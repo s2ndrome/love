@@ -1,3 +1,16 @@
+// called from inline onclick="" in post HTML (e.g. the About playlist card),
+// since content injected via innerHTML never runs its own <script> tags
+window.playTrack = function (button, videoId) {
+  const frame = document.getElementById("playlistFrame");
+  if (frame) frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+  const list = button.closest(".track-list");
+  if (list) list.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+
+  const li = button.closest("li");
+  if (li) li.classList.add("active");
+};
+
 const menuLayer = document.getElementById("menuLayer");
 const contentLayer = document.getElementById("contentLayer");
 const openMenu = document.getElementById("openMenu");

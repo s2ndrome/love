@@ -535,7 +535,8 @@ button { font: inherit; }
 }
 
 /* playlist card */
-.playlist-card .track-thumb {
+.playlist-card .track-thumb,
+.playlist-card .track-player {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 10px;
@@ -546,6 +547,14 @@ button { font: inherit; }
   place-items: center;
   color: #9a9aa0;
   font-size: 22px;
+  overflow: hidden;
+}
+
+.playlist-card .track-player iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
 
 .playlist-card .track-list {
@@ -554,23 +563,40 @@ button { font: inherit; }
   padding: 0;
 }
 
-.playlist-card .track-list li {
+.playlist-card .track-list li { border-bottom: 1px solid rgba(0, 0, 0, .05); }
+.playlist-card .track-list li:last-child { border-bottom: 0; }
+
+.playlist-card .track-btn {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
   padding: 8px 4px;
-  font-size: 12.5px;
+  border: 0;
+  background: transparent;
   color: #3c3c43;
-  border-bottom: 1px solid rgba(0, 0, 0, .05);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background .15s ease, color .15s ease;
 }
 
-.playlist-card .track-list li:last-child { border-bottom: 0; }
+.playlist-card .track-btn:hover { background: rgba(10, 132, 255, .06); }
+
+.playlist-card .track-list li.active .track-btn {
+  color: var(--accent);
+  font-weight: 600;
+}
 
 .playlist-card .track-num {
   width: 18px;
   color: #a0a0a5;
   font-size: 11px;
 }
+
+.playlist-card .track-list li.active .track-num { color: var(--accent); }
 
 /* simple divided-row list, shared by diary / world / guestbook */
 .entry-list {
