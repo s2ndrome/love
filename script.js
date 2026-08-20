@@ -7,14 +7,14 @@ const backToMenu = document.getElementById("backToMenu");
 
 const pages = {
   about: {
-    title: "ABOUT",
+    title: "About",
     html: `
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">♡</span><span class="card-title">INTRO</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">Intro</span></div>
         <section class="intro-card">
           <div class="fake-photo">YOUR<br>PHOTO</div>
           <div>
-            <h2>hello, little visitor ♡</h2>
+            <h2>hello, little visitor</h2>
             <p>여기는 나의 작은 인터넷 공간입니다. 좋아하는 것, 만든 것, 기록하고 싶은 것들을 천천히 모아두고 있어요.</p>
             <p>아직 준비 중인 페이지가 많지만, 이곳을 나만의 아카이브처럼 채워갈 예정이에요.</p>
             <div class="info-list">
@@ -27,7 +27,7 @@ const pages = {
       </div>
 
       <div class="feed-card playlist-card">
-        <div class="card-header"><span class="card-icon">✧</span><span class="card-title">PLAYLIST</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">Playlist</span></div>
         <div class="track-thumb">▶</div>
         <ul class="track-list">
           <li><span class="track-num">01</span>song title one</li>
@@ -39,10 +39,10 @@ const pages = {
   },
 
   characters: {
-    title: "CHARACTERS",
+    title: "Characters",
     html: `
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">✦</span><span class="card-title">CAST</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">Cast</span></div>
         <div class="character-grid">
           <article class="character-card">
             <div class="fake-photo">CHARACTER<br>01</div>
@@ -65,10 +65,10 @@ const pages = {
   },
 
   gallery: {
-    title: "GALLERY",
+    title: "Gallery",
     html: `
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">♡</span><span class="card-title">SNAPSHOTS</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">Snapshots</span></div>
         <div class="gallery-grid">
           <div class="gallery-item">IMAGE 01</div>
           <div class="gallery-item">IMAGE 02</div>
@@ -77,23 +77,23 @@ const pages = {
           <div class="gallery-item">IMAGE 05</div>
           <div class="gallery-item">IMAGE 06</div>
         </div>
-        <p style="margin-top:18px;text-align:center;font-size:10px;">이미지만 추가하면 갤러리로 바로 사용할 수 있어요 ♡</p>
+        <p style="margin-top:18px;text-align:center;font-size:10px;">이미지만 추가하면 갤러리로 바로 사용할 수 있어요</p>
       </div>
     `
   },
 
   diary: {
-    title: "DIARY",
+    title: "Diary",
     html: `
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">✧</span><span class="card-title">2026.08.20</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">2026.08.20</span></div>
         <article class="diary-entry" style="border:0;margin:0;padding:0;background:transparent;">
           <h2>welcome to my diary</h2>
           <p>첫 번째 기록. 앞으로 이 부분은 노션에서 작성한 일기를 자동으로 가져오도록 만들 수 있어요.</p>
         </article>
       </div>
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">✧</span><span class="card-title">2026.08.18</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">2026.08.18</span></div>
         <article class="diary-entry" style="border:0;margin:0;padding:0;background:transparent;">
           <h2>little things</h2>
           <p>좋아하는 것과 하루의 작은 순간들을 기록하는 공간.</p>
@@ -103,17 +103,17 @@ const pages = {
   },
 
   world: {
-    title: "WORLD",
+    title: "World",
     html: `
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">♡</span><span class="card-title">SETTING</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">Setting</span></div>
         <article class="world-entry" style="border:0;margin:0;padding:0;background:transparent;">
           <p>세계관의 기본 설정을 적는 공간입니다.</p>
           <p>지역 · 조직 · 사건 · 역사 · 용어집 등을 이곳에 쌓아갈 수 있어요.</p>
         </article>
       </div>
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">✦</span><span class="card-title">INDEX</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">Index</span></div>
         <article class="world-entry" style="border:0;margin:0;padding:0;background:transparent;">
           <p>01. Setting</p>
           <p>02. Organizations</p>
@@ -125,17 +125,17 @@ const pages = {
   },
 
   guestbook: {
-    title: "GUESTBOOK",
+    title: "Guestbook",
     html: `
       <div class="feed-card">
-        <div class="card-header"><span class="card-icon">✦</span><span class="card-title">GUESTBOOK</span></div>
+        <div class="card-header"><span class="card-icon">•</span><span class="card-title">Guestbook</span></div>
         <article class="guestbook-entry" style="border:0;margin:0 0 10px;padding:0;background:transparent;">
           <strong>mocha</strong>
-          <p>사이트 너무 귀여워요 ♡</p>
+          <p>사이트 너무 귀여워요</p>
         </article>
         <article class="guestbook-entry" style="border:0;margin:0;padding:0;background:transparent;">
           <strong>ribbon</strong>
-          <p>다녀갑니다 ✦</p>
+          <p>다녀갑니다</p>
         </article>
         <p style="text-align:center;margin-top:22px;font-size:10px;">방명록 기능은 나중에 외부 서비스나 별도 DB와 연결할 수 있어요.</p>
       </div>
@@ -198,3 +198,20 @@ document.addEventListener("keydown", event => {
     openMenu.focus();
   }
 });
+
+/* menu bar live clock */
+function updateMenubarClock() {
+  const el = document.getElementById("menubarClock");
+  if (!el) return;
+  const now = new Date();
+  el.textContent = now.toLocaleString("ko-KR", {
+    weekday: "short",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+updateMenubarClock();
+setInterval(updateMenubarClock, 1000 * 15);

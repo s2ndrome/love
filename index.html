@@ -7,80 +7,73 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="home">
-    <div class="deco deco-left">✦</div>
-    <div class="deco deco-right">♡</div>
+  <header class="menubar">
+    <span class="menubar-brand">🌊 Marine Archive</span>
+    <span class="menubar-right"><span id="menubarClock">--:--</span></span>
+  </header>
 
+  <main class="home">
     <button class="main-image-button" id="openMenu" aria-label="메뉴 열기">
       <img src="images/main.jpg" alt="Main Image">
-      <span class="click-hint">click me ♡</span>
+      <span class="click-hint">열어보기</span>
     </button>
 
-    <p class="site-mark">MARINE ARCHIVE</p>
+    <p class="site-mark">Marine Archive</p>
   </main>
+
+  <nav class="dock" aria-label="빠른 이동">
+    <button class="dock-about" data-page="about" title="About" aria-label="About">👤</button>
+    <button class="dock-characters" data-page="characters" title="Characters" aria-label="Characters">🎭</button>
+    <button class="dock-gallery" data-page="gallery" title="Gallery" aria-label="Gallery">🖼️</button>
+    <button class="dock-diary" data-page="diary" title="Diary" aria-label="Diary">📔</button>
+    <button class="dock-world" data-page="world" title="World" aria-label="World">🌐</button>
+    <button class="dock-guestbook" data-page="guestbook" title="Guestbook" aria-label="Guestbook">✍️</button>
+  </nav>
 
   <!-- MENU -->
   <div class="modal-layer" id="menuLayer" aria-hidden="true">
     <div class="menu-window modal-window">
-      <button class="close-button" data-close="menuLayer" aria-label="메뉴 닫기">×</button>
-
-      <div class="profile-mini">
-        <div class="avatar"><img src="images/main.jpg" alt="profile"></div>
-        <div class="handle">@yourhandle
-          <small>MARINE ARCHIVE</small>
+      <div class="titlebar">
+        <div class="traffic">
+          <button class="t-red" data-close="menuLayer" aria-label="메뉴 닫기"></button>
+          <span class="t-yellow" aria-hidden="true"></span>
+          <span class="t-green" aria-hidden="true"></span>
         </div>
+        <span class="titlebar-title">Marine Archive</span>
       </div>
 
-      <nav class="icon-nav" aria-label="빠른 이동">
-        <button data-page="about" aria-label="ABOUT">♡</button>
-        <button data-page="gallery" aria-label="GALLERY">✦</button>
-        <button data-page="diary" aria-label="DIARY">✧</button>
-      </nav>
+      <div class="menu-body">
+        <div class="profile-row">
+          <div class="avatar"><img src="images/main.jpg" alt="profile"></div>
+          <div class="who">@yourhandle<small>Marine Archive</small></div>
+        </div>
 
-      <div class="lace-line">♡ ✦ ♡ ✦ ♡ ✦ ♡</div>
-      <div class="ribbon">MENU</div>
-      <p class="modal-subtitle">welcome to my little archive</p>
-
-      <nav class="menu-list">
-        <button data-page="about">ABOUT <span>♡</span></button>
-        <button data-page="characters">CHARACTERS <span>✦</span></button>
-        <button data-page="gallery">GALLERY <span>♡</span></button>
-        <button data-page="diary">DIARY <span>✧</span></button>
-        <button data-page="world">WORLD <span>♡</span></button>
-        <button data-page="guestbook">GUESTBOOK <span>✦</span></button>
-      </nav>
-
-      <div class="info-card">
-        <p class="card-label">TODAY'S MOOD</p>
-        <div class="info-row"><span>NAME</span><span>YOUR NAME</span></div>
-        <div class="info-row"><span>SINCE</span><span>2026</span></div>
-        <div class="info-row"><span>MOOD</span><span>♡ dreamy</span></div>
+        <nav class="nav-list">
+          <button data-page="about"><span class="nav-icon c-blue">👤</span>About<span class="nav-chevron">›</span></button>
+          <button data-page="characters"><span class="nav-icon c-purple">🎭</span>Characters<span class="nav-chevron">›</span></button>
+          <button data-page="gallery"><span class="nav-icon c-pink">🖼️</span>Gallery<span class="nav-chevron">›</span></button>
+          <button data-page="diary"><span class="nav-icon c-orange">📔</span>Diary<span class="nav-chevron">›</span></button>
+          <button data-page="world"><span class="nav-icon c-green">🌐</span>World<span class="nav-chevron">›</span></button>
+          <button data-page="guestbook"><span class="nav-icon c-teal">✍️</span>Guestbook<span class="nav-chevron">›</span></button>
+        </nav>
       </div>
-
-      <div class="links-card">
-        <p class="card-label">LINKS</p>
-        <a class="link-item" href="#"><span class="lock">🔒</span> my other archive</a>
-      </div>
-
-      <div class="banner-strip">banner ♡ swap image here</div>
-
-      <div class="modal-footer">choose a little door ♡</div>
     </div>
   </div>
 
   <!-- CONTENT -->
   <div class="modal-layer" id="contentLayer" aria-hidden="true">
     <article class="content-window modal-window">
-      <button class="close-button" data-close="contentLayer" aria-label="본문 닫기">×</button>
-      <button class="back-button" id="backToMenu">← MENU</button>
+      <div class="titlebar">
+        <div class="traffic">
+          <button class="t-red" data-close="contentLayer" aria-label="닫기"></button>
+          <span class="t-yellow" aria-hidden="true"></span>
+          <span class="t-green" aria-hidden="true"></span>
+        </div>
+        <button class="back-button" id="backToMenu" aria-label="메뉴로">‹</button>
+        <span class="titlebar-title" id="contentTitle">About</span>
+      </div>
 
-      <header class="content-header">
-        <p class="tiny-label">MARINE ARCHIVE</p>
-        <h1 id="contentTitle">ABOUT</h1>
-        <div class="lace-line">♡ ─── ✦ ─── ♡</div>
-      </header>
-
-      <div id="contentBody" class="content-body"></div>
+      <div id="contentBody" class="content-body-wrap"></div>
     </article>
   </div>
 
