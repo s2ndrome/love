@@ -1,6 +1,6 @@
 [
   { "id": "image-01", "thumbLabel": "IMAGE 01", "thumb": "img/romrang2.png" },
-  { "id": "image-02", "thumbLabel": "IMAGE 02" },
+  { "id": "image-02", "thumbLabel": "IMAGE 02", "thumb": "img/웨딩롬줌.png" },
   { "id": "image-03", "thumbLabel": "IMAGE 03" },
   { "id": "image-04", "thumbLabel": "IMAGE 04" },
   { "id": "image-05", "thumbLabel": "IMAGE 05" },
