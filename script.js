@@ -15,6 +15,8 @@ const CATEGORY_TITLES = {
 };
 
 const noteIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`;
+const copyIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>`;
+const checkIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l5 5L20 6"/></svg>`;
 
 /* categories with a clickable list of entries; each entry's full content
    lives in its own file at posts/<category>/<id>.html */
@@ -52,22 +54,62 @@ const LIST_RENDERERS = {
   `
 };
 
-/* diary entries get a note-card wrapper (date tag + dots + compose bar);
-   everything else's post file is already a self-contained .feed-card */
+/* diary + guestbook entries get a note-card wrapper (tag + body + a bottom
+   bar); everything else's post file is already a self-contained .feed-card */
 function wrapDetail(category, item, html) {
   if (category === "diary") {
     return `
-      <div class="diary-note">
-        <span class="diary-note-date">${item ? item.label : ""}</span>
-        <div class="diary-note-body">${html}</div>
-        <div class="diary-note-compose">
-          <span class="diary-note-cursor">|</span>
-          <span class="diary-note-icon">${noteIconSvg}</span>
+      <div class="note-card">
+        <span class="note-tag">${item ? item.label : ""}</span>
+        <div class="note-body">${html}</div>
+        <div class="note-compose">
+          <span class="note-cursor">|</span>
+          <span class="note-icon">${noteIconSvg}</span>
         </div>
       </div>
     `;
   }
+
+  if (category === "guestbook") {
+    return `
+      <div class="note-card">
+        <span class="note-tag">${item ? item.name : ""}</span>
+        <div class="note-body">${html}</div>
+        <div class="note-compose">
+          <button class="copy-button" type="button" aria-label="복사하기">${copyIconSvg}</button>
+        </div>
+      </div>
+    `;
+  }
+
   return html;
+}
+
+async function copyNoteText(button) {
+  const text = button.closest(".note-card").querySelector(".note-body").innerText.trim();
+
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    const scratch = document.createElement("textarea");
+    scratch.value = text;
+    scratch.style.position = "fixed";
+    scratch.style.opacity = "0";
+    document.body.appendChild(scratch);
+    scratch.select();
+    document.execCommand("copy");
+    document.body.removeChild(scratch);
+  }
+
+  button.classList.add("copied");
+  button.innerHTML = checkIconSvg;
+  button.setAttribute("aria-label", "복사됨");
+
+  setTimeout(() => {
+    button.classList.remove("copied");
+    button.innerHTML = copyIconSvg;
+    button.setAttribute("aria-label", "복사하기");
+  }, 1400);
 }
 
 async function fetchJSON(path) {
@@ -113,6 +155,9 @@ async function openDetail(category, id) {
     const html = await fetchText(`posts/${category}/${id}.html`);
     const item = (lastListItems || []).find(entry => entry.id === id);
     contentBody.innerHTML = wrapDetail(category, item, html);
+
+    const copyButton = contentBody.querySelector(".copy-button");
+    if (copyButton) copyButton.addEventListener("click", () => copyNoteText(copyButton));
   } catch (err) {
     contentBody.innerHTML = `<p class="loading-hint">불러오지 못했어요.</p>`;
   }
