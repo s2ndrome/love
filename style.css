@@ -438,11 +438,16 @@ button { font: inherit; }
   background: linear-gradient(160deg, #eef3fb, #fff);
 }
 
-/* gallery post photos keep their original ratio (no square crop) */
+/* gallery post photos: fit fully inside the window at a glance, no crop,
+   no scrolling to see the rest — shrink by whichever side hits its limit
+   first and keep the original ratio */
 .gallery-photo {
   display: block;
-  width: 100%;
+  max-width: 100%;
+  max-height: min(52vh, 460px);
+  width: auto;
   height: auto;
+  margin: 0 auto 14px;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, .06);
 }
