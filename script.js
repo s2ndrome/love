@@ -6,7 +6,7 @@ const contentBody = document.getElementById("contentBody");
 const backToMenu = document.getElementById("backToMenu");
 
 const CATEGORY_TITLES = {
-  about: "About",
+  about: "SEOL",
   characters: "Characters",
   gallery: "Gallery",
   diary: "Diary",
@@ -133,20 +133,48 @@ async function fetchText(path) {
 let activeDetail = null; // { category, id } | null
 let lastListCategory = null;
 let lastListItems = null;
+let listPage = 0;
+
+const PAGE_SIZE = 6;
+const PAGINATED_CATEGORIES = new Set(["gallery", "diary", "world", "ooc"]);
 
 function updateBackLabel() {
   backToMenu.setAttribute("aria-label", activeDetail ? "목록으로" : "메뉴로");
 }
 
-function renderList(category, items) {
+function renderPager(totalItems, page) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+  if (totalPages <= 1) return "";
+
+  return `
+    <div class="pager">
+      <button class="pager-btn" data-pager="prev" ${page === 0 ? "disabled" : ""} aria-label="이전 페이지">‹</button>
+      <span class="pager-status">${page + 1} / ${totalPages}</span>
+      <button class="pager-btn" data-pager="next" ${page >= totalPages - 1 ? "disabled" : ""} aria-label="다음 페이지">›</button>
+    </div>
+  `;
+}
+
+function renderList(category, items, page = 0) {
   lastListCategory = category;
   lastListItems = items;
+  listPage = page;
   activeDetail = null;
   updateBackLabel();
 
-  contentBody.innerHTML = LIST_RENDERERS[category](items);
+  const paginate = PAGINATED_CATEGORIES.has(category);
+  const pageItems = paginate ? items.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE) : items;
+
+  contentBody.innerHTML = LIST_RENDERERS[category](pageItems) + (paginate ? renderPager(items.length, page) : "");
+
   contentBody.querySelectorAll("[data-id]").forEach(button => {
     button.addEventListener("click", () => openDetail(category, button.dataset.id));
+  });
+
+  contentBody.querySelectorAll("[data-pager]").forEach(button => {
+    button.addEventListener("click", () => {
+      renderList(category, items, page + (button.dataset.pager === "next" ? 1 : -1));
+    });
   });
 }
 
@@ -214,7 +242,7 @@ backToMenu.addEventListener("click", () => {
   if (activeDetail) {
     const category = activeDetail.category;
     if (lastListCategory === category && lastListItems) {
-      renderList(category, lastListItems);
+      renderList(category, lastListItems, listPage);
     } else {
       openCategory(category);
     }

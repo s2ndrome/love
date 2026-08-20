@@ -605,6 +605,43 @@ button { font: inherit; }
   font-size: 13px;
 }
 
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.pager-btn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .7);
+  color: #3c3c43;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background .15s ease, opacity .15s ease;
+}
+
+.pager-btn:hover:not(:disabled) { background: #fff; }
+
+.pager-btn:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.pager-status {
+  min-width: 46px;
+  text-align: center;
+  color: #8a8a8e;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
 .note-card {
   border: 1px solid rgba(0, 0, 0, .1);
   border-radius: 14px;
