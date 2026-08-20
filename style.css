@@ -19,10 +19,7 @@ body {
   min-height: 100vh;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
-  background:
-    radial-gradient(circle at 18% 18%, var(--bg1), transparent 45%),
-    linear-gradient(160deg, #eaf3ff, #f5eeff 55%, #fff0f5);
-  background-attachment: fixed;
+  background: var(--bg1);
 }
 
 button { font: inherit; }
