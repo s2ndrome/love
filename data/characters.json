@@ -1,5 +1,4 @@
 [
-  { "id": "character-one", "name": "Character One", "thumb": "CHARACTER<br>01", "blurb": "간단한 캐릭터 소개를 적는 공간." },
-  { "id": "character-two", "name": "Character Two", "thumb": "CHARACTER<br>02", "blurb": "성격, 설정, 관계 등을 적어주세요." },
-  { "id": "character-three", "name": "Character Three", "thumb": "CHARACTER<br>03", "blurb": "나중에 노션 데이터로 교체할 예정." }
+  { "id": "character-one", "name": "Character One", "thumbLabel": "CHARACTER<br>01", "thumb": "", "blurb": "간단한 캐릭터 소개를 적는 공간." },
+  { "id": "character-two", "name": "Character Two", "thumbLabel": "CHARACTER<br>02", "thumb": "", "blurb": "성격, 설정, 관계 등을 적어주세요." }
 ]

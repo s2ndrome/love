@@ -40,7 +40,7 @@ const LIST_RENDERERS = {
     <div class="character-grid">
       ${items.map(item => `
         <button class="character-card" data-id="${item.id}">
-          <div class="fake-photo">${item.thumb}</div>
+          ${item.thumb ? `<img src="${item.thumb}" alt="${item.name}">` : `<div class="fake-photo">${item.thumbLabel}</div>`}
           <h3>${item.name}</h3>
           <p>${item.blurb}</p>
         </button>
