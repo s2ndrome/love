@@ -1,8 +1,8 @@
 [
-  { "id": "image-01", "thumbLabel": "IMAGE 01" },
-  { "id": "image-02", "thumbLabel": "IMAGE 02" },
-  { "id": "image-03", "thumbLabel": "IMAGE 03" },
-  { "id": "image-04", "thumbLabel": "IMAGE 04" },
-  { "id": "image-05", "thumbLabel": "IMAGE 05" },
-  { "id": "image-06", "thumbLabel": "IMAGE 06" }
+  { "id": "image-01", "thumbLabel": "IMAGE 01", "thumb": "" },
+  { "id": "image-02", "thumbLabel": "IMAGE 02", "thumb": "" },
+  { "id": "image-03", "thumbLabel": "IMAGE 03", "thumb": "" },
+  { "id": "image-04", "thumbLabel": "IMAGE 04", "thumb": "" },
+  { "id": "image-05", "thumbLabel": "IMAGE 05", "thumb": "" },
+  { "id": "image-06", "thumbLabel": "IMAGE 06", "thumb": "" }
 ]

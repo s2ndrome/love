@@ -49,7 +49,11 @@ const LIST_RENDERERS = {
   `,
   gallery: items => `
     <div class="gallery-grid">
-      ${items.map(item => `<button class="gallery-item" data-id="${item.id}">${item.thumbLabel}</button>`).join("")}
+      ${items.map(item => `
+        <button class="gallery-item" data-id="${item.id}">
+          ${item.thumb ? `<img src="${item.thumb}" alt="${item.thumbLabel || ""}">` : item.thumbLabel}
+        </button>
+      `).join("")}
     </div>
   `
 };
