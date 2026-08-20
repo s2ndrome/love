@@ -1,7 +1,5 @@
 :root {
-  --bg1: #bcd9ff;
-  --bg2: #d9c6ff;
-  --bg3: #ffd7e6;
+  --bg1: #fff;
   --text: #1d1d1f;
   --text-secondary: #6e6e73;
   --window-bg: rgba(255, 255, 255, .78);
@@ -88,7 +86,7 @@ button { font: inherit; }
   border-radius: 16px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 25px 70px rgba(31, 26, 50, .26);
+  box-shadow: 0 25px 70px rgba(31, 26, 50, .14);
   cursor: pointer;
   transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s ease;
 }
@@ -103,7 +101,7 @@ button { font: inherit; }
 
 .main-image-button:hover {
   transform: translateY(-6px);
-  box-shadow: 0 35px 90px rgba(31, 26, 50, .32);
+  box-shadow: 0 35px 90px rgba(31, 26, 50, .18);
 }
 
 .click-hint {
@@ -171,7 +169,7 @@ button { font: inherit; }
 .dock-gallery     { background: linear-gradient(160deg, #ff9ec4, #ec5e93); }
 .dock-diary       { background: linear-gradient(160deg, #ffc36b, #f2994a); }
 .dock-world       { background: linear-gradient(160deg, #7be0b8, #2fbf71); }
-.dock-guestbook   { background: linear-gradient(160deg, #7fe0e0, #2fb6b6); }
+.dock-ooc   { background: linear-gradient(160deg, #7fe0e0, #2fb6b6); }
 
 /* ---------------------------------- */
 /* modal base */
@@ -676,7 +674,7 @@ button { font: inherit; }
 
 .diary-entry,
 .world-entry,
-.guestbook-entry {
+.ooc-entry {
   padding: 14px 16px;
   margin-bottom: 10px;
   border-radius: 10px;

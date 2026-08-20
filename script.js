@@ -11,7 +11,7 @@ const CATEGORY_TITLES = {
   gallery: "Gallery",
   diary: "Diary",
   world: "World",
-  guestbook: "Guestbook"
+  ooc: "Guestbook"
 };
 
 const noteIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`;
@@ -31,7 +31,7 @@ const LIST_RENDERERS = {
       ${items.map(item => `<button data-id="${item.id}">${item.label}</button>`).join("")}
     </nav>
   `,
-  guestbook: items => `
+  ooc: items => `
     <nav class="entry-list">
       ${items.map(item => `<button data-id="${item.id}">${item.name}</button>`).join("")}
     </nav>
@@ -70,7 +70,7 @@ function wrapDetail(category, item, html) {
     `;
   }
 
-  if (category === "guestbook") {
+  if (category === "ooc") {
     return `
       <div class="note-card">
         <span class="note-tag">${item ? item.name : ""}</span>
