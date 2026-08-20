@@ -1,5 +1,5 @@
 [
-  { "id": "image-01", "thumbLabel": "IMAGE 01" },
+  { "id": "image-01", "thumbLabel": "IMAGE 01", "thumb": "img/romrang2.png" },
   { "id": "image-02", "thumbLabel": "IMAGE 02" },
   { "id": "image-03", "thumbLabel": "IMAGE 03" },
   { "id": "image-04", "thumbLabel": "IMAGE 04" },
