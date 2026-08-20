@@ -1,5 +1,5 @@
 :root {
-  --bg1: #fff;;
+  --bg1: #fff;
   --text: #1d1d1f;
   --text-secondary: #6e6e73;
   --window-bg: rgba(255, 255, 255, .78);
@@ -21,8 +21,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
   background:
     radial-gradient(circle at 18% 18%, var(--bg1), transparent 45%),
-    radial-gradient(circle at 85% 15%, var(--bg2), transparent 45%),
-    radial-gradient(circle at 50% 92%, var(--bg3), transparent 55%),
     linear-gradient(160deg, #eaf3ff, #f5eeff 55%, #fff0f5);
   background-attachment: fixed;
 }
