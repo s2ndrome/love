@@ -471,10 +471,22 @@ button { font: inherit; }
 
 .character-card,
 .gallery-item {
+  display: block;
+  width: 100%;
   padding: 8px;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, .06);
   background: rgba(255, 255, 255, .6);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+}
+
+.character-card:hover,
+.gallery-item:hover {
+  background: rgba(10, 132, 255, .06);
+  transform: translateY(-1px);
 }
 
 .character-card h3 {
@@ -535,29 +547,37 @@ button { font: inherit; }
   font-size: 11px;
 }
 
-/* diary list + note detail */
-.diary-list {
+/* simple divided-row list, shared by diary / world / guestbook */
+.entry-list {
   display: flex;
   flex-direction: column;
   border-top: 1px solid rgba(10, 132, 255, .18);
 }
 
-.diary-list button {
+.entry-list button {
   width: 100%;
   padding: 20px 6px;
   border: 0;
   border-bottom: 1px solid rgba(10, 132, 255, .18);
   background: transparent;
   color: #8a8a8e;
+  font: inherit;
   font-size: 14.5px;
   text-align: left;
   cursor: pointer;
   transition: color .15s ease, background .15s ease;
 }
 
-.diary-list button:hover {
+.entry-list button:hover {
   color: #3c3c43;
   background: rgba(10, 132, 255, .05);
+}
+
+.loading-hint {
+  padding: 30px 4px;
+  text-align: center;
+  color: #9a9aa0;
+  font-size: 13px;
 }
 
 .diary-note {
