@@ -22,7 +22,7 @@ const CATEGORY_TITLES = {
   about: "SEOL",
   characters: "Characters",
   gallery: "Gallery",
-  diary: "Diary",
+  diary: "LOG",
   world: "World",
   ooc: "OOC"
 };
