@@ -1,0 +1,6 @@
+[
+  { "id": "setting", "label": "01. Setting" },
+  { "id": "organizations", "label": "02. Organizations" },
+  { "id": "characters", "label": "03. Characters" },
+  { "id": "timeline", "label": "04. Timeline" }
+]
