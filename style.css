@@ -2,10 +2,7 @@
 
 * { box-sizing: border-box; }
 
-html, body {
-  margin: 0;
-  min-height: 100%;
-}
+html, body { margin: 0; min-height: 100%; }
 
 body {
   overflow-x: hidden;
@@ -25,7 +22,10 @@ body::before {
   pointer-events: none;
   border: 1px solid rgba(193, 142, 157, .32);
   border-radius: 8px;
+  z-index: 5;
 }
+
+button { font: inherit; }
 
 .home {
   position: relative;
@@ -57,7 +57,6 @@ body::before {
   color: #d89aaa;
   font-size: 25px;
 }
-
 .main-image-button::before { left: -12px; top: -15px; }
 .main-image-button::after { right: -12px; bottom: -15px; }
 
@@ -103,20 +102,19 @@ body::before {
   font-size: 30px;
   animation: float 4s ease-in-out infinite;
 }
-
 .deco-left { left: 12%; top: 24%; }
 .deco-right { right: 13%; bottom: 27%; animation-delay: 1s; }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0); }
+  0%,100% { transform: translateY(0) rotate(0); }
   50% { transform: translateY(-9px) rotate(8deg); }
 }
 
-/* popup */
-.menu-overlay {
+/* modal base */
+.modal-layer {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,21 +123,20 @@ body::before {
   backdrop-filter: blur(9px);
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity .3s ease, visibility .3s ease;
 }
 
-.menu-overlay.active {
+.modal-layer.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
-.menu-window {
+.modal-window {
   position: relative;
-  width: min(440px, 92vw);
-  padding: 62px 48px 45px;
-  overflow: hidden;
   background:
-    radial-gradient(circle at 50% 15%, rgba(255,255,255,.95), transparent 38%),
+    radial-gradient(circle at 50% 10%, rgba(255,255,255,.95), transparent 40%),
     #fff8f6;
   border: 1px solid #dfb8c1;
   box-shadow:
@@ -149,43 +146,25 @@ body::before {
   transition: transform .38s cubic-bezier(.2,.8,.2,1);
 }
 
-.menu-window::before,
-.menu-window::after {
-  content: "♡  ✦  ♡  ✦  ♡  ✦  ♡";
-  position: absolute;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  color: #d99baa;
-  font-size: 13px;
-  letter-spacing: 5px;
+.modal-layer.active .modal-window { transform: translateY(0) scale(1); }
+
+.menu-window {
+  width: min(440px, 92vw);
+  padding: 62px 48px 45px;
 }
 
-.menu-window::before { top: 9px; }
-.menu-window::after { bottom: 9px; }
-
-.menu-overlay.active .menu-window {
-  transform: translateY(0) scale(1);
+.content-window {
+  width: min(850px, 92vw);
+  max-height: min(82vh, 820px);
+  padding: 50px 55px 55px;
+  overflow: auto;
 }
-
-.lace-top,
-.lace-bottom {
-  position: absolute;
-  left: 22px;
-  right: 22px;
-  height: 5px;
-  background:
-    radial-gradient(circle, #dfa8b6 0 2px, transparent 2.5px) 0 0 / 14px 7px repeat-x;
-  opacity: .8;
-}
-
-.lace-top { top: 34px; }
-.lace-bottom { bottom: 32px; }
 
 .close-button {
   position: absolute;
   top: 14px;
   right: 18px;
+  z-index: 3;
   width: 30px;
   height: 30px;
   border: 0;
@@ -196,16 +175,32 @@ body::before {
   cursor: pointer;
   transition: transform .25s ease, color .2s ease;
 }
+.close-button:hover { color: #d17e95; transform: rotate(90deg); }
 
-.close-button:hover {
-  color: #d17e95;
-  transform: rotate(90deg);
+.back-button {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  border: 0;
+  background: transparent;
+  color: #b27d8b;
+  font-size: 11px;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+.back-button:hover { color: #d17d94; }
+
+.lace-line {
+  text-align: center;
+  color: #d99baa;
+  font-size: 13px;
+  letter-spacing: 5px;
 }
 
 .ribbon {
   width: fit-content;
   min-width: 120px;
-  margin: 0 auto 8px;
+  margin: 12px auto 8px;
   padding: 10px 25px;
   background: #e6a6b4;
   color: white;
@@ -216,12 +211,11 @@ body::before {
   box-shadow: 0 7px 18px rgba(191, 113, 133, .18);
 }
 
-.menu-subtitle {
+.modal-subtitle {
   margin: 0 0 28px;
   text-align: center;
   color: #ad858e;
   font-size: 11px;
-  letter-spacing: .05em;
 }
 
 .menu-list {
@@ -230,36 +224,151 @@ body::before {
   gap: 8px;
 }
 
-.menu-list a {
+.menu-list button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   padding: 12px 15px;
+  border: 0;
+  border-bottom: 1px dashed rgba(196,145,157,.48);
+  background: transparent;
   color: #80666e;
-  text-decoration: none;
-  border-bottom: 1px dashed rgba(196, 145, 157, .48);
+  text-align: left;
   font-size: 14px;
   letter-spacing: .12em;
+  cursor: pointer;
   transition: padding .22s ease, color .22s ease, background .22s ease;
 }
-
-.menu-list a span {
-  color: #d998a8;
-  opacity: .75;
-}
-
-.menu-list a:hover {
+.menu-list button span { color: #d998a8; opacity: .75; }
+.menu-list button:hover {
   padding-left: 22px;
   color: #ce788f;
-  background: rgba(245, 218, 224, .35);
+  background: rgba(245,218,224,.35);
 }
 
-.menu-footer {
+.modal-footer {
   margin-top: 25px;
   text-align: center;
   color: #c2959e;
   font-size: 10px;
-  letter-spacing: .06em;
+}
+
+.content-header {
+  text-align: center;
+  padding-bottom: 25px;
+  border-bottom: 1px dashed rgba(196,145,157,.48);
+}
+
+.tiny-label {
+  margin: 0 0 5px;
+  color: #c0919c;
+  font-size: 9px;
+  letter-spacing: .2em;
+}
+
+.content-header h1 {
+  margin: 0 0 10px;
+  color: #9b6f7a;
+  font-family: "DM Serif Display", serif;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: .12em;
+}
+
+.content-body { padding-top: 28px; }
+
+.intro-card {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.fake-photo,
+.character-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: linear-gradient(145deg, #f8dfe5, #fff);
+  border: 1px solid #e4c0c8;
+}
+
+.content-body h2 {
+  margin: 0 0 12px;
+  color: #a06f7c;
+  font-family: "DM Serif Display", serif;
+  font-weight: 400;
+  letter-spacing: .08em;
+}
+
+.content-body p {
+  margin: 0 0 12px;
+  color: #806b70;
+  font-size: 13px;
+  line-height: 2;
+}
+
+.info-list {
+  margin: 20px 0 0;
+  padding: 15px 18px;
+  border: 1px dashed #ddb3bd;
+  background: rgba(255,255,255,.55);
+  font-size: 12px;
+  line-height: 2;
+}
+
+.character-grid,
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.character-card,
+.gallery-item {
+  padding: 10px;
+  border: 1px solid #e6c4ca;
+  background: rgba(255,255,255,.55);
+}
+
+.character-card h3 {
+  margin: 10px 0 3px;
+  color: #9c7180;
+  font-size: 13px;
+}
+.character-card p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.gallery-item {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  color: #c28d9b;
+  font-size: 12px;
+}
+
+.diary-entry,
+.world-entry,
+.guestbook-entry {
+  padding: 17px 18px;
+  margin-bottom: 12px;
+  border: 1px dashed #ddb3bd;
+  background: rgba(255,255,255,.55);
+}
+
+.entry-date {
+  margin-bottom: 6px !important;
+  color: #c18b98 !important;
+  font-size: 10px !important;
+}
+
+.guestbook-entry strong {
+  color: #a06f7c;
+  font-size: 12px;
 }
 
 /* mobile */
@@ -268,10 +377,7 @@ body::before {
 
   .home { padding: 35px 18px 70px; }
 
-  .main-image-button {
-    width: 90vw;
-    padding: 9px;
-  }
+  .main-image-button { width: 90vw; padding: 9px; }
 
   .click-hint {
     right: 14px;
@@ -283,29 +389,44 @@ body::before {
   .deco-left { left: 7%; top: 17%; }
   .deco-right { right: 8%; bottom: 19%; }
 
-  .site-mark {
-    bottom: 24px;
-    font-size: 12px;
-  }
+  .site-mark { bottom: 24px; font-size: 12px; }
 
-  .menu-overlay { padding: 14px; }
+  .modal-layer { padding: 12px; }
 
   .menu-window {
     width: 100%;
     padding: 58px 28px 48px;
   }
 
-  .menu-list { gap: 6px; }
+  .content-window {
+    width: 100%;
+    max-height: 88vh;
+    padding: 52px 22px 35px;
+  }
 
-  .menu-list a {
+  .content-header h1 { font-size: 28px; }
+
+  .intro-card {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .fake-photo {
+    width: min(190px, 60vw);
+    margin: 0 auto;
+  }
+
+  .character-grid,
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .menu-list button {
     padding: 13px 10px;
     font-size: 13px;
   }
-
-  .menu-list a:hover { padding-left: 16px; }
 }
 
-/* reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;

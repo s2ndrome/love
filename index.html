@@ -12,33 +12,48 @@
     <div class="deco deco-right">♡</div>
 
     <button class="main-image-button" id="openMenu" aria-label="메뉴 열기">
-      <img src="img/일러스트42.png" alt="Main Image">
+      <img src="images/main.jpg" alt="Main Image">
       <span class="click-hint">click me ♡</span>
     </button>
 
     <p class="site-mark">MARINE ARCHIVE</p>
   </main>
 
-  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
-    <div class="menu-window" role="dialog" aria-modal="true" aria-label="사이트 메뉴">
-      <div class="lace-top"></div>
-      <button class="close-button" id="closeMenu" aria-label="메뉴 닫기">×</button>
-
+  <!-- MENU -->
+  <div class="modal-layer" id="menuLayer" aria-hidden="true">
+    <div class="menu-window modal-window">
+      <button class="close-button" data-close="menuLayer" aria-label="메뉴 닫기">×</button>
+      <div class="lace-line">♡ ✦ ♡ ✦ ♡ ✦ ♡</div>
       <div class="ribbon">MENU</div>
-      <p class="menu-subtitle">welcome to my little archive</p>
+      <p class="modal-subtitle">welcome to my little archive</p>
 
       <nav class="menu-list">
-        <a href="#">ABOUT <span>♡</span></a>
-        <a href="#">CHARACTERS <span>✦</span></a>
-        <a href="#">GALLERY <span>♡</span></a>
-        <a href="#">DIARY <span>✧</span></a>
-        <a href="#">WORLD <span>♡</span></a>
-        <a href="#">GUESTBOOK <span>✦</span></a>
+        <button data-page="about">ABOUT <span>♡</span></button>
+        <button data-page="characters">CHARACTERS <span>✦</span></button>
+        <button data-page="gallery">GALLERY <span>♡</span></button>
+        <button data-page="diary">DIARY <span>✧</span></button>
+        <button data-page="world">WORLD <span>♡</span></button>
+        <button data-page="guestbook">GUESTBOOK <span>✦</span></button>
       </nav>
 
-      <div class="menu-footer">thank you for visiting ♡</div>
-      <div class="lace-bottom"></div>
+      <div class="modal-footer">choose a little door ♡</div>
     </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="modal-layer" id="contentLayer" aria-hidden="true">
+    <article class="content-window modal-window">
+      <button class="close-button" data-close="contentLayer" aria-label="본문 닫기">×</button>
+      <button class="back-button" id="backToMenu">← MENU</button>
+
+      <header class="content-header">
+        <p class="tiny-label">MARINE ARCHIVE</p>
+        <h1 id="contentTitle">ABOUT</h1>
+        <div class="lace-line">♡ ─── ✦ ─── ♡</div>
+      </header>
+
+      <div id="contentBody" class="content-body"></div>
+    </article>
   </div>
 
   <script src="script.js"></script>
