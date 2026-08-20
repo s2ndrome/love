@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Archive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="home">
+    <div class="deco deco-left">✦</div>
+    <div class="deco deco-right">♡</div>
+
+    <button class="main-image-button" id="openMenu" aria-label="메뉴 열기">
+      <img src="img/일러스트42.png" alt="Main Image">
+      <span class="click-hint">click me ♡</span>
+    </button>
+
+    <p class="site-mark">MARINE ARCHIVE</p>
+  </main>
+
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <div class="menu-window" role="dialog" aria-modal="true" aria-label="사이트 메뉴">
+      <div class="lace-top"></div>
+      <button class="close-button" id="closeMenu" aria-label="메뉴 닫기">×</button>
+
+      <div class="ribbon">MENU</div>
+      <p class="menu-subtitle">welcome to my little archive</p>
+
+      <nav class="menu-list">
+        <a href="#">ABOUT <span>♡</span></a>
+        <a href="#">CHARACTERS <span>✦</span></a>
+        <a href="#">GALLERY <span>♡</span></a>
+        <a href="#">DIARY <span>✧</span></a>
+        <a href="#">WORLD <span>♡</span></a>
+        <a href="#">GUESTBOOK <span>✦</span></a>
+      </nav>
+
+      <div class="menu-footer">thank you for visiting ♡</div>
+      <div class="lace-bottom"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
