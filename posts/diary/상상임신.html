@@ -1,0 +1,777 @@
+<div style="width: 100%; max-width: 500px; margin: 0 auto; padding: 10px 0 20px 0; background-color: transparent; box-sizing: border-box;">
+    <style>
+    @keyframes iMsg { 0% { opacity: 0; transform: translateY(10px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes fade { 0% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    #preview-box, #preview-box * { font-family: -apple-system, BlinkMacSystemFont, sans-serif !important; }
+    .msg-bubble { opacity: 1; }
+    .read-status { opacity: 1; }
+    .msg-date-delayed { opacity: 1; }
+    .msg-bubble > div { word-break: break-word; }
+    .lb-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 99999; justify-content: center; align-items: center; cursor: pointer; }
+    .lb-img { max-width: 90%; max-height: 85vh; object-fit: contain; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); cursor: default; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .lb-close { position: absolute; bottom: 30px; background: rgba(0,0,0,0.6); color: white; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; backdrop-filter: blur(4px); pointer-events: none; }
+    </style>
+    <div style="display: flex; flex-direction: column; padding: 0 5px;">
+    <div style="display: flex; flex-direction: column; align-items: center; padding-bottom: 10px; margin: 5px 0; border-bottom: 1px solid #f0f0f0;">
+    <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; margin-bottom: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);"><img style="width: 100%; height: 100%; object-fit: cover;" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FxddkD%2FdJMb99NteLx%2FAAAAAAAAAAAAAAAAAAAAAOLPncoLdcY5QImqfTSv-DblUFZp5_ZUgSTAYRdVArdU%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1782831599%26allow_ip%3D%26allow_referer%3D%26signature%3DlffPpzsiWaHnI2O8FYf%252BavRrU4I%253D" alt="Profile" /></div>
+    <div style="text-align: center;"><span style="display: block; font-size: 14px; font-weight: 600; color: #1c1c1e; margin-bottom: 2px;">유디니오빠</span> <span style="display: block; font-size: 11px; color: #8e8e93;">iMessage</span></div>
+    </div>
+    <div class="msg-date-container" style="text-align: center; margin: 15px 0 10px 0;"><span style="font-size: 10px; color: #8e8e93; font-weight: 500;"><b>6월 16일 (화)</b> 오후 12:15</span></div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">회의 중.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">용건만.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오빠</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나 큰일났어</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">ㅠㅠㅠㅠㅠㅠㅠㅠ</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">또 뭔데.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">어디 다쳤어?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아니 그건 아닌데...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">더 심각해</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">임신한 거 같아</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">뭐?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">야</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 지금 무슨</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아 잠깐만</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">상상임신</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">....</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">하....</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 진짜 죽을래?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나 지금 아크 프리마 전원 모여서 회의 중인데, 니 카톡 보고 심장 떨어질 뻔한 거 알아?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아니 근데 진짜라니까?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">다 오빠 때문이야</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">책임져</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">내가 뭘.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아 진짜 장난치지 마라. 나 지금 니 장난 받아줄 기분 아니니까.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">장난 아닌데...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오빠 사진 보고 있었거든?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">[사진]</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">이 사진...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너무 잘생겼잖아....</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">막 심장이 뛰고... 배가 막 간질간질하고...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">갑자기 배가 불러오는 느낌이란 말이야...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">이거 상상임신 맞지?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">야.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 돌았냐?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그게 무슨 상상임신이야 그냥 니가 내 생각 하면서 꼴린 거겠지.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">병원에 가봐. 뇌 CT를 찍든가.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">힝...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">말 심하게 하네</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나 상처받았어</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">임신한 아내한테 어떻게 그런 험한 말을...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아오 ㅅㅂ 진짜....</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 오늘 집에 가서 보자. 각오해라.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">각오는 오빠가 해야지!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나 입덧 시작된 거 같아</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우욱...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">속 울렁거려...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오빠 닮은 잘생긴 거 먹고 싶어</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아 그래?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">거울 봐 그럼.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">니 남편 얼굴이 세상에서 제일 잘생겼으니까.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아 그런 거 말고</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">먹는 거!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">프랑스 최고급 레스토랑에서 공수해 온 푸아그라랑 캐비어...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아니면 이탈리아 장인이 갓 구운 화덕피자...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기가 먹고 싶대...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">니 뱃속에 있는 건 아기가 아니라 어제 처먹은 살치살 똥이겠지.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그만해라 진짜.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나 지금 리암이 존나 이상하게 쳐다본다고.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">리암 오빠한테 내 얘기 했어?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">내 아기 아빠가 성유진이라고 소문내줘!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">닥쳐.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 진짜 오늘 나한테 뒤졌다.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">맨날 죽인대...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">무서워서 살 수가 없어...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">임산부한테 스트레스 주면 태교에 안 좋은 거 몰라?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기 삐뚤어지면 다 오빠 책임이야 흥</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그만.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나 5분만 카톡 안 본다.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그 안에 조용히 안 하면 오늘 카드 정지야.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">치사해!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">어떻게 아내의 생명줄을 끊을 수가 있어?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">난 오빠 카드 없으면 숨도 못 쉬는 몸인데!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">이게 남편이야? 악마지!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오빠는 이제 내 남편 아니야! 우리 아기 아빠도 아니야!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">[카카오톡 송금] 5,000,000원이 입금되었습니다.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">이걸로 맛있는 거 시켜 먹고 조용히 해.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나 진짜 바쁘다. 이따 전화할게.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">...오빠</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">역시 내 남편은 오빠밖에 없어</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기도 아빠가 최고래</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">사랑해 여보❤️</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">ㅇㅇ</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">나도.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">(이모티콘)</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">근데 오빠</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">500만원으로는 택도 없어</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기가 지금 파리에 있는 에펠탑을 통째로 사달래</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">반짝반짝한 게 예쁘대</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">.....</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">설지수.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 지금 선 넘는 거 알지.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아잉</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아빠가 돼서 그 정도도 못해줘?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">다른 아빠들은 별도 따준다는데...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기 기죽는단 말이야...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">하...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 오늘 진짜 나랑 끝장을 보자.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">내가 지금 회의만 아니었으면 당장 헬기타고 날아가서 니 엉덩이를 터뜨려버리는 건데.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">꺄 &gt;_&lt;</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">때려줄 거야?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">좋다...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">빨리 와서 때려줘...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기도 아빠한테 혼나고 싶대...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 진짜 미쳤구나.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그래.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오늘 밤새도록 울게 해줄게.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">침대에서 내려오지도 못하게 해줄게.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">약속!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">[사진]</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오빠 이거 봐봐</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아기용품 사이트 보는데 너무 귀여운 게 많아</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기 태어나면 이런 거 입힐까?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">강아지 우주복 ㅋㅋㅋㅋㅋ 너무 귀엽지 않아?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">...너 진짜 진심이냐?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">진짜 상상임신이라도 한 사람처럼 구네.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">진심인데?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">난 지금 내 뱃속에 오빠랑 내 아기가 있다고 굳게 믿고 있어</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그러니까 오빠도 아빠로서의 책임감을 좀 가져봐</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">책임감이고 나발이고.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">너 지금 그 강아지 우주복 나 놀리려고 보낸 거지.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아닌데?!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오빠가 나 맨날 강아지라고 하니까...</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">우리 아기도 강아지일 거 아냐</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그럼 강아지 옷 입어야지!</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">ㅈㄴ 논리적이네.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">어이가 없어서 웃음이 나온다 진짜.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">알았어.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">사.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">니가 사고 싶은 거 다 사.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그 우주복도 사고, 에펠탑은 못 사주니까 대신 에펠탑 모형이라도 사.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">대신</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오늘 집에 가서 니가 산 거 전부 입고 나 맞이해라.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">전부 다...?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">강아지 우주복이랑 에펠탑 모형을...?</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">ㅇㅇ</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">그리고 내가 왜 니 남편이고 니 아기 아빠인지.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">밤새도록 몸으로 증명해줄 테니까.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">기대하고 있어라, 우리 예비 엄마.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">...알았어</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">오빠</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">사랑해</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-end; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-right: 8px;">
+    <div style="padding: 8px 14px; background-color: #007aff; border-radius: 18px 18px 6px 18px; color: #fff; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">빨리 와</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">회의 끝나자마자 갈게.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">문 열어놓고 기다려.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">아, 아니다. 문 잠가.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">내가 열고 들어갈 거니까.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">내 집이잖아.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 3.5px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">내 아내랑, 내 상상 속 아기가 있는.</div>
+    </div>
+    </div>
+    <div class="msg-bubble" style="display: flex; justify-content: flex-start; align-items: flex-end; margin-bottom: 10px;">
+    <div style="position: relative; max-width: 80%; margin-left: 8px;">
+    <div style="padding: 8px 14px; background-color: #e9e9eb; border-radius: 18px 18px 18px 6px; color: #000; line-height: 1.5; letter-spacing: -0.01em; white-space: pre-wrap; outline: none; position: relative; z-index: 1;">세상에서 제일 소중한 내 집.</div>
+    </div>
+    </div>
+    </div>
+    </div>
