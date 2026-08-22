@@ -23,7 +23,7 @@ const CATEGORY_TITLES = {
   characters: "Characters",
   gallery: "Gallery",
   diary: "LOG",
-  world: "World",
+  world: "SHARE",
   ooc: "OOC"
 };
 
