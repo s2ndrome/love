@@ -2,5 +2,5 @@
   { "id": "setting", "label": "01. Setting" },
   { "id": "organizations", "label": "02. Organizations" },
   { "id": "characters", "label": "03. Characters" },
-  { "id": "timeline", "label": "04. Timeline" }
+  { "id": "HUG PROMPT", "label": "인형 껴안는 프롬프트" }
 ]
