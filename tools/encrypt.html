@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>글 암호화 도구</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background: #f2f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    color: #1d1d1f;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.08);
+  }
+  h1 { margin: 0 0 6px; font-size: 20px; }
+  p.hint { margin: 0 0 24px; color: #6e6e73; font-size: 13px; line-height: 1.6; }
+  label { display: block; margin: 18px 0 6px; font-size: 13px; font-weight: 600; }
+  input, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+    resize: vertical;
+  }
+  textarea { min-height: 160px; }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 8px;
+    background: #0a84ff;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:disabled { opacity: .5; cursor: default; }
+  #result-wrap { margin-top: 24px; display: none; }
+  #result {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px 12px;
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 8px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11.5px;
+    background: #fafafa;
+  }
+  #copy-btn { background: #34c759; }
+  #copy-btn.copied { background: #8a8a8e; }
+  .status { margin-top: 8px; font-size: 12px; color: #6e6e73; }
+</style>
+</head>
+<body>
+<main>
+  <h1>글 암호화 도구</h1>
+  <p class="hint">
+    비밀번호로 잠글 글의 내용을 아래에 붙여넣고 암호화하세요.<br>
+    결과로 나오는 코드를 그대로 <code>posts/카테고리/글이름.html</code> 파일에 붙여넣으면,
+    그 글은 사이트에서 비밀번호를 입력해야만 열립니다.<br>
+    이 페이지는 <b>완전히 이 브라우저 안에서만</b> 계산돼요 — 아무 데도 전송되지 않습니다.
+  </p>
+
+  <label for="password">비밀번호</label>
+  <input type="text" id="password" placeholder="이 글을 열 때 쓸 비밀번호">
+
+  <label for="content">글 내용 (원래 posts 파일에 넣던 HTML 그대로)</label>
+  <textarea id="content" placeholder="&lt;div class=&quot;feed-card&quot;&gt;...&lt;/div&gt; 같은 원래 글 내용을 그대로 붙여넣으세요"></textarea>
+
+  <div>
+    <button id="encrypt-btn">암호화하기</button>
+  </div>
+
+  <div id="result-wrap">
+    <label for="result">이 코드를 posts 파일에 붙여넣으세요</label>
+    <textarea id="result" readonly></textarea>
+    <button id="copy-btn" type="button">복사하기</button>
+    <p class="status" id="status"></p>
+  </div>
+</main>
+
+<script>
+function bytesToBase64(bytes) {
+  let binary = "";
+  bytes.forEach(b => binary += String.fromCharCode(b));
+  return btoa(binary);
+}
+
+async function encryptPost(password, plaintext) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+
+  const baseKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+    baseKey,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt"]
+  );
+
+  const cipherBuf = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(plaintext));
+
+  const saltB64 = bytesToBase64(salt);
+  const ivB64 = bytesToBase64(iv);
+  const cipherB64 = bytesToBase64(new Uint8Array(cipherBuf));
+
+  return `<div class="locked-post" data-salt="${saltB64}" data-iv="${ivB64}" data-cipher="${cipherB64}"></div>`;
+}
+
+const encryptBtn = document.getElementById("encrypt-btn");
+const resultWrap = document.getElementById("result-wrap");
+const resultBox = document.getElementById("result");
+const copyBtn = document.getElementById("copy-btn");
+const status = document.getElementById("status");
+
+encryptBtn.addEventListener("click", async () => {
+  const password = document.getElementById("password").value;
+  const content = document.getElementById("content").value;
+
+  if (!password || !content) {
+    status.textContent = "비밀번호랑 글 내용을 둘 다 입력해주세요.";
+    return;
+  }
+
+  encryptBtn.disabled = true;
+  status.textContent = "암호화하는 중…";
+
+  const snippet = await encryptPost(password, content);
+
+  resultBox.value = snippet;
+  resultWrap.style.display = "block";
+  status.textContent = "완료! 아래 코드를 복사해서 posts 파일에 붙여넣으세요.";
+  encryptBtn.disabled = false;
+});
+
+copyBtn.addEventListener("click", async () => {
+  await navigator.clipboard.writeText(resultBox.value);
+  copyBtn.textContent = "복사됨!";
+  copyBtn.classList.add("copied");
+  setTimeout(() => {
+    copyBtn.textContent = "복사하기";
+    copyBtn.classList.remove("copied");
+  }, 1500);
+});
+</script>
+</body>
+</html>

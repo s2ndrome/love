@@ -673,6 +673,83 @@ button { font: inherit; }
   font-variant-numeric: tabular-nums;
 }
 
+/* locked posts */
+.lock-badge {
+  display: inline-flex;
+  margin-right: 6px;
+  color: #c7c7cc;
+  vertical-align: -2px;
+}
+
+.lock-badge svg { width: 12px; height: 12px; display: block; }
+
+.gallery-item .lock-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  margin: 0;
+  padding: 3px;
+  color: #fff;
+  background: rgba(0, 0, 0, .45);
+  border-radius: 6px;
+}
+
+.lock-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.lock-gate-icon { width: 34px; height: 34px; color: #c7c7cc; }
+.lock-gate-icon svg { width: 100%; height: 100%; display: block; }
+
+.lock-gate-hint {
+  margin: 0;
+  color: #8a8a8e;
+  font-size: 13px;
+}
+
+.lock-gate-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.lock-gate-input {
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, .12);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  width: 160px;
+}
+
+.lock-gate-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.lock-gate-submit {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lock-gate-submit:disabled { opacity: .6; cursor: default; }
+
+.lock-gate-error {
+  margin: 4px 0 0;
+  color: #ff3b30;
+  font-size: 12px;
+}
+
 .note-card {
   border: 1px solid rgba(0, 0, 0, .1);
   border-radius: 14px;

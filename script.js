@@ -30,23 +30,107 @@ const CATEGORY_TITLES = {
 const noteIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`;
 const copyIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>`;
 const checkIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l5 5L20 6"/></svg>`;
+const lockIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>`;
+const lockBadgeSvg = `<span class="lock-badge">${lockIconSvg}</span>`;
+
+/* ------------------------------------------------------------------ */
+/* password-locked posts: a post file can be just
+     <div class="locked-post" data-salt="…" data-iv="…" data-cipher="…"></div>
+   instead of real HTML. The real content is AES-256-GCM encrypted with a
+   PBKDF2(password, salt, 100000, SHA-256) key, so the plaintext never
+   appears anywhere in the repo — only this decrypts it, client-side. */
+/* ------------------------------------------------------------------ */
+function parseLockedPost(html) {
+  const match = html.match(/<div class="locked-post" data-salt="([^"]+)" data-iv="([^"]+)" data-cipher="([^"]+)">/);
+  if (!match) return null;
+  return { salt: match[1], iv: match[2], cipher: match[3] };
+}
+
+function base64ToBytes(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+async function decryptLockedPost(locked, password) {
+  const baseKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: base64ToBytes(locked.salt), iterations: 100000, hash: "SHA-256" },
+    baseKey,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["decrypt"]
+  );
+  const plainBuf = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: base64ToBytes(locked.iv) },
+    key,
+    base64ToBytes(locked.cipher)
+  );
+  return new TextDecoder().decode(plainBuf);
+}
+
+function renderLockGate() {
+  return `
+    <div class="lock-gate">
+      <div class="lock-gate-icon">${lockIconSvg}</div>
+      <p class="lock-gate-hint">비밀번호가 필요한 글이에요</p>
+      <div class="lock-gate-row">
+        <input type="password" class="lock-gate-input" placeholder="비밀번호" autocomplete="off">
+        <button type="button" class="lock-gate-submit">확인</button>
+      </div>
+      <p class="lock-gate-error" hidden>비밀번호가 틀렸어요</p>
+    </div>
+  `;
+}
+
+function wireLockGate(locked, category, item) {
+  const input = contentBody.querySelector(".lock-gate-input");
+  const submit = contentBody.querySelector(".lock-gate-submit");
+  const error = contentBody.querySelector(".lock-gate-error");
+
+  const tryUnlock = async () => {
+    const password = input.value;
+    if (!password || submit.disabled) return;
+
+    submit.disabled = true;
+    error.hidden = true;
+
+    try {
+      const html = await decryptLockedPost(locked, password);
+      contentBody.innerHTML = wrapDetail(category, item, html);
+      wireDetailButtons();
+    } catch (err) {
+      error.hidden = false;
+      input.value = "";
+      input.focus();
+      submit.disabled = false;
+    }
+  };
+
+  submit.addEventListener("click", tryUnlock);
+  input.addEventListener("keydown", event => {
+    if (event.key === "Enter") tryUnlock();
+  });
+  input.focus();
+}
 
 /* categories with a clickable list of entries; each entry's full content
    lives in its own file at posts/<category>/<id>.html */
 const LIST_RENDERERS = {
   diary: items => `
     <nav class="entry-list">
-      ${items.map(item => `<button data-id="${item.id}">${item.label}</button>`).join("")}
+      ${items.map(item => `<button data-id="${item.id}">${item.locked ? lockBadgeSvg : ""}${item.label}</button>`).join("")}
     </nav>
   `,
   world: items => `
     <nav class="entry-list">
-      ${items.map(item => `<button data-id="${item.id}">${item.label}</button>`).join("")}
+      ${items.map(item => `<button data-id="${item.id}">${item.locked ? lockBadgeSvg : ""}${item.label}</button>`).join("")}
     </nav>
   `,
   ooc: items => `
     <nav class="entry-list">
-      ${items.map(item => `<button data-id="${item.id}">${item.name}</button>`).join("")}
+      ${items.map(item => `<button data-id="${item.id}">${item.locked ? lockBadgeSvg : ""}${item.name}</button>`).join("")}
     </nav>
   `,
   characters: items => `
@@ -54,7 +138,7 @@ const LIST_RENDERERS = {
       ${items.map(item => `
         <button class="character-card" data-id="${item.id}">
           ${item.thumb ? `<img src="${item.thumb}" alt="${item.name}">` : `<div class="fake-photo">${item.thumbLabel}</div>`}
-          <h3>${item.name}</h3>
+          <h3>${item.locked ? lockBadgeSvg : ""}${item.name}</h3>
           <p>${item.blurb}</p>
         </button>
       `).join("")}
@@ -64,6 +148,7 @@ const LIST_RENDERERS = {
     <div class="gallery-grid">
       ${items.map(item => `
         <button class="gallery-item" data-id="${item.id}">
+          ${item.locked ? lockBadgeSvg : ""}
           ${item.thumb ? `<img src="${item.thumb}" alt="${item.thumbLabel || ""}">` : item.thumbLabel}
         </button>
       `).join("")}
@@ -191,6 +276,11 @@ function renderList(category, items, page = 0) {
   });
 }
 
+function wireDetailButtons() {
+  const copyButton = contentBody.querySelector(".copy-button");
+  if (copyButton) copyButton.addEventListener("click", () => copyNoteText(copyButton));
+}
+
 async function openDetail(category, id) {
   activeDetail = { category, id };
   updateBackLabel();
@@ -199,10 +289,16 @@ async function openDetail(category, id) {
   try {
     const html = await fetchText(`posts/${category}/${id}.html`);
     const item = (lastListItems || []).find(entry => entry.id === id);
-    contentBody.innerHTML = wrapDetail(category, item, html);
+    const locked = parseLockedPost(html);
 
-    const copyButton = contentBody.querySelector(".copy-button");
-    if (copyButton) copyButton.addEventListener("click", () => copyNoteText(copyButton));
+    if (locked) {
+      contentBody.innerHTML = renderLockGate();
+      wireLockGate(locked, category, item);
+      return;
+    }
+
+    contentBody.innerHTML = wrapDetail(category, item, html);
+    wireDetailButtons();
   } catch (err) {
     contentBody.innerHTML = `<p class="loading-hint">불러오지 못했어요.</p>`;
   }
