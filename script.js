@@ -25,7 +25,8 @@ const CATEGORY_TITLES = {
   diary: "LOG",
   world: "SHARE",
   ooc: "OOC",
-  guestbook: "GUESTBOOK"
+  guestbook: "GUESTBOOK",
+  prompt: "PROMPT"
 };
 
 const noteIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`;
@@ -359,6 +360,11 @@ async function openCategory(category) {
     if (category === "guestbook") {
       contentBody.innerHTML = await fetchText("posts/guestbook.html");
       wireMessageForm();
+      return;
+    }
+
+    if (category === "prompt") {
+      contentBody.innerHTML = await fetchText("posts/prompt.html");
       return;
     }
 
