@@ -754,6 +754,21 @@ button { font: inherit; }
   font-size: 12px;
 }
 
+/* prompt blocks with their own copy button (e.g. the PROMPT page) */
+.prompt-block {
+  position: relative;
+  padding-right: 34px;
+  margin-bottom: 14px;
+}
+
+.prompt-block:last-child { margin-bottom: 0; }
+
+.prompt-block .copy-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 /* guestbook message form */
 .guestbook-hint {
   margin: 0 0 4px;

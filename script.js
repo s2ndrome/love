@@ -11,6 +11,35 @@ window.playTrack = function (button, videoId) {
   if (li) li.classList.add("active");
 };
 
+// called from inline onclick="" in post HTML — copies the text of the
+// nearest .copy-target (e.g. a prompt block) to the clipboard
+window.copyPromptText = function (button) {
+  const target = button.closest(".prompt-block")?.querySelector(".copy-target");
+  if (!target) return;
+  const text = target.innerText.trim();
+
+  const showCopied = () => {
+    button.classList.add("copied");
+    button.innerHTML = checkIconSvg;
+    setTimeout(() => {
+      button.classList.remove("copied");
+      button.innerHTML = copyIconSvg;
+    }, 1400);
+  };
+
+  navigator.clipboard.writeText(text).then(showCopied).catch(() => {
+    const scratch = document.createElement("textarea");
+    scratch.value = text;
+    scratch.style.position = "fixed";
+    scratch.style.opacity = "0";
+    document.body.appendChild(scratch);
+    scratch.select();
+    document.execCommand("copy");
+    document.body.removeChild(scratch);
+    showCopied();
+  });
+};
+
 const menuLayer = document.getElementById("menuLayer");
 const contentLayer = document.getElementById("contentLayer");
 const openMenu = document.getElementById("openMenu");
@@ -279,7 +308,9 @@ function renderList(category, items, page = 0) {
 }
 
 function wireDetailButtons() {
-  const copyButton = contentBody.querySelector(".copy-button");
+  // scoped to .note-card so this doesn't collide with .prompt-block's
+  // self-contained copy buttons (those use inline onclick="copyPromptText(this)")
+  const copyButton = contentBody.querySelector(".note-card .copy-button");
   if (copyButton) copyButton.addEventListener("click", () => copyNoteText(copyButton));
 }
 
@@ -364,7 +395,16 @@ async function openCategory(category) {
     }
 
     if (category === "prompt") {
-      contentBody.innerHTML = await fetchText("posts/prompt.html");
+      const html = await fetchText("posts/prompt.html");
+      const locked = parseLockedPost(html);
+
+      if (locked) {
+        contentBody.innerHTML = renderLockGate();
+        wireLockGate(locked, category, null);
+        return;
+      }
+
+      contentBody.innerHTML = html;
       return;
     }
 
