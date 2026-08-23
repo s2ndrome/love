@@ -341,7 +341,7 @@ function wireMessageForm() {
       if (!res.ok) throw new Error("send failed");
 
       form.reset();
-      status.textContent = "메시지를 보냈어요. 고마워요 ♡";
+      status.textContent = "메시지를 보냈어요 ♡";
     } catch (err) {
       status.textContent = "전송에 실패했어요. 잠시 후 다시 시도해주세요.";
       status.classList.add("error");
