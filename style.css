@@ -367,6 +367,16 @@ button { font: inherit; }
 .nav-icon.c-green  { background: linear-gradient(160deg, #7be0b8, #2fbf71); }
 .nav-icon.c-teal   { background: linear-gradient(160deg, #7fe0e0, #2fb6b6); }
 
+/* icon with no colored badge behind it, just the glyph */
+.nav-icon-plain {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  color: #8a8a8e;
+}
+
 .nav-chevron {
   margin-left: auto;
   color: #c7c7cc;
