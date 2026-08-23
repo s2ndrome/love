@@ -24,7 +24,8 @@ const CATEGORY_TITLES = {
   gallery: "Gallery",
   diary: "LOG",
   world: "SHARE",
-  ooc: "OOC"
+  ooc: "OOC",
+  guestbook: "GUESTBOOK"
 };
 
 const noteIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`;
@@ -281,6 +282,43 @@ function wireDetailButtons() {
   if (copyButton) copyButton.addEventListener("click", () => copyNoteText(copyButton));
 }
 
+/* posts/guestbook.html's <form> posts to Formspree; intercept it so the
+   visitor stays on this page instead of being redirected there */
+function wireMessageForm() {
+  const form = contentBody.querySelector(".message-form");
+  if (!form) return;
+
+  const status = form.querySelector(".message-form-status");
+  const button = form.querySelector("button");
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (button.disabled) return;
+
+    button.disabled = true;
+    status.textContent = "";
+    status.classList.remove("error");
+
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" }
+      });
+
+      if (!res.ok) throw new Error("send failed");
+
+      form.reset();
+      status.textContent = "메시지를 보냈어요. 고마워요 ♡";
+    } catch (err) {
+      status.textContent = "전송에 실패했어요. 잠시 후 다시 시도해주세요.";
+      status.classList.add("error");
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
+
 async function openDetail(category, id) {
   activeDetail = { category, id };
   updateBackLabel();
@@ -315,6 +353,12 @@ async function openCategory(category) {
   try {
     if (category === "about") {
       contentBody.innerHTML = await fetchText("posts/about/about.html");
+      return;
+    }
+
+    if (category === "guestbook") {
+      contentBody.innerHTML = await fetchText("posts/guestbook.html");
+      wireMessageForm();
       return;
     }
 

@@ -326,7 +326,8 @@ button { font: inherit; }
   gap: 2px;
 }
 
-.nav-list button {
+.nav-list button,
+.nav-list a {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -338,12 +339,15 @@ button { font: inherit; }
   color: var(--text);
   font-size: 13.5px;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition: background .15s ease;
 }
 
-.nav-list button:hover { background: rgba(0, 0, 0, .045); }
-.nav-list button:active { background: rgba(10, 132, 255, .14); }
+.nav-list button:hover,
+.nav-list a:hover { background: rgba(0, 0, 0, .045); }
+.nav-list button:active,
+.nav-list a:active { background: rgba(10, 132, 255, .14); }
 
 .nav-icon {
   width: 26px;
@@ -749,6 +753,54 @@ button { font: inherit; }
   color: #ff3b30;
   font-size: 12px;
 }
+
+/* guestbook message form */
+.message-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.message-form input,
+.message-form textarea {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, .12);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.message-form input:focus,
+.message-form textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.message-form button {
+  align-self: flex-end;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.message-form button:disabled { opacity: .6; cursor: default; }
+
+.message-form-status {
+  margin: 0;
+  text-align: right;
+  color: #34c759;
+  font-size: 12px;
+}
+
+.message-form-status.error { color: #ff3b30; }
 
 .note-card {
   border: 1px solid rgba(0, 0, 0, .1);
