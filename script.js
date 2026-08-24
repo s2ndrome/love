@@ -254,9 +254,21 @@ async function fetchJSON(path) {
 
 async function fetchText(path) {
   if (window.__EMBEDDED__ && path in window.__EMBEDDED__) return window.__EMBEDDED__[path];
+
   const res = await fetch(path);
-  if (!res.ok) throw new Error(`failed to load ${path}`);
-  return res.text();
+  if (res.ok) return res.text();
+
+  // Korean filenames uploaded from a Mac often end up NFD (decomposed)
+  // on disk while ids in data/*.json are typed as NFC (composed) — same
+  // glyphs, different bytes, so the exact-match fetch above 404s. Retry
+  // once with the NFD form so a new post doesn't need a manual rename.
+  const nfdPath = path.normalize("NFD");
+  if (nfdPath !== path) {
+    const retry = await fetch(nfdPath);
+    if (retry.ok) return retry.text();
+  }
+
+  throw new Error(`failed to load ${path}`);
 }
 
 let activeDetail = null; // { category, id } | null
@@ -426,6 +438,19 @@ function closeLayer(layer) {
   layer.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
 }
+
+// same NFC/NFD self-heal as fetchText, but for <img> tags — "error"
+// doesn't bubble, so this has to listen on the capture phase
+document.addEventListener("error", event => {
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement) || img.dataset.nfdRetried) return;
+
+  const nfdSrc = img.getAttribute("src").normalize("NFD");
+  if (nfdSrc === img.getAttribute("src")) return;
+
+  img.dataset.nfdRetried = "1";
+  img.src = nfdSrc;
+}, true);
 
 openMenu.addEventListener("click", () => openLayer(menuLayer));
 
