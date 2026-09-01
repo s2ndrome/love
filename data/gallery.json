@@ -1,9 +1,42 @@
 [
-  { "id": "image-07", "thumbLabel": "IMAGE 07", "thumb": "img/꽃남롬줌.png" },
-  { "id": "image-01", "thumbLabel": "IMAGE 01", "thumb": "img/romrang2.png" },
-  { "id": "image-02", "thumbLabel": "IMAGE 02", "thumb": "img/웨딩롬줌.png" },
-  { "id": "image-03", "thumbLabel": "IMAGE 03", "thumb": "img/롬둠4.png"},
-  { "id": "image-04", "thumbLabel": "IMAGE 04", "thumb": "img/롬줌5.png" },
-  { "id": "image-05", "thumbLabel": "IMAGE 05", "thumb": "img/IMG2608.png" },
-  { "id": "image-06", "thumbLabel": "IMAGE 06", "thumb": "img/portrait.png" }
+  {
+    "id": "image-07",
+    "thumbLabel": "IMAGE 07",
+    "thumb": "img/꽃남롬줌.png"
+  },
+  {
+    "id": "image-01",
+    "thumbLabel": "IMAGE 01",
+    "thumb": "img/romrang2.png"
+  },
+  {
+    "id": "image-02",
+    "thumbLabel": "IMAGE 02",
+    "thumb": "img/웨딩롬줌.png"
+  },
+  {
+    "id": "image-03",
+    "thumbLabel": "IMAGE 03",
+    "thumb": "img/롬둠4.png"
+  },
+  {
+    "id": "image-04",
+    "thumbLabel": "IMAGE 04",
+    "thumb": "img/롬줌5.png"
+  },
+  {
+    "id": "image-05",
+    "thumbLabel": "IMAGE 05",
+    "thumb": "img/IMG2608.png"
+  },
+  {
+    "id": "image-06",
+    "thumbLabel": "IMAGE 06",
+    "thumb": "img/portrait.png"
+  },
+  {
+    "id": "image-08",
+    "thumbLabel": "IMAGE 08",
+    "thumb": "img/image-08.png"
+  }
 ]
