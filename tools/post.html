@@ -241,7 +241,7 @@ uploadBtn.addEventListener("click", async () => {
 
     const entry = category === "ooc" ? { id: title, name: title } : { id: title, label: title };
     if (locked) entry.locked = true;
-    list.push(entry);
+    list.unshift(entry);
 
     setStatus(`${dataPath} 업데이트 중…`);
     const newJsonText = JSON.stringify(list, null, 2) + "\n";

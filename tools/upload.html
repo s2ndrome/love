@@ -202,7 +202,7 @@ uploadBtn.addEventListener("click", async () => {
     await putFile(imgPath, fileB64, `Add gallery photo ${id}`);
 
     setStatus("gallery.json 업데이트 중…");
-    gallery.push({ id, thumbLabel: `IMAGE ${padded}`, thumb: imgPath });
+    gallery.unshift({ id, thumbLabel: `IMAGE ${padded}`, thumb: imgPath });
     const newJsonText = JSON.stringify(gallery, null, 2) + "\n";
     await putFile("data/gallery.json", utf8ToBase64(newJsonText), `Add ${id} to gallery.json`, jsonFile.sha);
 
