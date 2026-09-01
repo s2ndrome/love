@@ -40,35 +40,6 @@ window.copyPromptText = function (button) {
   });
 };
 
-// called from inline onclick="" on the Banner page's own banner — copies
-// the hidden .copy-target's embed code and flashes the hint text
-window.copyBannerCode = function (button) {
-  const wrap = button.closest(".my-banner");
-  const target = wrap?.querySelector(".copy-target");
-  const hint = wrap?.querySelector(".my-banner-hint");
-  if (!target) return;
-  const text = target.textContent.trim();
-
-  const showCopied = () => {
-    if (!hint) return;
-    if (!hint.dataset.original) hint.dataset.original = hint.textContent;
-    hint.textContent = "복사됐어요!";
-    setTimeout(() => { hint.textContent = hint.dataset.original; }, 1400);
-  };
-
-  navigator.clipboard.writeText(text).then(showCopied).catch(() => {
-    const scratch = document.createElement("textarea");
-    scratch.value = text;
-    scratch.style.position = "fixed";
-    scratch.style.opacity = "0";
-    document.body.appendChild(scratch);
-    scratch.select();
-    document.execCommand("copy");
-    document.body.removeChild(scratch);
-    showCopied();
-  });
-};
-
 const menuLayer = document.getElementById("menuLayer");
 const contentLayer = document.getElementById("contentLayer");
 const openMenu = document.getElementById("openMenu");
