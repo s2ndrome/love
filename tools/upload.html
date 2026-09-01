@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>갤러리 사진 업로드 도구</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background: #f2f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    color: #1d1d1f;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.08);
+  }
+  h1 { margin: 0 0 6px; font-size: 20px; }
+  p.hint { margin: 0 0 20px; color: #6e6e73; font-size: 13px; line-height: 1.6; }
+  details {
+    margin-bottom: 24px;
+    padding: 12px 14px;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 8px;
+    background: #fafafa;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: #444;
+  }
+  details summary { cursor: pointer; font-weight: 600; color: #1d1d1f; }
+  details ol { margin: 10px 0 0; padding-left: 18px; }
+  details code { background: #eee; padding: 1px 5px; border-radius: 4px; }
+  label { display: block; margin: 18px 0 6px; font-size: 13px; font-weight: 600; }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+  }
+  input[type="file"] { font-size: 13px; }
+  button {
+    margin-top: 22px;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 8px;
+    background: #0a84ff;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:disabled { opacity: .5; cursor: default; }
+  .status { margin-top: 14px; font-size: 12.5px; color: #6e6e73; white-space: pre-line; }
+  .status.error { color: #d32f2f; }
+  .status.done { color: #1a8a3e; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>갤러리 사진 업로드 도구</h1>
+  <p class="hint">
+    사진 + 제목만 넣고 업로드하면, 사진 저장 → <code>data/gallery.json</code> 항목 추가 →
+    <code>posts/gallery/</code> 본문 파일 생성까지 한 번에 처리돼요.
+    번호(<code>image-08</code> 등)는 자동으로 매겨집니다.
+  </p>
+
+  <details>
+    <summary>GitHub 토큰은 어떻게 만들어요? (처음 한 번만)</summary>
+    <ol>
+      <li>GitHub 로그인 후 <code>github.com/settings/personal-access-tokens/new</code> 접속</li>
+      <li>Repository access → <b>Only select repositories</b> 선택 → <code>s2ndrome/love</code> 선택</li>
+      <li>Permissions → <b>Contents</b> → <b>Read and write</b>로 설정</li>
+      <li>Generate token → 생성된 토큰(<code>github_pat_...</code>) 복사</li>
+      <li>아래 칸에 붙여넣기 — 이 브라우저에만 저장되고, 딱 이 저장소에만 쓸 수 있어요</li>
+    </ol>
+  </details>
+
+  <label for="token">GitHub 토큰</label>
+  <input type="password" id="token" placeholder="github_pat_...">
+
+  <label for="photo">사진 파일</label>
+  <input type="file" id="photo" accept="image/*">
+
+  <label for="title">제목</label>
+  <input type="text" id="title" placeholder="예: 롬랑8">
+
+  <button id="upload-btn">업로드</button>
+  <p class="status" id="status"></p>
+</main>
+
+<script>
+const OWNER = "s2ndrome";
+const REPO = "love";
+const BRANCH = "main";
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+
+const tokenInput = document.getElementById("token");
+const photoInput = document.getElementById("photo");
+const titleInput = document.getElementById("title");
+const uploadBtn = document.getElementById("upload-btn");
+const status = document.getElementById("status");
+
+const savedToken = localStorage.getItem("gh_token");
+if (savedToken) tokenInput.value = savedToken;
+
+function setStatus(text, kind) {
+  status.textContent = text;
+  status.className = "status" + (kind ? " " + kind : "");
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = "";
+  bytes.forEach(b => binary += String.fromCharCode(b));
+  return btoa(binary);
+}
+
+function base64ToUtf8(b64) {
+  const binary = atob(b64.replace(/\n/g, ""));
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function putFile(path, base64Content, message, sha) {
+  const body = { message, content: base64Content, branch: BRANCH };
+  if (sha) body.sha = sha;
+
+  const res = await fetch(`${API}/${path}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${tokenInput.value.trim()}`,
+      Accept: "application/vnd.github+json"
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    const detail = await res.json().catch(() => ({}));
+    throw new Error(`${path} 저장 실패 (${res.status}): ${detail.message || "알 수 없는 오류"}`);
+  }
+}
+
+uploadBtn.addEventListener("click", async () => {
+  const token = tokenInput.value.trim();
+  const title = titleInput.value.trim();
+  const file = photoInput.files[0];
+
+  if (!token || !title || !file) {
+    setStatus("토큰, 제목, 사진을 모두 입력해주세요.", "error");
+    return;
+  }
+
+  localStorage.setItem("gh_token", token);
+  uploadBtn.disabled = true;
+
+  try {
+    setStatus("갤러리 목록 불러오는 중…");
+    const jsonRes = await fetch(`${API}/data/gallery.json?ref=${BRANCH}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }
+    });
+    if (!jsonRes.ok) throw new Error(`gallery.json을 못 불러왔어요 (${jsonRes.status}) — 토큰 권한을 확인해주세요.`);
+    const jsonFile = await jsonRes.json();
+    const gallery = JSON.parse(base64ToUtf8(jsonFile.content));
+
+    let maxN = 0;
+    for (const item of gallery) {
+      const m = /^image-(\d+)$/.exec(item.id || "");
+      if (m) maxN = Math.max(maxN, parseInt(m[1], 10));
+    }
+    const nextN = maxN + 1;
+    const padded = String(nextN).padStart(2, "0");
+    const id = `image-${padded}`;
+    const ext = (file.name.split(".").pop() || "png").toLowerCase();
+    const imgPath = `img/${id}.${ext}`;
+
+    setStatus(`사진 업로드 중… (${id})`);
+    const fileB64 = await readFileAsBase64(file);
+    await putFile(imgPath, fileB64, `Add gallery photo ${id}`);
+
+    setStatus("gallery.json 업데이트 중…");
+    gallery.push({ id, thumbLabel: `IMAGE ${padded}`, thumb: imgPath });
+    const newJsonText = JSON.stringify(gallery, null, 2) + "\n";
+    await putFile("data/gallery.json", utf8ToBase64(newJsonText), `Add ${id} to gallery.json`, jsonFile.sha);
+
+    setStatus("본문 글 생성 중…");
+    const safeTitle = escapeHtml(title);
+    const postHtml =
+`<div class="feed-card">
+  <div class="card-header"><span class="card-icon">♡</span><span class="card-title">${safeTitle}</span></div>
+  <img class="gallery-photo" src="${imgPath}" alt="${safeTitle}" style="margin-bottom:14px;">
+</div>
+`;
+    await putFile(`posts/gallery/${id}.html`, utf8ToBase64(postHtml), `Add post for ${id}`);
+
+    setStatus(`완료! ${id}로 등록됐어요. 1~2분 후 사이트에 반영돼요.`, "done");
+    photoInput.value = "";
+    titleInput.value = "";
+  } catch (err) {
+    setStatus(err.message, "error");
+  } finally {
+    uploadBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
