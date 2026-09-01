@@ -40,6 +40,35 @@ window.copyPromptText = function (button) {
   });
 };
 
+// called from inline onclick="" on the Banner page's own banner — copies
+// the hidden .copy-target's embed code and flashes the hint text
+window.copyBannerCode = function (button) {
+  const wrap = button.closest(".my-banner");
+  const target = wrap?.querySelector(".copy-target");
+  const hint = wrap?.querySelector(".my-banner-hint");
+  if (!target) return;
+  const text = target.textContent.trim();
+
+  const showCopied = () => {
+    if (!hint) return;
+    if (!hint.dataset.original) hint.dataset.original = hint.textContent;
+    hint.textContent = "복사됐어요!";
+    setTimeout(() => { hint.textContent = hint.dataset.original; }, 1400);
+  };
+
+  navigator.clipboard.writeText(text).then(showCopied).catch(() => {
+    const scratch = document.createElement("textarea");
+    scratch.value = text;
+    scratch.style.position = "fixed";
+    scratch.style.opacity = "0";
+    document.body.appendChild(scratch);
+    scratch.select();
+    document.execCommand("copy");
+    document.body.removeChild(scratch);
+    showCopied();
+  });
+};
+
 const menuLayer = document.getElementById("menuLayer");
 const contentLayer = document.getElementById("contentLayer");
 const openMenu = document.getElementById("openMenu");
@@ -55,7 +84,8 @@ const CATEGORY_TITLES = {
   world: "SHARE",
   ooc: "OOC",
   guestbook: "GUESTBOOK",
-  prompt: "PROMPT"
+  prompt: "PROMPT",
+  banner: "BANNER"
 };
 
 const noteIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`;
@@ -417,6 +447,11 @@ async function openCategory(category) {
       }
 
       contentBody.innerHTML = html;
+      return;
+    }
+
+    if (category === "banner") {
+      contentBody.innerHTML = await fetchText("posts/banner.html");
       return;
     }
 
