@@ -201,15 +201,29 @@ button { font: inherit; }
   align-items: flex-end;
   gap: 12px;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, .55);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, .6);
+  background: linear-gradient(160deg, rgba(255, 255, 255, .75), rgba(255, 255, 255, .35));
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, .75);
   border-radius: 20px;
-  box-shadow: 0 12px 40px rgba(31, 26, 50, .18);
+  box-shadow:
+    0 12px 40px rgba(31, 26, 50, .18),
+    inset 0 1px 0 rgba(255, 255, 255, .9),
+    inset 0 -14px 20px -14px rgba(255, 255, 255, .5);
+}
+
+.dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .55) 0%, rgba(255, 255, 255, 0) 45%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, .3) 100%);
+  pointer-events: none;
 }
 
 .dock button {
+  position: relative;
+  z-index: 1;
   width: 48px;
   height: 48px;
   border: 0;
@@ -226,12 +240,12 @@ button { font: inherit; }
 .dock button:hover { transform: translateY(-10px) scale(1.12); }
 .dock button:active { transform: translateY(-4px) scale(1.04); }
 
-.dock-about       { background: linear-gradient(160deg, #6db8ff, #2f80ed); }
-.dock-characters  { background: linear-gradient(160deg, #c39bff, #8a5cf6); }
-.dock-gallery     { background: linear-gradient(160deg, #ff9ec4, #ec5e93); }
-.dock-diary       { background: linear-gradient(160deg, #ffc36b, #f2994a); }
-.dock-world       { background: linear-gradient(160deg, #7be0b8, #2fbf71); }
-.dock-guestbook   { background: linear-gradient(160deg, #7fe0e0, #2fb6b6); }
+.dock-about       { background: linear-gradient(160deg, #CFE6EC, #85BED2); }
+.dock-characters  { background: linear-gradient(160deg, #C4D8E3, #678FA8); }
+.dock-gallery     { background: linear-gradient(160deg, #95BBCE, #678FA8); }
+.dock-diary       { background: linear-gradient(160deg, #E6EBEF, #95BBCE); }
+.dock-world       { background: linear-gradient(160deg, #CFE6EC, #95BBCE); }
+.dock-guestbook   { background: linear-gradient(160deg, #C4D8E3, #85BED2); }
 
 /* ---------------------------------- */
 /* modal base */
