@@ -1102,6 +1102,8 @@ button { font: inherit; }
 
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
   .character-grid .character-card { flex: 0 1 45%; }
+
+  .back-button { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
