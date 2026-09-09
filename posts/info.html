@@ -1,0 +1,318 @@
+<div class="kk-wrap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  .kk-wrap { --kk-navy: #3d5a78; --kk-ink: #4a6b8a; }
+
+  .kk-poster {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 3 / 4;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 16px;
+    background: linear-gradient(165deg, #c3d9ee 0%, #b3cee6 55%, #a9c7e2 100%);
+    box-shadow: 0 12px 30px rgba(40, 70, 110, .22), inset 0 0 0 1px rgba(255, 255, 255, .35);
+    font-family: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .kk-poster * { box-sizing: border-box; }
+
+  /* -------- decorative stars -------- */
+  .kk-star {
+    position: absolute;
+    color: #fff;
+    filter: drop-shadow(0 1px 2px rgba(60, 90, 120, .18));
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* -------- lyric text -------- */
+  .kk-lyric {
+    position: absolute;
+    margin: 0;
+    color: #fff;
+    line-height: 1.55;
+    letter-spacing: .01em;
+    text-shadow: 0 1px 3px rgba(50, 80, 110, .2);
+    z-index: 5;
+  }
+
+  .kk-lyric-top {
+    top: 3.5%;
+    left: 15%;
+    font-size: clamp(9px, 2.5vw, 12px);
+    font-weight: 700;
+  }
+
+  .kk-lyric-bottom {
+    bottom: 2.5%;
+    left: 6%;
+    right: 6%;
+    font-size: clamp(8.5px, 2vw, 11px);
+    font-weight: 700;
+  }
+
+  .kk-credit {
+    position: absolute;
+    top: 59%;
+    left: 41%;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(8.5px, 2vw, 11px);
+    letter-spacing: .04em;
+    text-shadow: 0 1px 3px rgba(50, 80, 110, .2);
+    z-index: 5;
+  }
+
+  /* -------- big cursive words -------- */
+  .kk-word {
+    position: absolute;
+    margin: 0;
+    font-family: "Mrs Saint Delafield", cursive;
+    color: #fff;
+    line-height: .85;
+    z-index: 6;
+    pointer-events: none;
+    text-shadow: 0 2px 6px rgba(50, 80, 110, .18);
+  }
+
+  .kk-word-kiss {
+    top: 15%;
+    left: 50%;
+    width: 48%;
+    font-size: clamp(46px, 13vw, 96px);
+  }
+
+  .kk-word-a {
+    top: 39%;
+    left: 1%;
+    width: 22%;
+    font-size: clamp(56px, 16vw, 120px);
+  }
+
+  .kk-word-kitty {
+    top: 66%;
+    left: 43%;
+    width: 54%;
+    font-size: clamp(46px, 13vw, 92px);
+  }
+
+  /* -------- clickable photo blocks -------- */
+  .kk-check {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .kk-photo {
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .kk-photo-1 { top: 9.5%;  left: 0;   width: 58%; height: 20.5%; border-radius: 0 0 10px 0; }
+  .kk-photo-2 { top: 38.5%; left: 39%; width: 61%; height: 19.5%; border-radius: 10px 0 0 10px; }
+  .kk-photo-3 { top: 65.5%; left: 0;   width: 58%; height: 20.5%; border-radius: 0 10px 0 0; }
+
+  .kk-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+    filter: url(#kkDuotone);
+    transition: transform .5s ease;
+  }
+
+  .kk-photo:hover img,
+  .kk-photo:focus-visible img { transform: scale(1.06); }
+
+  /* halftone dot texture over the duotone photo */
+  .kk-photo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, .95) 1px, transparent 1.4px);
+    background-size: 4px 4px;
+    mix-blend-mode: overlay;
+    opacity: .55;
+    pointer-events: none;
+  }
+
+  /* small "+" affordance so it reads as clickable */
+  .kk-photo::after {
+    content: "+";
+    position: absolute;
+    right: 8px;
+    bottom: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .82);
+    color: var(--kk-navy);
+    font-family: "Space Mono", monospace;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(40, 70, 110, .25);
+    transition: transform .2s ease;
+  }
+
+  .kk-photo:hover::after,
+  .kk-photo:focus-visible::after { transform: scale(1.15); }
+
+  .kk-check:focus-visible + .kk-photo,
+  .kk-check:focus-visible ~ .kk-photo { outline: 2px solid #fff; outline-offset: 2px; }
+
+  /* -------- reveal block (the "block" that pops up on click) -------- */
+  .kk-reveal {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8%;
+    text-align: center;
+    background: rgba(35, 58, 84, .78);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+  }
+
+  .kk-reveal img {
+    max-width: 72%;
+    max-height: 62%;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 10px 26px rgba(10, 20, 35, .4);
+  }
+
+  .kk-reveal-name {
+    margin: 4px 0 0;
+    font-family: "Mrs Saint Delafield", cursive;
+    font-size: 34px;
+    color: #fff;
+  }
+
+  .kk-reveal-caption {
+    margin: 0;
+    max-width: 80%;
+    font-size: 11px;
+    letter-spacing: .02em;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, .9);
+  }
+
+  .kk-reveal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  #kk-1:checked ~ .kk-reveal-1,
+  #kk-2:checked ~ .kk-reveal-2,
+  #kk-3:checked ~ .kk-reveal-3 {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="kkDuotone" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 1 0"/>
+    <feComponentTransfer>
+      <feFuncR type="table" tableValues="0.16 0.92"/>
+      <feFuncG type="table" tableValues="0.27 0.95"/>
+      <feFuncB type="table" tableValues="0.42 1"/>
+    </feComponentTransfer>
+  </filter>
+</svg>
+
+<div class="kk-poster">
+  <input type="checkbox" id="kk-1" class="kk-check">
+  <input type="checkbox" id="kk-2" class="kk-check">
+  <input type="checkbox" id="kk-3" class="kk-check">
+
+  <p class="kk-lyric kk-lyric-top">i wanna, wanna,<br>kiss a, kiss a-</p>
+
+  <svg class="kk-star" style="top:2%; right:14%; width:26px; height:26px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+  <svg class="kk-star" style="top:1%; right:3%; width:16px; height:16px; opacity:.85;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+
+  <label for="kk-1" class="kk-photo kk-photo-1" tabindex="0">
+    <img src="img/sdpor.png" alt="사진 1 — 클릭해서 크게 보기">
+  </label>
+  <h2 class="kk-word kk-word-kiss">Kiss</h2>
+
+  <svg class="kk-star" style="top:28%; left:9%; width:30px; height:30px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+  <svg class="kk-star" style="top:30%; left:22%; width:14px; height:14px; opacity:.85;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+
+  <h2 class="kk-word kk-word-a">A</h2>
+
+  <label for="kk-2" class="kk-photo kk-photo-2" tabindex="0">
+    <img src="img/liapor.png" alt="사진 2 — 클릭해서 크게 보기">
+  </label>
+  <p class="kk-credit">song by chuu</p>
+
+  <svg class="kk-star" style="top:47%; right:6%; width:28px; height:28px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+
+  <svg class="kk-star" style="top:61.5%; left:25%; width:18px; height:18px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+
+  <label for="kk-3" class="kk-photo kk-photo-3" tabindex="0">
+    <img src="img/웨딩롬줌.png" alt="사진 3 — 클릭해서 크게 보기">
+  </label>
+  <h2 class="kk-word kk-word-kitty">Kitty</h2>
+
+  <svg class="kk-star" style="bottom:11%; left:3%; width:32px; height:32px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+  <svg class="kk-star" style="bottom:9%; left:17%; width:15px; height:15px; opacity:.85;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8L12 2z"/></svg>
+
+  <p class="kk-lyric kk-lyric-bottom">(i wanna, she wanna, he wanna) kiss a kitty</p>
+
+  <div class="kk-reveal kk-reveal-1">
+    <label for="kk-1" class="kk-reveal-close" aria-label="닫기">×</label>
+    <img src="img/sdpor.png" alt="SYNDROME">
+    <p class="kk-reveal-name">Syndrome</p>
+    <p class="kk-reveal-caption">01. kiss<br>여기에 원하는 소개 문구를 적어주세요.</p>
+    <label for="kk-1" class="kk-reveal-backdrop" style="position:absolute; inset:0; z-index:-1;"></label>
+  </div>
+
+  <div class="kk-reveal kk-reveal-2">
+    <label for="kk-2" class="kk-reveal-close" aria-label="닫기">×</label>
+    <img src="img/liapor.png" alt="LIA">
+    <p class="kk-reveal-name">Lia</p>
+    <p class="kk-reveal-caption">02. a<br>여기에 원하는 소개 문구를 적어주세요.</p>
+    <label for="kk-2" class="kk-reveal-backdrop" style="position:absolute; inset:0; z-index:-1;"></label>
+  </div>
+
+  <div class="kk-reveal kk-reveal-3">
+    <label for="kk-3" class="kk-reveal-close" aria-label="닫기">×</label>
+    <img src="img/웨딩롬줌.png" alt="TOGETHER">
+    <p class="kk-reveal-name">Kitty</p>
+    <p class="kk-reveal-caption">03. kitty<br>여기에 원하는 소개 문구를 적어주세요.</p>
+    <label for="kk-3" class="kk-reveal-backdrop" style="position:absolute; inset:0; z-index:-1;"></label>
+  </div>
+</div>
+</div>

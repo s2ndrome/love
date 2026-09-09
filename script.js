@@ -56,7 +56,8 @@ const CATEGORY_TITLES = {
   ooc: "OOC",
   guestbook: "GUESTBOOK",
   prompt: "PROMPT",
-  banner: "BANNER"
+  banner: "BANNER",
+  info: "INFO"
 };
 
 const noteIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`;
@@ -423,6 +424,11 @@ async function openCategory(category) {
 
     if (category === "banner") {
       contentBody.innerHTML = await fetchText("posts/banner.html");
+      return;
+    }
+
+    if (category === "info") {
+      contentBody.innerHTML = await fetchText("posts/info.html");
       return;
     }
 
