@@ -1,6 +1,18 @@
 [
-  { "id": "setting", "label": "01. Setting" },
-  { "id": "characters", "label": "03. Characters" },
-  { "id": "무릎", "label": "무릎 위에 앉아 끌어안는 프롬프트" },
-  { "id": "HUG PROMPT", "label": "인형 껴안는 프롬프트" }
+  {
+    "id": "setting",
+    "label": "setting"
+  },
+  {
+    "id": "characters",
+    "label": "03. Characters"
+  },
+  {
+    "id": "무릎",
+    "label": "무릎 위에 앉아 끌어안는 프롬프트"
+  },
+  {
+    "id": "HUG PROMPT",
+    "label": "인형 껴안는 프롬프트"
+  }
 ]
