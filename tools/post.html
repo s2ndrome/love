@@ -151,6 +151,10 @@ function setStatus(text, kind) {
   status.className = "status" + (kind ? " " + kind : "");
 }
 
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 function utf8ToBase64(str) {
   const bytes = new TextEncoder().encode(str);
   let binary = "";
@@ -268,6 +272,10 @@ uploadBtn.addEventListener("click", async () => {
       const photoB64 = await readFileAsBase64(photo);
       await putFile(imgPath, photoB64, `Add photo for post: ${title}`);
       content = `<img src="${imgPath}" width="100%">\n\n${content}`;
+    }
+
+    if (category === "world") {
+      content = `<div class="feed-card">\n  <div class="card-header"><span class="card-icon">♡</span><span class="card-title">${escapeHtml(title)}</span></div>\n${content}\n</div>\n`;
     }
 
     setStatus("본문 글 생성 중…");
