@@ -1,5 +1,10 @@
 [
   {
+    "id": "멘헤라력",
+    "label": "멘헤라력",
+    "locked": true
+  },
+  {
     "id": "신드롬의 우선순위",
     "label": "신드롬의 우선순위",
     "locked": true
