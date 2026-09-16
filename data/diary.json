@@ -1,5 +1,10 @@
 [
   {
+    "id": "리아 기록 말소",
+    "label": "리아 기록 말소",
+    "locked": true
+  },
+  {
     "id": "멘헤라력",
     "label": "멘헤라력",
     "locked": true
