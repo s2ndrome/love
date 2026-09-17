@@ -154,22 +154,38 @@ function readFileAsBase64(file) {
 }
 
 async function putFile(path, base64Content, message, sha) {
+  const token = tokenInput.value.trim();
   const body = { message, content: base64Content, branch: BRANCH };
   if (sha) body.sha = sha;
 
   const res = await fetch(`${API}/${path}`, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${tokenInput.value.trim()}`,
+      Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json"
     },
     body: JSON.stringify(body)
   });
 
-  if (!res.ok) {
-    const detail = await res.json().catch(() => ({}));
-    throw new Error(`${path} 저장 실패 (${res.status}): ${detail.message || "알 수 없는 오류"}`);
+  if (res.ok) return;
+
+  const detail = await res.json().catch(() => ({}));
+
+  // A retried upload (or a leftover file from a previously interrupted
+  // one) can already exist at this path — GitHub then rejects a
+  // sha-less PUT as invalid. Fetch its current sha once and retry
+  // instead of failing outright.
+  if (!sha && res.status === 422 && /sha/i.test(detail.message || "")) {
+    const existing = await fetch(`${API}/${path}?ref=${BRANCH}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }
+    });
+    if (existing.ok) {
+      const existingFile = await existing.json();
+      return putFile(path, base64Content, message, existingFile.sha);
+    }
   }
+
+  throw new Error(`${path} 저장 실패 (${res.status}): ${detail.message || "알 수 없는 오류"}`);
 }
 
 uploadBtn.addEventListener("click", async () => {

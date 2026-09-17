@@ -279,11 +279,20 @@ async function putFile(path, base64Content, message, sha, token) {
     headers: authHeaders(token),
     body: JSON.stringify(body)
   });
-  if (!res.ok) {
-    const detail = await res.json().catch(() => ({}));
-    throw new Error(`${path} 저장 실패 (${res.status}): ${detail.message || "알 수 없는 오류"}`);
+  if (res.ok) return res.json();
+
+  const detail = await res.json().catch(() => ({}));
+
+  // A retried save (or a leftover file from a previously interrupted
+  // one) can already exist at this path — GitHub then rejects a
+  // sha-less PUT as invalid. Fetch its current sha once and retry
+  // instead of failing outright.
+  if (!sha && res.status === 422 && /sha/i.test(detail.message || "")) {
+    const existing = await getFile(path, token).catch(() => null);
+    if (existing) return putFile(path, base64Content, message, existing.sha, token);
   }
-  return res.json();
+
+  throw new Error(`${path} 저장 실패 (${res.status}): ${detail.message || "알 수 없는 오류"}`);
 }
 
 async function deleteFile(path, sha, message, token) {
