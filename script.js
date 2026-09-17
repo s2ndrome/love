@@ -301,8 +301,8 @@ function renderPager(totalItems, page) {
 function galleryTabsHtml() {
   return `
     <div class="gallery-tabs">
-      <button class="gallery-tab${galleryGroup === "A" ? " active" : ""}" data-group="A" type="button">A 갤러리</button>
-      <button class="gallery-tab${galleryGroup === "B" ? " active" : ""}" data-group="B" type="button">B 갤러리</button>
+      <button class="gallery-tab${galleryGroup === "A" ? " active" : ""}" data-group="A" type="button">ARCH</button>
+      <button class="gallery-tab${galleryGroup === "B" ? " active" : ""}" data-group="B" type="button">S &amp; L</button>
     </div>
   `;
 }
