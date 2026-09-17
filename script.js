@@ -276,6 +276,7 @@ let activeDetail = null; // { category, id } | null
 let lastListCategory = null;
 let lastListItems = null;
 let listPage = 0;
+let galleryGroup = "A"; // "A" | "B" — which gallery sub-group is shown
 
 const PAGE_SIZE = 6;
 const PAGINATED_CATEGORIES = new Set(["gallery", "diary", "world", "ooc"]);
@@ -297,6 +298,15 @@ function renderPager(totalItems, page) {
   `;
 }
 
+function galleryTabsHtml() {
+  return `
+    <div class="gallery-tabs">
+      <button class="gallery-tab${galleryGroup === "A" ? " active" : ""}" data-group="A" type="button">A 갤러리</button>
+      <button class="gallery-tab${galleryGroup === "B" ? " active" : ""}" data-group="B" type="button">B 갤러리</button>
+    </div>
+  `;
+}
+
 function renderList(category, items, page = 0) {
   lastListCategory = category;
   lastListItems = items;
@@ -305,9 +315,11 @@ function renderList(category, items, page = 0) {
   updateBackLabel();
 
   const paginate = PAGINATED_CATEGORIES.has(category);
-  const pageItems = paginate ? items.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE) : items;
+  const visibleItems = category === "gallery" ? items.filter(item => (item.group || "A") === galleryGroup) : items;
+  const pageItems = paginate ? visibleItems.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE) : visibleItems;
 
-  contentBody.innerHTML = LIST_RENDERERS[category](pageItems) + (paginate ? renderPager(items.length, page) : "");
+  const tabsHtml = category === "gallery" ? galleryTabsHtml() : "";
+  contentBody.innerHTML = tabsHtml + LIST_RENDERERS[category](pageItems) + (paginate ? renderPager(visibleItems.length, page) : "");
 
   contentBody.querySelectorAll("[data-id]").forEach(button => {
     button.addEventListener("click", () => openDetail(category, button.dataset.id));
@@ -316,6 +328,14 @@ function renderList(category, items, page = 0) {
   contentBody.querySelectorAll("[data-pager]").forEach(button => {
     button.addEventListener("click", () => {
       renderList(category, items, page + (button.dataset.pager === "next" ? 1 : -1));
+    });
+  });
+
+  contentBody.querySelectorAll(".gallery-tab").forEach(button => {
+    button.addEventListener("click", () => {
+      if (button.dataset.group === galleryGroup) return;
+      galleryGroup = button.dataset.group;
+      renderList(category, items, 0);
     });
   });
 }

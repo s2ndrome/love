@@ -564,6 +564,36 @@ button { font: inherit; }
   line-height: 1.9;
 }
 
+.gallery-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 3px;
+  margin-bottom: 14px;
+  background: rgba(0, 0, 0, .05);
+  border-radius: 10px;
+}
+
+.gallery-tab {
+  flex: 1;
+  padding: 7px 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #6e6e73;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+
+.gallery-tab:hover { color: #3c3c43; }
+
+.gallery-tab.active {
+  background: #fff;
+  color: #1d1d1f;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
