@@ -72,6 +72,7 @@
     사진 + 제목만 넣고 업로드하면, 사진 저장 → <code>data/gallery.json</code> 항목 추가 →
     <code>posts/gallery/</code> 본문 파일 생성까지 한 번에 처리돼요.
     번호(<code>image-08</code> 등)는 자동으로 매겨집니다.
+    사진을 여러 장 고르면 한 번에 순서대로 업로드돼요 (제목 뒤에 1, 2, 3…이 자동으로 붙어요).
   </p>
 
   <details>
@@ -88,8 +89,8 @@
   <label for="token">GitHub 토큰</label>
   <input type="password" id="token" placeholder="github_pat_...">
 
-  <label for="photo">사진 파일</label>
-  <input type="file" id="photo" accept="image/*">
+  <label for="photo">사진 파일 (여러 장 선택 가능)</label>
+  <input type="file" id="photo" accept="image/*" multiple>
 
   <label for="title">제목</label>
   <input type="text" id="title" placeholder="예: 롬랑8">
@@ -175,9 +176,9 @@ uploadBtn.addEventListener("click", async () => {
   const token = tokenInput.value.trim();
   const title = titleInput.value.trim();
   const group = groupSelect.value;
-  const file = photoInput.files[0];
+  const files = Array.from(photoInput.files);
 
-  if (!token || !title || !file) {
+  if (!token || !title || !files.length) {
     setStatus("토큰, 제목, 사진을 모두 입력해주세요.", "error");
     return;
   }
@@ -199,32 +200,41 @@ uploadBtn.addEventListener("click", async () => {
       const m = /^image-(\d+)$/.exec(item.id || "");
       if (m) maxN = Math.max(maxN, parseInt(m[1], 10));
     }
-    const nextN = maxN + 1;
-    const padded = String(nextN).padStart(2, "0");
-    const id = `image-${padded}`;
-    const ext = (file.name.split(".").pop() || "png").toLowerCase();
-    const imgPath = `img/${id}.${ext}`;
 
-    setStatus(`사진 업로드 중… (${id})`);
-    const fileB64 = await readFileAsBase64(file);
-    await putFile(imgPath, fileB64, `Add gallery photo ${id}`);
+    const newEntries = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileTitle = files.length > 1 ? `${title} ${i + 1}` : title;
 
-    setStatus("gallery.json 업데이트 중…");
-    gallery.unshift({ id, thumbLabel: `IMAGE ${padded}`, thumb: imgPath, group });
-    const newJsonText = JSON.stringify(gallery, null, 2) + "\n";
-    await putFile("data/gallery.json", utf8ToBase64(newJsonText), `Add ${id} to gallery.json`, jsonFile.sha);
+      maxN += 1;
+      const padded = String(maxN).padStart(2, "0");
+      const id = `image-${padded}`;
+      const ext = (file.name.split(".").pop() || "png").toLowerCase();
+      const imgPath = `img/${id}.${ext}`;
 
-    setStatus("본문 글 생성 중…");
-    const safeTitle = escapeHtml(title);
-    const postHtml =
+      setStatus(`사진 업로드 중… (${i + 1}/${files.length}: ${id})`);
+      const fileB64 = await readFileAsBase64(file);
+      await putFile(imgPath, fileB64, `Add gallery photo ${id}`);
+
+      setStatus(`본문 글 생성 중… (${i + 1}/${files.length}: ${id})`);
+      const safeTitle = escapeHtml(fileTitle);
+      const postHtml =
 `<div class="feed-card">
   <div class="card-header"><span class="card-icon">♡</span><span class="card-title">${safeTitle}</span></div>
   <img class="gallery-photo" src="${imgPath}" alt="${safeTitle}" style="margin-bottom:14px;">
 </div>
 `;
-    await putFile(`posts/gallery/${id}.html`, utf8ToBase64(postHtml), `Add post for ${id}`);
+      await putFile(`posts/gallery/${id}.html`, utf8ToBase64(postHtml), `Add post for ${id}`);
 
-    setStatus(`완료! ${id}로 등록됐어요. 1~2분 후 사이트에 반영돼요.`, "done");
+      newEntries.push({ id, thumbLabel: `IMAGE ${padded}`, thumb: imgPath, group });
+    }
+
+    setStatus("gallery.json 업데이트 중…");
+    gallery.unshift(...newEntries);
+    const newJsonText = JSON.stringify(gallery, null, 2) + "\n";
+    await putFile("data/gallery.json", utf8ToBase64(newJsonText), `Add ${newEntries.map(e => e.id).join(", ")} to gallery.json`, jsonFile.sha);
+
+    setStatus(`완료! ${newEntries.length}장 등록됐어요. 1~2분 후 사이트에 반영돼요.`, "done");
     photoInput.value = "";
     titleInput.value = "";
   } catch (err) {
