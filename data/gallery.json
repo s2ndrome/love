@@ -1,5 +1,11 @@
 [
   {
+    "id": "image-09",
+    "thumbLabel": "IMAGE 09",
+    "thumb": "img/image-09.png",
+    "group": "B"
+  },
+  {
     "id": "image-07",
     "thumbLabel": "IMAGE 07",
     "thumb": "img/꽃남롬줌.png",
