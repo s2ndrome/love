@@ -181,7 +181,7 @@ const LIST_RENDERERS = {
       ${items.map(item => `
         <button class="gallery-item" data-id="${item.id}">
           ${item.locked ? lockBadgeSvg : ""}
-          ${item.thumb ? `<img src="${item.thumb}" alt="${item.thumbLabel || ""}">` : item.thumbLabel}
+          ${item.thumb ? `<img src="${item.thumb}" alt="${item.thumbLabel || ""}"${item.blur ? ' class="thumb-blur"' : ""}>` : item.thumbLabel}
         </button>
       `).join("")}
     </div>
@@ -384,14 +384,21 @@ function wireMessageForm() {
   });
 }
 
-async function openDetail(category, id) {
-  activeDetail = { category, id };
-  updateBackLabel();
+function renderBlurGate() {
+  return `
+    <div class="blur-gate">
+      <span class="blur-gate-icon">⚠️</span>
+      <p class="blur-gate-hint">위험한 롬랑입니다! 열람하시겠습니까?</p>
+      <button class="blur-gate-submit" type="button">YES</button>
+    </div>
+  `;
+}
+
+async function loadDetailContent(category, id, item) {
   contentBody.innerHTML = `<p class="loading-hint">불러오는 중…</p>`;
 
   try {
     const html = await fetchText(`posts/${category}/${id}.html`);
-    const item = (lastListItems || []).find(entry => entry.id === id);
     const locked = parseLockedPost(html);
 
     if (locked) {
@@ -405,6 +412,23 @@ async function openDetail(category, id) {
   } catch (err) {
     contentBody.innerHTML = `<p class="loading-hint">불러오지 못했어요.</p>`;
   }
+}
+
+async function openDetail(category, id) {
+  activeDetail = { category, id };
+  updateBackLabel();
+
+  const item = (lastListItems || []).find(entry => entry.id === id);
+
+  if (category === "gallery" && item && item.blur) {
+    contentBody.innerHTML = renderBlurGate();
+    contentBody.querySelector(".blur-gate-submit").addEventListener("click", () => {
+      loadDetailContent(category, id, item);
+    });
+    return;
+  }
+
+  await loadDetailContent(category, id, item);
 }
 
 async function openCategory(category) {

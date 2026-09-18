@@ -47,6 +47,9 @@
     font-size: 13px;
   }
   input[type="file"] { font-size: 13px; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 18px; }
+  .checkbox-row input { width: auto; }
+  .checkbox-row label { margin: 0; font-size: 13px; font-weight: 400; }
   button {
     margin-top: 22px;
     padding: 10px 20px;
@@ -101,6 +104,11 @@
     <option value="B">S &amp; L</option>
   </select>
 
+  <div class="checkbox-row">
+    <input type="checkbox" id="blur-check">
+    <label for="blur-check">썸네일 블러 처리 (NSFW 등 주의 표시)</label>
+  </div>
+
   <button id="upload-btn">업로드</button>
   <p class="status" id="status"></p>
 </main>
@@ -115,6 +123,7 @@ const tokenInput = document.getElementById("token");
 const photoInput = document.getElementById("photo");
 const titleInput = document.getElementById("title");
 const groupSelect = document.getElementById("group");
+const blurCheck = document.getElementById("blur-check");
 const uploadBtn = document.getElementById("upload-btn");
 const status = document.getElementById("status");
 
@@ -192,6 +201,7 @@ uploadBtn.addEventListener("click", async () => {
   const token = tokenInput.value.trim();
   const title = titleInput.value.trim();
   const group = groupSelect.value;
+  const blur = blurCheck.checked;
   const files = Array.from(photoInput.files);
 
   if (!token || !title || !files.length) {
@@ -243,13 +253,16 @@ ${imgPaths.map(p => `  <img class="gallery-photo" src="${p}" alt="${safeTitle}" 
     await putFile(`posts/gallery/${id}.html`, utf8ToBase64(postHtml), `Add post for ${id}`);
 
     setStatus("gallery.json 업데이트 중…");
-    gallery.unshift({ id, thumbLabel: `IMAGE ${padded}`, thumb: imgPaths[0], group });
+    const entry = { id, thumbLabel: `IMAGE ${padded}`, thumb: imgPaths[0], group };
+    if (blur) entry.blur = true;
+    gallery.unshift(entry);
     const newJsonText = JSON.stringify(gallery, null, 2) + "\n";
     await putFile("data/gallery.json", utf8ToBase64(newJsonText), `Add ${id} to gallery.json`, jsonFile.sha);
 
     setStatus(`완료! ${id}로 등록됐어요 (사진 ${imgPaths.length}장). 1~2분 후 사이트에 반영돼요.`, "done");
     photoInput.value = "";
     titleInput.value = "";
+    blurCheck.checked = false;
   } catch (err) {
     setStatus(err.message, "error");
   } finally {
