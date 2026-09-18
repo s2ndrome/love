@@ -55,6 +55,13 @@
   #edit-fields { display: none; }
   .row { display: flex; gap: 10px; align-items: flex-end; }
   .row > div { flex: 1; }
+  #gallery-fields { display: none; }
+  .photo-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .photo-list-item { position: relative; width: 84px; }
+  .photo-list-item img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(0,0,0,.1); display: block; }
+  .photo-list-item button { margin: 6px 0 0; width: 100%; padding: 4px 0; font-size: 11px; font-weight: 600; }
+  .photo-list-item.removed img { opacity: .35; }
+  .photo-list-item.removed button { background: #1a8a3e; }
   button {
     margin-top: 22px;
     padding: 10px 20px;
@@ -104,6 +111,7 @@
     <option value="diary">LOG (Diary)</option>
     <option value="world">SHARE (World)</option>
     <option value="ooc">OOC</option>
+    <option value="gallery">Gallery</option>
   </select>
 
   <label for="post-select">수정할 글</label>
@@ -125,19 +133,42 @@
     <label for="title">제목</label>
     <input type="text" id="title">
 
-    <label for="photo">사진 교체/추가 (선택, 본문 맨 위에 들어가요 — 기존에 맨 위에 있던 사진은 자동으로 빠져요)</label>
-    <input type="file" id="photo" accept="image/*">
+    <div id="text-fields">
+      <label for="photo">사진 교체/추가 (선택, 본문 맨 위에 들어가요 — 기존에 맨 위에 있던 사진은 자동으로 빠져요)</label>
+      <input type="file" id="photo" accept="image/*">
 
-    <label for="content">내용</label>
-    <textarea id="content"></textarea>
+      <label for="content">내용</label>
+      <textarea id="content"></textarea>
 
-    <div class="checkbox-row">
-      <input type="checkbox" id="lock-check">
-      <label for="lock-check">비밀번호로 잠그기</label>
+      <div class="checkbox-row">
+        <input type="checkbox" id="lock-check">
+        <label for="lock-check">비밀번호로 잠그기</label>
+      </div>
+      <div id="password-row">
+        <label for="lock-password">비밀번호</label>
+        <input type="text" id="lock-password" placeholder="이 글을 열 때 쓸 비밀번호">
+      </div>
     </div>
-    <div id="password-row">
-      <label for="lock-password">비밀번호</label>
-      <input type="text" id="lock-password" placeholder="이 글을 열 때 쓸 비밀번호">
+
+    <div id="gallery-fields">
+      <label for="gallery-group">갤러리 구분</label>
+      <select id="gallery-group">
+        <option value="A">ARCH</option>
+        <option value="B">S &amp; L</option>
+      </select>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="gallery-blur-check">
+        <label for="gallery-blur-check">썸네일 블러 처리 (NSFW 등 주의 표시)</label>
+      </div>
+
+      <label>기존 사진 (삭제 누르면 제외돼요, 저장해야 반영)</label>
+      <div class="photo-list" id="existing-photos"></div>
+
+      <label for="gallery-add-photo">사진 추가 (선택, 여러 장 가능)</label>
+      <input type="file" id="gallery-add-photo" accept="image/*" multiple>
+
+      <p class="hint" style="margin-top:14px;">갤러리 글은 제목만 바뀌고 번호(id)는 그대로 유지돼요.</p>
     </div>
 
     <button id="save-btn" type="button">저장</button>
@@ -160,12 +191,18 @@ const unlockRow = document.getElementById("unlock-row");
 const unlockPassword = document.getElementById("unlock-password");
 const unlockBtn = document.getElementById("unlock-btn");
 const editFields = document.getElementById("edit-fields");
+const textFields = document.getElementById("text-fields");
+const galleryFields = document.getElementById("gallery-fields");
 const titleInput = document.getElementById("title");
 const photoInput = document.getElementById("photo");
 const contentInput = document.getElementById("content");
 const lockCheck = document.getElementById("lock-check");
 const passwordRow = document.getElementById("password-row");
 const passwordInput = document.getElementById("lock-password");
+const galleryGroupSelect = document.getElementById("gallery-group");
+const galleryBlurCheck = document.getElementById("gallery-blur-check");
+const existingPhotosContainer = document.getElementById("existing-photos");
+const galleryAddPhotoInput = document.getElementById("gallery-add-photo");
 const saveBtn = document.getElementById("save-btn");
 const status = document.getElementById("status");
 
@@ -328,8 +365,9 @@ async function loadPostList() {
       return;
     }
     postSelect.innerHTML = list.map(item => {
-      const title = item.label || item.name || item.id;
-      return `<option value="${item.id.replace(/"/g, "&quot;")}">${title}${item.locked ? " 🔒" : ""}</option>`;
+      const title = item.label || item.name || item.thumbLabel || item.id;
+      const groupTag = category === "gallery" ? ` (${item.group === "B" ? "S & L" : "ARCH"})` : "";
+      return `<option value="${item.id.replace(/"/g, "&quot;")}">${title}${groupTag}${item.locked ? " 🔒" : ""}</option>`;
     }).join("");
     setStatus("");
   } catch (err) {
@@ -348,7 +386,63 @@ async function openPostForEditing(plainContent) {
   lockCheck.checked = !!currentPost.locked;
   passwordRow.style.display = currentPost.locked ? "block" : "none";
   passwordInput.value = currentPost.locked ? (unlockPassword.value || "") : "";
+  textFields.style.display = "block";
+  galleryFields.style.display = "none";
   editFields.style.display = "block";
+}
+
+function renderExistingPhotos(photos) {
+  existingPhotosContainer.innerHTML = photos.map((src, i) => `
+    <div class="photo-list-item" data-index="${i}">
+      <img src="${src}" alt="">
+      <button type="button" class="secondary" data-toggle="${i}">삭제</button>
+    </div>
+  `).join("");
+  existingPhotosContainer.querySelectorAll("button[data-toggle]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.toggle);
+      const item = btn.closest(".photo-list-item");
+      if (currentPost.galleryRemoved.has(i)) {
+        currentPost.galleryRemoved.delete(i);
+        item.classList.remove("removed");
+        btn.textContent = "삭제";
+      } else {
+        currentPost.galleryRemoved.add(i);
+        item.classList.add("removed");
+        btn.textContent = "복구";
+      }
+    });
+  });
+}
+
+async function openGalleryPostForEditing(token, id) {
+  try {
+    setStatus("글 불러오는 중…");
+    const file = await getFile(`posts/gallery/${id}.html`, token);
+    const html = base64ToUtf8(file.content);
+    const titleMatch = html.match(/class="card-title">([^<]*)</);
+    const title = titleMatch ? titleMatch[1] : "";
+    const photos = [...html.matchAll(/<img[^>]*class="gallery-photo"[^>]*src="([^"]+)"/g)].map(m => m[1]);
+
+    const jsonFile = await getFile(`data/gallery.json`, token);
+    const list = JSON.parse(base64ToUtf8(jsonFile.content));
+    const entry = list.find(x => x.id === id);
+
+    currentPost = { category: "gallery", title: id, sha: file.sha, locked: null, galleryPhotos: photos, galleryRemoved: new Set() };
+
+    titleInput.value = title;
+    galleryGroupSelect.value = entry && entry.group === "B" ? "B" : "A";
+    galleryBlurCheck.checked = !!(entry && entry.blur);
+    galleryAddPhotoInput.value = "";
+    renderExistingPhotos(photos);
+
+    textFields.style.display = "none";
+    galleryFields.style.display = "block";
+    editFields.style.display = "block";
+    setStatus("");
+  } catch (err) {
+    setStatus(err.message, "error");
+  }
 }
 
 postSelect.addEventListener("change", async () => {
@@ -359,6 +453,11 @@ postSelect.addEventListener("change", async () => {
   unlockRow.style.display = "none";
   currentPost = null;
   if (!title) return;
+
+  if (category === "gallery") {
+    await openGalleryPostForEditing(token, title);
+    return;
+  }
 
   try {
     setStatus("글 불러오는 중…");
@@ -396,8 +495,79 @@ unlockBtn.addEventListener("click", async () => {
   }
 });
 
+async function saveGalleryPost() {
+  const token = tokenInput.value.trim();
+  const id = currentPost.title;
+  const title = titleInput.value.trim();
+  const group = galleryGroupSelect.value;
+  const blur = galleryBlurCheck.checked;
+  const newFiles = Array.from(galleryAddPhotoInput.files);
+
+  if (!title) {
+    setStatus("제목을 입력해주세요.", "error");
+    return;
+  }
+
+  const keptPhotos = currentPost.galleryPhotos.filter((_, i) => !currentPost.galleryRemoved.has(i));
+  if (!keptPhotos.length && !newFiles.length) {
+    setStatus("사진이 최소 1장은 있어야 해요.", "error");
+    return;
+  }
+
+  saveBtn.disabled = true;
+  try {
+    const newPaths = [];
+    for (let i = 0; i < newFiles.length; i++) {
+      const file = newFiles[i];
+      setStatus(`사진 업로드 중… (${i + 1}/${newFiles.length})`);
+      const ext = (file.name.split(".").pop() || "png").toLowerCase();
+      const imgPath = `img/${crypto.randomUUID()}.${ext}`;
+      const b64 = await readFileAsBase64(file);
+      await putFile(imgPath, b64, `Add photo for gallery post: ${id}`, undefined, token);
+      newPaths.push(imgPath);
+    }
+
+    const finalPhotos = [...keptPhotos, ...newPaths];
+    const safeTitle = title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const postHtml =
+`<div class="feed-card">
+  <div class="card-header"><span class="card-icon">♡</span><span class="card-title">${safeTitle}</span></div>
+${finalPhotos.map(p => `  <img class="gallery-photo" src="${p}" alt="${safeTitle}" style="margin-bottom:14px;">`).join("\n")}
+</div>
+`;
+
+    setStatus("본문 저장 중…");
+    await putFile(`posts/gallery/${id}.html`, utf8ToBase64(postHtml), `Update gallery post: ${id}`, currentPost.sha, token);
+
+    setStatus("data/gallery.json 업데이트 중…");
+    const jsonFile = await getFile(`data/gallery.json`, token);
+    const list = JSON.parse(base64ToUtf8(jsonFile.content));
+    const index = list.findIndex(x => x.id === id);
+    if (index === -1) throw new Error("목록에서 이 글을 찾을 수 없어요. 새로고침 후 다시 시도해주세요.");
+
+    const entry = { id, thumbLabel: list[index].thumbLabel || id, thumb: finalPhotos[0], group };
+    if (blur) entry.blur = true;
+    list[index] = entry;
+
+    const newJsonText = JSON.stringify(list, null, 2) + "\n";
+    await putFile(`data/gallery.json`, utf8ToBase64(newJsonText), `Update gallery entry: ${id}`, jsonFile.sha, token);
+
+    setStatus(`완료! 저장됐어요. 1~2분 후 사이트에 반영돼요.`, "done");
+    await loadPostList();
+    editFields.style.display = "none";
+  } catch (err) {
+    setStatus(err.message, "error");
+  } finally {
+    saveBtn.disabled = false;
+  }
+}
+
 saveBtn.addEventListener("click", async () => {
   if (!currentPost) return;
+  if (currentPost.category === "gallery") {
+    await saveGalleryPost();
+    return;
+  }
   const token = tokenInput.value.trim();
   const { category, title: oldTitle, sha: oldSha } = currentPost;
   const newTitle = titleInput.value.trim();
