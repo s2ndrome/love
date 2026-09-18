@@ -15,7 +15,8 @@
     "id": "image-49",
     "thumbLabel": "IMAGE 49",
     "thumb": "img/image-49-1.png",
-    "group": "B"
+    "group": "B",
+    "blur": true
   },
   {
     "id": "image-48",
