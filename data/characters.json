@@ -1,4 +1,4 @@
 [
-  { "id": "character-one", "name": "SYNDROME", "thumbLabel": "CHARACTER<br>01", "thumb": "img/sdpor.png", "blurb": "S-CLASS ENTITY" },
-  { "id": "character-two", "name": "LIA", "thumbLabel": "CHARACTER<br>02", "thumb": "img/liapor.png", "blurb": "S-CLASS ENTITY" }
+  { "id": "character-one", "name": "SYNDROME", "thumbLabel": "CHARACTER<br>01", "thumb": "img/sdpor.jpg", "blurb": "S-CLASS ENTITY" },
+  { "id": "character-two", "name": "LIA", "thumbLabel": "CHARACTER<br>02", "thumb": "img/liapor.jpg", "blurb": "S-CLASS ENTITY" }
 ]
