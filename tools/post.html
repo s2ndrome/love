@@ -184,6 +184,26 @@ function readFileAsBase64(file) {
   });
 }
 
+// Same downscale-and-recompress used by the gallery upload tool, so a
+// full-res phone photo pasted at the top of a post doesn't slow the
+// whole page down.
+async function compressImage(file, maxDim = 1600, quality = 0.85) {
+  const bitmap = await createImageBitmap(file);
+  let { width, height } = bitmap;
+  if (Math.max(width, height) > maxDim) {
+    const scale = maxDim / Math.max(width, height);
+    width = Math.round(width * scale);
+    height = Math.round(height * scale);
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", quality));
+  return blob || file;
+}
+
 async function encryptPost(password, plaintext) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -282,10 +302,13 @@ uploadBtn.addEventListener("click", async () => {
     await putFile(dataPath, utf8ToBase64(newJsonText), `Add "${title}" to ${category}.json`, jsonFile.sha);
 
     if (photo) {
-      setStatus("사진 업로드 중…");
-      const ext = (photo.name.split(".").pop() || "png").toLowerCase();
+      const isGif = photo.type === "image/gif" || /\.gif$/i.test(photo.name);
+      setStatus("사진 압축 중…");
+      const uploadBlob = isGif ? photo : await compressImage(photo);
+      const ext = isGif ? "gif" : "jpg";
       const imgPath = `img/${crypto.randomUUID()}.${ext}`;
-      const photoB64 = await readFileAsBase64(photo);
+      setStatus("사진 업로드 중…");
+      const photoB64 = await readFileAsBase64(uploadBlob);
       await putFile(imgPath, photoB64, `Add photo for post: ${title}`);
       content = `<img src="${imgPath}" width="100%">\n\n${content}`;
     }

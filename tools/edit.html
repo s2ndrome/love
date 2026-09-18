@@ -257,6 +257,25 @@ function readFileAsBase64(file) {
   });
 }
 
+// Same downscale-and-recompress used by the upload tool, so photos
+// added here don't undo the point of compressing on upload.
+async function compressImage(file, maxDim = 1600, quality = 0.85) {
+  const bitmap = await createImageBitmap(file);
+  let { width, height } = bitmap;
+  if (Math.max(width, height) > maxDim) {
+    const scale = maxDim / Math.max(width, height);
+    width = Math.round(width * scale);
+    height = Math.round(height * scale);
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", quality));
+  return blob || file;
+}
+
 function stripLeadingImages(text) {
   return text.replace(/^(\s*<img[^>]*>\s*)+/i, "");
 }
@@ -399,7 +418,10 @@ async function openPostForEditing(plainContent) {
 // currentPost.thumbIndex: index into currentPost.photos used as the gallery thumbnail
 
 function photoSrc(p) {
-  return p.kind === "existing" ? p.src : p.previewUrl;
+  // p.src is root-relative (e.g. "img/foo.png") for saving to gallery.json,
+  // but this tool page itself lives under /tools/, so previewing it needs
+  // "../" prepended or the browser looks for /tools/img/foo.png instead.
+  return p.kind === "existing" ? `../${p.src}` : p.previewUrl;
 }
 
 function renderPhotoList() {
@@ -581,10 +603,13 @@ async function saveGalleryPost() {
         finalPhotos.push(p.src);
         continue;
       }
-      setStatus(`사진 업로드 중… (${i + 1}/${currentPost.photos.length})`);
-      const ext = (p.file.name.split(".").pop() || "png").toLowerCase();
+      const isGif = p.file.type === "image/gif" || /\.gif$/i.test(p.file.name);
+      setStatus(`사진 압축 중… (${i + 1}/${currentPost.photos.length})`);
+      const uploadBlob = isGif ? p.file : await compressImage(p.file);
+      const ext = isGif ? "gif" : "jpg";
       const imgPath = `img/${crypto.randomUUID()}.${ext}`;
-      const b64 = await readFileAsBase64(p.file);
+      setStatus(`사진 업로드 중… (${i + 1}/${currentPost.photos.length})`);
+      const b64 = await readFileAsBase64(uploadBlob);
       await putFile(imgPath, b64, `Add photo for gallery post: ${id}`, undefined, token);
       finalPhotos.push(imgPath);
     }
