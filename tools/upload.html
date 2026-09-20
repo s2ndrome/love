@@ -183,7 +183,7 @@ async function compressImage(file, maxDim = 1600, quality = 0.85) {
   return blob || file;
 }
 
-async function putFile(path, base64Content, message, sha) {
+async function putFile(path, base64Content, message, sha, retried) {
   const token = tokenInput.value.trim();
   const body = { message, content: base64Content, branch: BRANCH };
   if (sha) body.sha = sha;
@@ -201,17 +201,18 @@ async function putFile(path, base64Content, message, sha) {
 
   const detail = await res.json().catch(() => ({}));
 
-  // A retried upload (or a leftover file from a previously interrupted
-  // one) can already exist at this path — GitHub then rejects a
-  // sha-less PUT as invalid. Fetch its current sha once and retry
-  // instead of failing outright.
-  if (!sha && res.status === 422 && /sha/i.test(detail.message || "")) {
+  // The file's current sha didn't match what we sent — either no sha
+  // was supplied but one is required (422, e.g. a leftover file from a
+  // retried upload), or the sha we had is stale because something else
+  // touched the file since (409). Either way, fetch the current sha
+  // once and retry.
+  if (!retried && (res.status === 409 || (res.status === 422 && /sha/i.test(detail.message || "")))) {
     const existing = await fetch(`${API}/${path}?ref=${BRANCH}`, {
       headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }
     });
     if (existing.ok) {
       const existingFile = await existing.json();
-      return putFile(path, base64Content, message, existingFile.sha);
+      return putFile(path, base64Content, message, existingFile.sha, true);
     }
   }
 
