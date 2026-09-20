@@ -12,12 +12,6 @@
     "group": "B"
   },
   {
-    "id": "image-75",
-    "thumbLabel": "IMAGE 75",
-    "thumb": "img/image-75-1.jpg",
-    "group": "B"
-  },
-  {
     "id": "image-74",
     "thumbLabel": "IMAGE 74",
     "thumb": "img/image-74-1.jpg",
@@ -83,12 +77,6 @@
     "thumb": "img/image-62-1.jpg",
     "group": "B",
     "blur": true
-  },
-  {
-    "id": "image-61",
-    "thumbLabel": "IMAGE 61",
-    "thumb": "img/image-61-1.jpg",
-    "group": "B"
   },
   {
     "id": "image-60",
