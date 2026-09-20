@@ -250,7 +250,8 @@
     "id": "image-16",
     "thumbLabel": "IMAGE 16",
     "thumb": "img/image-16.jpg",
-    "group": "A"
+    "group": "A",
+    "blur": true
   },
   {
     "id": "image-15",
