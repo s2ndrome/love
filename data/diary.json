@@ -1,5 +1,10 @@
 [
   {
+    "id": "더티토크",
+    "label": "더티토크",
+    "locked": true
+  },
+  {
     "id": "수인화",
     "label": "수인화",
     "locked": true
