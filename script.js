@@ -570,4 +570,20 @@ function updateMenubarClock() {
 }
 
 updateMenubarClock();
+
+/* Deter casual right-click / dev-tools shortcut access. Note: this can't
+   stop anyone determined (devtools can still be opened from the browser
+   menu, or via disabling JS first) — it just discourages casual poking. */
+document.addEventListener("contextmenu", event => event.preventDefault());
+
+document.addEventListener("keydown", event => {
+  const key = event.key.toLowerCase();
+  const blockCombo =
+    key === "f12" ||
+    (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
+    (event.metaKey && event.altKey && ["i", "j", "c"].includes(key)) ||
+    (event.ctrlKey && key === "u") ||
+    (event.metaKey && key === "u");
+  if (blockCombo) event.preventDefault();
+});
 setInterval(updateMenubarClock, 1000 * 15);
