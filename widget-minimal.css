@@ -36,13 +36,11 @@ body{counter-reset:wid}
   color:var(--mn-ink);
 }
 
-/* 이미지 공통: 흑백, 네모, 마우스 올리면 색 */
+/* 이미지 공통: 흑백, 네모 */
 .side img{
   border-radius:0!important;
   filter:grayscale(1) contrast(1.05);
-  transition:filter .4s;
 }
-.side:hover img{filter:none}
 
 /* ═════ 커플 프로필 ═════ */
 .sw-pair{padding-top:24px!important}
