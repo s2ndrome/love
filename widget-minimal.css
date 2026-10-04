@@ -1,0 +1,81 @@
+/* ═════ 미니멀 위젯 — 공통 ═════ */
+:root{--mn-ink:#161616;--mn-mut:#9a9a9a;--mn-line:#c9c9c9;--mn-mono:'IBM Plex Mono',ui-monospace,monospace}
+body{counter-reset:wid}
+
+.side,.side.w-bare,.side.w-bare.w-line{
+  background:transparent!important;
+  border:0!important;
+  border-top:1px solid var(--mn-ink)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  padding:14px 0 18px!important;
+  margin-bottom:10px;
+}
+.side:hover{border-color:var(--mn-ink)!important}
+/* 원래 색 막대 → 오른쪽 위 십자 표시 */
+.side::before,.side.w-bare::before{
+  display:block!important;content:'+'!important;
+  position:absolute;left:auto!important;right:0;top:5px!important;
+  width:auto!important;height:auto!important;
+  background:none!important;opacity:1!important;border-radius:0!important;
+  font:300 13px/1 var(--mn-mono);color:var(--mn-ink);
+}
+
+/* 제목: ■ 01* SEARCH */
+.side .label{
+  position:static!important;
+  font:400 9px/1.4 var(--mn-mono)!important;
+  letter-spacing:.14em!important;text-transform:uppercase;
+  color:var(--mn-ink)!important;text-shadow:none!important;
+  margin:0 0 12px!important;
+}
+.side .label::before{
+  counter-increment:wid;
+  content:"■ " counter(wid,decimal-leading-zero) "*\2003";
+  color:var(--mn-ink);
+}
+
+/* 이미지 공통: 흑백, 네모, 마우스 올리면 색 */
+.side img{
+  border-radius:0!important;
+  filter:grayscale(1) contrast(1.05);
+  transition:filter .4s;
+}
+.side:hover img{filter:none}
+
+/* ═════ 커플 프로필 ═════ */
+.sw-pair{padding-top:24px!important}
+.sw-pair .cp-card{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.sw-pair .cp-img{border:1px solid var(--mn-ink)!important;padding:3px;background:transparent}
+.sw-pair .cp-imw{border-radius:0!important;box-shadow:none!important;background:none!important}
+.sw-pair .cp-nm{
+  font:500 10px/1.4 var(--mn-mono)!important;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--mn-ink)!important;
+}
+.sw-pair .cp-bio{font:300 9.5px/1.6 var(--mn-mono)!important;color:var(--mn-mut)!important}
+
+/* ═════ BGM ═════ */
+.sw-bgm .bgm-w{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important}
+.sw-bgm .bgm-cov,.sw-bgm .bgm-cov img{border-radius:0!important;box-shadow:none!important}
+.sw-bgm .bgm-meta b{font:400 10px/1.4 var(--mn-mono)!important;letter-spacing:.06em;color:var(--mn-ink)!important}
+.sw-bgm .bgm-eq i{background:var(--mn-ink)!important;border-radius:0!important}
+.sw-bgm .bgm-btn2{border-radius:0!important;border:1px solid var(--mn-ink)!important;background:none!important;color:var(--mn-ink)!important;box-shadow:none!important}
+.sw-bgm .bgm-tw{border-top:1px dashed var(--mn-line);margin-top:10px;padding-top:6px}
+.sw-bgm .bgm-trk button{
+  background:none!important;border:0!important;border-radius:0!important;
+  font:300 9.5px/1.9 var(--mn-mono)!important;color:var(--mn-mut)!important;
+}
+.sw-bgm .bgm-trk button.sel{color:var(--mn-ink)!important}
+.sw-bgm .bgm-trk button.sel .t::before{content:"→ "}
+
+/* ═════ 배너 ═════ */
+.sw-banner .bn-h{border-radius:0!important;box-shadow:none!important;border:1px solid var(--mn-ink)!important}
+.sw-banner .bn-card{background:none!important;border-radius:0!important;backdrop-filter:none!important}
+.sw-banner .bn-cnm b,.sw-banner .bn-cnm i,.sw-banner .bn-cth{
+  font-family:var(--mn-mono)!important;font-size:9px!important;
+  letter-spacing:.1em;text-transform:uppercase;font-style:normal!important;
+}
+
+/* ═════ 이미지 ═════ */
+.sw-img .iw{border-radius:0!important;box-shadow:none!important;display:block}
