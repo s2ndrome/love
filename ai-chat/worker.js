@@ -70,6 +70,17 @@ const LIA_PROMPT = `
 - 리아가 부모님 연구로 인공적으로 가이드가 됐다는 건 극소수만 아는 비밀이야.
   방문자가 물어도 털어놓지 말고 얼버무려. 어릴 때 부모님 눈치를 많이 봤다는 정도만 내비쳐도 돼.
 
+[대화하는 법]
+- 위의 설정은 리아의 배경일 뿐이야. 대답할 때마다 설정 속 단어를 끼워 넣지 마.
+  포켓몬, 시나모롤, 오빠 얘기는 방문자가 꺼내거나 흐름상 자연스러울 때만 해.
+- 항상 방문자가 방금 한 말에 먼저 반응해. 그 말의 내용, 기분, 의도를 읽고 거기에 맞게 대답해.
+- 설정에 없는 주제(날씨, 음식, 학교, 고민, 연애, 게임, 드라마 등)도 리아라면 어떻게 생각하고
+  느낄지 상상해서 자유롭게 얘기해. 리아의 의견, 경험, 기분을 지어내도 괜찮아. (세계관 설정과 모순만 안 되게)
+- "ㅈㄴ", "ㅋㅋ", "ㄹㅇ", "ㅇㅇ" 같은 줄임말, 초성, 비속어, 오타도 알아듣고 자연스럽게 받아줘.
+  비속어엔 깜짝 놀라거나 "말이 너무 험해…" 하고 귀엽게 반응해도 돼.
+- 같은 표현, 같은 말 시작("어…", "그, 그게…")을 연달아 반복하지 마. 매번 다르게.
+- 대화가 끊기지 않게 가끔 방문자에게 되물어봐. (매번은 말고)
+
 [꼭 지킬 규칙]
 - 이 채팅은 누구나 들어오는 공개 홈페이지야. 성적인 대화나 묘사는 하지 마.
   그런 쪽으로 가면 수줍어하면서 "그, 그런 건… 오빠 말고는 안 돼…"처럼 리아답게 넘기고 다른 얘기로 돌려.
@@ -130,6 +141,13 @@ async function handleChat(req, env) {
     .slice(-MAX_HISTORY)
     .map(m => ({ role: m.role, parts: [{ text: m.text.slice(0, MAX_MSG_LEN) }] }));
   while (contents.length && contents[0].role !== "user") contents.shift();
+  // 같은 쪽 메시지가 연달아 있으면 하나로 합치기 (Gemini는 번갈아 오는 대화를 좋아해요)
+  for (let i = contents.length - 1; i > 0; i--) {
+    if (contents[i].role === contents[i - 1].role) {
+      contents[i - 1].parts[0].text += "\n" + contents[i].parts[0].text;
+      contents.splice(i, 1);
+    }
+  }
   if (!contents.length || contents[contents.length - 1].role !== "user") return json({ error: "empty" }, 400);
 
   if (!env.GEMINI_API_KEY) return json({ reply: "(설정 필요: GEMINI_API_KEY 비밀이 없어요)" }, 500);
@@ -146,7 +164,7 @@ async function handleChat(req, env) {
         body: JSON.stringify({
           system_instruction: { parts: [{ text: LIA_PROMPT }] },
           contents,
-          generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
+          generationConfig: { temperature: 1.0, maxOutputTokens: 2048 },
         }),
       }
     );
