@@ -108,7 +108,7 @@ const PROVIDER = "studio";
 
 // Vertex AI 모델 (PROVIDER = "vertex"일 때만 씀). 이름은 Vertex AI Model Garden에서 확인할 수 있어요.
 const VERTEX_MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash"];
-const VERTEX_PROJECT = ""; // Vertex AI를 켠 Google Cloud 프로젝트 ID (예: "lia-chat-123456")
+const VERTEX_PROJECT = "gen-lang-client-0170873477"; // Vertex AI를 켠 Google Cloud 프로젝트 ID (Default Gemini Project)
 
 // 사용 제한 (방문자 1명 기준, 대략적인 값)
 const LIMIT_PER_10MIN = 20; // 10분에 보낼 수 있는 메시지 수
