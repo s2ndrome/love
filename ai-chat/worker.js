@@ -165,8 +165,9 @@ async function handleChat(req, env) {
 
   const key = String(env[keyName]).trim();
   const debug = body?.debug === true;
-  let r, errText = "";
+  let r, errText = "", used = "";
   for (const model of vertex ? VERTEX_MODELS : MODELS) {
+    used = model;
     r = await fetch(
       vertex
         ? (VERTEX_PROJECT
@@ -214,7 +215,8 @@ async function handleChat(req, env) {
     .replace(/ +([.,!?…])/g, "$1")
     .replace(/\s*\n+\s*/g, " ")   // 줄바꿈은 전부 한 줄로 이어 붙이기
     .trim();
-  return json({ reply: clean || (text ? "…" : "음… 뭐라고 해야 할지 모르겠다.") });
+  const reply = clean || (text ? "…" : "음… 뭐라고 해야 할지 모르겠다.");
+  return json({ reply: debug ? `${reply}\n\n[디버그] ${vertex ? "Vertex AI" : "AI Studio"} · ${used}` : reply });
 }
 
 export default {
