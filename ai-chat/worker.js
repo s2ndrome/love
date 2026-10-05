@@ -100,7 +100,7 @@ const ALLOWED_PARENTS = ["https://luvlog.me"];
 
 // Gemini 모델 — 앞에서부터 시도하고, 없는 모델이거나 무료 사용량이 찼거나 붐비면 다음 걸로 넘어가요.
 // (모델마다 무료 사용량이 따로라서, 여러 개 적어두면 리아가 더 오래 대답할 수 있어요)
-const MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash", "gemini-2.5-flash-lite"];
+const MODELS = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"];
 
 // 사용 제한 (방문자 1명 기준, 대략적인 값)
 const LIMIT_PER_10MIN = 20; // 10분에 보낼 수 있는 메시지 수
@@ -165,7 +165,12 @@ async function handleChat(req, env) {
         body: JSON.stringify({
           system_instruction: { parts: [{ text: LIA_PROMPT }] },
           contents,
-          generationConfig: { temperature: 1.0, maxOutputTokens: 2048 },
+          generationConfig: {
+            temperature: 1.0,
+            maxOutputTokens: 4096,
+            // 2.5 모델은 대답 전에 "생각"을 해요. 채팅엔 길게 생각할 필요가 없어서 줄여요 (더 빠르고 저렴)
+            ...(model.startsWith("gemini-2.5") ? { thinkingConfig: { thinkingBudget: model.includes("pro") ? 128 : 0 } } : {}),
+          },
         }),
       }
     );
