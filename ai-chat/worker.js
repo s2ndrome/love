@@ -100,7 +100,7 @@ const ALLOWED_PARENTS = ["https://luvlog.me"];
 
 // Gemini 모델 — 앞에서부터 시도하고, 없는 모델이거나 무료 사용량이 찼거나 붐비면 다음 걸로 넘어가요.
 // (모델마다 무료 사용량이 따로라서, 여러 개 적어두면 리아가 더 오래 대답할 수 있어요)
-const MODELS = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"];
+const MODELS = ["gemini-pro-latest", "gemini-flash-latest", "gemini-3.5-flash-lite", "gemini-flash-lite-latest"];
 
 // 사용 제한 (방문자 1명 기준, 대략적인 값)
 const LIMIT_PER_10MIN = 20; // 10분에 보낼 수 있는 메시지 수
