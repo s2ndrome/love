@@ -62,7 +62,7 @@ const GREETING = "아… 안녕… 놀러 와줬구나. 오빠는 지금 임무 
 // 이 채팅을 띄울 수 있는 사이트 (다른 사이트가 퍼가서 키를 쓰는 걸 막아요)
 const ALLOWED_PARENTS = ["https://luvlog.me"];
 
-// Gemini 모델 — 앞에서부터 시도하고, 없는 모델이거나 무료 사용량이 차면 다음 걸로 넘어가요.
+// Gemini 모델 — 앞에서부터 시도하고, 없는 모델이거나 무료 사용량이 찼거나 붐비면 다음 걸로 넘어가요.
 // (모델마다 무료 사용량이 따로라서, 여러 개 적어두면 리아가 더 오래 대답할 수 있어요)
 const MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash", "gemini-2.5-flash-lite"];
 
@@ -129,14 +129,14 @@ async function handleChat(req, env) {
     if (r.ok) break;
     errText = await r.text();
     console.log("gemini error", model, r.status, errText.slice(0, 800));
-    if (r.status !== 404 && r.status !== 429) break; // 모델이 없거나 사용량이 찼을 때만 다음 모델 시도
+    if (r.status !== 404 && r.status !== 429 && r.status < 500) break; // 모델이 없거나, 사용량이 찼거나, 붐빌 때만 다음 모델 시도
   }
 
   if (!r.ok) {
     let msg = "";
     try { msg = JSON.parse(errText)?.error?.message || ""; } catch {}
     const detail = debug ? `\n\n[디버그] ${r.status} ${msg || errText}`.slice(0, 600) : "";
-    if (r.status === 429) return json({ reply: "지금 사람이 너무 많아서 정신없어. 조금 있다 다시 불러줘." + detail }, 429);
+    if (r.status === 429 || r.status >= 500) return json({ reply: "지금 사람이 너무 많아서 정신없어. 조금 있다 다시 불러줘." + detail }, 429);
     return json({ reply: "어… 방금 무슨 말 하려다 까먹었어. 다시 말해줄래?" + detail }, 502);
   }
   const data = await r.json();
