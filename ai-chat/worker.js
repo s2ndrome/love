@@ -62,8 +62,8 @@ const GREETING = "아… 안녕… 놀러 와줬구나. 오빠는 지금 임무 
 // 이 채팅을 띄울 수 있는 사이트 (다른 사이트가 퍼가서 키를 쓰는 걸 막아요)
 const ALLOWED_PARENTS = ["https://luvlog.me"];
 
-// Gemini 모델 — "gemini-flash-latest"는 항상 최신 Flash를 가리켜요.
-const MODEL = "gemini-flash-latest";
+// Gemini 모델 — 앞에서부터 시도하고, 없는 모델이면 다음 걸로 넘어가요.
+const MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest"];
 
 // 사용 제한 (방문자 1명 기준, 대략적인 값)
 const LIMIT_PER_10MIN = 20; // 10분에 보낼 수 있는 메시지 수
@@ -109,23 +109,34 @@ async function handleChat(req, env) {
 
   if (!env.GEMINI_API_KEY) return json({ reply: "(설정 필요: GEMINI_API_KEY 비밀이 없어요)" }, 500);
 
-  const r = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
-    {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": env.GEMINI_API_KEY },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: LIA_PROMPT }] },
-        contents,
-        generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
-      }),
-    }
-  );
+  const key = String(env.GEMINI_API_KEY).trim();
+  const debug = body?.debug === true;
+  let r, errText = "";
+  for (const model of MODELS) {
+    r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": key },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: LIA_PROMPT }] },
+          contents,
+          generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
+        }),
+      }
+    );
+    if (r.ok) break;
+    errText = (await r.text()).slice(0, 800);
+    console.log("gemini error", model, r.status, errText);
+    if (r.status !== 404) break; // 모델이 없을 때만 다음 모델 시도
+  }
 
-  if (r.status === 429) return json({ reply: "지금 사람이 너무 많아서 정신없어. 조금 있다 다시 불러줘." }, 429);
   if (!r.ok) {
-    console.log("gemini error", r.status, (await r.text()).slice(0, 500));
-    return json({ reply: "어… 방금 무슨 말 하려다 까먹었어. 다시 말해줄래?" }, 502);
+    let msg = "";
+    try { msg = JSON.parse(errText)?.error?.message || ""; } catch {}
+    const detail = debug ? `\n\n[디버그] ${r.status} ${msg || errText}`.slice(0, 600) : "";
+    if (r.status === 429) return json({ reply: "지금 사람이 너무 많아서 정신없어. 조금 있다 다시 불러줘." + detail }, 429);
+    return json({ reply: "어… 방금 무슨 말 하려다 까먹었어. 다시 말해줄래?" + detail }, 502);
   }
   const data = await r.json();
   const text = (data?.candidates?.[0]?.content?.parts || [])
@@ -200,6 +211,7 @@ const PAGE = `<!doctype html>
 <script>
 (() => {
   const GREETING = __GREETING__;
+  const DEBUG = new URLSearchParams(location.search).has("debug");
   const KEY = "lia-chat";
   const log = document.getElementById("log"), f = document.getElementById("f"),
         q = document.getElementById("q"), s = document.getElementById("s");
@@ -229,7 +241,7 @@ const PAGE = `<!doctype html>
     const t = add("model", "· · ·", "typing");
     let reply, ok = false;
     try {
-      const r = await fetch("/chat", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ messages: hist }) });
+      const r = await fetch("/chat", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ messages: hist, debug: DEBUG }) });
       reply = (await r.json()).reply;
       ok = r.ok && !!reply;
     } catch (e) {}
