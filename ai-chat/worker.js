@@ -62,8 +62,9 @@ const GREETING = "아… 안녕… 놀러 와줬구나. 오빠는 지금 임무 
 // 이 채팅을 띄울 수 있는 사이트 (다른 사이트가 퍼가서 키를 쓰는 걸 막아요)
 const ALLOWED_PARENTS = ["https://luvlog.me"];
 
-// Gemini 모델 — 앞에서부터 시도하고, 없는 모델이면 다음 걸로 넘어가요.
-const MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest"];
+// Gemini 모델 — 앞에서부터 시도하고, 없는 모델이거나 무료 사용량이 차면 다음 걸로 넘어가요.
+// (모델마다 무료 사용량이 따로라서, 여러 개 적어두면 리아가 더 오래 대답할 수 있어요)
+const MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash", "gemini-2.5-flash-lite"];
 
 // 사용 제한 (방문자 1명 기준, 대략적인 값)
 const LIMIT_PER_10MIN = 20; // 10분에 보낼 수 있는 메시지 수
@@ -126,9 +127,9 @@ async function handleChat(req, env) {
       }
     );
     if (r.ok) break;
-    errText = (await r.text()).slice(0, 800);
-    console.log("gemini error", model, r.status, errText);
-    if (r.status !== 404) break; // 모델이 없을 때만 다음 모델 시도
+    errText = await r.text();
+    console.log("gemini error", model, r.status, errText.slice(0, 800));
+    if (r.status !== 404 && r.status !== 429) break; // 모델이 없거나 사용량이 찼을 때만 다음 모델 시도
   }
 
   if (!r.ok) {
