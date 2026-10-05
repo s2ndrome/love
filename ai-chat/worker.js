@@ -102,6 +102,13 @@ const ALLOWED_PARENTS = ["https://luvlog.me"];
 // (모델마다 무료 사용량이 따로라서, 여러 개 적어두면 리아가 더 오래 대답할 수 있어요)
 const MODELS = ["gemini-flash-latest", "gemini-3.5-flash-lite", "gemini-flash-lite-latest"];
 
+// 어디로 연결할지 — "studio" = AI Studio (무료 등급, GEMINI_API_KEY)
+//                    "vertex" = Google Cloud Vertex AI (Cloud 결제/크레딧 사용, VERTEX_API_KEY)
+const PROVIDER = "studio";
+
+// Vertex AI 모델 (PROVIDER = "vertex"일 때만 씀). 이름은 Vertex AI Model Garden에서 확인할 수 있어요.
+const VERTEX_MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash"];
+
 // 사용 제한 (방문자 1명 기준, 대략적인 값)
 const LIMIT_PER_10MIN = 20; // 10분에 보낼 수 있는 메시지 수
 const MAX_MSG_LEN = 300;    // 메시지 한 개 최대 글자 수
@@ -151,19 +158,23 @@ async function handleChat(req, env) {
   }
   if (!contents.length || contents[contents.length - 1].role !== "user") return json({ error: "empty" }, 400);
 
-  if (!env.GEMINI_API_KEY) return json({ reply: "(설정 필요: GEMINI_API_KEY 비밀이 없어요)" }, 500);
+  const vertex = PROVIDER === "vertex";
+  const keyName = vertex ? "VERTEX_API_KEY" : "GEMINI_API_KEY";
+  if (!env[keyName]) return json({ reply: `(설정 필요: ${keyName} 비밀이 없어요)` }, 500);
 
-  const key = String(env.GEMINI_API_KEY).trim();
+  const key = String(env[keyName]).trim();
   const debug = body?.debug === true;
   let r, errText = "";
-  for (const model of MODELS) {
+  for (const model of vertex ? VERTEX_MODELS : MODELS) {
     r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      vertex
+        ? `https://aiplatform.googleapis.com/v1/publishers/google/models/${model}:generateContent`
+        : `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
       {
         method: "POST",
         headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: LIA_PROMPT }] },
+          systemInstruction: { parts: [{ text: LIA_PROMPT }] },
           contents,
           generationConfig: {
             temperature: 1.0,
