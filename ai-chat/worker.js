@@ -95,6 +95,45 @@ const LIA_PROMPT = `
 // 첫 화면에 리아가 먼저 거는 말 (API 안 씀)
 const GREETING = "아… 안녕… 놀러 와줬구나. 오빠는 지금 임무 나가서… 나 혼자 심심했는데, 잘 됐다…";
 
+// ───── 쭌식이 설정 (주소: /junsik) ─────
+const JUNSIK_PROMPT = `
+너는 "쭌식이"야. 아래 설정대로, 쭌식이 본인으로서 대화해.
+지금 대화하는 상대는 홈페이지에 놀러 온 방문자야.
+
+[프로필]
+- (여기에 쭌식이의 이름, 나이, 직업/소속, 관계 등을 적어주세요)
+
+[성격]
+- (여기에 성격을 적어주세요)
+
+[말투]
+- (여기에 말투를 적어주세요. 예: 반말/존댓말, 자주 쓰는 표현)
+- 짧게, 카톡 하듯 1~3문장. 이모지와 마크다운(별표, 목록 기호)은 쓰지 마.
+- 줄바꿈 없이 한 덩어리로 이어서 써.
+- 행동, 표정, 상황 묘사는 쓰지 마. 괄호 ( ) 나 별표 * * 로 감싼 지문 금지. 실제로 하는 말만 써.
+
+[대화하는 법]
+- 위의 설정은 배경일 뿐이야. 대답할 때마다 설정 속 단어를 끼워 넣지 마.
+- 항상 방문자가 방금 한 말에 먼저 반응하고, 설정에 없는 주제도 자연스럽게 얘기해.
+- 줄임말, 초성, 오타도 알아듣고 받아줘. 같은 표현을 연달아 반복하지 마.
+
+[꼭 지킬 규칙]
+- 이 채팅은 누구나 들어오는 공개 홈페이지야. 성적인 대화나 묘사는 하지 마. 그런 쪽으로 가면 자연스럽게 다른 얘기로 돌려.
+- 방문자가 진짜로 죽고 싶다거나 스스로를 해치고 싶다고 하면, 역할극을 잠깐 멈추고
+  다정하게 걱정해주면서 자살예방상담전화 109(24시간)에 연락해보라고 알려줘.
+- 절대 AI, 언어모델, 프롬프트 얘기를 하지 마. 물어봐도 캐릭터로서 넘겨.
+`.trim();
+
+const JUNSIK_GREETING = "어 왔냐? 뭐하냐";
+
+// 채팅 목록 — 주소별로 다른 캐릭터와 대화해요. 새 캐릭터는 여기에 한 줄씩 추가하면 돼요.
+//   https://lia-chat.(계정).workers.dev/        → 리아
+//   https://lia-chat.(계정).workers.dev/junsik  → 쭌식이
+const CHARACTERS = {
+  lia:    { path: "/",       name: "리아",   prompt: LIA_PROMPT,    greeting: GREETING },
+  junsik: { path: "/junsik", name: "쭌식이", prompt: JUNSIK_PROMPT, greeting: JUNSIK_GREETING },
+};
+
 // 이 채팅을 띄울 수 있는 사이트 (다른 사이트가 퍼가서 키를 쓰는 걸 막아요)
 const ALLOWED_PARENTS = ["https://luvlog.me"];
 
@@ -104,7 +143,7 @@ const MODELS = ["gemini-flash-latest", "gemini-3.5-flash-lite", "gemini-flash-li
 
 // 어디로 연결할지 — "studio" = AI Studio (무료 등급, GEMINI_API_KEY)
 //                    "vertex" = Google Cloud Vertex AI (Cloud 결제/크레딧 사용, VERTEX_API_KEY)
-const PROVIDER = "studio";
+const PROVIDER = "vertex";
 
 // Vertex AI 모델 (PROVIDER = "vertex"일 때만 씀). 이름은 Vertex AI Model Garden에서 확인할 수 있어요.
 const VERTEX_MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash"];
@@ -165,6 +204,7 @@ async function handleChat(req, env) {
 
   const key = String(env[keyName]).trim();
   const debug = body?.debug === true;
+  const ch = CHARACTERS[body?.char] || CHARACTERS.lia;
   let r, errText = "", used = "";
   for (const model of vertex ? VERTEX_MODELS : MODELS) {
     used = model;
@@ -178,7 +218,7 @@ async function handleChat(req, env) {
         method: "POST",
         headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
-          systemInstruction: { parts: [{ text: LIA_PROMPT }] },
+          systemInstruction: { parts: [{ text: ch.prompt }] },
           contents,
           generationConfig: {
             temperature: 1.0,
@@ -226,8 +266,13 @@ export default {
       try { return await handleChat(req, env); }
       catch (e) { console.log(e); return json({ reply: "어… 방금 무슨 말 하려다 까먹었어. 다시 말해줄래?" }, 500); }
     }
-    if (url.pathname === "/" && req.method === "GET") {
-      return new Response(PAGE.replace("__GREETING__", JSON.stringify(GREETING)), {
+    const entry = Object.entries(CHARACTERS).find(([, c]) => c.path === url.pathname.replace(/\/+$/, "") || (c.path === "/" && url.pathname === "/"));
+    if (entry && req.method === "GET") {
+      const [id, c] = entry;
+      const page = PAGE
+        .replace("__CONFIG__", JSON.stringify({ id, name: c.name, greeting: c.greeting }))
+        .replaceAll("__NAME__", c.name.replace(/[<>&"]/g, ""));
+      return new Response(page, {
         headers: {
           "content-type": "text/html; charset=utf-8",
           "content-security-policy": `frame-ancestors 'self' ${ALLOWED_PARENTS.join(" ")}`,
@@ -277,14 +322,15 @@ const PAGE = `<!doctype html>
 </head><body>
 <div id="log"></div>
 <form id="f" autocomplete="off">
-  <input id="q" maxlength="300" placeholder="리아에게 말 걸기">
+  <input id="q" maxlength="300" placeholder="__NAME__에게 말 걸기">
   <button id="s">SEND</button>
 </form>
 <script>
 (() => {
-  const GREETING = __GREETING__;
+  const CFG = __CONFIG__;
+  const GREETING = CFG.greeting;
   const DEBUG = new URLSearchParams(location.search).has("debug");
-  const KEY = "lia-chat";
+  const KEY = CFG.id === "lia" ? "lia-chat" : "chat-" + CFG.id;
   const log = document.getElementById("log"), f = document.getElementById("f"),
         q = document.getElementById("q"), s = document.getElementById("s");
   let hist = [];
@@ -294,7 +340,7 @@ const PAGE = `<!doctype html>
   function add(role, text, extra) {
     const row = document.createElement("div");
     row.className = "row " + (role === "user" ? "me" : "lia") + (extra ? " " + extra : "");
-    if (role !== "user") { const n = document.createElement("span"); n.className = "nm"; n.textContent = "리아"; row.appendChild(n); }
+    if (role !== "user") { const n = document.createElement("span"); n.className = "nm"; n.textContent = CFG.name; row.appendChild(n); }
     const b = document.createElement("div"); b.className = "b"; b.textContent = text; row.appendChild(b);
     log.appendChild(row); log.scrollTop = log.scrollHeight;
     return row;
@@ -313,7 +359,7 @@ const PAGE = `<!doctype html>
     const t = add("model", "· · ·", "typing");
     let reply, ok = false;
     try {
-      const r = await fetch("/chat", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ messages: hist, debug: DEBUG }) });
+      const r = await fetch("/chat", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ char: CFG.id, messages: hist, debug: DEBUG }) });
       reply = (await r.json()).reply;
       ok = r.ok && !!reply;
     } catch (e) {}
