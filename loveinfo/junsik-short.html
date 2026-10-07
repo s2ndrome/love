@@ -36,7 +36,7 @@
   --img-start:url("https://i.imgur.com/GbZAmXv.png");   /* 게임시작 팝업 얼굴 */
   --img-howto:url("https://i.imgur.com/GbZAmXv.png");   /* 게임방법 팝업 얼굴 */
   --img-notice:url("https://i.imgur.com/GbZAmXv.png");  /* 주의사항 팝업 얼굴 */
-  --img-chat:url("https://i.imgur.com/GbZAmXv.png");    /* 채팅 속 쭌식이 프로필 */
+  --img-chat:url("https://i.imgur.com/TPahUQo.png");    /* 채팅 속 쭌식이 프로필 */
 }
 
 /* ===== 화면 ===== */
@@ -161,7 +161,7 @@
 .jg-bubble em{font-style:normal;color:#ff8fb6}
 
 /* ===== 소리 / 카메라 ===== */
-.jg-sound{position:absolute;right:20px;bottom:18px;z-index:9;width:38px;height:38px;border-radius:11px;background:linear-gradient(#ffffff,#e5f4ff);box-shadow:0 0 0 2px var(--rib),0 4px 0 var(--rib-dk);display:grid;place-items:center}
+.jg-sound{position:absolute;right:44px;bottom:42px;z-index:11;width:38px;height:38px;border-radius:11px;background:linear-gradient(#ffffff,#e5f4ff);box-shadow:0 0 0 2px var(--rib),0 4px 0 var(--rib-dk);display:grid;place-items:center}
 .jg-sound:active{transform:translateY(2px);box-shadow:0 0 0 2px var(--rib),0 2px 0 var(--rib-dk)}
 .jg-sound svg{width:20px;height:20px;color:var(--main-dk)}
 .jg-sound .off{display:none}
@@ -221,9 +221,11 @@
 .jg-info dl{display:grid;grid-template-columns:76px 1fr;gap:4px 10px;margin:0 0 6px}
 .jg-info dt{color:var(--main-dk);font-family:"Jua",sans-serif}
 .jg-info dd{margin:0}
-/* 채팅 팝업 */
-.jg-win.chat{width:600px;max-height:none}
-.jg-chat{position:relative;height:372px;margin:12px 12px 4px;border-radius:14px}
+/* 채팅 팝업 (화면 크기 줄이기와 상관없이 실제 크기로 떠요) */
+.jg-float{position:fixed;inset:0;z-index:2147483000;width:auto;margin:0;pointer-events:none}
+.jg-float .jg-pop{pointer-events:auto}
+.jg-win.chat{width:min(600px,calc(100vw - 24px));max-height:none}
+.jg-chat{position:relative;height:min(372px,calc(100vh - 110px));margin:12px 12px 4px;border-radius:14px}
 .jg-chat iframe{display:block;width:100%;height:100%;border:0;background:transparent}
 .jg-chat-wait{position:absolute;inset:0;display:grid;place-items:center;font-size:16px;color:var(--soft);pointer-events:none;transition:opacity .3s}
 .jg-chat.ready .jg-chat-wait{opacity:0}
@@ -336,7 +338,7 @@
   </svg>
 
   <!-- 소리 -->
-  <button class="jg-sound muted" id="jgSound" aria-label="효과음 켜기/끄기">
+  <button class="jg-sound" id="jgSound" aria-label="효과음 켜기/끄기">
     <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
     <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
   </button>
@@ -360,9 +362,8 @@
             <h4>PROFILE</h4>
             <dl>
               <dt>이름</dt><dd>쭌식이</dd>
-              <dt>나이</dt><dd>여기에 입력</dd>
-              <dt>키</dt><dd>여기에 입력</dd>
-              <dt>좋아하는 것</dt><dd>여기에 입력</dd>
+              <dt>나이</dt><dd>18살</dd>
+              <dt>좋아하는 것</dt><dd>산즈 하루치요, 시나모롤, mikko</dd>
               <dt>싫어하는 것</dt><dd>여기에 입력</dd>
             </dl>
             <h4>ABOUT</h4>
@@ -450,7 +451,7 @@
   if(!root) return;
 
   /* ===== 효과음 (소리 버튼으로 켜고 끄기) ===== */
-  var sound = root.querySelector('#jgSound'), ac = null, on = false;
+  var sound = root.querySelector('#jgSound'), ac = null, on = true;
   function blip(f1, f2, len){
     if(!on) return;
     try{
@@ -462,6 +463,16 @@
     }catch(e){}
   }
   sound.addEventListener('click', function(){ on = !on; sound.classList.toggle('muted', !on); blip(660, 990, .15); });
+  function unlock(){
+    try{
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      if(ac.state === 'suspended') ac.resume();
+    }catch(e){}
+    document.removeEventListener('pointerdown', unlock);
+    document.removeEventListener('keydown', unlock);
+  }
+  document.addEventListener('pointerdown', unlock);
+  document.addEventListener('keydown', unlock);
 
   /* ===== 키링 하트 ===== */
   var hearts = root.querySelectorAll('#jgMeter i'), maxEl = root.querySelector('#jgMax'), lv = 1, toy = root.querySelector('.jg-toy');
@@ -476,6 +487,17 @@
       if(lv >= hearts.length){ maxEl.classList.add('show'); blip(880, 1760, .3); }
     });
   });
+
+  /* ===== 채팅 팝업은 줄어든 화면 밖(페이지 위)에 띄우기 ===== */
+  var chatPop = root.querySelector('#chat');
+  if(chatPop){
+    var layer = document.createElement('div');
+    layer.className = 'jg jg-float';
+    layer.appendChild(chatPop);
+    document.body.appendChild(layer);
+  }
+  function $all(sel){ return Array.from(root.querySelectorAll(sel)).concat(chatPop ? Array.from(chatPop.querySelectorAll(sel)) : []); }
+  function findPop(id){ return root.querySelector('#' + id) || (chatPop && chatPop.id === id ? chatPop : null); }
 
   /* ===== 말풍선 ===== */
   var bubble = root.querySelector('#jgBubble'), cur = '';
@@ -507,9 +529,10 @@
     el.onclick = function(){ clearTimeout(timer); el.textContent = text.join(''); el.classList.add('done'); };
   }
   function open(id, from){
-    var pop = root.querySelector('#' + id);
+    var pop = findPop(id);
     if(!pop) return;
-    root.querySelectorAll('.jg-pop.open').forEach(function(p){ p.classList.remove('open'); });
+    $all('.jg-pop.open').forEach(function(p){ p.classList.remove('open'); });
+    if(chatPop && chatPop.classList.contains('open')) chatPop.classList.remove('open');
     if(!from || !from.classList.contains('jg-item')) from = last; else last = from;
     var fr = pop.querySelector('iframe[data-src]');
     if(fr && !fr.src){
@@ -526,15 +549,15 @@
     var x = pop.querySelector('.jg-x'); if(x) x.focus({preventScroll:true});
   }
   function close(){
-    var pop = root.querySelector('.jg-pop.open');
+    var pop = root.querySelector('.jg-pop.open') || (chatPop && chatPop.classList.contains('open') ? chatPop : null);
     if(!pop) return;
     pop.classList.remove('open'); clearTimeout(timer);
     items.forEach(function(it){ it.classList.remove('on'); });
     blip(700, 420, .12);
     if(last) last.focus({preventScroll:true});
   }
-  root.querySelectorAll('[data-close]').forEach(function(b){ b.addEventListener('click', close); });
-  root.querySelectorAll('.jg-pop [data-open]').forEach(function(b){ b.addEventListener('click', function(){ open(b.dataset.open, b); }); });
+  $all('[data-close]').forEach(function(b){ b.addEventListener('click', close); });
+  $all('.jg-pop [data-open]').forEach(function(b){ b.addEventListener('click', function(){ open(b.dataset.open, b); }); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
 
   /* ===== 화면 크기에 맞춰 줄이기 ===== */
