@@ -27,8 +27,16 @@
 .jg{margin:0 auto;width:720px;font-family:"Jua",sans-serif;color:var(--ink);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 .jg button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;-webkit-appearance:none;appearance:none}
 
-/* ===== 캐릭터 사진 (한 번만 넣어두고 여러 곳에서 같이 써요) ===== */
-.jg{--jg-img:url("https://i.imgur.com/GbZAmXv.png")}
+/* ===== 사진 넣는 곳 =====
+   따옴표 안 주소만 바꾸면 돼요. 지금은 다섯 곳 모두 같은 사진이에요.
+   키링·팝업 얼굴은 동그란/네모 칸에 맞춰 자동으로 채워져요 (정사각형 얼굴 사진 추천). */
+.jg{
+  --img-main:url("https://i.imgur.com/GbZAmXv.png");    /* 오른쪽 큰 캐릭터 (배경 투명한 사진 추천) */
+  --img-toy:url("https://i.imgur.com/GbZAmXv.png");     /* 왼쪽 위 키링 화면 */
+  --img-start:url("https://i.imgur.com/GbZAmXv.png");   /* 게임시작 팝업 얼굴 */
+  --img-howto:url("https://i.imgur.com/GbZAmXv.png");   /* 게임방법 팝업 얼굴 */
+  --img-notice:url("https://i.imgur.com/GbZAmXv.png");  /* 주의사항 팝업 얼굴 */
+}
 
 /* ===== 화면 ===== */
 .jg-stage{
@@ -60,38 +68,35 @@
   animation:jgFloat 5s ease-in-out infinite;
 }
 @keyframes jgFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.jg-chara{height:535px;background:var(--jg-img) center/100% 100% no-repeat}
+.jg-chara{height:535px;background:var(--img-main) center/100% 100% no-repeat}
 
-/* ===== 휴대폰 ===== */
-.jg-phone{
-  position:absolute;left:34px;top:70px;width:150px;height:262px;z-index:2;
-  transform:rotate(-11deg);border-radius:26px;background:#fff;
-  box-shadow:0 0 0 2px #d7ecfa,0 10px 22px rgba(70,140,200,.22);
+/* ===== 키링 (다마고치) ===== */
+.jg-toy{position:absolute;left:44px;top:86px;width:150px;height:176px;z-index:2;transform-origin:50% -34px;animation:jgSwing 4.5s ease-in-out infinite}
+@keyframes jgSwing{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(-4deg)}}
+.jg-chain{position:absolute;left:50%;top:-58px;width:60px;height:66px;transform:translateX(-50%);overflow:visible;pointer-events:none}
+.jg-egg{
+  position:absolute;inset:0;border-radius:50% 50% 46% 46%/56% 56% 44% 44%;
+  background:
+    radial-gradient(ellipse at 30% 18%,rgba(255,255,255,.95) 0 9%,rgba(255,255,255,0) 26%),
+    radial-gradient(circle,rgba(255,255,255,.75) 2px,transparent 2.5px) 0 0/16px 16px,
+    linear-gradient(170deg,#cdeeff,#9fd6f5);
+  box-shadow:inset 0 -9px 0 rgba(79,160,214,.28),0 0 0 3px #fff,0 0 0 5px #8fcdf3,0 12px 22px rgba(70,140,200,.25);
 }
-.jg-phone:before{content:"";position:absolute;left:50%;top:10px;width:30px;height:4px;border-radius:4px;background:#d7ecfa;transform:translateX(-50%)}
-.jg-phone:after{content:"";position:absolute;left:50%;bottom:9px;width:18px;height:18px;border-radius:50%;border:2px solid #d7ecfa;transform:translateX(-50%)}
-.jg-screen{position:absolute;left:9px;right:9px;top:22px;bottom:34px;border-radius:6px;overflow:hidden;background:#f7fbff;font-family:"Gowun Dodum",sans-serif}
-.jg-scr{position:absolute;inset:0;padding:6px 7px;animation:jgScr 8s infinite}
-.jg-scr.two{animation-delay:-4s}
-@keyframes jgScr{0%,45%{opacity:1}50%,95%{opacity:0}100%{opacity:1}}
-.jg-bar{display:flex;justify-content:space-between;font-size:6px;color:#9bb5c8;margin-bottom:5px}
-.jg-pf{display:flex;align-items:center;gap:6px}
-.jg-av{width:30px;height:30px;border-radius:50%;flex:none;background:#dff1ff var(--jg-img) 66% 22%/300% auto no-repeat;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--rib)}
-.jg-pf b{display:block;font-size:8px;color:var(--ink)}
-.jg-pf small{font-size:6px;color:var(--soft)}
-.jg-cnt{display:flex;justify-content:space-around;margin:7px 0 6px;font-size:6px;color:var(--soft);text-align:center}
-.jg-cnt b{display:block;font-size:8px;color:var(--ink)}
-.jg-fbtn{display:block;text-align:center;font-size:7px;color:#fff;background:var(--main);border-radius:4px;padding:3px 0;margin-bottom:6px}
-.jg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-.jg-grid i{aspect-ratio:1;border-radius:2px;background:linear-gradient(135deg,#d6efff,#f2f9ff)}
-.jg-grid i:nth-child(2n){background:linear-gradient(135deg,#ffe3ee,#fff6fa)}
-.jg-grid i:nth-child(3n){background:linear-gradient(135deg,#e5f6ff,#c9e7fb)}
-.jg-post{height:84px;border-radius:5px;margin:4px 0 5px;background:#e3f3ff var(--jg-img) 60% 18%/160% auto no-repeat}
-.jg-post-t{font-size:7px;line-height:1.5;color:var(--ink)}
-.jg-post-t span{color:var(--main)}
-.jg-like{font-size:7px;color:var(--pink);margin-top:3px}
-.jg-cursor{position:absolute;left:128px;top:250px;width:22px;z-index:4;transform:rotate(-8deg);animation:jgCur 3s ease-in-out infinite;pointer-events:none}
-@keyframes jgCur{0%,100%{transform:translate(0,0) rotate(-8deg)}50%{transform:translate(-6px,-8px) rotate(-8deg)}}
+.jg-toy-name{position:absolute;left:0;right:0;top:15px;text-align:center;font-size:11px;letter-spacing:.14em;color:#fff;text-shadow:0 1px 0 var(--main-dk)}
+.jg-lcd-wrap{position:absolute;left:29px;top:33px;width:92px;height:84px;padding:6px;border-radius:20px;background:#fff;box-shadow:inset 0 0 0 2px #d7ecfa,0 3px 0 rgba(79,160,214,.35)}
+.jg-lcd{position:relative;width:100%;height:100%;overflow:hidden;border-radius:14px;background:#e9f7ff var(--img-toy) center 22%/cover no-repeat;box-shadow:inset 0 0 0 2px #cfe9fa}
+.jg-lcd:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.18) 0 1px,transparent 1px 3px);pointer-events:none}
+.jg-meter{position:absolute;left:0;right:0;bottom:2px;z-index:1;text-align:center;font-size:10px;letter-spacing:1px;color:#ff8fb6;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff}
+.jg-meter i{font-style:normal;color:#fff;-webkit-text-stroke:.6px #ff8fb6}
+.jg-meter i.on{color:#ff8fb6;-webkit-text-stroke:0}
+.jg-max{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(233,247,255,.82);color:var(--main-dk);font-size:13px;line-height:1.1;text-align:center;opacity:0;transition:opacity .25s}
+.jg-max.show{opacity:1}
+.jg-toy-btns{position:absolute;left:0;right:0;top:128px;display:flex;justify-content:center;gap:11px}
+.jg .jg-tb{width:18px;height:18px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 3px 0 2px rgba(79,160,214,.45)}
+.jg .jg-tb:active{transform:translateY(2px);box-shadow:0 0 0 2px #fff,0 1px 0 2px rgba(79,160,214,.45)}
+.jg-tb.a{background:#ffc4d9}.jg-tb.b{background:#fff3a8}.jg-tb.c{background:#ffffff}
+.jg-plus{position:absolute;left:50%;top:22px;z-index:3;font-size:15px;color:#ff8fb6;-webkit-text-stroke:3px #fff;paint-order:stroke fill;pointer-events:none;animation:jgPlus .7s ease-out forwards}
+@keyframes jgPlus{from{transform:translate(-50%,0);opacity:1}to{transform:translate(-50%,-26px);opacity:0}}
 
 /* ===== 제목 ===== */
 .jg-title{position:absolute;left:150px;top:62px;width:330px;height:270px;z-index:5;pointer-events:none}
@@ -123,10 +128,6 @@
 .jg-w2 span:nth-child(1){--r:5deg}
 .jg-w2 span:nth-child(2){--r:-4deg;font-size:104px}
 .jg-w2 span:nth-child(3){--r:6deg}
-.jg-sub{
-  position:absolute;left:276px;top:122px;writing-mode:vertical-rl;font-size:19px;letter-spacing:.06em;color:#ff8fb6;
-  -webkit-text-stroke:4px #fff;paint-order:stroke fill;transform:rotate(-14deg);
-}
 
 /* ===== 메뉴 ===== */
 .jg-menu{position:absolute;left:50px;top:330px;width:250px;z-index:7;display:flex;flex-direction:column;gap:4px}
@@ -165,7 +166,6 @@
 .jg-sound .off{display:none}
 .jg-sound.muted .on{display:none}
 .jg-sound.muted .off{display:block}
-.jg-cam{position:absolute;right:30px;top:96px;width:84px;z-index:4;transform:rotate(12deg);animation:jgFloat 4s ease-in-out infinite;pointer-events:none}
 
 /* ===== 리본 테두리 ===== */
 .jg-frame{position:absolute;inset:0;width:100%;height:100%;z-index:10;pointer-events:none}
@@ -192,9 +192,12 @@
 .jg-body{display:flex;gap:14px;padding:16px 16px 6px;min-height:0;flex:1}
 .jg-face{
   flex:none;width:96px;height:96px;border-radius:50%;
-  background:#e3f3ff var(--jg-img) 66% 22%/300% auto no-repeat;
+  background:#e3f3ff var(--face) center 22%/cover no-repeat;
   box-shadow:0 0 0 3px #fff,0 0 0 5px var(--rib);
 }
+#start .jg-face{--face:var(--img-start)}
+#howto .jg-face{--face:var(--img-howto)}
+#notice .jg-face{--face:var(--img-notice)}
 .jg-text{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
 .jg-name{
   align-self:flex-start;margin:0 0 8px;padding:3px 14px 4px;border-radius:999px;background:var(--main);color:#fff;font-size:15px;
@@ -230,26 +233,29 @@
   <div class="jg-pattern"></div>
   <div class="jg-glow"></div>
 
-  <!-- 휴대폰 (화면 두 장이 번갈아 나와요) -->
-  <div class="jg-phone" aria-hidden="true">
-    <div class="jg-screen">
-      <div class="jg-scr one">
-        <div class="jg-bar"><span>9:41</span><span>♡ ▮▮▮</span></div>
-        <div class="jg-pf"><div class="jg-av"></div><div><b>jjunsik_kiugi</b><small>육성 중… Lv.1</small></div></div>
-        <div class="jg-cnt"><div><b>3</b>게시물</div><div><b>1</b>팔로워</div><div><b>1</b>팔로잉</div></div>
-        <span class="jg-fbtn">팔로우</span>
-        <div class="jg-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      </div>
-      <div class="jg-scr two">
-        <div class="jg-bar"><span>9:41</span><span>♡ ▮▮▮</span></div>
-        <div class="jg-pf"><div class="jg-av"></div><div><b>jjunsik_kiugi</b><small>방금 전</small></div></div>
-        <div class="jg-post"></div>
-        <div class="jg-post-t">오늘부터 키워지는 중 <span>#쭌식이키우기</span></div>
-        <div class="jg-like">♥ 좋아요 1개</div>
+  <!-- 키링: 동그란 버튼 누르면 하트가 차요 -->
+  <div class="jg-toy">
+    <svg class="jg-chain" viewBox="0 0 60 66" aria-hidden="true">
+      <circle cx="30" cy="14" r="11" fill="none" stroke="#fff" stroke-width="5"/>
+      <circle cx="30" cy="14" r="11" fill="none" stroke="#b9dff6" stroke-width="2.5"/>
+      <g fill="none" stroke="#b9dff6" stroke-width="3"><ellipse cx="30" cy="31" rx="3.5" ry="5.5"/><ellipse cx="30" cy="42" rx="3.5" ry="5.5"/><ellipse cx="30" cy="53" rx="3.5" ry="5.5"/></g>
+      <path d="M30 24 L48 32" stroke="#b9dff6" stroke-width="1.5"/>
+      <path d="M48 26l2.4 5 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-3.9-3.8 5.4-.8z" fill="#fff3a8" stroke="#fff" stroke-width="1.5"/>
+    </svg>
+    <div class="jg-egg"></div>
+    <div class="jg-toy-name">JJUNSIK</div>
+    <div class="jg-lcd-wrap">
+      <div class="jg-lcd">
+        <div class="jg-meter" id="jgMeter"><i>♥</i><i>♥</i><i>♥</i><i>♥</i><i>♥</i></div>
+        <div class="jg-max" id="jgMax">LOVE<br>MAX!</div>
       </div>
     </div>
+    <div class="jg-toy-btns">
+      <button class="jg-tb a" aria-label="쓰다듬기"></button>
+      <button class="jg-tb b" aria-label="간식 주기"></button>
+      <button class="jg-tb c" aria-label="놀아주기"></button>
+    </div>
   </div>
-  <svg class="jg-cursor" viewBox="0 0 20 26" aria-hidden="true"><path d="M2 2 L2 21 L7 16.5 L10.5 24 L14 22.5 L10.5 15 L17 15 Z" fill="#fff" stroke="#3d5f7a" stroke-width="1.6" stroke-linejoin="round"/></svg>
 
   <!-- 제목 -->
   <div class="jg-title" aria-label="쭌식이 키우기">
@@ -260,17 +266,7 @@
     <div class="jg-shh">쉿~</div>
     <div class="jg-word jg-w1"><span>쭌</span><span>식</span><span>이</span></div>
     <div class="jg-word jg-w2"><span>키</span><span>우</span><span>기</span></div>
-    <div class="jg-sub">육성 대작전</div>
   </div>
-
-  <!-- 카메라 -->
-  <svg class="jg-cam" viewBox="0 0 100 80" aria-hidden="true">
-    <rect x="6" y="18" width="88" height="56" rx="14" fill="#bfe6fd" stroke="#fff" stroke-width="4"/>
-    <rect x="20" y="10" width="26" height="14" rx="5" fill="#93d0f4" stroke="#fff" stroke-width="3"/>
-    <circle cx="52" cy="46" r="20" fill="#fff"/><circle cx="52" cy="46" r="14" fill="#5a7f9c"/><circle cx="52" cy="46" r="8" fill="#2f4f68"/><circle cx="47" cy="41" r="3.5" fill="#fff"/>
-    <circle cx="82" cy="30" r="4" fill="#ffb3cf"/>
-    <path d="M88 4l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff3a8" stroke="#fff" stroke-width="1.5"/>
-  </svg>
 
   <!-- 캐릭터 -->
   <div class="jg-chara" role="img" aria-label="쭌식이"></div>
@@ -447,6 +443,20 @@
     }catch(e){}
   }
   sound.addEventListener('click', function(){ on = !on; sound.classList.toggle('muted', !on); blip(660, 990, .15); });
+
+  /* ===== 키링 하트 ===== */
+  var hearts = root.querySelectorAll('#jgMeter i'), maxEl = root.querySelector('#jgMax'), lv = 1, toy = root.querySelector('.jg-toy');
+  function paint(){ hearts.forEach(function(h, i){ h.classList.toggle('on', i < lv); }); }
+  paint();
+  root.querySelectorAll('.jg-tb').forEach(function(b){
+    b.addEventListener('click', function(){
+      if(lv >= hearts.length){ lv = 0; maxEl.classList.remove('show'); paint(); blip(500, 300, .15); return; }
+      lv++; paint(); blip(700 + lv * 90, 1100 + lv * 90, .1);
+      var p = document.createElement('span'); p.className = 'jg-plus'; p.textContent = '+♥';
+      toy.appendChild(p); setTimeout(function(){ p.remove(); }, 750);
+      if(lv >= hearts.length){ maxEl.classList.add('show'); blip(880, 1760, .3); }
+    });
+  });
 
   /* ===== 말풍선 ===== */
   var bubble = root.querySelector('#jgBubble'), cur = '';
