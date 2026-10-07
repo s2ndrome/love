@@ -224,11 +224,11 @@
 /* 채팅 팝업 (화면 크기 줄이기와 상관없이 실제 크기로 떠요) */
 .jg-wrap{position:relative;margin:0 auto}
 .jg-wrap > .jg{margin:0}
-.jg-float{position:absolute;inset:0;z-index:50;width:auto;margin:0;overflow:hidden;pointer-events:none}
+.jg-float{position:absolute;left:0;top:0;width:720px;height:540px;transform-origin:0 0;z-index:50;margin:0;overflow:hidden;border-radius:18px;pointer-events:none}
 .jg-float .jg-pop{pointer-events:auto}
 .jg-float .jg-pop.open{pointer-events:auto}
 .jg-pop:not(.open){pointer-events:none}
-.jg-win.chat{width:calc(100% - 22px);max-width:600px;height:calc(100% - 22px);max-height:470px}
+.jg-win.chat{width:520px;height:420px;max-height:none}
 .jg-chat{position:relative;flex:1;min-height:0;margin:10px 10px 4px;border-radius:14px}
 .jg-chat iframe{display:block;width:100%;height:100%;border:0;background:transparent}
 .jg-chat-wait{position:absolute;inset:0;display:grid;place-items:center;font-size:16px;color:var(--soft);pointer-events:none;transition:opacity .3s}
@@ -575,7 +575,7 @@
     var w = (box.parentElement && box.parentElement.clientWidth) || window.innerWidth;
     var z = Math.min(1, w / DESIGN_W);
     root.style.zoom = z;
-    if(box !== root){ box.style.width = (DESIGN_W * z) + 'px'; layer.style.borderRadius = (18 * z) + 'px'; }
+    if(box !== root){ box.style.width = (DESIGN_W * z) + 'px'; layer.style.transform = 'scale(' + z + ')'; }
   }
   window.addEventListener('resize', fit, {passive:true});
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
