@@ -54,11 +54,6 @@
 /* ===== 캐릭터 ===== */
 .jg-chara{
   position:absolute;right:-34px;bottom:-26px;width:452px;z-index:3;pointer-events:none;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%),linear-gradient(180deg,#000 74%,transparent 98%);
-  -webkit-mask-composite:source-in;
-          mask-image:linear-gradient(90deg,transparent 0,#000 22%),linear-gradient(180deg,#000 74%,transparent 98%);
-          mask-composite:intersect;
-  filter:drop-shadow(0 6px 16px rgba(79,150,210,.25));
   animation:jgFloat 5s ease-in-out infinite;
 }
 @keyframes jgFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -194,7 +189,7 @@
 .jg-body{display:flex;gap:14px;padding:16px 16px 6px;min-height:0;flex:1}
 .jg-face{
   flex:none;width:96px;height:96px;border-radius:50%;
-  background:#e3f3ff url("https://raw.githubusercontent.com/s2ndrome/love/claude/funny-turing-rvyssq/img/junsik-game.webp") 66% 22%/300% auto no-repeat;
+  background:#e3f3ff url("https://raw.githubusercontent.com/s2ndrome/love/claude/funny-turing-rvyssq/img/junsik-game.webp?v=2") 66% 22%/300% auto no-repeat;
   box-shadow:0 0 0 3px #fff,0 0 0 5px var(--rib);
 }
 .jg-text{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
@@ -275,7 +270,7 @@
   </svg>
 
   <!-- 캐릭터 -->
-  <div class="jg-chara"><img src="https://raw.githubusercontent.com/s2ndrome/love/claude/funny-turing-rvyssq/img/junsik-game.webp" alt="쭌식이" draggable="false"></div>
+  <div class="jg-chara"><img src="https://raw.githubusercontent.com/s2ndrome/love/claude/funny-turing-rvyssq/img/junsik-game.webp?v=2" alt="쭌식이" draggable="false"></div>
 
   <!-- 메뉴: data-open 값이 아래 팝업 id랑 같아야 해요 -->
   <nav class="jg-menu">
@@ -435,7 +430,7 @@
 (function(){
   var root = document.getElementById('jg');
   if(!root) return;
-  var IMG = 'https://raw.githubusercontent.com/s2ndrome/love/claude/funny-turing-rvyssq/img/junsik-game.webp';
+  var IMG = 'https://raw.githubusercontent.com/s2ndrome/love/claude/funny-turing-rvyssq/img/junsik-game.webp?v=2';
   root.querySelectorAll('.jg-av,.jg-post').forEach(function(el){ el.style.backgroundImage = 'url("' + IMG + '")'; });
 
   /* ===== 효과음 (소리 버튼으로 켜고 끄기) ===== */
