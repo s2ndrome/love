@@ -62,7 +62,7 @@ const CHARACTERS = {
 };
 
 // 이 채팅을 띄울 수 있는 사이트 (다른 사이트가 퍼가서 키를 쓰는 걸 막아요)
-const ALLOWED_PARENTS = ["https://luvlog.me"];
+const ALLOWED_PARENTS = ["https://luvlog.me", "https://*.luvlog.me"];
 
 // Gemini 모델 — 앞에서부터 시도하고, 없는 모델이거나 무료 사용량이 찼거나 붐비면 다음 걸로 넘어가요.
 // (모델마다 무료 사용량이 따로라서, 여러 개 적어두면 리아가 더 오래 대답할 수 있어요)
