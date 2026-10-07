@@ -222,10 +222,14 @@
 .jg-info dt{color:var(--main-dk);font-family:"Jua",sans-serif}
 .jg-info dd{margin:0}
 /* 채팅 팝업 (화면 크기 줄이기와 상관없이 실제 크기로 떠요) */
-.jg-float{position:fixed;inset:0;z-index:2147483000;width:auto;margin:0;pointer-events:none}
+.jg-wrap{position:relative;margin:0 auto}
+.jg-wrap > .jg{margin:0}
+.jg-float{position:absolute;inset:0;z-index:50;width:auto;margin:0;overflow:hidden;pointer-events:none}
 .jg-float .jg-pop{pointer-events:auto}
-.jg-win.chat{width:min(600px,calc(100vw - 24px));max-height:none}
-.jg-chat{position:relative;height:min(372px,calc(100vh - 110px));margin:12px 12px 4px;border-radius:14px}
+.jg-float .jg-pop.open{pointer-events:auto}
+.jg-pop:not(.open){pointer-events:none}
+.jg-win.chat{width:calc(100% - 22px);max-width:600px;height:calc(100% - 22px);max-height:470px}
+.jg-chat{position:relative;flex:1;min-height:0;margin:10px 10px 4px;border-radius:14px}
 .jg-chat iframe{display:block;width:100%;height:100%;border:0;background:transparent}
 .jg-chat-wait{position:absolute;inset:0;display:grid;place-items:center;font-size:16px;color:var(--soft);pointer-events:none;transition:opacity .3s}
 .jg-chat.ready .jg-chat-wait{opacity:0}
@@ -491,10 +495,14 @@
   /* ===== 채팅 팝업은 줄어든 화면 밖(페이지 위)에 띄우기 ===== */
   var chatPop = root.querySelector('#chat');
   if(chatPop){
+    var wrap = document.createElement('div');
+    wrap.className = 'jg-wrap';
+    root.parentNode.insertBefore(wrap, root);
+    wrap.appendChild(root);
     var layer = document.createElement('div');
     layer.className = 'jg jg-float';
     layer.appendChild(chatPop);
-    document.body.appendChild(layer);
+    wrap.appendChild(layer);
   }
   function $all(sel){ return Array.from(root.querySelectorAll(sel)).concat(chatPop ? Array.from(chatPop.querySelectorAll(sel)) : []); }
   function findPop(id){ return root.querySelector('#' + id) || (chatPop && chatPop.id === id ? chatPop : null); }
@@ -563,8 +571,11 @@
   /* ===== 화면 크기에 맞춰 줄이기 ===== */
   var DESIGN_W = 720;
   function fit(){
-    var w = (root.parentElement && root.parentElement.clientWidth) || window.innerWidth;
-    root.style.zoom = Math.min(1, w / DESIGN_W);
+    var box = root.parentElement.classList.contains('jg-wrap') ? root.parentElement : root;
+    var w = (box.parentElement && box.parentElement.clientWidth) || window.innerWidth;
+    var z = Math.min(1, w / DESIGN_W);
+    root.style.zoom = z;
+    if(box !== root){ box.style.width = (DESIGN_W * z) + 'px'; layer.style.borderRadius = (18 * z) + 'px'; }
   }
   window.addEventListener('resize', fit, {passive:true});
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
