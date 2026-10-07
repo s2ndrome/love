@@ -36,6 +36,7 @@
   --img-start:url("https://i.imgur.com/GbZAmXv.png");   /* 게임시작 팝업 얼굴 */
   --img-howto:url("https://i.imgur.com/GbZAmXv.png");   /* 게임방법 팝업 얼굴 */
   --img-notice:url("https://i.imgur.com/GbZAmXv.png");  /* 주의사항 팝업 얼굴 */
+  --img-chat:url("https://i.imgur.com/GbZAmXv.png");    /* 채팅 속 쭌식이 프로필 */
 }
 
 /* ===== 화면 ===== */
@@ -220,6 +221,12 @@
 .jg-info dl{display:grid;grid-template-columns:76px 1fr;gap:4px 10px;margin:0 0 6px}
 .jg-info dt{color:var(--main-dk);font-family:"Jua",sans-serif}
 .jg-info dd{margin:0}
+/* 채팅 팝업 */
+.jg-win.chat{width:600px;max-height:none}
+.jg-chat{position:relative;height:372px;margin:12px 12px 4px;border-radius:14px}
+.jg-chat iframe{display:block;width:100%;height:100%;border:0;background:transparent}
+.jg-chat-wait{position:absolute;inset:0;display:grid;place-items:center;font-size:16px;color:var(--soft);pointer-events:none;transition:opacity .3s}
+.jg-chat.ready .jg-chat-wait{opacity:0}
 .jg-foot{display:flex;justify-content:flex-end;gap:8px;padding:8px 16px 12px}
 .jg .jg-btn{padding:6px 22px 7px;border-radius:999px;background:linear-gradient(#ffffff,#e7f5ff);color:var(--main-dk);font-size:15px;box-shadow:0 0 0 2px var(--rib),0 4px 0 var(--rib-dk)}
 .jg .jg-btn.go{background:linear-gradient(#8fd2fa,#56b4ec);color:#fff;text-shadow:0 1px 0 var(--main-dk);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--rib),0 4px 0 4px var(--rib-dk)}
@@ -364,7 +371,7 @@
           </div>
         </div>
       </div>
-      <div class="jg-foot"><button class="jg-btn" data-close>닫기</button><button class="jg-btn go" data-close>시작하기 ♡</button></div>
+      <div class="jg-foot"><button class="jg-btn" data-close>닫기</button><button class="jg-btn go" data-open="chat">시작하기 ♡</button></div>
     </div>
   </div>
 
@@ -419,6 +426,18 @@
         </div>
       </div>
       <div class="jg-foot"><button class="jg-btn go" data-close>약속할게 ♡</button></div>
+    </div>
+  </div>
+
+  <!-- ④ 채팅 (게임시작 → 시작하기 ♡ 누르면 열려요) -->
+  <div class="jg-pop" id="chat" role="dialog" aria-modal="true" aria-label="쭌식이랑 대화하기">
+    <div class="jg-dim" data-close></div>
+    <div class="jg-win chat">
+      <div class="jg-win-bar">쭌식이랑 대화하기<button class="jg-x" data-close aria-label="닫기">✕</button></div>
+      <div class="jg-chat">
+        <div class="jg-chat-wait">쭌식이 부르는 중…</div>
+        <iframe data-src="https://junsik-chat.jenojeno0423.workers.dev/?theme=vn" title="쭌식이 채팅" allow="clipboard-write"></iframe>
+      </div>
     </div>
   </div>
 
@@ -490,7 +509,15 @@
   function open(id, from){
     var pop = root.querySelector('#' + id);
     if(!pop) return;
-    last = from || null;
+    root.querySelectorAll('.jg-pop.open').forEach(function(p){ p.classList.remove('open'); });
+    if(!from || !from.classList.contains('jg-item')) from = last; else last = from;
+    var fr = pop.querySelector('iframe[data-src]');
+    if(fr && !fr.src){
+      var src = fr.dataset.src, m = getComputedStyle(root).getPropertyValue('--img-chat').match(/url\(["']?([^"')]+)/);
+      if(m) src += '&face=' + encodeURIComponent(m[1].trim());
+      fr.addEventListener('load', function(){ fr.parentElement.classList.add('ready'); });
+      fr.src = src;
+    }
     if(from) from.classList.add('on');
     pop.classList.add('open');
     var info = pop.querySelector('.jg-info'); if(info) info.scrollTop = 0;
@@ -507,6 +534,7 @@
     if(last) last.focus({preventScroll:true});
   }
   root.querySelectorAll('[data-close]').forEach(function(b){ b.addEventListener('click', close); });
+  root.querySelectorAll('.jg-pop [data-open]').forEach(function(b){ b.addEventListener('click', function(){ open(b.dataset.open, b); }); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
 
   /* ===== 화면 크기에 맞춰 줄이기 ===== */
