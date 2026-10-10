@@ -80,8 +80,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .ticker span i { font-style: normal; color: var(--blue); }
 @keyframes tick { to { transform: translateX(-50%); } }
 
-.cursor { position: fixed; left: 0; top: 0; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: #86c4ee; opacity: .9; pointer-events: none; z-index: 60; transition: width .25s, height .25s, margin .25s; }
-.cursor.big { width: 64px; height: 64px; margin: -32px; opacity: .55; }
+.cursor { position: fixed; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 60; }
+.cursor i { position: absolute; left: 0; top: 0; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: #86c4ee; opacity: .9; transition: width .25s, height .25s, margin .25s, opacity .25s; }
+.cursor.big i { width: 64px; height: 64px; margin: -32px; opacity: .55; }
+/* 원 안에 들어온 메뉴 글씨는 흰색: 같은 자리에 흰 글씨 복사본을 두고 원 모양으로만 보여줘요 */
+.ix-w { pointer-events: none; z-index: 61 !important; clip-path: circle(0 at 0 0); }
+.ix-w, .ix-w * { color: #fff !important; }
+.ix-w .lock::after { color: #fff !important; }
 @media (pointer: coarse) { .cursor { display: none; } }
 
 .ribbon { position: fixed; left: 31vw; top: 79vh; width: min(560px, 38vw); z-index: 1; mix-blend-mode: multiply; pointer-events: none; transform: translate(-50%, -50%) translate(var(--rx, 0px), var(--ry, 0px)) rotate(calc(-80deg + var(--rr, 0deg))); }
@@ -668,7 +673,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   </div>
 <div class="ticker" id="ticker"><div id="lyr"></div></div>
 <audio id="au" src="audio/set-me-free.mp3" preload="metadata"></audio>
-<div class="cursor" id="cursor"></div>
+<div class="cursor" id="cursor"><i></i></div>
 
 <div class="wlayer" id="sheet"><section class="win" id="win" role="dialog" aria-modal="true" aria-label="상세">
   <header class="wbar" id="wbar"><span class="dots"><button class="d" id="close" aria-label="닫기"></button><i class="d"></i><i class="d"></i></span><span class="wurl" id="wurl">www.syndrome.com</span><span class="wn" id="wn"></span></header>
@@ -735,6 +740,24 @@ SITE_READY.then(function () {
     } else b.onclick = function () { open(it.k); };
     ix.appendChild(li);
   });
+
+  // 원 안의 글씨를 흰색으로: 메뉴 복사본을 원 모양으로 잘라서 커서 위에 겹쳐요
+  var ixw = null, lr = 0;
+  function mirror() { if (ixw) ixw.remove(); ixw = ix.cloneNode(true); ixw.removeAttribute('id'); ixw.classList.add('ix-w'); ixw.setAttribute('aria-hidden', 'true'); document.body.appendChild(ixw); }
+  function syncCls() {
+    var a = ix.querySelectorAll('*'), b = ixw.querySelectorAll('*'); ixw.className = ix.className + ' ix-w';
+    if (a.length !== b.length) return mirror();
+    a.forEach(function (el, i) { if (b[i].className !== el.className) b[i].className = el.className; });
+  }
+  if (matchMedia('(pointer: fine)').matches) {
+    mirror();
+    new MutationObserver(function (ms) { ms.some(function (m) { return m.type === 'childList'; }) ? mirror() : syncCls(); }).observe(ix, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true });
+    (function lens() {
+      lr += ((cur.classList.contains('big') ? 32 : 5) - lr) * .25;
+      var r = ixw.getBoundingClientRect(); ixw.style.clipPath = 'circle(' + lr.toFixed(1) + 'px at ' + (mx - r.left).toFixed(1) + 'px ' + (my - r.top).toFixed(1) + 'px)';
+      requestAnimationFrame(lens);
+    })();
+  }
 
   // image + cursor follow with lag
   var mx = innerWidth / 2, my = innerHeight / 2, fx = mx, fy = my, last = mx;
