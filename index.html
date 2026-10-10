@@ -798,7 +798,7 @@ SITE_READY.then(function () {
   function chatView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com/lia';
     document.getElementById('wn').textContent = '(chat)';
-    var img = SITE.data.characters && SITE.data.characters[1] && SITE.data.characters[1].thumb;
+    var img = 'img/lia-fro.jpg';
     render('', '<div class="chat"><div class="who">' + (img ? '<img src="' + img + '" alt="">' : '') + '<div><b>Lia</b><small>SEOLJISU · AQUA GUIDE</small></div></div><iframe src="' + LIA_URL + '" title="리아와 채팅"></iframe></div>', null);
   }
   // ======== Seol → INFO ========
