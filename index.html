@@ -481,7 +481,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .wlayer { position: fixed; inset: 0; z-index: 40; background: rgba(240,240,242,.35); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; visibility: hidden; transition: opacity .35s, visibility .35s; }
 .wlayer.open { opacity: 1; visibility: visible; }
-.win { position: absolute; left: 50%; top: 50%; width: min(640px, calc(100vw - 32px)); height: auto; max-height: min(82vh, 760px); display: flex; flex-direction: column; background: #fcfcfb; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px rgba(15,15,16,.08), 0 30px 80px -20px rgba(15,15,16,.28), 0 8px 20px -10px rgba(15,15,16,.15); transform: translate(-50%, -48%) scale(.96); transition: transform .5s cubic-bezier(.2,.9,.2,1); }
+.win { position: absolute; left: 50%; top: 50%; width: min(640px, calc(100vw - 32px)); height: auto; max-height: min(82vh, 760px); max-height: min(82dvh, 760px); display: flex; flex-direction: column; background: #fcfcfb; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px rgba(15,15,16,.08), 0 30px 80px -20px rgba(15,15,16,.28), 0 8px 20px -10px rgba(15,15,16,.15); transform: translate(-50%, -48%) scale(.96); transition: transform .5s cubic-bezier(.2,.9,.2,1); }
 .wlayer.open .win { transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, 0px))) scale(1); }
 .wbar { flex: none; display: grid; grid-template-columns: 70px 1fr 70px; align-items: center; height: 38px; padding: 0 14px; border-bottom: 1px solid var(--hair); font: 400 11px var(--mono); color: var(--mid); cursor: grab; user-select: none; touch-action: none; background: rgba(255,255,255,.7); }
 .wbar.grab { cursor: grabbing; }
@@ -526,8 +526,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .index { top: 90px; transform: none; }
   .obj { width: 30vw; top: 52px; right: 10px; }
   .note { display: none; }
-  .win { max-height: 82vh; }
-  .win.w-info { max-height: 66vh; }
+  .win { max-height: 82vh; max-height: 82dvh; }
+  .win.w-info { max-height: 66vh; max-height: 66dvh; }
   .wbody .in { padding: 0 20px; }
   .syn-list { columns: 1; } .syn-grid { columns: 2; }
   .wbody .meta { grid-template-columns: 1fr 1fr; }
@@ -594,7 +594,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .post.char .markdown-body > div { border: 0 !important; border-radius: 0 !important; }
 @media (min-width: 700px) { .info { grid-template-columns: 200px 1fr; gap: 0 30px; } .info-links { grid-column: 1 / -1; margin-top: 18px; } }
 /* chat with lia — the real AI chat (Cloudflare worker) embedded */
-.chat { display: flex; flex-direction: column; height: min(60vh, 520px); }
+.chat { display: flex; flex-direction: column; height: min(60vh, 520px); height: min(60dvh, 520px); }
 .chat .who { display: flex; align-items: center; gap: 10px; padding: 0 0 12px; border-bottom: 1px solid var(--hair); }
 .chat .who img { width: 34px; height: 34px; object-fit: cover; }
 .chat .who b { font: italic 400 22px/1 var(--serif); }
