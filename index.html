@@ -43,7 +43,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .index em { font: italic 400 1em/.92 var(--serif); letter-spacing: -.02em; }
 .index.dim button { color: #e2e2e5; }
 .index.dim button.on { color: var(--ink); transform: translateX(14px); }
-.index .lock::after { content: "*"; color: var(--blue); font-size: .5em; }
+.index .lock::after { content: "*"; color: #86c4ee; font-size: .5em; }
 
 .float { position: fixed; left: 0; top: 0; width: 230px; aspect-ratio: 3/4; pointer-events: none; z-index: 2; opacity: 0; transition: opacity .3s; overflow: hidden; }
 .float.on { opacity: 1; }
@@ -81,8 +81,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @keyframes tick { to { transform: translateX(-50%); } }
 
 .cursor { position: fixed; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 60; }
-.cursor i { position: absolute; left: 0; top: 0; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: #86c4ee; opacity: .9; transition: width .25s, height .25s, margin .25s, opacity .25s; }
-.cursor.big i { width: 64px; height: 64px; margin: -32px; opacity: .55; }
+.cursor i { position: absolute; left: 0; top: 0; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: #86c4ee; transition: width .25s, height .25s, margin .25s; }
+.cursor.big i { width: 64px; height: 64px; margin: -32px; }
 /* 원 안에 들어온 메뉴 글씨는 흰색: 같은 자리에 흰 글씨 복사본을 두고 원 모양으로만 보여줘요 */
 .ix-w { pointer-events: none; z-index: 61 !important; clip-path: circle(0 at 0 0); }
 .ix-w, .ix-w * { color: #fff !important; }
@@ -110,7 +110,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .rows button { width: 100%; display: grid; grid-template-columns: 1fr 16px; gap: 10px; align-items: baseline; padding: 11px 0; border: 0; border-bottom: 1px solid var(--hair); background: none; text-align: left; cursor: pointer; font: 400 14px/1.5 var(--ko); color: var(--ink); transition: padding .3s; }
 .rows button:hover { padding-left: 8px; }
 .rows .rn { font: 400 10px var(--mono); color: var(--mid); }
-.rows .rl { color: var(--blue); }
+.rows .rl { color: #86c4ee; }
 .pair-k { font: 400 11px var(--mono); letter-spacing: .2em; color: var(--mid); margin: 0 0 14px; }
 .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
 .pc { display: block; text-align: left; background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink); }
