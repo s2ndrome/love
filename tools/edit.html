@@ -689,9 +689,9 @@ saveBtn.addEventListener("click", async () => {
 
     if (photo) {
       setStatus("사진 업로드 중…");
-      const ext = (photo.name.split(".").pop() || "png").toLowerCase();
-      const imgPath = `img/${crypto.randomUUID()}.${ext}`;
-      const photoB64 = await readFileAsBase64(photo);
+      // 항상 JPG로 다시 그려서 올려요 (원본의 촬영 정보 같은 메타데이터가 남지 않게)
+      const imgPath = `img/${crypto.randomUUID()}.jpg`;
+      const photoB64 = await readFileAsBase64(await compressImage(photo));
       await putFile(imgPath, photoB64, `Add photo for post: ${newTitle}`, undefined, token);
       content = `<img src="${imgPath}" width="100%">\n\n${stripLeadingImages(content)}`;
     }
