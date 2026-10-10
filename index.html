@@ -102,7 +102,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .gpick .ga { grid-row: 1 / 3; grid-column: 3; align-self: center; font: 400 16px var(--mono); color: var(--mid); transition: color .3s, transform .3s; }
 .gpick button:hover .ga { color: var(--blue); transform: translateX(4px); }
 .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
-.rows button { width: 100%; display: grid; grid-template-columns: 38px 1fr 16px; gap: 10px; align-items: baseline; padding: 11px 0; border: 0; border-bottom: 1px solid var(--hair); background: none; text-align: left; cursor: pointer; font: 400 14px/1.5 var(--ko); color: var(--ink); transition: padding .3s; }
+.rows button { width: 100%; display: grid; grid-template-columns: 1fr 16px; gap: 10px; align-items: baseline; padding: 11px 0; border: 0; border-bottom: 1px solid var(--hair); background: none; text-align: left; cursor: pointer; font: 400 14px/1.5 var(--ko); color: var(--ink); transition: padding .3s; }
 .rows button:hover { padding-left: 8px; }
 .rows .rn { font: 400 10px var(--mono); color: var(--mid); }
 .rows .rl { color: var(--blue); }
@@ -588,6 +588,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .info-links i { font-style: normal; color: #86c4ee; }
 .info-links a:hover { color: #4f9ad0; }
 #wn { visibility: hidden; }
+/* ooc 복사 버튼 (기존 style.css에서 옮김) */
+.wbody .copy-button { display: grid; place-items: center; width: 26px; height: 26px; margin-left: auto; padding: 0; border: 1px solid rgba(0,0,0,.1); border-radius: 7px; background: rgba(255,255,255,.7); color: #8a8a8e; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.wbody .copy-button svg { width: 14px; height: 14px; display: block; }
+.wbody .copy-button:hover { color: #3c3c43; background: #fff; }
+.wbody .copy-button.copied { color: #4f9ad0; border-color: #86c4ee; }
 /* 배려 리스트 */
 .roster-btn { display: inline; font-family: inherit; font-size: inherit; line-height: inherit; font-weight: 700; color: #6fb0dc; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; }
 .roster-btn:hover, .roster-btn.on { color: #4f9ad0; }
@@ -762,7 +767,7 @@ SITE_READY.then(function () {
       }).join('') + '</div>';
     }
     else if (cat === 'gallery') body = '<div class="gallery-grid">' + items.map(function (it) { return '<button class="gallery-item" data-id="' + it.id + '">' + (it.locked ? LOCK : '') + (it.thumb ? '<img src="' + it.thumb + '" alt="' + (it.thumbLabel || '') + '"' + (it.blur ? ' class="thumb-blur"' : '') + '>' : it.thumbLabel) + '</button>'; }).join('') + '</div>';
-    else body = '<ol class="rows">' + items.map(function (it, i) { return '<li><button data-id="' + SYN.esc(it.id) + '"><span class="rn">' + String(items.length - i).padStart(2, '0') + '</span><span class="rt">' + SYN.esc(label(it)) + '</span><span class="rl">' + (it.locked ? '*' : '') + '</span></button></li>'; }).join('') + '</ol>';
+    else body = '<ol class="rows">' + items.map(function (it, i) { return '<li><button data-id="' + SYN.esc(it.id) + '"><span class="rt">' + SYN.esc(label(it)) + '</span><span class="rl">' + (it.locked ? '*' : '') + '</span></button></li>'; }).join('') + '</ol>';
     var titles = { characters: 'Characters', log: 'Log', ooc: 'Ooc', share: 'Share', gallery: 'Gallery' };
     var sub = { characters: 'SYNDROME ୨୧ LIA', log: all.length + ' entries · * 는 잠긴 기록', ooc: all.length + ' notes', share: 'prompts & worldbuilding', gallery: (GG === 'A' ? 'ARCH' : 'S & L') + ' · ' + all.length + ' frames' };
     var pager = pages > 1 ? '<nav class="pager"><button data-pg="' + (pg - 1) + '"' + (pg ? '' : ' disabled') + '>← prev</button><span>' + String(pg + 1).padStart(2, '0') + ' / ' + String(pages).padStart(2, '0') + '</span><button data-pg="' + (pg + 1) + '"' + (pg < pages - 1 ? '' : ' disabled') + '>next →</button></nav>' : '';
