@@ -10,7 +10,10 @@
     { name: '화이트룩', img: 'img/closet/white.webp' },
     { name: '사복', sub: '여름 ver', img: 'img/closet/casual-summer.webp' },
     { name: '사복', sub: '겨울 ver', img: 'img/closet/casual-winter.webp' },
-    { name: '마린룩', img: 'img/closet/marine.webp' }
+    { name: '마린룩', img: 'img/closet/marine.webp' },
+    { name: '동화 속', img: 'img/closet/fairytale.webp' },
+    { name: '천악', img: 'img/closet/angel-devil.webp' },
+    { name: '고딕', img: 'img/closet/gothic.webp' }
   ];
 
   function mount(host) {
