@@ -13,7 +13,8 @@
     { name: '마린룩', img: 'img/closet/marine.webp' },
     { name: '동화 속', img: 'img/closet/fairytale.webp' },
     { name: '천악', img: 'img/closet/angel-devil.webp' },
-    { name: '고딕', img: 'img/closet/gothic.webp' }
+    { name: '고딕', img: 'img/closet/gothic.webp' },
+    { name: '하라주쿠', img: 'img/closet/harajuku.webp' }
   ];
 
   function mount(host) {
