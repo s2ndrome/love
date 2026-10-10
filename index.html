@@ -593,6 +593,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .info-links i { font-style: normal; color: #86c4ee; }
 .info-links a:hover { color: #4f9ad0; }
 #wn { visibility: hidden; }
+/* 비밀번호 칸·확인 버튼: 흰 바탕에 얇은 테두리 (폰 다크모드에서도 동일) */
+.wbody .lock-gate-input { -webkit-appearance: none; appearance: none; background: #fff !important; color: var(--ink) !important; border: 1px solid #c0d1dc !important; border-radius: 0 !important; padding: 9px 12px; font: 400 13px var(--ko); width: 170px; outline: none; color-scheme: light; }
+.wbody .lock-gate-input::placeholder { color: #a7adb5; }
+.wbody .lock-gate-input:focus { border-color: #86c4ee !important; outline: none; }
+.wbody .lock-gate-submit, .wbody .blur-gate-submit { -webkit-appearance: none; appearance: none; background: #fff !important; color: var(--ink) !important; border: 1px solid #c0d1dc !important; border-radius: 0 !important; padding: 9px 16px; font: 500 12.5px var(--ko); cursor: pointer; }
+.wbody .lock-gate-submit:hover, .wbody .blur-gate-submit:hover { border-color: #86c4ee !important; color: #4f9ad0 !important; }
 .post.gal-a .feed-card { border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important; }
 .post.gal-a .feed-card > .card-header { display: none !important; }
 .post.gal-a .gallery-photo { margin-bottom: 0 !important; }
