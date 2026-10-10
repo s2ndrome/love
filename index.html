@@ -593,6 +593,16 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .info-links i { font-style: normal; color: #86c4ee; }
 .info-links a:hover { color: #4f9ad0; }
 #wn { visibility: hidden; }
+/* 방명록 */
+.guest .feed-card { border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+.guest .guestbook-hint { margin: 0 0 3px; font: 400 12px/1.6 var(--ko); color: var(--mid); }
+.guest .message-form { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.guest .message-form input, .guest .message-form textarea { padding: 9px 2px; border: 0; border-bottom: 1px solid #cfd3d8; border-radius: 0; background: none; font: 400 13.5px/1.6 var(--ko); color: var(--ink); resize: vertical; outline: none; }
+.guest .message-form input:focus, .guest .message-form textarea:focus { border-bottom-color: #86c4ee; }
+.guest .message-form button { align-self: flex-end; padding: 8px 18px; border: 1px solid #86c4ee; border-radius: 999px; background: #86c4ee; color: #fff; font: 500 12px var(--ko); cursor: pointer; }
+.guest .message-form button:disabled { opacity: .5; cursor: default; }
+.guest .message-form-status { margin: 0; min-height: 1em; font: 400 12px var(--ko); color: #4f9ad0; text-align: right; }
+.guest .message-form-status.error { color: #d0564f; }
 /* ooc 복사 버튼 (기존 style.css에서 옮김) */
 .wbody .copy-button { display: grid; place-items: center; width: 26px; height: 26px; margin-left: auto; padding: 0; border: 1px solid rgba(0,0,0,.1); border-radius: 7px; background: rgba(255,255,255,.7); color: #8a8a8e; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
 .wbody .copy-button svg { width: 14px; height: 14px; display: block; }
@@ -716,10 +726,10 @@ SITE_READY.then(function () {
     { k: 'seol', t: 'Seol', n: '00', img: 'img/seol.jpg', cap: 'the keeper' },
     { k: 'characters', t: 'Charac<em>ters</em>', n: '02', img: 'img/sd.jpg', cap: 'syndrome & lia' },
     { k: 'archive', t: 'Archive', n: SYN.log.length + SITE.data.gallery.length, img: 'img/g1.jpg', cap: 'log · gallery', lock: 1 },
-    { k: 'extra', t: '<em>Extra</em>', n: SYN.ooc.length + SYN.share.length, img: 'img/g2.jpg', cap: 'ooc · share' }
+    { k: 'extra', t: '<em>Extra</em>', n: SYN.ooc.length + SYN.share.length, img: 'img/g2.jpg', cap: 'ooc · share · guestbook' }
   ];
   var ix = document.getElementById('index'), fl = document.getElementById('float'), cur = document.getElementById('cursor');
-  var SUBS = { archive: [['log', 'Log', SYN.log.length], ['gallery', 'Gallery', SITE.data.gallery.length]], extra: [['ooc', 'Ooc', SYN.ooc.length], ['share', 'Share', SYN.share.length]] };
+  var SUBS = { archive: [['log', 'Log', SYN.log.length], ['gallery', 'Gallery', SITE.data.gallery.length]], extra: [['ooc', 'Ooc', SYN.ooc.length], ['share', 'Share', SYN.share.length], ['guest', 'Guestbook', '✎']] };
   items.forEach(function (it) {
     var li = document.createElement('li'), b = document.createElement('button');
     b.innerHTML = '<span class="' + (it.lock ? 'lock' : '') + '">' + it.t + '</span><sup>(' + it.n + ')</sup>';
@@ -904,13 +914,33 @@ SITE_READY.then(function () {
       '<section class="info-n"><h4>NOTICE</h4>' + INFO.notice.map(function (t) { return '<p>' + t + '</p>' + (t.indexOf('data-roster') > -1 ? rosterBox() : ''); }).join('') + (INFO.end ? '<p class="info-end">' + INFO.end + '</p>' : '') + '</section>' +
       '<nav class="info-links">' + INFO.links.map(function (l) { return '<a href="' + l[1] + '" target="_blank" rel="noopener"><span>' + l[0] + '</span><i>↗</i></a>'; }).join('') + '</nav></div>';
   }
+  // 방명록: posts/guestbook.html을 불러와서 Formspree로 보내요 (페이지 이동 없이)
+  var GUEST = '<p class="guestbook-hint">남기고 싶은 말을 적어주세요 ~</p><p class="guestbook-hint">오직 SEOL만 열람합니다.</p><form class="message-form" action="https://formspree.io/f/xljrkazq" method="POST"><input type="text" name="name" placeholder="이름 (선택)"><textarea name="message" placeholder="메시지" rows="5" required></textarea><button type="submit">보내기</button><p class="message-form-status" aria-live="polite"></p></form>';
+  function guestView() {
+    document.getElementById('wurl').textContent = 'www.syndrome.com/guestbook';
+    var show = function (html) {
+      render('', '<div class="guest">' + html + '</div>', null);
+      txt.querySelectorAll('.guest .card-header').forEach(function (h) { h.remove(); });
+      var form = txt.querySelector('.message-form'); if (!form) return;
+      var st = form.querySelector('.message-form-status'), bt = form.querySelector('button');
+      form.onsubmit = function (e) {
+        e.preventDefault(); if (bt.disabled) return; bt.disabled = true; st.textContent = ''; st.classList.remove('error');
+        fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+          .then(function (r) { if (!r.ok) throw 0; form.reset(); st.textContent = '메시지를 보냈어요 ♡'; })
+          .catch(function () { st.textContent = '전송에 실패했어요. 잠시 후 다시 시도해주세요.'; st.classList.add('error'); })
+          .then(function () { bt.disabled = false; });
+      };
+    };
+    fetch('posts/guestbook.html').then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(show, function () { show(GUEST); });
+  }
   function open(k) {
     var it = items.filter(function (i) { return i.k === k; })[0] || {};
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + k;
     document.getElementById('wn').textContent = '(' + (it.n == null ? '∞' : it.n) + ')';
     win.classList.toggle('w-info', k === 'seol');
     win.classList.toggle('w-du', k === 'dressup');
-    if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com/closet'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
+    if (k === 'guest') guestView();
+    else if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com/closet'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
     else if (k === 'chat') chatView();
     else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com/info'; render('', infoView(), 'img/info.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
     else if (k === 'forever') render('<h2>Forever</h2><p class="sub">활을 끝까지 돌린 사람만 보는 페이지. 잠긴 기록 ' + lockN + '개.</p>', SYN.logList(true), null);
