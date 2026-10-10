@@ -593,6 +593,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .info-links i { font-style: normal; color: #86c4ee; }
 .info-links a:hover { color: #4f9ad0; }
 #wn { visibility: hidden; }
+.post.gal-a .feed-card { border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important; }
+.post.gal-a .feed-card > .card-header { display: none !important; }
+.post.gal-a .gallery-photo { margin-bottom: 0 !important; }
 /* 방명록 */
 .guest .feed-card { border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
 .guest .guestbook-hint { margin: 0 0 3px; font: 400 12px/1.6 var(--ko); color: var(--mid); }
@@ -794,13 +797,15 @@ SITE_READY.then(function () {
     if (cat === 'ooc') return '<div class="note-card"><span class="note-tag">' + label(it) + '</span><div class="note-body">' + html + '</div><div class="note-compose"><button class="copy-button" type="button" aria-label="복사하기">' + COPY + '</button></div></div>';
     return html;
   }
+  var galA = false; // ARCH 갤러리 글: 제목·카드 틀 없이 사진만
   function render(head, body, pic) {
-    txt.innerHTML = (pic ? '<div class="pic"><img src="' + pic + '" alt=""></div>' : '') + '<div class="in' + (pic ? '' : ' nopic') + '">' + head + '<div class="post">' + body + '</div></div>';
+    txt.innerHTML = (pic ? '<div class="pic"><img src="' + pic + '" alt=""></div>' : '') + '<div class="in' + (pic ? '' : ' nopic') + '">' + head + '<div class="post' + (galA ? ' gal-a' : '') + '">' + body + '</div></div>';
     txt.scrollTop = 0;
     txt.querySelectorAll('.copy-button').forEach(function (b) { b.onclick = function () { var t = b.closest('.note-card').querySelector('.note-body').innerText.trim(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).catch(function () {}); b.classList.add('copied'); setTimeout(function () { b.classList.remove('copied'); }, 1400); }; });
   }
   var PAGE = {}, PER = 6, GG = 'A';
   function listView(k, pg) {
+    galA = false;
     var cat = CAT[k], all = D[cat], body;
     if (cat === 'gallery') all = all.filter(function (x) { return (x.group || 'A') === GG; });
     var tabs = cat === 'gallery' ? '<nav class="gtabs"><button data-g="A"' + (GG === 'A' ? ' class="on"' : '') + '>ARCH</button><button data-g="B"' + (GG === 'B' ? ' class="on"' : '') + '>S &amp; L</button></nav>' : '';
@@ -832,6 +837,7 @@ SITE_READY.then(function () {
   }
   function detail(k, id) {
     var cat = CAT[k], it = D[cat].filter(function (x) { return x.id === id; })[0] || { id: id }, html = PST[cat][id];
+    galA = cat === 'gallery' && (it.group || 'A') === 'A';
     if (html == null) { fetchPost(cat, id).then(function (h) { PST[cat][id] = h; }, function () { PST[cat][id] = '<p>불러오지 못했어요.</p>'; }).then(function () { detail(k, id); }); return; }
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + k + '/' + label(it);
     var head = '<button class="back" id="pback">← ' + ({ characters: 'Characters', log: 'Log', ooc: 'Ooc', share: 'Share', gallery: 'Gallery' })[k] + '</button>';
@@ -930,6 +936,7 @@ SITE_READY.then(function () {
     fetch('posts/guestbook.html').then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(show, function () { show(GUEST); });
   }
   function open(k) {
+    galA = false;
     var it = items.filter(function (i) { return i.k === k; })[0] || {};
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + k;
     document.getElementById('wn').textContent = '(' + (it.n == null ? '∞' : it.n) + ')';
