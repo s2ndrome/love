@@ -614,9 +614,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* chat with lia — the real AI chat (Cloudflare worker) embedded */
 .chat { display: flex; flex-direction: column; height: min(60vh, 520px); height: min(60dvh, 520px); }
 .chat .who { display: flex; align-items: center; gap: 10px; padding: 0 0 12px; border-bottom: 1px solid var(--hair); }
-.chat .who img { width: 34px; height: 34px; object-fit: cover; }
-.chat .who b { font: italic 400 22px/1 var(--serif); }
-.chat .who small { display: block; font: 400 10px var(--mono); color: var(--mid); letter-spacing: .1em; margin-top: 3px; }
+.chat .who img { width: 40px; height: 40px; flex: none; object-fit: cover; object-position: center 20%; border-radius: 50%; }
+.chat .who > div { height: 40px; display: flex; flex-direction: column; justify-content: center; background: none !important; border: 0 !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; }
+.chat .who b { font: italic 400 20px/1 var(--serif); }
+.chat .who small { display: block; font: 400 10px/1 var(--mono); color: var(--mid); letter-spacing: .1em; margin-top: 6px; }
 .chat .who a { margin-left: auto; font: 400 10px var(--mono); color: #4f9ad0; text-decoration: none; }
 .chat iframe { flex: 1; width: 100%; border: 0; display: block; margin-top: 10px; background: transparent; }
 @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
