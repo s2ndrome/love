@@ -593,6 +593,26 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .wbody .copy-button svg { width: 14px; height: 14px; display: block; }
 .wbody .copy-button:hover { color: #3c3c43; background: #fff; }
 .wbody .copy-button.copied { color: #4f9ad0; border-color: #86c4ee; }
+/* 커플 옷장 */
+.stills figure[data-du] { cursor: pointer; pointer-events: auto; }
+.win.w-du { width: min(880px, calc(100vw - 32px)); }
+.du { display: grid; grid-template-columns: 1.2fr 1fr; gap: 26px; padding: 4px 0 2px; align-items: start; }
+.du-stage { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; }
+.du-stage img { position: absolute; inset: 0; width: 100%; height: 100%; user-select: none; }
+.du-stage img.swap { animation: duSwap .45s cubic-bezier(.2,.9,.2,1); }
+@keyframes duSwap { from { opacity: .2; transform: scale(.985); } }
+.du-h { margin: 0 0 10px; font: 400 10px var(--mono); letter-spacing: .16em; color: var(--mid); }
+.du-sets { display: flex; flex-wrap: wrap; gap: 8px; }
+.du-sets button { display: inline-flex; align-items: center; padding: 8px 15px; border: 1px solid #d6dbe1; border-radius: 999px; background: #fff; transition: border-color .2s, background .2s, color .2s; }
+.du-sets button span { font: 500 12.5px/1 var(--ko); color: #2c2f36; white-space: nowrap; }
+.du-sets button i { font: 400 10px var(--mono); font-style: normal; color: var(--mid); margin-right: 6px; }
+.du-sets button small { font: 400 10px var(--mono); color: #6fb0dc; margin-left: 3px; }
+.du-sets button:hover { border-color: #b9dcf2; }
+.du-sets button.on { border-color: #86c4ee; background: #86c4ee; }
+.du-sets button.on span, .du-sets button.on i, .du-sets button.on small { color: #fff; }
+.du-act { display: flex; gap: 16px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hair); font: 400 11px var(--mono); letter-spacing: .12em; }
+.du-act button:hover { color: #4f9ad0; }
+@media (max-width: 700px) { .du { grid-template-columns: 1fr; gap: 14px; } }
 /* 배려 리스트 */
 .roster-btn { display: inline; font-family: inherit; font-size: inherit; line-height: inherit; font-weight: 700; color: #6fb0dc; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; }
 .roster-btn:hover, .roster-btn.on { color: #4f9ad0; }
@@ -632,7 +652,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rwave" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence id="rturb" type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="2" seed="3" result="n"/><feDisplacementMap id="rdisp" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <div class="ribbon" id="ribbon" aria-hidden="true"><img src="img/ribbon.jpg" alt=""></div>
-<div class="stills" aria-hidden="true"><figure class="wide"><img src="img/hero-wide.jpg" alt=""></figure><figure class="sq"><img src="img/hero-sq.jpg" alt=""></figure></div>
+<div class="stills"><figure class="wide"><img src="img/hero-wide.jpg" alt=""></figure><figure class="sq" data-du title="옷장"><img src="img/hero-sq.jpg" alt=""></figure></div>
 <ol class="index" id="index"></ol>
 
 <figure class="float" id="float" hidden><img id="floatImg" src="img/seol.jpg" alt=""><figcaption id="floatCap"></figcaption></figure>
@@ -683,6 +703,7 @@ window.fetchPost = function (cat, id) {
 };
 </script>
 <script src="cupid.js"></script>
+<script src="dressup.js"></script>
 <script>
 SITE_READY.then(function () {
   var c = SYN.chars, lockN = SYN.log.filter(function (e) { return e[1]; }).length;
@@ -865,7 +886,9 @@ SITE_READY.then(function () {
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + k;
     document.getElementById('wn').textContent = '(' + (it.n == null ? '∞' : it.n) + ')';
     win.classList.toggle('w-info', k === 'seol');
-    if (k === 'chat') chatView();
+    win.classList.toggle('w-du', k === 'dressup');
+    if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com/closet'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
+    else if (k === 'chat') chatView();
     else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com/info'; render('', infoView(), 'img/info.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
     else if (k === 'forever') render('<h2>Forever</h2><p class="sub">활을 끝까지 돌린 사람만 보는 페이지. 잠긴 기록 ' + lockN + '개.</p>', SYN.logList(true), null);
     else if (GROUPS[k]) groupView(k);
@@ -884,11 +907,13 @@ SITE_READY.then(function () {
     bar.addEventListener('pointerup', function () { d = null; bar.classList.remove('grab'); win.style.transition = ''; });
   })();
   addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  document.querySelectorAll('[data-du]').forEach(function (f) { f.onclick = function () { open('dressup'); }; });
 
   // player + synced lyrics
-  // 가사 타이밍은 곡 구간을 보고 대략 맞춘 값이에요. [초, 가사]를 고치면 바로 반영돼요.
+  // 가사 타이밍: [초, 가사]. 고치면 바로 반영돼요.
   var TRACKS = [
-    { title: 'Set me free', artist: 'Syndrome', src: 'audio/set-me-free.mp3', lyrics: [[1.0, "Call my name again..."], [5.5, "Who was I?"], [10.0, "Tell me now"], [14.5, "Was it love, or a mask?"], [21.0, "날 때부터 주입된"], [24.8, "상냥한 오답들"], [28.6, "정답처럼 외운 표정"], [32.3, "누가 원하면 울어주고"], [36.1, "누가 원하면 웃었지 또"], [39.9, "Perfect scene, perfect lie"], [43.7, "찬사 속에 갇힌 life"], [47.4, "Everybody loved that face"], [51.2, "...Nobody knew my name."], [56.0, "조명이 꺼진 밤이면"], [59.8, "내 안의 소음만 커져"], [63.5, "숨 막히던 silence"], [67.2, "끝내 타올라"], [73.0, "Set me free, let it burn"], [76.4, "내 안의 가짜를 태워"], [79.7, "Clap for me, watch me turn"], [83.1, "괴물이면 어때서"], [86.5, "I don't know who I am"], [89.8, "그래도 처음 느껴"], [93.2, "겁먹은 네 눈빛 속에"], [96.5, "나는 살아있어"], [99.9, "Set me free, let it burn"], [103.3, "무너진 뒤에야 보여"], [106.6, "진짜 나를"], [111.0, "카메라 없는 도시 위를"], [113.4, "재처럼 걸어 다녀"], [115.8, "칭찬보다 비명소리가"], [118.2, "이상하게 더 솔직해"], [120.7, "Pretty boy, crash dummy"], [123.1, "Still they scream for more"], [125.5, "위험할수록 사랑받는"], [127.9, "Funny world, encore"], [130.3, "묶을 수 있으면 묶어봐"], [132.8, "그 감옥은 끝났어"], [135.2, "달콤한 친절은 간직해"], [137.6, "못 견디겠으니까"], [141.0, "예쁜 것들은 대개 독해"], [143.6, "난 특히 더 그렇고"], [146.2, "한 번쯤은"], [148.9, "날 가졌다 착각하게도 만들지"], [151.5, "날카로운 혀끝으로"], [154.1, "자존심을 핥고"], [156.8, "등을 돌리면서"], [159.4, "넌 또 나를 쫓겠지"], [163.0, "Set me free, let it burn"], [165.6, "내 안의 가짜를 태워"], [168.3, "Clap for me, watch me turn"], [170.9, "괴물이면 어때서"], [173.5, "I don't know who I am"], [176.2, "완전히 다 돌아버렸지"], [178.8, "잔뜩 겁을 먹은 주제에"], [181.5, "왜 이리도 달콤한 건지"], [184.1, "Tick tock tick, let it burn"], [186.7, "잿더미가 된 뒤에 내게 안겨"], [189.4, "Tick tock tick, let it burn"], [193.0, "어설프게 건드린 죄"], [195.3, "달게 받아, 숨죽인 채"], [197.7, "까맣게 다 타버려야"], [200.0, "내 것이 될까"], [202.3, "까마득히 추락해야"], [204.7, "나를 안을까"], [207.0, "Spent my pride to the bone"], [209.3, "다 바친 뒤에야 알았어"], [211.7, "누가 묶인 건지"], [215.0, "Set me free, let it burn"], [217.3, "남은 재까지도 태워"], [219.5, "Call my name, not that name"], [221.8, "처음부터 다시 해"], [224.1, "I don't know who I am"], [226.4, "그래서 더 아름다워"], [228.6, "망가진 이 심장조차"], [230.9, "내 것 같으니까"], [233.2, "Set me free, let it burn"], [235.5, "추락한 끝에서 배운"], [237.7, "진짜 나를"], [241.0, "Say my name, not that name"], [242.4, "네 입술로 다시 써"], [243.8, "Trapped in you to be set free"], [245.2, "끝내 누가 누구를"], [246.6, "가둔 건지"], [248.0, "Lose the grip, let it burn"], [249.4, "가장 기꺼이 갇힌"], [250.8, "나의 자유지"], [252.2, "Flash... flash..."], [253.6, "No more role tonight"], [255.0, "Just me"], [256.4, "In the firelight"], [257.8, "Still burning where the lies once stood"], [259.2, "No applause now, only my heartbeat"], [260.6, "From the ashes, I can see myself"]] }
+    { title: 'Set me free', artist: 'Syndrome', src: 'audio/set-me-free.mp3', lyrics: [[1.0, "Call my name again..."], [5.5, "Who was I?"], [10.0, "Tell me now"], [14.5, "Was it love, or a mask?"], [21.0, "날 때부터 주입된"], [24.8, "상냥한 오답들"], [28.6, "정답처럼 외운 표정"], [32.3, "누가 원하면 울어주고"], [36.1, "누가 원하면 웃었지 또"], [39.9, "Perfect scene, perfect lie"], [43.7, "찬사 속에 갇힌 life"], [47.4, "Everybody loved that face"], [51.2, "...Nobody knew my name."], [56.0, "조명이 꺼진 밤이면"], [59.8, "내 안의 소음만 커져"], [63.5, "숨 막히던 silence"], [67.2, "끝내 타올라"], [73.0, "Set me free, let it burn"], [76.4, "내 안의 가짜를 태워"], [79.7, "Clap for me, watch me turn"], [83.1, "괴물이면 어때서"], [86.5, "I don't know who I am"], [89.8, "그래도 처음 느껴"], [93.2, "겁먹은 네 눈빛 속에"], [96.5, "나는 살아있어"], [99.9, "Set me free, let it burn"], [103.3, "무너진 뒤에야 보여"], [106.6, "진짜 나를"], [111.0, "카메라 없는 도시 위를"], [113.4, "재처럼 걸어 다녀"], [115.8, "칭찬보다 비명소리가"], [118.2, "이상하게 더 솔직해"], [120.7, "Pretty boy, crash dummy"], [123.1, "Still they scream for more"], [125.5, "위험할수록 사랑받는"], [127.9, "Funny world, encore"], [130.3, "묶을 수 있으면 묶어봐"], [132.8, "그 감옥은 끝났어"], [135.2, "달콤한 친절은 간직해"], [137.6, "못 견디겠으니까"], [141.0, "예쁜 것들은 대개 독해"], [143.6, "난 특히 더 그렇고"], [146.2, "한 번쯤은"], [148.9, "날 가졌다 착각하게도 만들지"], [151.5, "날카로운 혀끝으로"], [154.1, "자존심을 핥고"], [156.8, "등을 돌리면서"], [159.4, "넌 또 나를 쫓겠지"], [163.0, "Set me free, let it burn"], [165.6, "내 안의 가짜를 태워"], [168.3, "Clap for me, watch me turn"], [170.9, "괴물이면 어때서"], [173.5, "I don't know who I am"], [176.2, "완전히 다 돌아버렸지"], [178.8, "잔뜩 겁을 먹은 주제에"], [181.5, "왜 이리도 달콤한 건지"], [184.1, "Tick tock tick, let it burn"], [186.7, "잿더미가 된 뒤에 내게 안겨"], [189.4, "Tick tock tick, let it burn"], [193.0, "어설프게 건드린 죄"], [195.3, "달게 받아, 숨죽인 채"], [197.7, "까맣게 다 타버려야"], [200.0, "내 것이 될까"], [202.3, "까마득히 추락해야"], [204.7, "나를 안을까"], [207.0, "Spent my pride to the bone"], [209.3, "다 바친 뒤에야 알았어"], [211.7, "누가 묶인 건지"], [215.0, "Set me free, let it burn"], [217.3, "남은 재까지도 태워"], [219.5, "Call my name, not that name"], [221.8, "처음부터 다시 해"], [224.1, "I don't know who I am"], [226.4, "그래서 더 아름다워"], [228.6, "망가진 이 심장조차"], [230.9, "내 것 같으니까"], [233.2, "Set me free, let it burn"], [235.5, "추락한 끝에서 배운"], [237.7, "진짜 나를"], [241.0, "Say my name, not that name"], [242.4, "네 입술로 다시 써"], [243.8, "Trapped in you to be set free"], [245.2, "끝내 누가 누구를"], [246.6, "가둔 건지"], [248.0, "Lose the grip, let it burn"], [249.4, "가장 기꺼이 갇힌"], [250.8, "나의 자유지"], [252.2, "Flash... flash..."], [253.6, "No more role tonight"], [255.0, "Just me"], [256.4, "In the firelight"], [257.8, "Still burning where the lies once stood"], [259.2, "No applause now, only my heartbeat"], [260.6, "From the ashes, I can see myself"]] },
+    { title: 'Hold Me Under', artist: 'Lia', src: 'audio/hold-me-under.mp3', lyrics: [[0, "불 꺼진 방에 혼자 남으면"], [6, "자꾸 네 목소릴 따라 해"], [9, "착한 애처럼 웃고 있지만"], [13, "사실은 조금 이상해"], [16, "창문 아래 번진 새벽빛"], [19, "젖은 머릴 쓸어내릴 때"], [22, "너는 모를 것 같은 표정"], [25, "거울 속에 남아 있어"], [28, "천천히 네 뒤를 걸으면"], [32, "발끝이 자꾸 엉켜와"], [35, "괜히 들킬 것만 같아서"], [38, "숨도 작게 쉬게 돼"], [43, "네가 무심코 던진 말"], [46, "하루 종일 맴돌아"], [49, "별거 아닌 표정까지"], [53, "전부 기억해놨어"], [56, "아무도 없는 골목 끝"], [59, "혼자 이름을 불러봐"], [62, "왜 이렇게까지 됐는지"], [65, "나도 잘 모르겠어"], [68, "Oh babe"], [70, "나는 왜 이럴까"], [73, "버릇처럼 네 눈치만 봐"], [76, "어두운 물 밑처럼"], [85, "Oh babe"], [87, "조용히 흔들려"], [90, "네가 없는 밤이 오면"], [93, "숨이 잘 안 쉬어져"], [96, "Bubble like kiss"], [99, "닿으면 사라질 텐데"], [102, "또 네 주변만 맴돌아"], [103, "Slowly drown"], [106, "차갑게 가라앉아도"], [109, "네 손끝이면 괜찮아"], [112, "투명한 맘"], [115, "다 들켜버릴 것 같아"], [119, "웃고 있는데 자꾸만"], [122, "눈물이 고여 와"], [126, "어릴 때 배운 것처럼"], [128, "싫단 말은 어려워서"], [130, "또 괜찮은 척 웃으면"], [132, "다들 착하다고 해"], [133, "네 앞에서는 이상하게"], [136, "자꾸 작아지는 맘"], [138, "사라져 버려도 좋으니"], [140, "한 번만 안아줘"], [142, "into my wave"], [144, "나는 자꾸 sink into you"], [146, "도망칠 수도 없잖아"], [149, "난 이미 너의 바다야"], [157, "Blue night"], [159, "깊이 잠긴 목소리"], [160, "예쁜 말들 사이로"], [161, "금이 가는 heartbeat"], [164, "네가 떠나가면 나는"], [166, "무얼 해야 할지 몰라"], [168, "조용히 부서진 채로"], [170, "네 그림잘 따라가"], [172, "Bubble like love"], [175, "손대면 흩어질 텐데"], [177, "왜 자꾸 네게 가는지"], [180, "Slowly drown"], [182, "끝없이 가라앉아도"], [184, "너만 보면 편안해"], [187, "투명한 밤"], [188, "깨질 듯 흔들리는 mood"], [194, "도망치고 싶다가도"], [197, "네 품으로 숨어가"], [203, "La la love..."], [211, "희미하게 번진 light"], [215, "아무도 모르게 난"], [219, "또 네 뒤를 걸어가"], [225, "재가 되어도 좋아, 네 품이라면"]] }
   ];
   var ti = 0, au = document.getElementById('au'), lyrEl = document.getElementById('lyr'), spans = [], curLine = -1;
   function fmt(x) { x = Math.floor(x || 0); return Math.floor(x / 60) + ':' + String(x % 60).padStart(2, '0'); }
