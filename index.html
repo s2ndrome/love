@@ -631,16 +631,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* 배려 리스트 */
 .roster-btn { display: inline; font-family: inherit; font-size: inherit; line-height: inherit; font-weight: 700; color: #6fb0dc; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; }
 .roster-btn:hover, .roster-btn.on { color: #4f9ad0; }
-.roster { margin: -2px 0 14px; padding: 4px 14px 6px; border: 1px solid #c9e1f1; border-radius: 8px; background: #f7fbfe; animation: pop .3s cubic-bezier(.2,.9,.2,1); }
+.roster { margin: 2px 0 16px; padding: 10px 14px; border: 1px solid #c0d1dc; border-radius: 0; background: none; animation: pop .3s cubic-bezier(.2,.9,.2,1); }
 .roster table { width: 100%; border-collapse: collapse; }
-.roster th { font: 400 9.5px var(--mono); letter-spacing: .16em; color: #8aa3b5; text-align: left; padding: 8px 6px 7px 0; border-bottom: 1px solid #b9cfdf; }
-.roster th:last-child, .roster td:last-child { text-align: right; padding-right: 0; }
-.roster td { padding: 8px 6px 8px 0; border-bottom: 1px solid #dbe8f1; vertical-align: top; font: 400 12px/1.6 var(--ko); color: #3a3d44; }
-.roster tr:last-child td { border-bottom: 0; }
-.roster td:first-child, .roster td:last-child { font: 400 10px/1.9 var(--mono); color: #8aa3b5; width: 26px; }
-.info-n .roster td b { font: 700 12.5px/1.5 var(--sans); white-space: nowrap; color: #2c2f36; }
+.roster td { padding: 4px 12px 4px 0; border: 0; vertical-align: baseline; font: 400 12px/1.7 var(--ko); color: #3a3d44; }
+.roster td:last-child { padding-right: 0; }
+.info-n .roster td b { font: 700 10.5px/1.7 var(--mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--ink); }
 .roster td span { white-space: nowrap; }
-.roster td i { font-style: normal; color: #a9c7dc; margin: 0 5px; }
+.roster td i { font-style: normal; color: #c0d1dc; margin: 0 6px; }
 /* character profile: drop the outer feed-card shell and its PROFILE / name header */
 .post.char .feed-card { border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
 .post.char .feed-card > .card-header, .post.char .feed-card > h2 { display: none !important; }
@@ -904,9 +901,8 @@ SITE_READY.then(function () {
     ]
   };
   function rosterBox() {
-    var total = INFO.roster.reduce(function (n, r) { return n + r[1].length; }, 0), pad = function (v) { return String(v).padStart(2, '0'); };
-    return '<div class="roster" id="roster" hidden><table><thead><tr><th>NO.</th><th>UNIT</th><th>MEMBER</th><th>' + pad(total) + '</th></tr></thead><tbody>' +
-      INFO.roster.map(function (r, i) { return '<tr><td>' + pad(i + 1) + '</td><td><b>' + r[0] + '</b></td><td>' + '<span>' + r[1].join('</span><i>/</i><span>') + '</span>' + '</td><td>' + pad(r[1].length) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    return '<div class="roster" id="roster" hidden><table><tbody>' +
+      INFO.roster.map(function (r) { return '<tr><td><b>' + r[0] + '</b></td><td><span>' + r[1].join('</span><i>/</i><span>') + '</span></td></tr>'; }).join('') + '</tbody></table></div>';
   }
   function infoView() {
     var sup = ['¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
