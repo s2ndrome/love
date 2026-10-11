@@ -20,7 +20,8 @@
     { name: '기모노', img: 'img/closet/kimono-2.png' },
     { name: '치파오', img: 'img/closet/qipao-2.png' },
     { name: '테크웨어', img: 'img/closet/techwear.png' },
-    { name: '포켓몬', img: 'img/closet/pokemon.png' }
+    { name: '포켓몬', img: 'img/closet/pokemon.png' },
+    { name: '사이버펑크', img: 'img/closet/cyberpunk.png' }
   ];
 
   function mount(host) {
