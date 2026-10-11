@@ -19,7 +19,8 @@
     { name: '한복', img: 'img/closet/hanbok.png' },
     { name: '기모노', img: 'img/closet/kimono.png' },
     { name: '치파오', img: 'img/closet/qipao.png' },
-    { name: '테크웨어', img: 'img/closet/techwear.png' }
+    { name: '테크웨어', img: 'img/closet/techwear.png' },
+    { name: '포켓몬', img: 'img/closet/pokemon.png' }
   ];
 
   function mount(host) {
