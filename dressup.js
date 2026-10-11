@@ -15,7 +15,8 @@
     { name: '천악', img: 'img/closet/angel-devil.jpg' },
     { name: '고딕', img: 'img/closet/gothic.jpg' },
     { name: '하라주쿠', img: 'img/closet/harajuku.jpg' },
-    { name: '포근룩', img: 'img/closet/cozy.jpg' }
+    { name: '포근룩', img: 'img/closet/cozy.jpg' },
+    { name: '한복', img: 'img/closet/hanbok.jpg' }
   ];
 
   function mount(host) {
