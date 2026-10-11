@@ -23,7 +23,8 @@
     { name: '포켓몬', img: 'img/closet/pokemon.png' },
     { name: '사이버펑크', img: 'img/closet/cyberpunk.png' },
     { name: '오피스', img: 'img/closet/office.png' },
-    { name: '펑크', img: 'img/closet/punk.png' }
+    { name: '펑크', img: 'img/closet/punk.png' },
+    { name: '프레피', img: 'img/closet/preppy.png' }
   ];
 
   function mount(host) {
