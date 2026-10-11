@@ -17,8 +17,8 @@
     { name: '하라주쿠', img: 'img/closet/harajuku.png' },
     { name: '포근룩', img: 'img/closet/cozy.png' },
     { name: '한복', img: 'img/closet/hanbok.png' },
-    { name: '기모노', img: 'img/closet/kimono.png' },
-    { name: '치파오', img: 'img/closet/qipao.png' },
+    { name: '기모노', img: 'img/closet/kimono-2.png' },
+    { name: '치파오', img: 'img/closet/qipao-2.png' },
     { name: '테크웨어', img: 'img/closet/techwear.png' },
     { name: '포켓몬', img: 'img/closet/pokemon.png' }
   ];
