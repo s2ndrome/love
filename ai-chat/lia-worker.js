@@ -375,7 +375,6 @@ const PAGE = `<!doctype html>
   input::placeholder{color:var(--mut)}
   button{border:1px solid var(--ink);background:transparent;color:var(--ink);padding:0 12px;font:400 9px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;cursor:pointer}
   button:disabled{opacity:.35;cursor:default}
-  .note{margin-top:6px;font-size:9.5px;color:var(--mut);text-align:right}
 </style>
 </head><body>
 <div id="log"></div>
@@ -383,7 +382,6 @@ const PAGE = `<!doctype html>
   <input id="q" maxlength="300" placeholder="__NAME__에게 말 걸기">
   <button id="s">SEND</button>
 </form>
-<p class="note">대화 내용은 홈 주인이 볼 수 있어요</p>
 <script>
 (() => {
   const CFG = __CONFIG__;
