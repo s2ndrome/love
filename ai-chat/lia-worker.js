@@ -266,18 +266,45 @@ async function record(env, vid, userText, reply, req) {
   });
   if (notify) {
     const isNew = visitors === 1;
-    await fetch("https://ntfy.sh/", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        topic: String(env.NTFY_TOPIC).trim(),
-        title: isNew ? "리아에게 새 방문자가 말을 걸었어요" : "리아 채팅에 새 메시지",
-        message: NOTIFY_WITH_TEXT ? userText.slice(0, 200) : "대화함에서 확인해 주세요",
-        click: new URL("/inbox#" + vid, req.url).toString(),
-        tags: ["speech_balloon"],
-      }),
+    await sendNtfy(env, {
+      title: isNew ? "리아에게 새 방문자가 말을 걸었어요" : "리아 채팅에 새 메시지",
+      message: NOTIFY_WITH_TEXT ? userText.slice(0, 200) : "대화함에서 확인해 주세요",
+      click: new URL("/inbox#" + vid, req.url).toString(),
     });
   }
+}
+
+// ntfy로 알림 보내기 — 결과는 대화함 "알림 테스트"에서 확인할 수 있게 KV에 남겨둬요
+async function sendNtfy(env, msg) {
+  const topic = String(env.NTFY_TOPIC || "").trim();
+  let result;
+  try {
+    const r = await fetch("https://ntfy.sh/" + encodeURIComponent(topic), {
+      method: "POST",
+      headers: {
+        "content-type": "text/plain; charset=utf-8",
+        "Title": encodeRFC2047(msg.title),
+        "Click": msg.click,
+        "Tags": "speech_balloon",
+      },
+      body: msg.message,
+    });
+    result = { ok: r.ok, status: r.status, body: (await r.text()).slice(0, 300) };
+  } catch (e) {
+    result = { ok: false, status: 0, body: String(e).slice(0, 300) };
+  }
+  result.at = Date.now();
+  result.topic = topic ? topic.slice(0, 6) + "…(" + topic.length + "자)" : "(비어 있음)";
+  if (!result.ok) console.log("ntfy error", JSON.stringify(result));
+  if (env.CHATLOG) await env.CHATLOG.put("meta:ntfy", JSON.stringify(result));
+  return result;
+}
+
+// 헤더에는 한글을 그대로 못 넣어서 =?UTF-8?B?...?= 로 감싸요 (ntfy가 알아서 풀어줘요)
+function encodeRFC2047(text) {
+  const bytes = new TextEncoder().encode(text);
+  let bin = ""; bytes.forEach(b => bin += String.fromCharCode(b));
+  return "=?UTF-8?B?" + btoa(bin) + "?=";
 }
 
 async function inboxApi(req, env, url) {
@@ -290,6 +317,11 @@ async function inboxApi(req, env, url) {
   if (!env.CHATLOG) return json({ error: "CHATLOG KV가 연결되지 않았어요" }, 500);
   const id = url.searchParams.get("id");
   if (id && !/^[a-z0-9]{8,32}$/.test(id)) return json({ error: "bad id" }, 400);
+  if (url.searchParams.has("ping")) { // 알림 테스트
+    if (!env.NTFY_TOPIC) return json({ ok: false, status: 0, body: "NTFY_TOPIC 비밀이 없어요", topic: "(비어 있음)" });
+    return json(await sendNtfy(env, { title: "리아 대화함 알림 테스트", message: "이 알림이 보이면 성공이에요", click: new URL("/inbox", req.url).toString() }));
+  }
+  if (url.searchParams.has("ntfylog")) return json((await env.CHATLOG.get("meta:ntfy", "json")) || {});
   if (req.method === "DELETE" && id) { await env.CHATLOG.delete("t:" + id); return json({ ok: true }); }
   if (id) {
     const t = await env.CHATLOG.get("t:" + id, "json");
@@ -463,7 +495,7 @@ const INBOX = `<!doctype html>
   .err{color:#c0392b;font-size:12px;min-height:1em}
   .app{display:none;max-width:980px;margin:0 auto;min-height:100vh;border-left:1px solid var(--line);border-right:1px solid var(--line);background:#fff}
   .top{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
-  .top span{margin-left:auto;color:var(--mut);font-size:11.5px}
+  .top button+button{margin-left:-2px}.top span{margin-left:auto;color:var(--mut);font-size:11.5px}
   .wrap{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 49px)}
   .list{border-right:1px solid var(--line);overflow-y:auto;max-height:calc(100vh - 49px)}
   .it{display:block;width:100%;text-align:left;padding:12px 16px;border:0;border-bottom:1px solid var(--line);background:#fff;font:inherit;cursor:pointer}
@@ -497,7 +529,7 @@ const INBOX = `<!doctype html>
   <p class="err" id="err"></p>
 </form>
 <div class="app" id="app">
-  <div class="top"><h1>LIA · INBOX</h1><span id="cnt"></span><button id="re">새로고침</button></div>
+  <div class="top"><h1>LIA · INBOX</h1><span id="cnt"></span><button id="pt">알림 테스트</button><button id="re">새로고침</button></div>
   <div class="wrap" id="wrap">
     <div class="list" id="list"></div>
     <div class="view"><div class="vh" id="vh"><span>왼쪽에서 대화를 골라주세요</span></div><div class="msgs" id="msgs"></div></div>
@@ -537,6 +569,14 @@ const INBOX = `<!doctype html>
   }
   $("gate").onsubmit = e => { e.preventDefault(); PW = $("pw").value; start(); };
   $("re").onclick = () => { load(); if (cur) open(cur); };
+  $("pt").onclick = async () => {
+    const show = (t, r) => t + "\\n\\n결과: " + (r.ok ? "성공" : "실패") + " (" + r.status + ")\\n채널: " + r.topic + "\\n" + (r.body || "");
+    try {
+      const last = await api("?ntfylog=1");
+      const r = await api("?ping=1", { method: "POST" });
+      alert(show("테스트 알림을 보냈어요.", r) + (last.at ? "\\n\\n[마지막 채팅 알림 " + new Date(last.at).toLocaleString("ko-KR") + "]\\n" + (last.ok ? "성공" : "실패") + " (" + last.status + ") " + (last.body || "") : "\\n\\n(채팅 알림은 아직 한 번도 안 보냈어요)"));
+    } catch (e) { alert("오류: " + e.message); }
+  };
   if (PW) start();
 })();
 </script>
