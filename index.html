@@ -733,8 +733,8 @@ SITE_READY.then(function () {
   var c = SYN.chars, lockN = SYN.log.filter(function (e) { return e[1]; }).length;
   var items = [
     { k: 'seol', t: 'Seol', n: '00', img: 'img/seol.jpg', cap: 'the keeper' },
-    { k: 'characters', t: 'Charac<em>ters</em>', n: '02', img: 'img/sd.jpg', cap: 'syndrome & lia' },
-    { k: 'archive', t: 'Archive', n: SYN.log.length + SITE.data.gallery.length, img: 'img/g1.jpg', cap: 'log · gallery', lock: 1 },
+    { k: 'characters', t: 'Charac<em>ters</em>', n: '01', img: 'img/sd.jpg', cap: 'syndrome & lia' },
+    { k: 'archive', t: 'Archive', n: '02', img: 'img/g1.jpg', cap: 'log · gallery', lock: 1 },
     { k: 'extra', t: '<em>Extra</em>', n: SYN.ooc.length + SYN.share.length, img: 'img/g2.jpg', cap: 'ooc · share · guestbook' }
   ];
   var ix = document.getElementById('index'), fl = document.getElementById('float'), cur = document.getElementById('cursor');
