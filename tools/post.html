@@ -15,7 +15,7 @@
     color: #1d1d1f;
   }
   main {
-    max-width: 640px;
+    max-width: 760px;
     margin: 0 auto;
     background: #fff;
     border-radius: 14px;
@@ -103,11 +103,8 @@
   <label for="title">제목</label>
   <input type="text" id="title" placeholder="예: 오늘의 일기">
 
-  <label for="photo">사진 (선택, 본문 맨 위에 들어가요)</label>
-  <input type="file" id="photo" accept="image/*">
-
-  <label for="content">내용 (원래 posts 파일에 넣던 HTML/텍스트 그대로)</label>
-  <textarea id="content" placeholder="&lt;p&gt;여기에 본문 내용을 붙여넣으세요&lt;/p&gt;"></textarea>
+  <label for="content">내용 (사진은 🖼 버튼, 끌어다 놓기, 붙여넣기로 넣을 수 있어요 — 올릴 때 메타데이터는 자동으로 지워져요)</label>
+  <textarea id="content" placeholder="여기에 글을 써주세요"></textarea>
 
   <div class="checkbox-row">
     <input type="checkbox" id="lock-check">
@@ -122,6 +119,7 @@
   <p class="status" id="status"></p>
 </main>
 
+<script src="editor.js"></script>
 <script>
 const OWNER = "s2ndrome";
 const REPO = "love";
@@ -131,8 +129,8 @@ const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
 const tokenInput = document.getElementById("token");
 const categorySelect = document.getElementById("category");
 const titleInput = document.getElementById("title");
-const photoInput = document.getElementById("photo");
 const contentInput = document.getElementById("content");
+const editor = RichEditor(contentInput);
 const lockCheck = document.getElementById("lock-check");
 const passwordRow = document.getElementById("password-row");
 const passwordInput = document.getElementById("lock-password");
@@ -258,16 +256,28 @@ async function putFile(path, base64Content, message, sha, retried) {
   throw new Error(`${path} 저장 실패 (${res.status}): ${detail.message || "알 수 없는 오류"}`);
 }
 
+// 본문 안에 넣은 사진: 다시 그려서 올리니까 촬영 정보·프롬프트 같은 메타데이터가 남지 않아요
+function uploadInlinePhoto(title) {
+  return async (file, i, n) => {
+    const isGif = file.type === "image/gif" || /\.gif$/i.test(file.name);
+    setStatus(`사진 압축 중… (${i}/${n})`);
+    const blob = isGif ? file : await compressImage(file);
+    const imgPath = `img/${crypto.randomUUID()}.${isGif ? "gif" : "jpg"}`;
+    setStatus(`사진 업로드 중… (${i}/${n})`);
+    await putFile(imgPath, await readFileAsBase64(blob), `Add photo for post: ${title}`);
+    return imgPath;
+  };
+}
+
 uploadBtn.addEventListener("click", async () => {
   const token = tokenInput.value.trim();
   const category = categorySelect.value;
   const title = titleInput.value.trim();
-  const photo = photoInput.files[0];
-  let content = contentInput.value;
+
   const locked = lockCheck.checked;
   const password = passwordInput.value;
 
-  if (!token || !title || !content) {
+  if (!token || !title || editor.isEmpty()) {
     setStatus("토큰, 제목, 내용을 모두 입력해주세요.", "error");
     return;
   }
@@ -302,17 +312,7 @@ uploadBtn.addEventListener("click", async () => {
     const newJsonText = JSON.stringify(list, null, 2) + "\n";
     await putFile(dataPath, utf8ToBase64(newJsonText), `Add "${title}" to ${category}.json`, jsonFile.sha);
 
-    if (photo) {
-      const isGif = photo.type === "image/gif" || /\.gif$/i.test(photo.name);
-      setStatus("사진 압축 중…");
-      const uploadBlob = isGif ? photo : await compressImage(photo);
-      const ext = isGif ? "gif" : "jpg";
-      const imgPath = `img/${crypto.randomUUID()}.${ext}`;
-      setStatus("사진 업로드 중…");
-      const photoB64 = await readFileAsBase64(uploadBlob);
-      await putFile(imgPath, photoB64, `Add photo for post: ${title}`);
-      content = `<img src="${imgPath}" width="100%">\n\n${content}`;
-    }
+    let content = await editor.finalize(uploadInlinePhoto(title));
 
     if (category === "world") {
       content = `<div class="feed-card">\n  <div class="card-header"><span class="card-icon">♡</span><span class="card-title">${escapeHtml(title)}</span></div>\n${content}\n</div>\n`;
@@ -324,8 +324,7 @@ uploadBtn.addEventListener("click", async () => {
 
     setStatus(`완료! "${title}" 글이 등록됐어요. 1~2분 후 사이트에 반영돼요.`, "done");
     titleInput.value = "";
-    photoInput.value = "";
-    contentInput.value = "";
+    editor.clear();
     lockCheck.checked = false;
     passwordInput.value = "";
     passwordRow.style.display = "none";
