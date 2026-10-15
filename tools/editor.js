@@ -20,6 +20,15 @@
   .re-pop .row { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: #6e6e73; }
   .re-pop .row input[type=color] { width: 34px; height: 24px; padding: 0; border: 1px solid rgba(0,0,0,.12); border-radius: 4px; background: none; }
   .re-pop .row button { margin: 0 0 0 auto; padding: 4px 8px; border: 1px solid rgba(0,0,0,.12); border-radius: 4px; background: #fff; color: #1d1d1f; font-size: 11.5px; font-weight: 500; cursor: pointer; }
+  .re-q { min-width: 268px; }
+  .re-q h6 { margin: 0 0 8px; font: 600 12px/1.4 -apple-system, sans-serif; color: #1d1d1f; }
+  .re-q label { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: 12.5px; font-weight: 500; color: #1d1d1f; }
+  .re-q label input { width: auto; margin: 0; }
+  .re-q .sw button.on { outline: 2px solid #1d1d1f; outline-offset: 1px; }
+  .re-q .acts { display: flex; gap: 6px; margin-top: 10px; }
+  .re-q .acts button { flex: 1; margin: 0; padding: 7px 0; border: 1px solid rgba(0,0,0,.12); border-radius: 6px; background: #fff; color: #1d1d1f; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .re-q .acts button.go { background: #1d1d1f; border-color: #1d1d1f; color: #fff; }
+  .re-q .msg { margin-top: 8px; font-size: 11.5px; color: #6e6e73; }
   .re-area { min-height: 320px; max-height: 70vh; overflow-y: auto; padding: 16px 18px; outline: none; white-space: pre-line; word-break: break-word; font: 400 13.5px/1.9 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #3c3c43; }
   .re-area:empty::before { content: attr(data-ph); color: #b0b0b5; }
   .re-area p { margin: 0 0 16px; }
@@ -62,6 +71,7 @@
         '<button type="button" data-cmd="insertUnorderedList" title="목록">•</button>' +
         '<button type="button" data-act="link" title="링크">🔗</button>' +
         '<button type="button" data-act="image" title="사진">🖼</button>' +
+        '<button type="button" data-act="quotes" title="“대사” 한 번에 꾸미기">“대사”</button>' +
         '<span class="sep"></span>' +
         '<button type="button" data-cmd="removeFormat" title="서식 지우기">⌫</button>' +
         '<button type="button" data-cmd="undo" title="되돌리기">↶</button>' +
@@ -70,6 +80,12 @@
       '</div>' +
       '<div class="re-area" contenteditable="true"></div>' +
       '<div class="re-pop"><div class="sw"></div><div class="row">직접 고르기 <input type="color" value="#6fb0dc"><button type="button" data-none>없애기</button></div></div>' +
+      '<div class="re-pop re-q"><h6>“ ” 안의 대사를 한 번에 꾸며요</h6>' +
+        '<label><input type="checkbox" data-qb checked> 굵게</label>' +
+        '<div class="sw"></div>' +
+        '<div class="row">직접 고르기 <input type="color" data-qc value="#6fb0dc"><button type="button" data-qnone>색 없음</button></div>' +
+        '<div class="acts"><button type="button" data-qoff>대사 꾸밈 풀기</button><button type="button" class="go" data-qgo>적용</button></div>' +
+        '<div class="msg"></div></div>' +
       '<input type="file" accept="image/*" multiple hidden>';
     ta.parentNode.insertBefore(wrap, ta);
     wrap.appendChild(ta); ta.classList.add('re-src'); ta.style.display = 'none';
@@ -130,6 +146,7 @@
         }
       }
       if (a === 'image') fileIn.click();
+      if (a === 'quotes') toggleQ(b);
       if (a === 'html') toggleSrc();
     });
     bar.querySelector('[data-size]').addEventListener('change', e => {
@@ -178,6 +195,75 @@
     });
     pop.querySelector('input[type=color]').addEventListener('change', e => applyColor(e.target.value));
     document.addEventListener('mousedown', e => { if (!pop.contains(e.target) && !e.target.closest('[data-pop]')) closePop(); });
+
+    // “대사” 한 번에 꾸미기 — 따옴표 안 글자에 굵게/색을 한꺼번에 입혀요 (<span data-q>로 감싸서 나중에 한 번에 풀 수도 있어요)
+    const qp = wrap.querySelector('.re-q'), qmsg = qp.querySelector('.msg');
+    let qColor = '';
+    try { const v = JSON.parse(localStorage.getItem('re_q') || '{}'); if ('b' in v) qp.querySelector('[data-qb]').checked = v.b; qColor = v.c || ''; } catch (e) {}
+    qp.querySelector('.sw').innerHTML = COLORS.map(c => '<button type="button" data-qc="' + c + '" style="background:' + c + '" title="' + c + '"></button>').join('');
+    function markQ() { qp.querySelectorAll('.sw button').forEach(x => x.classList.toggle('on', x.dataset.qc === qColor)); }
+    markQ();
+    function toggleQ(b) {
+      closePop();
+      if (qp.classList.toggle('open')) {
+        qmsg.textContent = '';
+        qp.style.top = (b.offsetTop + b.offsetHeight + 4) + 'px';
+        qp.style.left = Math.max(4, Math.min(b.offsetLeft, wrap.clientWidth - qp.offsetWidth - 4)) + 'px';
+      }
+    }
+    qp.addEventListener('mousedown', e => { if (e.target.closest('button')) e.preventDefault(); });
+    qp.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.qc) { qColor = qColor === b.dataset.qc ? '' : b.dataset.qc; markQ(); }
+      if (b.hasAttribute('data-qnone')) { qColor = ''; markQ(); }
+      if (b.hasAttribute('data-qoff')) { const n = unQ(); sync(); qmsg.textContent = n ? '대사 ' + n + '곳의 꾸밈을 풀었어요' : '꾸민 대사가 없어요'; }
+      if (b.hasAttribute('data-qgo')) applyQ();
+    });
+    qp.querySelector('input[data-qc]').addEventListener('input', e => { qColor = e.target.value; markQ(); });
+    document.addEventListener('mousedown', e => { if (!qp.contains(e.target) && !e.target.closest('[data-act=quotes]')) qp.classList.remove('open'); });
+    function unQ() {
+      const xs = area.querySelectorAll('span[data-q]');
+      xs.forEach(x => x.replaceWith(...x.childNodes));
+      area.normalize();
+      return xs.length;
+    }
+    function applyQ() {
+      const bold = qp.querySelector('[data-qb]').checked;
+      if (!bold && !qColor) { qmsg.textContent = '굵게나 색 중 하나는 골라주세요'; return; }
+      try { localStorage.setItem('re_q', JSON.stringify({ b: bold, c: qColor })); } catch (e) {}
+      unQ(); // 다시 적용해도 겹치지 않게 먼저 풀어요
+      // 글자를 순서대로 훑으면서 여는 따옴표 ~ 닫는 따옴표 구간을 모아요 (줄이 바뀌면 끊어요)
+      const BLOCK = /^(BR|DIV|P|BLOCKQUOTE|LI|UL|OL|HR|IMG|H[1-6])$/;
+      const pieces = []; let open = null;
+      const w = document.createTreeWalker(area, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+      let n, quotes = 0;
+      while ((n = w.nextNode())) {
+        if (n.nodeType === 1) { if (BLOCK.test(n.tagName)) open = null; continue; }
+        const t = n.data;
+        let from = open ? 0 : -1;
+        for (let i = 0; i < t.length; i++) {
+          const ch = t[i];
+          if (ch === '\n') { open = null; from = -1; continue; } // 줄이 바뀌면 안 닫힌 따옴표는 버려요
+          if (!open && (ch === '“' || ch === '"')) { open = { parts: [], close: ch === '“' ? '”' : '"' }; from = i; }
+          else if (open && ch === open.close) {
+            open.parts.push([n, from, i + 1]); pieces.push(...open.parts); quotes++; open = null; from = -1;
+          }
+        }
+        if (open && from >= 0 && from < t.length) open.parts.push([n, from, t.length]);
+      }
+      // 뒤에서부터 감싸야 앞쪽 위치가 안 흐트러져요
+      for (let i = pieces.length - 1; i >= 0; i--) {
+        const [node, a, b] = pieces[i];
+        if (a >= b) continue;
+        const r = document.createRange(); r.setStart(node, a); r.setEnd(node, b);
+        const sp = document.createElement('span'); sp.dataset.q = '';
+        if (bold) sp.style.fontWeight = '700';
+        if (qColor) sp.style.color = qColor;
+        r.surroundContents(sp);
+      }
+      sync();
+      qmsg.textContent = quotes ? '대사 ' + quotes + '개에 적용했어요' : '“ ” 로 감싼 대사를 못 찾았어요';
+    }
 
     // 엔터는 줄바꿈(<br>)만 — 사이트에서 보이는 줄 간격이랑 똑같이
     area.addEventListener('beforeinput', e => {
