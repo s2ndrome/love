@@ -964,18 +964,33 @@ SITE_READY.then(function () {
   }
   // 관리: 툴(글쓰기/수정/사진)을 팝업 안에서 열어요. 토큰이 있는 브라우저에서만 메뉴가 보여요.
   var ADM = { tab: 'post', q: '' };
-  function isAdmin() { try { return !!localStorage.getItem('gh_token'); } catch (e) { return false; } }
-  function admSync() { document.getElementById('adm').hidden = !isAdmin(); }
+  // 토큰이 진짜 이 저장소에 쓸 수 있는 토큰인지 GitHub에 한 번 물어보고 나서야 메뉴/수정 버튼을 보여줘요
+  var ADM_OK = false;
+  function tok() { try { return localStorage.getItem('gh_token') || ''; } catch (e) { return ''; } }
+  function isAdmin() { return ADM_OK; }
+  function admSync() {
+    var t = tok(); ADM_OK = false; document.getElementById('adm').hidden = true;
+    if (!t) return;
+    var ck = ''; try { ck = sessionStorage.getItem('adm_ok') || ''; } catch (e) {}
+    if (ck && ck === t.slice(-8)) { ADM_OK = true; document.getElementById('adm').hidden = false; return; }
+    fetch('https://api.github.com/repos/s2ndrome/love', { headers: { Authorization: 'Bearer ' + t, Accept: 'application/vnd.github+json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.permissions || !d.permissions.push) return;
+        ADM_OK = true; document.getElementById('adm').hidden = false;
+        try { sessionStorage.setItem('adm_ok', t.slice(-8)); } catch (e) {}
+      }).catch(function () {});
+  }
   function openAdmin(tab, q) { ADM.tab = tab || 'post'; ADM.q = q || ''; open('admin'); }
   function adminView() {
     var T = [['post', '글쓰기'], ['edit', '글 수정'], ['upload', '사진 업로드']];
     document.getElementById('wurl').textContent = 'www.syndrome.com/admin';
     render('', '<div class="adm-w"><nav class="adm-tabs">' + T.map(function (t) { return '<button data-t="' + t[0] + '"' + (t[0] === ADM.tab ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join('') +
-      (isAdmin() ? '<button class="out" data-out>로그아웃</button>' : '') + '</nav><iframe src="tools/' + ADM.tab + '.html?embed=1' + ADM.q + '" title="관리"></iframe></div>', null);
+      (tok() ? '<button class="out" data-out>로그아웃</button>' : '') + '</nav><iframe src="tools/' + ADM.tab + '.html?embed=1' + ADM.q + '" title="관리"></iframe></div>', null);
     document.getElementById('wn').textContent = '';
     txt.querySelectorAll('[data-t]').forEach(function (b) { b.onclick = function () { ADM.tab = b.dataset.t; ADM.q = ''; adminView(); }; });
     var o = txt.querySelector('[data-out]');
-    if (o) o.onclick = function () { if (!confirm('이 브라우저에서 관리 메뉴를 끌까요? (토큰이 지워져요)')) return; try { localStorage.removeItem('gh_token'); } catch (e) {} admSync(); close(); };
+    if (o) o.onclick = function () { if (!confirm('이 브라우저에서 관리 메뉴를 끌까요? (토큰이 지워져요)')) return; try { localStorage.removeItem('gh_token'); sessionStorage.removeItem('adm_ok'); } catch (e) {} admSync(); close(); };
   }
   function open(k) {
     galA = false;
