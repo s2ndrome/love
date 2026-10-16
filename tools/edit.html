@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="embed.js"></script>
 <title>글 수정 도구</title>
 <style>
   * { box-sizing: border-box; }
@@ -395,6 +396,18 @@ async function loadPostList() {
 }
 
 categorySelect.addEventListener("change", loadPostList);
+
+// 홈에서 글 보다가 "수정"을 누르면 ?cat=...&id=... 로 열려요 — 그 글을 바로 불러와요
+(async () => {
+  const qp = new URLSearchParams(location.search), cat = qp.get("cat"), id = qp.get("id");
+  if (!cat || !tokenInput.value.trim() || ![...categorySelect.options].some(o => o.value === cat)) return;
+  categorySelect.value = cat;
+  await loadPostList();
+  if (id && [...postSelect.options].some(o => o.value === id)) {
+    postSelect.value = id;
+    postSelect.dispatchEvent(new Event("change"));
+  }
+})();
 loadBtn.addEventListener("click", loadPostList);
 
 async function openPostForEditing(plainContent) {

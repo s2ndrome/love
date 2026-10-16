@@ -664,6 +664,21 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .chat .who small { display: block; font: 400 10px/1 var(--mono); color: var(--mid); letter-spacing: .1em; margin-top: 6px; }
 .chat .who a { margin-left: auto; font: 400 10px var(--mono); color: #4f9ad0; text-decoration: none; }
 .chat iframe { flex: 1; width: 100%; border: 0; display: block; margin-top: 10px; background: transparent; }
+/* 관리 (나만 보여요 — 이 브라우저에 GitHub 토큰이 저장돼 있을 때만) */
+.head .adm { display: flex; align-items: flex-start; gap: 14px; font: 400 10px/1.35 var(--mono); letter-spacing: .14em; }
+.head .adm[hidden] { display: none; }
+.head .adm button { padding: 0; border: 0; background: none; color: var(--mid); font: inherit; letter-spacing: inherit; cursor: pointer; }
+.head .adm button:hover { color: var(--ink); }
+.head:has(.adm:not([hidden])) { grid-template-columns: 1fr auto auto; }
+.win.w-adm { width: min(860px, calc(100vw - 32px)); max-height: min(88vh, 900px); max-height: min(88dvh, 900px); }
+.adm-w { display: flex; flex-direction: column; height: min(76vh, 800px); height: min(76dvh, 800px); }
+.adm-tabs { display: flex; align-items: center; gap: 18px; padding: 0 0 10px; border-bottom: 1px solid var(--hair); font: 400 11px var(--mono); letter-spacing: .1em; }
+.adm-tabs button { padding: 0 0 4px; border: 0; border-bottom: 1px solid transparent; background: none; color: var(--mid); font: inherit; letter-spacing: inherit; cursor: pointer; }
+.adm-tabs button.on { color: var(--ink); border-bottom-color: var(--ink); }
+.adm-tabs .out { margin-left: auto; color: #b0b0b5; }
+.adm-w iframe { flex: 1; width: 100%; border: 0; display: block; margin-top: 6px; background: transparent; }
+.adm-edit { float: right; }
+@media (max-width: 820px) { .head .adm { gap: 10px; font-size: 9.5px; } }
 @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
 </style>
 </head>
@@ -671,6 +686,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 <div class="grain" id="grain" aria-hidden="true"></div>
 <header class="head">
   <a href="#" id="brand">SYNDROME ୨୧ LIA</a>
+  <nav class="adm" id="adm" hidden aria-label="관리"><button data-adm="post">WRITE</button><button data-adm="edit">EDIT</button><button data-adm="upload">PHOTO</button></nav>
   <div class="h3">AEGIS, KR<br><span id="clock">--:--:--</span></div>
 </header>
 
@@ -851,23 +867,25 @@ SITE_READY.then(function () {
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + k + '/' + label(it);
     var head = '<button class="back" id="pback">← ' + ({ characters: 'Characters', log: 'Log', ooc: 'Ooc', share: 'Share', gallery: 'Gallery' })[k] + '</button>';
     var go = function () { listView(k); document.getElementById('wurl').textContent = 'www.syndrome.com/' + k; };
+    if (isAdmin() && /^(diary|ooc|world|gallery)$/.test(cat)) head += '<button class="back adm-edit" data-aedit>수정</button>';
+    var wire = function () { document.getElementById('pback').onclick = go; var e = txt.querySelector('[data-aedit]'); if (e) e.onclick = function () { openAdmin('edit', '&cat=' + cat + '&id=' + encodeURIComponent(id)); }; };
     if (cat === 'gallery' && it.blur) {
       render(head, '<div class="blur-gate"><span class="blur-gate-icon">⚠️</span><p class="blur-gate-hint">위험한 롬랑입니다! 열람하시겠습니까?</p><button class="blur-gate-submit" type="button">YES</button></div>', null);
-      document.getElementById('pback').onclick = go; txt.querySelector('.blur-gate-submit').onclick = function () { it = Object.assign({}, it, { blur: 0 }); render(head, wrap(cat, it, html), null); document.getElementById('pback').onclick = go; };
+      wire(); txt.querySelector('.blur-gate-submit').onclick = function () { it = Object.assign({}, it, { blur: 0 }); render(head, wrap(cat, it, html), null); wire(); };
       return;
     }
     var l = lockedOf(html);
     if (l) {
       render(head, '<div class="lock-gate"><div class="lock-gate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></div><p class="lock-gate-hint">비밀번호가 필요한 글이에요</p><div class="lock-gate-row"><input type="password" class="lock-gate-input" id="pw" placeholder="비밀번호" autocomplete="off"><button type="button" class="lock-gate-submit">확인</button></div><p class="lock-gate-error" hidden>비밀번호가 틀렸어요</p></div>', null);
-      document.getElementById('pback').onclick = go;
+      wire();
       var inp = txt.querySelector('.lock-gate-input'), sb = txt.querySelector('.lock-gate-submit'), er = txt.querySelector('.lock-gate-error');
-      var tryIt = function () { if (!inp.value) return; sb.disabled = true; er.hidden = true; decrypt(l, inp.value).then(function (h) { render(head, wrap(cat, it, h), null); document.getElementById('pback').onclick = go; }, function () { er.hidden = false; inp.value = ''; inp.focus(); sb.disabled = false; }); };
+      var tryIt = function () { if (!inp.value) return; sb.disabled = true; er.hidden = true; decrypt(l, inp.value).then(function (h) { render(head, wrap(cat, it, h), null); wire(); }, function () { er.hidden = false; inp.value = ''; inp.focus(); sb.disabled = false; }); };
       sb.onclick = tryIt; inp.onkeydown = function (e) { if (e.key === 'Enter') tryIt(); }; inp.focus();
       return;
     }
     render(head, wrap(cat, it, html), null);
     if (cat === 'characters') txt.querySelector('.post').classList.add('char');
-    document.getElementById('pback').onclick = go;
+    wire();
   }
   var GROUPS = {
     archive: { title: 'Archive', sub: '둘 중 하나를 고르세요', opts: [['log', 'Log', '기록 · ' + SYN.log.length + ' entries'], ['gallery', 'Gallery', '사진 · ARCH / S & L']] },
@@ -944,6 +962,21 @@ SITE_READY.then(function () {
     };
     fetch('posts/guestbook.html').then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(show, function () { show(GUEST); });
   }
+  // 관리: 툴(글쓰기/수정/사진)을 팝업 안에서 열어요. 토큰이 있는 브라우저에서만 메뉴가 보여요.
+  var ADM = { tab: 'post', q: '' };
+  function isAdmin() { try { return !!localStorage.getItem('gh_token'); } catch (e) { return false; } }
+  function admSync() { document.getElementById('adm').hidden = !isAdmin(); }
+  function openAdmin(tab, q) { ADM.tab = tab || 'post'; ADM.q = q || ''; open('admin'); }
+  function adminView() {
+    var T = [['post', '글쓰기'], ['edit', '글 수정'], ['upload', '사진 업로드']];
+    document.getElementById('wurl').textContent = 'www.syndrome.com/admin';
+    render('', '<div class="adm-w"><nav class="adm-tabs">' + T.map(function (t) { return '<button data-t="' + t[0] + '"' + (t[0] === ADM.tab ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join('') +
+      (isAdmin() ? '<button class="out" data-out>로그아웃</button>' : '') + '</nav><iframe src="tools/' + ADM.tab + '.html?embed=1' + ADM.q + '" title="관리"></iframe></div>', null);
+    document.getElementById('wn').textContent = '';
+    txt.querySelectorAll('[data-t]').forEach(function (b) { b.onclick = function () { ADM.tab = b.dataset.t; ADM.q = ''; adminView(); }; });
+    var o = txt.querySelector('[data-out]');
+    if (o) o.onclick = function () { if (!confirm('이 브라우저에서 관리 메뉴를 끌까요? (토큰이 지워져요)')) return; try { localStorage.removeItem('gh_token'); } catch (e) {} admSync(); close(); };
+  }
   function open(k) {
     galA = false;
     var it = items.filter(function (i) { return i.k === k; })[0] || {};
@@ -951,7 +984,9 @@ SITE_READY.then(function () {
     document.getElementById('wn').textContent = '(' + (it.n == null ? '∞' : it.n) + ')';
     win.classList.toggle('w-info', k === 'seol');
     win.classList.toggle('w-du', k === 'dressup');
-    if (k === 'guest') guestView();
+    win.classList.toggle('w-adm', k === 'admin');
+    if (k === 'admin') adminView();
+    else if (k === 'guest') guestView();
     else if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com/closet'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
     else if (k === 'chat') chatView();
     else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com/info'; render('', infoView(), 'img/info.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
@@ -974,6 +1009,11 @@ SITE_READY.then(function () {
   addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   document.querySelectorAll('[data-du]').forEach(function (f) { f.onclick = function () { open('dressup'); }; });
   // 모바일: 왼쪽 위 SYNDROME ୨୧ LIA를 누르면 옷장 (PC는 왼쪽 아래 사진)
+  document.querySelectorAll('[data-adm]').forEach(function (b) { b.onclick = function () { openAdmin(b.dataset.adm); }; });
+  admSync();
+  addEventListener('storage', function (e) { if (e.key === 'gh_token') admSync(); });
+  // 다른 기기에서 처음 쓸 때: 신드롬.com/#admin 으로 들어와서 토큰을 한 번 넣으면 돼요
+  if (location.hash === '#admin') { history.replaceState(null, '', location.pathname); openAdmin('post'); }
   document.getElementById('brand').onclick = function (e) { e.preventDefault(); if (matchMedia('(max-width: 820px)').matches) open('dressup'); };
 
   // player + synced lyrics
