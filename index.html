@@ -2,6 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<base href="/">
+<script>/* 404.html이 넘겨준 주소(/log/3 같은)를 주소창에 되돌려 놓아요 */(function(){try{var p=new URLSearchParams(location.search).get("p");if(p&&p.charAt(0)==="/")history.replaceState(null,"",p+location.hash);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>냥냥펀치 아카이브</title>
 <link rel="icon" type="image/png" href="img/pav.png">
@@ -863,10 +865,11 @@ SITE_READY.then(function () {
   function detail(k, id) {
     var cat = CAT[k], it = D[cat].filter(function (x) { return x.id === id; })[0] || { id: id }, html = PST[cat][id];
     galA = cat === 'gallery' && (it.group || 'A') === 'A';
+    var no = numOf(k, id); if (no) nav('/' + k + '/' + no);
     if (html == null) { fetchPost(cat, id).then(function (h) { PST[cat][id] = h; }, function () { PST[cat][id] = '<p>불러오지 못했어요.</p>'; }).then(function () { detail(k, id); }); return; }
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + k + '/' + label(it);
     var head = '<button class="back" id="pback">← ' + ({ characters: 'Characters', log: 'Log', ooc: 'Ooc', share: 'Share', gallery: 'Gallery' })[k] + '</button>';
-    var go = function () { listView(k); document.getElementById('wurl').textContent = 'www.syndrome.com/' + k; };
+    var go = function () { nav('/' + k); listView(k); document.getElementById('wurl').textContent = 'www.syndrome.com/' + k; };
     if (isAdmin() && /^(diary|ooc|world|gallery)$/.test(cat)) head += '<button class="back adm-edit" data-aedit>수정</button>';
     var wire = function () { document.getElementById('pback').onclick = go; var e = txt.querySelector('[data-aedit]'); if (e) e.onclick = function () { openAdmin('edit', '&cat=' + cat + '&id=' + encodeURIComponent(id)); }; };
     if (cat === 'gallery' && it.blur) {
@@ -895,7 +898,7 @@ SITE_READY.then(function () {
     var G = GROUPS[g];
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + g;
     render('<h2>' + G.title + '</h2><p class="sub">' + G.sub + '</p>', '<div class="gpick">' + G.opts.map(function (o, i) { return '<button data-sub="' + o[0] + '"><span class="gn">0' + (i + 1) + '</span><b>' + o[1] + '</b><small>' + o[2] + '</small><span class="ga">→</span></button>'; }).join('') + '</div>', null);
-    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { document.getElementById('wurl').textContent = 'www.syndrome.com/' + g + '/' + b.dataset.sub; listView(b.dataset.sub); }; });
+    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com/' + g + '/' + b.dataset.sub; listView(b.dataset.sub); }; });
   }
   var LIA_URL = 'https://lia-chat.jenojeno0423.workers.dev';
   function chatView() {
@@ -963,6 +966,29 @@ SITE_READY.then(function () {
     };
     fetch('posts/guestbook.html').then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(show, function () { show(GUEST); });
   }
+  // ======== 주소 (신드롬.com/log/3, /guestbook 처럼 바로 들어오기) ========
+  // 창을 열면 주소창도 같이 바뀌고, 그 주소로 들어오면 그 창이 바로 열려요.
+  // 글 번호는 오래된 글부터 1번 (캐릭터는 목록 순서대로).
+  var PATH_OF = { seol: 'info', guest: 'guestbook', dressup: 'closet' };
+  var ROUTE = { info: 'seol', seol: 'seol', characters: 'characters', archive: 'archive', extra: 'extra', log: 'log', gallery: 'gallery', ooc: 'ooc', share: 'share', guestbook: 'guest', chat: 'chat', lia: 'chat', closet: 'dressup', admin: 'admin' };
+  var routing = false;
+  function nav(path) { if (routing || location.pathname === path) return; try { history.pushState(null, '', path); } catch (e) {} }
+  function numOf(k, id) { var l = D[CAT[k]] || [], i = l.map(function (x) { return x.id; }).indexOf(id); return i < 0 ? '' : (CAT[k] === 'characters' ? i + 1 : l.length - i); }
+  function idOf(k, n) { var l = D[CAT[k]] || []; n = parseInt(n, 10); if (!(n > 0) || n > l.length) return null; return (CAT[k] === 'characters' ? l[n - 1] : l[l.length - n]).id; }
+  function route() {
+    var seg = location.pathname.split('/').filter(Boolean).map(function (x) { try { return decodeURIComponent(x); } catch (e) { return x; } });
+    var k = ROUTE[(seg[0] || '').toLowerCase()];
+    routing = true;
+    try {
+      if (!k) { if (sheet.classList.contains('open')) close(); return; }
+      if (k === 'admin') { openAdmin('post'); return; }
+      open(k);
+      var id = seg[1] && CAT[k] ? idOf(k, seg[1]) : null;
+      if (id) detail(k, id);
+    } finally { routing = false; }
+  }
+  addEventListener('popstate', route);
+
   // 관리: 툴(글쓰기/수정/사진)을 팝업 안에서 열어요. 토큰이 있는 브라우저에서만 메뉴가 보여요.
   var ADM = { tab: 'post', q: '' };
   // 토큰이 진짜 이 저장소에 쓸 수 있는 토큰인지 GitHub에 한 번 물어보고 나서야 메뉴/수정 버튼을 보여줘요
@@ -995,6 +1021,7 @@ SITE_READY.then(function () {
   }
   function open(k) {
     galA = false;
+    nav('/' + (PATH_OF[k] || k));
     var it = items.filter(function (i) { return i.k === k; })[0] || {};
     document.getElementById('wurl').textContent = 'www.syndrome.com/' + k;
     document.getElementById('wn').textContent = '(' + (it.n == null ? '∞' : it.n) + ')';
@@ -1012,7 +1039,7 @@ SITE_READY.then(function () {
     var wide = innerWidth > 820; dx = wide ? (Math.random() - .5) * 60 : 0; dy = wide ? (Math.random() - .5) * 30 : 0; place();
     sheet.classList.add('open'); document.getElementById('close').focus();
   }
-  function close() { sheet.classList.remove('open'); }
+  function close() { sheet.classList.remove('open'); nav('/'); }
   var win = document.getElementById('win'), dx = 0, dy = 0;
   function place() { win.style.setProperty('--dx', dx + 'px'); win.style.setProperty('--dy', dy + 'px'); }
   document.getElementById('close').onclick = close;
@@ -1029,7 +1056,8 @@ SITE_READY.then(function () {
   admSync();
   addEventListener('storage', function (e) { if (e.key === 'gh_token') admSync(); });
   // 다른 기기에서 처음 쓸 때: 신드롬.com/#admin 으로 들어와서 토큰을 한 번 넣으면 돼요
-  if (location.hash === '#admin') { history.replaceState(null, '', location.pathname); openAdmin('post'); }
+  if (location.hash === '#admin') { history.replaceState(null, '', '/admin'); }
+  route(); // 주소로 바로 들어온 경우 그 창 열기
   document.getElementById('brand').onclick = function (e) { e.preventDefault(); if (matchMedia('(max-width: 820px)').matches) open('dressup'); };
 
   // player + synced lyrics
