@@ -1032,7 +1032,7 @@ SITE_READY.then(function () {
     else if (k === 'guest') guestView();
     else if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com/closet'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
     else if (k === 'chat') chatView();
-    else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com/info'; render('', infoView(), 'img/info.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
+    else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com/info'; render('', infoView(), 'img/info-2.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
     else if (k === 'forever') render('<h2>Forever</h2><p class="sub">활을 끝까지 돌린 사람만 보는 페이지. 잠긴 기록 ' + lockN + '개.</p>', SYN.logList(true), null);
     else if (GROUPS[k]) groupView(k);
     else listView(k);
