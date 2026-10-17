@@ -1,5 +1,11 @@
 [
   {
+    "id": "image-106",
+    "thumbLabel": "IMAGE 106",
+    "thumb": "img/image-106.jpg",
+    "group": "A"
+  },
+  {
     "id": "image-105",
     "thumbLabel": "IMAGE 105",
     "thumb": "img/image-105.jpg",
