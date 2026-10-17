@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="embed.js"></script>
+<script src="dedupe.js"></script>
 <title>갤러리 사진 업로드 도구</title>
 <style>
   * { box-sizing: border-box; }
@@ -154,10 +155,11 @@ function renderPicked() {
   pickedBox.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { URL.revokeObjectURL(picked[+b.dataset.rm].url); picked.splice(+b.dataset.rm, 1); renderPicked(); });
 }
 photoInput.addEventListener("change", () => { addPhotos([...photoInput.files]); photoInput.value = ""; });
-document.addEventListener("paste", e => {
-  const files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
+document.addEventListener("paste", async e => {
+  let files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
   if (!files.length) return;
   e.preventDefault();
+  files = await uniqueImages(files);
   addPhotos(files.map((f, i) => f.name && f.name !== "image.png" ? f : new File([f], `paste-${Date.now()}-${i}.${(f.type.split("/")[1] || "png")}`, { type: f.type })));
   setStatus(`붙여넣은 사진 ${files.length}장을 추가했어요.`);
 });

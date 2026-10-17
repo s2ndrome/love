@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="embed.js"></script>
+<script src="dedupe.js"></script>
 <title>글 수정 도구</title>
 <style>
   * { box-sizing: border-box; }
@@ -494,11 +495,12 @@ function swapPhotos(i, j) {
 }
 
 // 갤러리 글 수정 중엔 사진을 복사해서 붙여넣어도 목록 맨 뒤에 추가돼요
-document.addEventListener("paste", e => {
+document.addEventListener("paste", async e => {
   if (!currentPost || currentPost.category !== "gallery" || galleryFields.style.display === "none") return;
-  const files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
+  let files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
   if (!files.length) return;
   e.preventDefault();
+  files = await uniqueImages(files);
   files.forEach(file => currentPost.photos.push({ kind: "new", file, previewUrl: URL.createObjectURL(file) }));
   renderPhotoList();
   setStatus(`붙여넣은 사진 ${files.length}장을 추가했어요. 저장해야 반영돼요.`);

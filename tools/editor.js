@@ -289,7 +289,7 @@
     area.addEventListener('paste', e => {
       const files = [...(e.clipboardData.files || [])].filter(f => f.type.startsWith('image/'));
       e.preventDefault();
-      if (files.length) return addImages(files);
+      if (files.length) return (window.uniqueImages ? uniqueImages(files) : Promise.resolve(files)).then(addImages);
       const t = e.clipboardData.getData('text/plain');
       if (t) document.execCommand('insertHTML', false, esc(t).replace(/\r?\n/g, '<br>'));
       if (t && /\n$/.test(t)) lineBreak();
