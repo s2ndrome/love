@@ -245,7 +245,7 @@ async function putFile(path, base64Content, message, sha, retried) {
   // touched the file since (409). Either way, fetch the current sha
   // once and retry.
   if (!retried && (res.status === 409 || (res.status === 422 && /sha/i.test(detail.message || "")))) {
-    const existing = await fetch(`${API}/${path}?ref=${BRANCH}`, {
+    const existing = await fetch(`${API}/${path}?ref=${BRANCH}`, { cache: "no-store",
       headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }
     });
     if (existing.ok) {
@@ -294,7 +294,7 @@ uploadBtn.addEventListener("click", async () => {
     const dataPath = `data/${category}.json`;
 
     setStatus(`${dataPath} 불러오는 중…`);
-    const jsonRes = await fetch(`${API}/${dataPath}?ref=${BRANCH}`, {
+    const jsonRes = await fetch(`${API}/${dataPath}?ref=${BRANCH}`, { cache: "no-store",
       headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }
     });
     if (!jsonRes.ok) throw new Error(`${dataPath}을 못 불러왔어요 (${jsonRes.status}) — 토큰 권한을 확인해주세요.`);

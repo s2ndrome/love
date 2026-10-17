@@ -321,7 +321,7 @@ function authHeaders(token) {
 }
 
 async function getFile(path, token) {
-  const res = await fetch(`${API}/${encodeURIComponent(path).replace(/%2F/g, "/")}?ref=${BRANCH}`, { headers: authHeaders(token) });
+  const res = await fetch(`${API}/${encodeURIComponent(path).replace(/%2F/g, "/")}?ref=${BRANCH}`, { cache: "no-store", headers: authHeaders(token) });
   if (!res.ok) throw new Error(`${path} 불러오기 실패 (${res.status})`);
   return res.json();
 }
