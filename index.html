@@ -870,9 +870,9 @@ SITE_READY.then(function () {
     galA = cat === 'gallery' && (it.group || 'A') === 'A';
     var no = numOf(k, id); if (no) nav('/' + k + '/' + no);
     if (html == null) { fetchPost(cat, id).then(function (h) { PST[cat][id] = h; }, function () { PST[cat][id] = '<p>불러오지 못했어요.</p>'; }).then(function () { detail(k, id); }); return; }
-    document.getElementById('wurl').textContent = 'www.syndrome.com/' + k + '/' + label(it);
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
     var head = '<button class="back" id="pback">← ' + ({ characters: 'Characters', log: 'Log', ooc: 'Ooc', share: 'Share', gallery: 'Gallery' })[k] + '</button>';
-    var go = function () { nav('/' + k); listView(k); document.getElementById('wurl').textContent = 'www.syndrome.com/' + k; };
+    var go = function () { nav('/' + k); listView(k); document.getElementById('wurl').textContent = 'www.syndrome.com'; };
     if (isAdmin() && /^(diary|ooc|world|gallery)$/.test(cat)) head += '<button class="back adm-edit" data-aedit>수정</button>';
     var wire = function () { document.getElementById('pback').onclick = go; var e = txt.querySelector('[data-aedit]'); if (e) e.onclick = function () { openAdmin('edit', '&cat=' + cat + '&id=' + encodeURIComponent(id)); }; };
     if (cat === 'gallery' && it.blur) {
@@ -899,13 +899,13 @@ SITE_READY.then(function () {
   }, PARENT = {};
   function groupView(g) {
     var G = GROUPS[g];
-    document.getElementById('wurl').textContent = 'www.syndrome.com/' + g;
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
     render('<h2>' + G.title + '</h2><p class="sub">' + G.sub + '</p>', '<div class="gpick">' + G.opts.map(function (o, i) { return '<button data-sub="' + o[0] + '"><span class="gn">0' + (i + 1) + '</span><b>' + o[1] + '</b><small>' + o[2] + '</small><span class="ga">→</span></button>'; }).join('') + '</div>', null);
-    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com/' + g + '/' + b.dataset.sub; listView(b.dataset.sub); }; });
+    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com'; listView(b.dataset.sub); }; });
   }
   var LIA_URL = 'https://lia-chat.jenojeno0423.workers.dev';
   function chatView() {
-    document.getElementById('wurl').textContent = 'www.syndrome.com/lia';
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
     document.getElementById('wn').textContent = '(chat)';
     var img = 'img/lia-fro.jpg';
     render('', '<div class="chat"><div class="who">' + (img ? '<img src="' + img + '" alt="">' : '') + '<div><b>Lia</b><small>SEOLJISU · AQUA GUIDE</small></div></div><iframe src="' + LIA_URL + '" title="리아와 채팅"></iframe></div>', null);
@@ -953,7 +953,7 @@ SITE_READY.then(function () {
   // 방명록: posts/guestbook.html을 불러와서 Formspree로 보내요 (페이지 이동 없이)
   var GUEST = '<p class="guestbook-hint">남기고 싶은 말을 적어주세요 ~</p><p class="guestbook-hint">오직 SEOL만 열람합니다.</p><form class="message-form" action="https://formspree.io/f/xljrkazq" method="POST"><input type="text" name="name" placeholder="이름 (선택)"><textarea name="message" placeholder="메시지" rows="5" required></textarea><button type="submit">보내기</button><p class="message-form-status" aria-live="polite"></p></form>';
   function guestView() {
-    document.getElementById('wurl').textContent = 'www.syndrome.com/guestbook';
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
     var show = function (html) {
       render('', '<div class="guest">' + html + '</div>', null);
       txt.querySelectorAll('.guest .card-header').forEach(function (h) { h.remove(); });
@@ -1014,7 +1014,7 @@ SITE_READY.then(function () {
   function openAdmin(tab, q) { ADM.tab = tab || 'post'; ADM.q = q || ''; open('admin'); }
   function adminView() {
     var T = [['post', '글쓰기'], ['edit', '글 수정'], ['upload', '사진 업로드']];
-    document.getElementById('wurl').textContent = 'www.syndrome.com/admin';
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
     render('', '<div class="adm-w"><nav class="adm-tabs">' + T.map(function (t) { return '<button data-t="' + t[0] + '"' + (t[0] === ADM.tab ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join('') +
       (tok() ? '<button class="out" data-out>로그아웃</button>' : '') + '</nav><iframe src="tools/' + ADM.tab + '.html?embed=1' + ADM.q + '" title="관리"></iframe></div>', null);
     document.getElementById('wn').textContent = '';
@@ -1026,16 +1026,16 @@ SITE_READY.then(function () {
     galA = false;
     nav('/' + (PATH_OF[k] || k));
     var it = items.filter(function (i) { return i.k === k; })[0] || {};
-    document.getElementById('wurl').textContent = 'www.syndrome.com/' + k;
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
     document.getElementById('wn').textContent = '(' + (it.n == null ? '∞' : it.n) + ')';
     win.classList.toggle('w-info', k === 'seol');
     win.classList.toggle('w-du', k === 'dressup');
     win.classList.toggle('w-adm', k === 'admin');
     if (k === 'admin') adminView();
     else if (k === 'guest') guestView();
-    else if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com/closet'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
+    else if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
     else if (k === 'chat') chatView();
-    else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com/info'; render('', infoView(), 'img/info-2.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
+    else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com'; render('', infoView(), 'img/info-2.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
     else if (k === 'forever') render('<h2>Forever</h2><p class="sub">활을 끝까지 돌린 사람만 보는 페이지. 잠긴 기록 ' + lockN + '개.</p>', SYN.logList(true), null);
     else if (GROUPS[k]) groupView(k);
     else listView(k);
