@@ -167,7 +167,7 @@
       <label>사진 (라디오로 대표(썸네일) 사진 선택, ▲▼로 순서 변경, 삭제 가능 — 저장해야 반영)</label>
       <div class="photo-list" id="existing-photos"></div>
 
-      <label for="gallery-add-photo">사진 추가 (선택, 여러 장 가능 — 목록 맨 뒤에 추가돼요)</label>
+      <label for="gallery-add-photo">사진 추가 (선택, 여러 장 가능 — 복사해서 붙여넣기도 돼요. 목록 맨 뒤에 추가돼요)</label>
       <input type="file" id="gallery-add-photo" accept="image/*" multiple>
 
       <p class="hint" style="margin-top:14px;">갤러리 글은 제목만 바뀌고 번호(id)는 그대로 유지돼요.</p>
@@ -492,6 +492,17 @@ function swapPhotos(i, j) {
   else if (currentPost.thumbIndex === j) currentPost.thumbIndex = i;
   renderPhotoList();
 }
+
+// 갤러리 글 수정 중엔 사진을 복사해서 붙여넣어도 목록 맨 뒤에 추가돼요
+document.addEventListener("paste", e => {
+  if (!currentPost || currentPost.category !== "gallery" || galleryFields.style.display === "none") return;
+  const files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
+  if (!files.length) return;
+  e.preventDefault();
+  files.forEach(file => currentPost.photos.push({ kind: "new", file, previewUrl: URL.createObjectURL(file) }));
+  renderPhotoList();
+  setStatus(`붙여넣은 사진 ${files.length}장을 추가했어요. 저장해야 반영돼요.`);
+});
 
 galleryAddPhotoInput.addEventListener("change", () => {
   if (!currentPost || currentPost.category !== "gallery") return;

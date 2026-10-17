@@ -67,6 +67,16 @@
   .status { margin-top: 14px; font-size: 12.5px; color: #6e6e73; white-space: pre-line; }
   .status.error { color: #d32f2f; }
   .status.done { color: #1a8a3e; font-weight: 600; }
+  .drop { padding: 12px; border: 1px dashed rgba(0,0,0,.18); border-radius: 8px; background: #fafafa; }
+  .drop.over { border-color: #0a84ff; background: #f0f7ff; }
+  .drop p { margin: 0 0 10px; font-size: 12.5px; color: #6e6e73; line-height: 1.6; }
+  .drop input[type=file] { width: 100%; font-size: 13px; }
+  .picked { display: flex; flex-wrap: wrap; gap: 8px; }
+  .picked:not(:empty) { margin-bottom: 10px; }
+  .picked div { position: relative; width: 84px; height: 84px; }
+  .picked img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; border: 1px solid rgba(0,0,0,.1); display: block; }
+  .picked button { position: absolute; top: 3px; right: 3px; margin: 0; width: 22px; height: 22px; padding: 0; border-radius: 50%; background: rgba(0,0,0,.6); font-size: 12px; line-height: 22px; }
+  .picked i { position: absolute; left: 4px; bottom: 3px; font: 600 10px/1 ui-monospace, monospace; color: #fff; text-shadow: 0 0 3px rgba(0,0,0,.8); font-style: normal; }
 </style>
 </head>
 <body>
@@ -93,8 +103,12 @@
   <label for="token">GitHub 토큰</label>
   <input type="password" id="token" placeholder="github_pat_...">
 
-  <label for="photo">사진 파일 (여러 장 선택하면 한 게시물에 같이 들어가요)</label>
-  <input type="file" id="photo" accept="image/*" multiple>
+  <label for="photo">사진 (여러 장이면 한 게시물에 같이 들어가요)</label>
+  <div class="drop" id="drop">
+    <p>사진을 <b>복사해서 붙여넣기</b>(Ctrl+V / 길게 눌러 붙여넣기) 하거나, 여기로 끌어다 놓거나, 아래에서 골라주세요</p>
+    <div class="picked" id="picked"></div>
+    <input type="file" id="photo" accept="image/*" multiple>
+  </div>
 
   <label for="title">제목</label>
   <input type="text" id="title" placeholder="예: 롬랑8">
@@ -127,6 +141,29 @@ const groupSelect = document.getElementById("group");
 const blurCheck = document.getElementById("blur-check");
 const uploadBtn = document.getElementById("upload-btn");
 const status = document.getElementById("status");
+
+// 고른 사진 + 붙여넣은 사진을 같이 모아둬요 (순서대로 올라가요)
+let picked = [];
+const pickedBox = document.getElementById("picked"), drop = document.getElementById("drop");
+function addPhotos(files) {
+  files.filter(f => f && f.type.startsWith("image/")).forEach(f => picked.push({ file: f, url: URL.createObjectURL(f) }));
+  renderPicked();
+}
+function renderPicked() {
+  pickedBox.innerHTML = picked.map((p, i) => `<div><img src="${p.url}" alt=""><i>${i + 1}</i><button type="button" data-rm="${i}" aria-label="빼기">×</button></div>`).join("");
+  pickedBox.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { URL.revokeObjectURL(picked[+b.dataset.rm].url); picked.splice(+b.dataset.rm, 1); renderPicked(); });
+}
+photoInput.addEventListener("change", () => { addPhotos([...photoInput.files]); photoInput.value = ""; });
+document.addEventListener("paste", e => {
+  const files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
+  if (!files.length) return;
+  e.preventDefault();
+  addPhotos(files.map((f, i) => f.name && f.name !== "image.png" ? f : new File([f], `paste-${Date.now()}-${i}.${(f.type.split("/")[1] || "png")}`, { type: f.type })));
+  setStatus(`붙여넣은 사진 ${files.length}장을 추가했어요.`);
+});
+drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", e => { e.preventDefault(); drop.classList.remove("over"); addPhotos([...(e.dataTransfer?.files || [])]); });
 
 const savedToken = localStorage.getItem("gh_token");
 if (savedToken) tokenInput.value = savedToken;
@@ -225,7 +262,7 @@ uploadBtn.addEventListener("click", async () => {
   const title = titleInput.value.trim();
   const group = groupSelect.value;
   const blur = blurCheck.checked;
-  const files = Array.from(photoInput.files);
+  const files = picked.map(p => p.file);
 
   if (!token || !title || !files.length) {
     setStatus("토큰, 제목, 사진을 모두 입력해주세요.", "error");
@@ -287,7 +324,7 @@ ${imgPaths.map(p => `  <img class="gallery-photo" src="${p}" alt="${safeTitle}" 
     await putFile("data/gallery.json", utf8ToBase64(newJsonText), `Add ${id} to gallery.json`, jsonFile.sha);
 
     setStatus(`완료! ${id}로 등록됐어요 (사진 ${imgPaths.length}장). 1~2분 후 사이트에 반영돼요.`, "done");
-    photoInput.value = "";
+    picked.forEach(p => URL.revokeObjectURL(p.url)); picked = []; renderPicked();
     titleInput.value = "";
     blurCheck.checked = false;
   } catch (err) {
