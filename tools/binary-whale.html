@@ -1,0 +1,101 @@
+<!--
+  BINARY WHALE BACKGROUND — 0/1 글자로 된 고래가 화면을 천천히 헤엄쳐 지나가요 (자바스크립트 없음)
+  이 내용 전체를 배경 HTML 칸에 붙여넣으면 돼요.
+    - 색: fill="#a9d4ef" (두 군데)
+    - 진하기: 맨 바깥 div 의 opacity
+    - 글자 크기: font-size (두 군데)
+    - 헤엄 속도: translate 의 dur="70s" (클수록 느려요)
+    - 고래 크기: 고래 svg 의 width / height
+-->
+<div aria-hidden="true" style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:.6;overflow:hidden;">
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="display:block;width:100%;height:100%;">
+  <defs>
+    <pattern id="bw-a" width="272" height="144" patternUnits="userSpaceOnUse">
+      <text y="-1" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="6.6" fill="#a9d4ef">
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1101000011010000110100010000000011000011011001011010111110110010</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1101110100000111110110100110110111000110001001111000110001001100</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1101011111111001011001110101111111001111111111110111000111010111</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0001000010000010100111100010111101010111101111001100010101011110</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1111101111101111010010100101101001101111000111101110001100011111</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011010111100111010001000110110000001100010000010100100101111100</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1010100110011100010000101111001001000100110111110111100010000000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0111011111110000011101010100101110011001110000000111011101000001</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1010110001000101000110011110000100010000001111100110001101110001</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0010101000110011101001000110101010011110000000111001010110000100</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1110111011010011000100000111100101101100111000110001010111001000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1010111110011001100011101000011010001110110011101000111000100011</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110111010100010101010010010110100000010101100100001101001110010</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0111011001101101100111010010100101101001100001001110000101011000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1100011110010101010110101110001001010001110100100010101100101001</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1111100100100100001001000110111001111100100101110110100100001011</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1110011011001100010010100101100000011010111111011110011010010111</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0001011001110001111001111100010010010110110101111001000010110010</tspan>
+      </text>
+    </pattern>
+    <pattern id="bw-b" width="272" height="144" patternUnits="userSpaceOnUse">
+      <text y="-1" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="6.6" fill="#a9d4ef">
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011011000000110111100010010010111110111100010100000111010111000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0111110101111010001011111110010111000100000101101000011100110100</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1010000011111001001001001000100101011001000110101101001110011000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011010001001101010011111101110011001001001101101000011011011100</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1010111001101010110110100111110110110001101110001010000011110011</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011110011100111101111001110010111001101100010100101110000101100</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110110000010000111101101001011000101101010000110100111110110000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0100001010000101110010110100011111001000101001011101100001111011</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011010011011010010111011110010000110001000011000111001110101000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1110010110111011010001101010110100001100110011100110001110011101</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011110100100010110000011011011100111010110100001001001001101011</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110111001110111001111110001000110101010011010111111000110011101</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110101110001001100110001101001111111101110100001010110111100010</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110001001001010000111000111001100101011111011110000101110111000</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0000011110100011011010000100011111010100001001001001100001110110</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0000011011000010011010110110101010011001000111010101001101001110</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1001101111011011001111100101000001001110111110000100110111101101</tspan>
+<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0101010010011011001010101110100000111100100010010100110011000101</tspan>
+      </text>
+    </pattern>
+    <linearGradient id="bw-g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".75" stop-color="#ddd"/>
+      <stop offset="1" stop-color="#777"/>
+    </linearGradient>
+    <filter id="bw-f" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" result="n">
+        <animate attributeName="seed" values="3;4;5;6;3" dur="2s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix in="n" type="matrix" values="2.4 0 0 0 -.25  2.4 0 0 0 -.25  2.4 0 0 0 -.25  0 0 0 0 1" result="m"/>
+      <feComposite in="b" in2="m" operator="arithmetic" k1="1" k2="0" k3="0" k4="0"/>
+    </filter>
+    <mask id="bw-m" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <g>
+      <animateTransform attributeName="transform" type="translate" values="40 0;-2700 0" dur="70s" repeatCount="indefinite"/>
+      <svg x="100%" y="30%" width="720" height="380" viewBox="0 0 420 220" overflow="visible">
+        <animate attributeName="y" values="30%;36%;27%;30%" dur="17s" repeatCount="indefinite"/>
+        <g filter="url(#bw-f)" fill="url(#bw-g)">
+          <animateTransform attributeName="transform" type="rotate" values="-2 200 110;3 200 110;-2 200 110" dur="9s" repeatCount="indefinite"/>
+          <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
+          <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z">
+            <animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="5s" repeatCount="indefinite"/>
+          </path>
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="5s" repeatCount="indefinite"/>
+            <path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/>
+          </g>
+          <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="64" cy="100" r="5" fill="#000"/>
+        </g>
+      </svg>
+      </g>
+    </mask>
+  </defs>
+  <g mask="url(#bw-m)">
+    <rect width="100%" height="100%" fill="url(#bw-a)">
+      <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.45;.5;.95;1" dur="1.6s" repeatCount="indefinite"/>
+    </rect>
+    <rect width="100%" height="100%" fill="url(#bw-b)" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.45;.5;.95;1" dur="1.6s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+</svg>
+</div>
