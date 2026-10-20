@@ -3,12 +3,13 @@
   이 내용 전체를 배경 HTML 칸에 붙여넣으면 돼요.
     - 색: fill="#a9d4ef" (두 군데)
     - 진하기: 맨 바깥 div 의 opacity
+    - 고래를 그림 뒤로 보내고 싶으면: z-index:9999 → z-index:0
     - 글자 크기: font-size (두 군데)
     - 헤엄 속도: type="translate" 의 dur (큰 고래 20s, 작은 고래 16s — 작을수록 빨라요)
     - 고래 크기: scale(1.25) / scale(0.8)
     - 헤엄 경로: type="translate" 의 values (화면 가운데 기준 x,y 좌표)
 -->
-<div aria-hidden="true" style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:.6;overflow:hidden;">
+<div aria-hidden="true" style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;opacity:.6;overflow:hidden;mix-blend-mode:multiply;">
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="display:block;width:100%;height:100%;">
   <defs>
     <pattern id="bw-a" width="272" height="144" patternUnits="userSpaceOnUse">
@@ -68,9 +69,10 @@
       <feColorMatrix in="n" type="matrix" values="2.4 0 0 0 -.25  2.4 0 0 0 -.25  2.4 0 0 0 -.25  0 0 0 0 1" result="m"/>
       <feComposite in="b" in2="m" operator="arithmetic" k1="1" k2="0" k3="0" k4="0"/>
     </filter>
-    <g id="bw-w1">
-        <g>
-          <animateTransform attributeName="transform" type="translate" values="260 -120;-40 10;-300 120;-330 40;-120 -60;160 -170;290 -150;260 -120" keyTimes="0;.22;.42;.5;.68;.86;.95;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="20s" begin="0s" repeatCount="indefinite"/>
+    <mask id="bw-m" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="260 -120;-40 10;-300 120;-330 40;-120 -60;160 -170;290 -150;260 -120" keyTimes="0;.22;.42;.5;.68;.86;.95;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="20s" begin="0s" repeatCount="indefinite"/>
+        <svg x="50%" y="50%" width="100%" height="100%" overflow="visible">
           <g>
             <animateTransform attributeName="transform" type="rotate" values="-10;-12;-6;8;-10;-10;6;-10" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="20s" begin="0s" repeatCount="indefinite"/>
             <g>
@@ -91,11 +93,11 @@
               </g>
             </g>
           </g>
-        </g>
-    </g>
-    <g id="bw-w2">
-        <g>
-          <animateTransform attributeName="transform" type="translate" values="-230 -170;0 -20;220 150;300 110;120 40;-120 -60;-280 -150;-230 -170" keyTimes="0;.22;.42;.5;.68;.86;.95;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="16s" begin="0s" repeatCount="indefinite"/>
+        </svg>
+      </g>
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="-230 -170;0 -20;220 150;300 110;120 40;-120 -60;-280 -150;-230 -170" keyTimes="0;.22;.42;.5;.68;.86;.95;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="16s" begin="0s" repeatCount="indefinite"/>
+        <svg x="50%" y="50%" width="100%" height="100%" overflow="visible">
           <g>
             <animateTransform attributeName="transform" type="rotate" values="14;12;6;-8;10;12;-6;14" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="16s" begin="0s" repeatCount="indefinite"/>
             <g>
@@ -116,11 +118,8 @@
               </g>
             </g>
           </g>
-        </g>
-    </g>
-    <mask id="bw-m" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
-      <use href="#bw-w1" x="50%" y="50%"/>
-      <use href="#bw-w2" x="50%" y="50%"/>
+        </svg>
+      </g>
     </mask>
   </defs>
   <g mask="url(#bw-m)">
