@@ -29,6 +29,9 @@
   var cv = document.getElementById('binbg');
   if (!cv || cv.dataset.on) return;
   cv.dataset.on = '1';
+  // 위젯 칸(transform/overflow) 안에 갇히지 않도록 body 바로 아래로 옮겨요
+  if (cv.parentNode !== document.body) document.body.insertBefore(cv, document.body.firstChild);
+  cv.style.cssText = 'position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;pointer-events:none;';
   var ctx = cv.getContext('2d');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 

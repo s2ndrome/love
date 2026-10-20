@@ -1,0 +1,70 @@
+<!--
+  BINARY SMOKE BACKGROUND (자바스크립트 없는 버전)
+  <script>를 지우는 사이트에서도 동작하도록 SVG + 내장 애니메이션만 써요.
+  이 파일 내용 전체를 배경 HTML 칸에 붙여넣으면 돼요.
+
+  조절하고 싶으면:
+    - 색: animate attributeName="fill" 의 values (파랑;보라;회색;파랑) — 두 군데 다 바꿔 주세요
+    - 진하기: 맨 바깥 div 의 opacity
+    - 연기 크기: feTurbulence 의 baseFrequency (작을수록 덩어리가 커요)
+    - 연기 양: feColorMatrix 의 -4.6 (더 작은 수 = 연기 적게, 예: -5.2 / 더 큰 수 = 많이, 예: -4.0)
+-->
+<div aria-hidden="true" style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:.6;overflow:hidden;">
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none" style="display:block;width:100%;height:100%;">
+  <defs>
+    <pattern id="bbg-a" width="290" height="156" patternUnits="userSpaceOnUse">
+      <text y="-2" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11.5" fill="#3b3fd8">
+<animate attributeName="fill" values="#3b3fd8;#8f5fe0;#5a5a66;#3b3fd8" dur="36s" repeatCount="indefinite"/>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">11100100110001100000000111001100111011010001</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">01100000011110011011010000001100100110110011</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">00010000110111000000111010100100000110100001</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">01111100001010000111000011001011000111000101</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10001100110101010110000011111110010100011101</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10001110111010010100011001001110111111001011</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10011001000010100011001000110100110110011110</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">00001011101001111100010010101100110111010110</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10010010100011110110111100101000000011101010</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10101100000010110000000011011001000110100100</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">01000000010001001111110100001111100001010111</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">00101110100011100100111010011001000011100100</tspan>
+      </text>
+    </pattern>
+    <pattern id="bbg-b" width="290" height="156" patternUnits="userSpaceOnUse">
+      <text y="-2" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11.5" fill="#3b3fd8">
+<animate attributeName="fill" values="#3b3fd8;#8f5fe0;#5a5a66;#3b3fd8" dur="36s" repeatCount="indefinite"/>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">11111010010110101111111111110000011011010011</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10001000011000100110111110100101111010000000</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">11100001000011110111000101111010110110110011</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">11001001111001110111111101001101110110000110</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">00010101010101000010011111110110011010101001</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10001010111101101000101010001001010110111111</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">01010001100011101010101010000000011011010010</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">01001101111011010001101011010100011111010010</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">11111110000000010100000011011000111101100110</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">11101011001101000000001111011101000101000110</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">10001010011000110010101010100011011111111100</tspan>
+<tspan x="0" dy="13" textLength="290" lengthAdjust="spacing">11101011111000101010011001100100000101010100</tspan>
+      </text>
+    </pattern>
+    <filter id="bbg-f" x="0" y="0" width="100%" height="100%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0045" numOctaves="4" seed="7">
+        <animate attributeName="baseFrequency" values="0.0045;0.0058;0.004;0.0045" dur="31s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix type="matrix" values="9 0 0 0 -4.6  9 0 0 0 -4.6  9 0 0 0 -4.6  0 0 0 0 1"/>
+    </filter>
+    <mask id="bbg-m" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <rect x="-50%" y="-50%" width="200%" height="200%" filter="url(#bbg-f)">
+        <animateTransform attributeName="transform" type="translate" values="0 0; -260 140; 120 260; 0 0" dur="46s" repeatCount="indefinite"/>
+      </rect>
+    </mask>
+  </defs>
+  <g mask="url(#bbg-m)">
+    <rect width="100%" height="100%" fill="url(#bbg-a)">
+      <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.45;.5;.95;1" dur="1.6s" repeatCount="indefinite"/>
+    </rect>
+    <rect width="100%" height="100%" fill="url(#bbg-b)" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.45;.5;.95;1" dur="1.6s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+</svg>
+</div>
