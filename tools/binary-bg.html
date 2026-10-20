@@ -1,0 +1,155 @@
+<!--
+  BINARY SMOKE BACKGROUND — 0/1 글자로 그려지는 연기(잉크) 배경
+  사용법: 이 파일 내용 전체를 홈페이지 "배경 HTML" 칸에 그대로 붙여넣으면 돼요.
+
+  아래 CONFIG 값만 바꾸면 느낌을 조절할 수 있어요.
+    colors   : 시간이 지나며 천천히 바뀌는 글자 색 (영상처럼 파랑 → 보라 → 회색)
+    opacity  : 전체 진하기 (0 ~ 1)
+    cell     : 글자 한 칸 크기(px). 작을수록 촘촘해요
+    speed    : 연기가 흐르는 속도
+    amount   : 연기 양 (0.3 적음 ~ 0.6 많음)
+    image    : 이미지 주소를 넣으면 그 그림 모양으로 0/1이 모였다 흩어져요 (빈칸이면 연기만)
+               ※ 같은 사이트에 올린 이미지거나 CORS가 허용된 이미지여야 해요
+-->
+<canvas id="binbg" aria-hidden="true"></canvas>
+<style>
+  #binbg { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+</style>
+<script>
+(function () {
+  var CONFIG = {
+    colors: ['#3b3fd8', '#8f5fe0', '#5a5a66', '#3b3fd8'],
+    opacity: 0.55,
+    cell: 9,
+    speed: 1,
+    amount: 0.42,
+    image: ''
+  };
+
+  var cv = document.getElementById('binbg');
+  if (!cv || cv.dataset.on) return;
+  cv.dataset.on = '1';
+  var ctx = cv.getContext('2d');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- 3D value noise ---------------------------------------------------
+  var P = new Uint8Array(512);
+  for (var i = 0; i < 256; i++) P[i] = i;
+  for (i = 255; i > 0; i--) { var r = (Math.random() * (i + 1)) | 0, s = P[i]; P[i] = P[r]; P[r] = s; }
+  for (i = 0; i < 256; i++) P[i + 256] = P[i];
+  function fade(t) { return t * t * (3 - 2 * t); }
+  function h(x, y, z) { return P[P[P[x & 255] + (y & 255)] + (z & 255)] / 255; }
+  function noise(x, y, z) {
+    var X = Math.floor(x), Y = Math.floor(y), Z = Math.floor(z);
+    var u = fade(x - X), v = fade(y - Y), w = fade(z - Z);
+    var a = h(X, Y, Z) + (h(X + 1, Y, Z) - h(X, Y, Z)) * u;
+    var b = h(X, Y + 1, Z) + (h(X + 1, Y + 1, Z) - h(X, Y + 1, Z)) * u;
+    var c = h(X, Y, Z + 1) + (h(X + 1, Y, Z + 1) - h(X, Y, Z + 1)) * u;
+    var d = h(X, Y + 1, Z + 1) + (h(X + 1, Y + 1, Z + 1) - h(X, Y + 1, Z + 1)) * u;
+    var e = a + (b - a) * v, f = c + (d - c) * v;
+    return e + (f - e) * w;
+  }
+  function fbm(x, y, z) { return noise(x, y, z) * 0.55 + noise(x * 2.1, y * 2.1, z * 1.3) * 0.3 + noise(x * 4.3, y * 4.3, z * 1.7) * 0.15; }
+
+  // --- color cycle --------------------------------------------------------
+  function rgb(hex) { var n = parseInt(hex.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+  var PAL = CONFIG.colors.map(rgb);
+  function colorAt(t) {
+    var k = (t % PAL.length + PAL.length) % PAL.length, i0 = Math.floor(k), f = fade(k - i0);
+    var a = PAL[i0], b = PAL[(i0 + 1) % PAL.length];
+    return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * f) + ',' + Math.round(a[1] + (b[1] - a[1]) * f) + ',' + Math.round(a[2] + (b[2] - a[2]) * f) + ')';
+  }
+
+  // --- grid ---------------------------------------------------------------
+  var W, H, cols, rows, cw, ch, bits, mask = null, img = null;
+  function resize() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cw = W < 700 ? CONFIG.cell + 2 : CONFIG.cell;
+    ch = Math.round(cw * 1.45);
+    cols = Math.ceil(W / cw); rows = Math.ceil(H / ch);
+    bits = new Uint8Array(cols * rows);
+    for (var i = 0; i < bits.length; i++) bits[i] = Math.random() < 0.5 ? 48 : 49;
+    ctx.font = Math.round(ch * 0.9) + 'px ui-monospace, "SF Mono", Menlo, Consolas, monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
+    buildMask();
+  }
+
+  // 이미지 모양 마스크 (선택)
+  function buildMask() {
+    mask = null;
+    if (!img || !img.width) return;
+    try {
+      var oc = document.createElement('canvas'), o = oc.getContext('2d');
+      oc.width = cols; oc.height = rows;
+      var sc = Math.min(cols / img.width, (rows * ch / cw) / img.height) * 0.9;
+      var dw = img.width * sc, dh = img.height * sc * cw / ch;
+      o.fillStyle = '#fff'; o.fillRect(0, 0, cols, rows);
+      o.drawImage(img, (cols - dw) / 2, (rows - dh) / 2, dw, dh);
+      var d = o.getImageData(0, 0, cols, rows).data;
+      mask = new Float32Array(cols * rows);
+      for (var i = 0; i < mask.length; i++) mask[i] = 1 - (d[i * 4] * 0.3 + d[i * 4 + 1] * 0.59 + d[i * 4 + 2] * 0.11) / 255;
+    } catch (e) { mask = null; } // CORS로 막힌 이미지는 연기 모드로
+  }
+  if (CONFIG.image) {
+    img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = buildMask;
+    img.src = CONFIG.image;
+  }
+
+  // --- draw ---------------------------------------------------------------
+  var BUCKETS = 6, lists = [], last = 0, t0 = performance.now();
+  for (i = 0; i < BUCKETS; i++) lists.push([]);
+
+  function frame(now) {
+    if (!reduce) requestAnimationFrame(frame);
+    if (now - last < 42) return; // ~24fps
+    last = now;
+    var t = (now - t0) / 1000 * CONFIG.speed;
+    var z = t * 0.12, dx = t * 0.05, dy = -t * 0.03;
+    var th = 1.02 - CONFIG.amount; // 연기 문턱값
+    // 이미지 모드: 모였다(1) 흩어졌다(0) 반복
+    var gather = mask ? 0.5 + 0.5 * Math.sin(t * 0.35) : 0;
+
+    for (var b = 0; b < BUCKETS; b++) lists[b].length = 0;
+    var sx = 4.6 / Math.max(cols, rows), flips = (cols * rows * 0.004) | 0;
+    for (var f = 0; f < flips; f++) { var fi = (Math.random() * bits.length) | 0; bits[fi] ^= 1; }
+
+    for (var y = 0; y < rows; y++) {
+      for (var x = 0; x < cols; x++) {
+        var nx = x * sx, ny = y * sx * (ch / cw);
+        // 도메인 워핑으로 연기처럼 휘어지게
+        var wx = fbm(nx + dx, ny + dy, z) * 1.6, wy = fbm(nx + 5.2 + dx, ny + 1.3, z + 3.1) * 1.6;
+        var v = fbm(nx + wx + dx, ny + wy + dy, z * 1.4);
+        v -= noise(nx * 9, ny * 9, z * 2.5) * 0.1; // 안쪽 구멍/결
+        var idx = y * cols + x;
+        if (mask) v = v * (1 - gather) + (mask[idx] * 0.55 + v * 0.45 + 0.12) * gather;
+        var a = (v - th) / 0.1;
+        if (a <= 0) continue;
+        if (a > 1) a = 1;
+        lists[Math.min(BUCKETS - 1, (a * BUCKETS) | 0)].push(idx);
+      }
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = colorAt(t * 0.08);
+    for (b = 0; b < BUCKETS; b++) {
+      var L = lists[b];
+      ctx.globalAlpha = CONFIG.opacity * (b + 1) / BUCKETS;
+      for (var j = 0; j < L.length; j++) {
+        var id = L[j];
+        ctx.fillText(bits[id] === 49 ? '1' : '0', (id % cols) * cw + cw / 2, ((id / cols) | 0) * ch);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  resize();
+  var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(resize, 150); });
+  if (reduce) frame(performance.now() + 100); else requestAnimationFrame(frame);
+})();
+</script>
