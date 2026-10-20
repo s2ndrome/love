@@ -1,11 +1,11 @@
 <!--
-  BINARY WHALE BACKGROUND — 0/1 글자로 된 고래 두 마리가 화면 가운데를 돌아다녀요
+  BINARY WHALE BACKGROUND — 0/1 글자로 된 고래 두 마리가 화면을 크게 빙글빙글 돌아다녀요
   (자바스크립트 없음 / 사이트가 지우는 animate·use 태그 안 씀)
     - 색: fill="#a9d4ef"
     - 진하기: 맨 바깥 div 의 opacity
     - 그림 뒤로 보내기: z-index:9999 → z-index:0
-    - 헤엄 속도: dur="20s" / dur="16s" (작을수록 빨라요, 고래마다 세 군데씩)
-    - 헤엄 경로: type="translate" 의 values (화면을 1600 x 900 으로 봤을 때 좌표, 가운데 = 800 450)
+    - 헤엄 속도: dur="60s" / dur="50s" (작을수록 빨라요, 고래마다 세 군데씩)
+    - 테두리 흐림: feGaussianBlur 의 stdDeviation (클수록 흐려요)
 -->
 <div aria-hidden="true" style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;opacity:.6;overflow:hidden;mix-blend-mode:multiply;">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" style="display:block;width:100vw;height:100vh;">
@@ -32,40 +32,51 @@
 <tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0001011001110001111001111100010010010110110101111001000010110010</tspan>
       </text>
     </pattern>
-    <linearGradient id="bw-g" x1="0" y1="0" x2="0" y2="1">
+    <radialGradient id="bw-g" cx=".38" cy=".42" r=".62">
       <stop offset="0" stop-color="#fff"/>
-      <stop offset=".75" stop-color="#ddd"/>
-      <stop offset="1" stop-color="#888"/>
-    </linearGradient>
+      <stop offset=".55" stop-color="#e6e6e6"/>
+      <stop offset=".85" stop-color="#777"/>
+      <stop offset="1" stop-color="#333"/>
+    </radialGradient>
+    <filter id="bw-f" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="2.6 0 0 0 -.45  2.6 0 0 0 -.45  2.6 0 0 0 -.45  0 0 0 0 1" result="m"/>
+      <feComposite in="b" in2="m" operator="arithmetic" k1="1.25" k2="0" k3="0" k4="0"/>
+    </filter>
     <mask id="bw-m" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900">
       <g>
-        <animateTransform attributeName="transform" type="translate" values="1060 330;760 460;500 570;470 490;680 390;960 280;1090 300;1060 330" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="20s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" values="1440 500;1458 530;1467 558;1467 558;1465 583;1451 605;1424 625;1384 642;1332 656;1269 668;1198 677;1120 685;1039 691;957 695;876 698;800 699;730 700;667 699;610 698;561 695;518 691;480 685;445 677;413 668;381 656;349 642;316 625;282 605;248 583;215 558;185 530;160 500;142 468;133 433;133 433;135 398;149 361;176 325;216 289;268 254;331 222;402 192;480 165;561 142;643 124;724 111;800 103;870 100;933 103;990 111;1039 124;1082 142;1120 165;1155 192;1187 222;1219 254;1251 289;1284 325;1318 361;1352 398;1385 433;1415 468;1440 500" keyTimes="0;0.017;0.031;0.033;0.05;0.067;0.083;0.1;0.117;0.133;0.15;0.167;0.183;0.2;0.217;0.233;0.25;0.267;0.283;0.3;0.317;0.333;0.35;0.367;0.383;0.4;0.417;0.433;0.45;0.467;0.483;0.5;0.517;0.531;0.533;0.55;0.567;0.583;0.6;0.617;0.633;0.65;0.667;0.683;0.7;0.717;0.733;0.75;0.767;0.783;0.8;0.817;0.833;0.85;0.867;0.883;0.9;0.917;0.933;0.95;0.967;0.983;1" dur="60s" repeatCount="indefinite"/>
         <g>
-          <animateTransform attributeName="transform" type="rotate" values="-10;-12;-6;8;-10;-10;6;-10" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="20s" repeatCount="indefinite"/>
+          <animateTransform attributeName="transform" type="rotate" values="30;30;30;-30;-30;-30;-23;-15;-11;-8;-6;-4;-3;-2;-1;-0;0;2;3;6;9;12;16;20;24;27;30;30;30;30;30;30;30;30;-30;-30;-30;-30;-30;-27;-23;-19;-16;-13;-9;-6;-2;2;8;15;23;30;30;30;30;30;30;30;30;30;30;30;30" keyTimes="0;0.017;0.031;0.033;0.05;0.067;0.083;0.1;0.117;0.133;0.15;0.167;0.183;0.2;0.217;0.233;0.25;0.267;0.283;0.3;0.317;0.333;0.35;0.367;0.383;0.4;0.417;0.433;0.45;0.467;0.483;0.5;0.517;0.531;0.533;0.55;0.567;0.583;0.6;0.617;0.633;0.65;0.667;0.683;0.7;0.717;0.733;0.75;0.767;0.783;0.8;0.817;0.833;0.85;0.867;0.883;0.9;0.917;0.933;0.95;0.967;0.983;1" dur="60s" repeatCount="indefinite"/>
           <g>
-            <animateTransform attributeName="transform" type="scale" values="1 1;1 1;-1 1;-1 1;1 1;1 1" keyTimes="0;.45;.47;.91;.93;1" dur="20s" repeatCount="indefinite"/>
-            <g transform="scale(1.15) translate(-210,-110)" fill="url(#bw-g)">
-            <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
-            <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z"><animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="3s" repeatCount="indefinite"/></path>
-            <g><animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="2.4s" repeatCount="indefinite"/><path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/></g>
-            <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="64" cy="100" r="5" fill="#000"/>
+            <animateTransform attributeName="transform" type="scale" values="-1 1;-1 1;-1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1" keyTimes="0;0.017;0.031;0.033;0.05;0.067;0.083;0.1;0.117;0.133;0.15;0.167;0.183;0.2;0.217;0.233;0.25;0.267;0.283;0.3;0.317;0.333;0.35;0.367;0.383;0.4;0.417;0.433;0.45;0.467;0.483;0.5;0.517;0.531;0.533;0.55;0.567;0.583;0.6;0.617;0.633;0.65;0.667;0.683;0.7;0.717;0.733;0.75;0.767;0.783;0.8;0.817;0.833;0.85;0.867;0.883;0.9;0.917;0.933;0.95;0.967;0.983;1" dur="60s" repeatCount="indefinite"/>
+            <g transform="scale(1.1) translate(-210,-110)">
+              <g filter="url(#bw-f)" fill="url(#bw-g)">
+              <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
+              <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z"><animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="4s" repeatCount="indefinite"/></path>
+              <g><animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="3.2s" repeatCount="indefinite"/><path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/></g>
+              <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="64" cy="100" r="6" fill="#000"/>
+              </g>
             </g>
           </g>
         </g>
       </g>
       <g>
-        <animateTransform attributeName="transform" type="translate" values="570 280;800 430;1020 600;1100 560;920 490;680 390;520 300;570 280" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="16s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" values="1118 620;1174 605;1226 591;1272 579;1312 567;1345 556;1371 542;1388 527;1397 509;1397 488;1397 488;1389 463;1373 434;1349 402;1318 368;1280 332;1237 297;1189 263;1137 233;1082 207;1025 187;967 172;909 165;852 163;796 168;742 178;691 191;643 208;597 226;556 245;517 263;482 280;451 295;423 309;398 321;377 333;358 344;343 358;331 373;323 391;317 412;315 437;315 437;316 466;322 498;331 532;345 568;363 603;387 637;415 667;448 693;486 713;529 728;577 735;629 737;684 732;743 722;805 709;868 692;932 674;996 655;1058 637;1118 620" keyTimes="0;0.017;0.033;0.05;0.067;0.083;0.1;0.117;0.133;0.148;0.15;0.167;0.183;0.2;0.217;0.233;0.25;0.267;0.283;0.3;0.317;0.333;0.35;0.367;0.383;0.4;0.417;0.433;0.45;0.467;0.483;0.5;0.517;0.533;0.55;0.567;0.583;0.6;0.617;0.633;0.65;0.665;0.667;0.683;0.7;0.717;0.733;0.75;0.767;0.783;0.8;0.817;0.833;0.85;0.867;0.883;0.9;0.917;0.933;0.95;0.967;0.983;1" dur="50s" repeatCount="indefinite"/>
         <g>
-          <animateTransform attributeName="transform" type="rotate" values="14;12;6;-8;10;12;-6;14" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="16s" repeatCount="indefinite"/>
+          <animateTransform attributeName="transform" type="rotate" values="-15;-15;-15;-16;-20;-27;-30;-30;-30;-30;30;30;30;30;30;30;30;30;25;20;14;8;1;-5;-10;-15;-19;-22;-24;-25;-26;-26;-26;-27;-29;-30;-30;-30;-30;-30;-30;-30;30;30;30;30;30;30;30;30;28;18;9;1;-5;-9;-13;-15;-16;-16;-16;-16;-15" keyTimes="0;0.017;0.033;0.05;0.067;0.083;0.1;0.117;0.133;0.148;0.15;0.167;0.183;0.2;0.217;0.233;0.25;0.267;0.283;0.3;0.317;0.333;0.35;0.367;0.383;0.4;0.417;0.433;0.45;0.467;0.483;0.5;0.517;0.533;0.55;0.567;0.583;0.6;0.617;0.633;0.65;0.665;0.667;0.683;0.7;0.717;0.733;0.75;0.767;0.783;0.8;0.817;0.833;0.85;0.867;0.883;0.9;0.917;0.933;0.95;0.967;0.983;1" dur="50s" repeatCount="indefinite"/>
           <g>
-            <animateTransform attributeName="transform" type="scale" values="-1 1;-1 1;1 1;1 1;-1 1;-1 1" keyTimes="0;.45;.47;.91;.93;1" dur="16s" repeatCount="indefinite"/>
-            <g transform="scale(0.75) translate(-210,-110)" fill="url(#bw-g)">
-            <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
-            <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z"><animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="3s" repeatCount="indefinite"/></path>
-            <g><animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="2.4s" repeatCount="indefinite"/><path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/></g>
-            <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="64" cy="100" r="5" fill="#000"/>
+            <animateTransform attributeName="transform" type="scale" values="-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1;-1 1" keyTimes="0;0.017;0.033;0.05;0.067;0.083;0.1;0.117;0.133;0.148;0.15;0.167;0.183;0.2;0.217;0.233;0.25;0.267;0.283;0.3;0.317;0.333;0.35;0.367;0.383;0.4;0.417;0.433;0.45;0.467;0.483;0.5;0.517;0.533;0.55;0.567;0.583;0.6;0.617;0.633;0.65;0.665;0.667;0.683;0.7;0.717;0.733;0.75;0.767;0.783;0.8;0.817;0.833;0.85;0.867;0.883;0.9;0.917;0.933;0.95;0.967;0.983;1" dur="50s" repeatCount="indefinite"/>
+            <g transform="scale(0.75) translate(-210,-110)">
+              <g filter="url(#bw-f)" fill="url(#bw-g)">
+              <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
+              <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z"><animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="4s" repeatCount="indefinite"/></path>
+              <g><animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="3.2s" repeatCount="indefinite"/><path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/></g>
+              <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="64" cy="100" r="6" fill="#000"/>
+              </g>
             </g>
           </g>
         </g>
