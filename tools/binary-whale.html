@@ -1,16 +1,14 @@
 <!--
-  BINARY WHALE BACKGROUND — 0/1 글자로 된 고래 두 마리가 화면 가운데를 돌아다녀요 (자바스크립트 없음)
-  이 내용 전체를 배경 HTML 칸에 붙여넣으면 돼요.
-    - 색: fill="#a9d4ef" (두 군데)
+  BINARY WHALE BACKGROUND — 0/1 글자로 된 고래 두 마리가 화면 가운데를 돌아다녀요
+  (자바스크립트 없음 / 사이트가 지우는 animate·use 태그 안 씀)
+    - 색: fill="#a9d4ef"
     - 진하기: 맨 바깥 div 의 opacity
-    - 고래를 그림 뒤로 보내고 싶으면: z-index:9999 → z-index:0
-    - 글자 크기: font-size (두 군데)
-    - 헤엄 속도: type="translate" 의 dur (큰 고래 20s, 작은 고래 16s — 작을수록 빨라요)
-    - 고래 크기: scale(1.25) / scale(0.8)
-    - 헤엄 경로: type="translate" 의 values (화면 가운데 기준 x,y 좌표)
+    - 그림 뒤로 보내기: z-index:9999 → z-index:0
+    - 헤엄 속도: dur="20s" / dur="16s" (작을수록 빨라요, 고래마다 세 군데씩)
+    - 헤엄 경로: type="translate" 의 values (화면을 1600 x 900 으로 봤을 때 좌표, 가운데 = 800 450)
 -->
 <div aria-hidden="true" style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;opacity:.6;overflow:hidden;mix-blend-mode:multiply;">
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="display:block;width:100%;height:100%;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" style="display:block;width:100vw;height:100vh;">
   <defs>
     <pattern id="bw-a" width="272" height="144" patternUnits="userSpaceOnUse">
       <text y="-1" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="6.6" fill="#a9d4ef">
@@ -34,101 +32,46 @@
 <tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0001011001110001111001111100010010010110110101111001000010110010</tspan>
       </text>
     </pattern>
-    <pattern id="bw-b" width="272" height="144" patternUnits="userSpaceOnUse">
-      <text y="-1" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="6.6" fill="#a9d4ef">
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011011000000110111100010010010111110111100010100000111010111000</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0111110101111010001011111110010111000100000101101000011100110100</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1010000011111001001001001000100101011001000110101101001110011000</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011010001001101010011111101110011001001001101101000011011011100</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1010111001101010110110100111110110110001101110001010000011110011</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011110011100111101111001110010111001101100010100101110000101100</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110110000010000111101101001011000101101010000110100111110110000</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0100001010000101110010110100011111001000101001011101100001111011</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011010011011010010111011110010000110001000011000111001110101000</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1110010110111011010001101010110100001100110011100110001110011101</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1011110100100010110000011011011100111010110100001001001001101011</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110111001110111001111110001000110101010011010111111000110011101</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110101110001001100110001101001111111101110100001010110111100010</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0110001001001010000111000111001100101011111011110000101110111000</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0000011110100011011010000100011111010100001001001001100001110110</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0000011011000010011010110110101010011001000111010101001101001110</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">1001101111011011001111100101000001001110111110000100110111101101</tspan>
-<tspan x="0" dy="8" textLength="272" lengthAdjust="spacing">0101010010011011001010101110100000111100100010010100110011000101</tspan>
-      </text>
-    </pattern>
     <linearGradient id="bw-g" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff"/>
       <stop offset=".75" stop-color="#ddd"/>
-      <stop offset="1" stop-color="#777"/>
+      <stop offset="1" stop-color="#888"/>
     </linearGradient>
-    <filter id="bw-f" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
-      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" result="n">
-        <animate attributeName="seed" values="3;4;5;6;3" dur="2s" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feColorMatrix in="n" type="matrix" values="2.4 0 0 0 -.25  2.4 0 0 0 -.25  2.4 0 0 0 -.25  0 0 0 0 1" result="m"/>
-      <feComposite in="b" in2="m" operator="arithmetic" k1="1" k2="0" k3="0" k4="0"/>
-    </filter>
-    <mask id="bw-m" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+    <mask id="bw-m" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900">
       <g>
-        <animateTransform attributeName="transform" type="translate" values="260 -120;-40 10;-300 120;-330 40;-120 -60;160 -170;290 -150;260 -120" keyTimes="0;.22;.42;.5;.68;.86;.95;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="20s" begin="0s" repeatCount="indefinite"/>
-        <svg x="50%" y="50%" width="100%" height="100%" overflow="visible">
+        <animateTransform attributeName="transform" type="translate" values="1060 330;760 460;500 570;470 490;680 390;960 280;1090 300;1060 330" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="20s" repeatCount="indefinite"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" values="-10;-12;-6;8;-10;-10;6;-10" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="20s" repeatCount="indefinite"/>
           <g>
-            <animateTransform attributeName="transform" type="rotate" values="-10;-12;-6;8;-10;-10;6;-10" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="20s" begin="0s" repeatCount="indefinite"/>
-            <g>
-              <animateTransform attributeName="transform" type="scale" values="1 1;-1 1;1 1" keyTimes="0;.46;.92" calcMode="discrete" dur="20s" begin="0s" repeatCount="indefinite"/>
-              <g transform="scale(1.25) translate(-210,-110)">
-                <g filter="url(#bw-f)" fill="url(#bw-g)">
-                  <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
-                  <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z">
-                    <animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="3s" repeatCount="indefinite"/>
-                  </path>
-                  <g>
-                    <animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="2.4s" repeatCount="indefinite"/>
-                    <path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/>
-                  </g>
-                  <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
-                  <circle cx="64" cy="100" r="5" fill="#000"/>
-                </g>
-              </g>
+            <animateTransform attributeName="transform" type="scale" values="1 1;1 1;-1 1;-1 1;1 1;1 1" keyTimes="0;.45;.47;.91;.93;1" dur="20s" repeatCount="indefinite"/>
+            <g transform="scale(1.15) translate(-210,-110)" fill="url(#bw-g)">
+            <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
+            <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z"><animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="3s" repeatCount="indefinite"/></path>
+            <g><animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="2.4s" repeatCount="indefinite"/><path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/></g>
+            <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="64" cy="100" r="5" fill="#000"/>
             </g>
           </g>
-        </svg>
+        </g>
       </g>
       <g>
-        <animateTransform attributeName="transform" type="translate" values="-230 -170;0 -20;220 150;300 110;120 40;-120 -60;-280 -150;-230 -170" keyTimes="0;.22;.42;.5;.68;.86;.95;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1" dur="16s" begin="0s" repeatCount="indefinite"/>
-        <svg x="50%" y="50%" width="100%" height="100%" overflow="visible">
+        <animateTransform attributeName="transform" type="translate" values="570 280;800 430;1020 600;1100 560;920 490;680 390;520 300;570 280" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="16s" repeatCount="indefinite"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" values="14;12;6;-8;10;12;-6;14" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="16s" repeatCount="indefinite"/>
           <g>
-            <animateTransform attributeName="transform" type="rotate" values="14;12;6;-8;10;12;-6;14" keyTimes="0;.22;.42;.5;.68;.86;.95;1" dur="16s" begin="0s" repeatCount="indefinite"/>
-            <g>
-              <animateTransform attributeName="transform" type="scale" values="-1 1;1 1;-1 1" keyTimes="0;.46;.92" calcMode="discrete" dur="16s" begin="0s" repeatCount="indefinite"/>
-              <g transform="scale(0.8) translate(-210,-110)">
-                <g filter="url(#bw-f)" fill="url(#bw-g)">
-                  <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
-                  <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z">
-                    <animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="3s" repeatCount="indefinite"/>
-                  </path>
-                  <g>
-                    <animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="2.4s" repeatCount="indefinite"/>
-                    <path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/>
-                  </g>
-                  <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
-                  <circle cx="64" cy="100" r="5" fill="#000"/>
-                </g>
-              </g>
+            <animateTransform attributeName="transform" type="scale" values="-1 1;-1 1;1 1;1 1;-1 1;-1 1" keyTimes="0;.45;.47;.91;.93;1" dur="16s" repeatCount="indefinite"/>
+            <g transform="scale(0.75) translate(-210,-110)" fill="url(#bw-g)">
+            <path d="M10,104 C8,74 22,50 62,44 C132,34 222,44 290,72 C316,82 334,90 350,90 L356,106 C336,112 316,120 290,130 C230,152 160,160 100,158 C40,156 12,136 10,104 Z"/>
+            <path d="M112,146 C122,178 150,204 184,206 C180,190 162,166 142,148 Z"><animateTransform attributeName="transform" type="rotate" values="-5 120 148;9 120 148;-5 120 148" dur="3s" repeatCount="indefinite"/></path>
+            <g><animateTransform attributeName="transform" type="rotate" values="-14 352 98;10 352 98;-14 352 98" dur="2.4s" repeatCount="indefinite"/><path d="M346,92 C358,82 370,62 388,46 C398,40 412,42 406,54 C396,70 384,86 370,98 C388,102 406,108 416,118 C420,126 410,130 400,126 C384,118 366,112 348,108 Z"/></g>
+            <path d="M16,114 C60,128 112,130 156,120" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="64" cy="100" r="5" fill="#000"/>
             </g>
           </g>
-        </svg>
+        </g>
       </g>
     </mask>
   </defs>
-  <g mask="url(#bw-m)">
-    <rect width="100%" height="100%" fill="url(#bw-a)">
-      <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.45;.5;.95;1" dur="1.6s" repeatCount="indefinite"/>
-    </rect>
-    <rect width="100%" height="100%" fill="url(#bw-b)" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.45;.5;.95;1" dur="1.6s" repeatCount="indefinite"/>
-    </rect>
-  </g>
+  <rect x="0" y="0" width="1600" height="900" fill="url(#bw-a)" mask="url(#bw-m)"/>
 </svg>
 </div>
