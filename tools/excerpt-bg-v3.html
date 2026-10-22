@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>발췌기 배경 시안 3</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Archivo:wdth,wght@125,900&display=swap");
+/* ── 미리보기 페이지 전용 ── */
+body { margin: 0; padding: 32px 16px 64px; background: #e9ebee; font-family: "Geist", system-ui, sans-serif; color: #0f0f10; }
+h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13px; color: #6b6e76; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 32px 28px; max-width: 1400px; }
+.opt h2 { font-size: 14px; margin: 0 0 4px; } .opt p.d { margin: 0 0 10px; font-size: 12px; color: #8c8f98; }
+.card { position: relative; width: 100%; aspect-ratio: 1 / 1; box-shadow: 0 2px 14px rgba(30,40,60,.08); container-type: inline-size; }
+.card.narrow { width: 300px; margin-top: 14px; }
+.mock { position: absolute; inset: 0; z-index: 1; padding: 8.5% 8.5% 8%; display: grid; grid-template-columns: 1fr 26%; gap: 0 4.5%;
+  font: 400 clamp(7px, 1.75cqw, 13px)/1.85 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; color: #33353b; }
+.mock .tx { display: flex; flex-direction: column; gap: 1.2em; min-width: 0; }
+.mock .tx b { color: #1f2024; } .mock .tx small { margin-top: auto; font-size: .8em; color: #55575f; font-weight: 600; }
+.mock .img { background: #dfe3e8; border-radius: 4px; display: grid; place-items: center; font-size: 11px; color: #8c8f98; }
+.mock p { margin: 0; }
+
+/* ════════ 공통 ════════ */
+.bg, .top { position: absolute; inset: 0; pointer-events: none; overflow: hidden; container-type: size;
+  --ink: #0f0f10; --mid: #9b9b9f; --hair: #ececee; --ac: #c0d1dc; --e: 3.4cqmin; }
+.bg { z-index: 0; background: #ffffff; }
+.top { z-index: 2; }
+/* 리본 사진: 그림자 없음. 흰 바탕에서 새틴 결이 보이도록 밝기만 살짝 낮춰요 */
+.rb { position: absolute; display: block; filter: brightness(.9) contrast(1.08); }
+.top .s { position: absolute; font: 400 max(8px, 1.1cqmin)/1.35 "Geist", "Helvetica Neue", Arial, sans-serif; color: var(--ink); white-space: nowrap; }
+.top .m { position: absolute; font: 400 max(7px, .9cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--mid); white-space: nowrap; }
+.top .s span, .top .m span { color: var(--mid); }
+.top .ast { color: var(--ac); }
+.tl { left: var(--e); top: var(--e); } .tr { right: var(--e); top: var(--e); text-align: right; }
+.bl { left: var(--e); bottom: var(--e); } .br { right: var(--e); bottom: var(--e); text-align: right; }
+@container (max-width: 300px) { .top .hide-n { display: none; } }
+
+/* ── 1. 리본 드리프트 ── */
+.w1 .r1 { width: 74cqmin; left: -30cqmin; bottom: -36cqmin; transform: rotate(-24deg); }
+.w1 .r2 { width: 30cqmin; right: -11cqmin; top: -20cqmin; transform: rotate(-70deg); }
+.w1 .tk { position: absolute; left: 0; right: 0; bottom: 0; height: 3.4cqmin; min-height: 14px; border-top: 1px solid var(--hair); background: #fff;
+  display: flex; align-items: center; gap: 4cqmin; padding-left: var(--e); font: 400 max(6.5px, .85cqmin)/1 "Geist Mono", monospace; color: #c7c7cb; white-space: nowrap; overflow: hidden; }
+.w1 .tk b { font-weight: 400; color: var(--ink); } .w1 .tk i { font-style: normal; color: var(--ac); }
+
+/* ── 2. 에디토리얼 머리글 ── */
+.w2 .hd { position: absolute; left: var(--e); top: calc(var(--e) - .4cqmin); font: 400 max(13px, 3.2cqmin)/.92 "Geist", "Helvetica Neue", Arial, sans-serif; letter-spacing: -.055em; color: var(--ink); white-space: nowrap; }
+.w2 .hd em { font: italic 400 1em/.92 "Instrument Serif", "Times New Roman", serif; letter-spacing: -.02em; }
+.w2 .hd sup { font: 400 max(6px, .8cqmin)/1 "Geist Mono", monospace; letter-spacing: 0; color: var(--mid); vertical-align: 1.6em; margin-left: .3em; }
+.w2 .hd .ast { font-size: .5em; }
+.w2 .bw { width: 15cqmin; left: -1cqmin; bottom: -6cqmin; transform: rotate(-8deg); }
+.w2 .r1 { width: 40cqmin; right: -16cqmin; bottom: -22cqmin; transform: rotate(150deg); }
+
+/* ── 3. 헤어라인 프레임 ── */
+.w3 .fr { position: absolute; inset: 2.6cqmin; border: 1px solid var(--hair); }
+.w3 .cn { position: absolute; width: 1.8cqmin; height: 1.8cqmin; border: 0 solid var(--ink); }
+.w3 .cn.a { left: 2.6cqmin; top: 2.6cqmin; border-left-width: 1px; border-top-width: 1px; }
+.w3 .cn.b { right: 2.6cqmin; bottom: 2.6cqmin; border-right-width: 1px; border-bottom-width: 1px; }
+.w3 .r1 { width: 52cqmin; left: -24cqmin; top: -26cqmin; transform: rotate(190deg); }
+.w3 .top .s.tl, .w3 .top .m.br { background: #fff; padding: 0 .9cqmin; }
+.w3 .top .s.tl { left: 7cqmin; top: 2.6cqmin; transform: translateY(-50%); }
+.w3 .top .m.br { right: 7cqmin; bottom: 2.6cqmin; transform: translateY(50%); }
+.w3 .top .ast.big { position: absolute; right: 5cqmin; top: 4.6cqmin; font: 400 max(14px, 2.6cqmin)/1 "Geist", sans-serif; }
+
+/* ── 4. 포스터 하단 타이포 (굵고 납작하게) ── */
+.w4 .ln { position: absolute; left: 3cqmin; right: 0; top: 3cqmin; bottom: 4.6cqmin; border: 0 solid #2b2c31; border-left-width: 1px; border-top-width: 1px; }
+.w4 .ln::after { content: ""; position: absolute; left: -1px; bottom: 0; width: 6cqmin; height: 1px; background: #2b2c31; }
+.w4 .big { position: absolute; left: 6.6cqmin; bottom: 4.6cqmin; transform: translateY(50%) scaleY(.82); transform-origin: left center; padding: 0 1.4cqmin; background: #fff; white-space: nowrap;
+  font: 900 8.6cqmin/.86 "Archivo", "Arial Black", "Helvetica Neue", Impact, sans-serif; font-stretch: 125%; letter-spacing: -.01em; color: #2b2c31; }
+.w4 .big::after { content: ""; position: absolute; left: 100%; top: 50%; width: 100cqmin; height: 1px; background: #2b2c31; transform: scaleY(1.22); }
+.w4 .top .m.tr { right: 4.6cqmin; top: 1.4cqmin; }
+.w4 .top .s.tl2 { position: absolute; left: 6cqmin; top: 3cqmin; transform: translateY(-50%); padding: 0 .9cqmin; background: #fff; }
+
+/* ── 5. 위아래 가사 줄 ── */
+.w5 .tk { position: absolute; left: 0; right: 0; height: 3.4cqmin; min-height: 14px; display: flex; align-items: center; gap: 4cqmin; padding: 0 var(--e); background: #fff;
+  font: 400 max(6.5px, .85cqmin)/1 "Geist Mono", monospace; color: #c7c7cb; white-space: nowrap; overflow: hidden; }
+.w5 .tk.t { top: 0; border-bottom: 1px solid var(--hair); } .w5 .tk.b { bottom: 0; border-top: 1px solid var(--hair); justify-content: flex-end; }
+.w5 .tk b { font-weight: 400; color: var(--ink); } .w5 .tk i { font-style: normal; color: var(--ac); }
+.w5 .r2 { width: 26cqmin; left: -9cqmin; bottom: -10cqmin; transform: rotate(22deg); }
+.w5 .bw { width: 10cqmin; right: 1.5cqmin; top: -1cqmin; transform: rotate(14deg); }
+
+/* ── 6. 매듭 태그 ── */
+.w6 .tag { position: absolute; right: 6cqmin; top: 3cqmin; padding: .55em 1.2em; border: 1px solid #0f0f10; border-radius: 99px; background: #fff;
+  font: italic 400 max(10px, 1.6cqmin)/1 "Instrument Serif", "Times New Roman", serif; color: var(--ink); white-space: nowrap; }
+.w6 .tag sup { font: 400 max(6px, .75cqmin)/1 "Geist Mono", monospace; font-style: normal; color: var(--mid); margin-left: .35em; vertical-align: .6em; }
+.w6 .bw { width: 8.5cqmin; min-width: 30px; right: 3.2cqmin; top: 1.2cqmin; transform: rotate(-24deg); }
+.w6 .r1 { width: 58cqmin; left: -26cqmin; bottom: -30cqmin; transform: rotate(-60deg); }
+.w6 .hl { position: absolute; left: var(--e); right: 18cqmin; top: 4.1cqmin; height: 1px; background: var(--hair); }
+
+/* ── 7. 필기체 속삭임 ── */
+.w7 .sc { position: absolute; left: 2.6cqmin; bottom: -1.4cqmin; white-space: nowrap;
+  font: 400 max(20px, 6.4cqmin)/1 "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive; color: #d4d4d8; }
+.w7 .r2 { width: 34cqmin; right: -13cqmin; bottom: -24cqmin; transform: rotate(-35deg); }
+.w7 .r1 { width: 40cqmin; left: -20cqmin; top: -24cqmin; transform: rotate(160deg); }
+.w7 .top .m.tr span.n { color: var(--ink); }
+</style>
+</head>
+<body>
+<h1>발췌기 배경 시안 3 — 흰 바탕 + 리본</h1>
+<p class="lead">바탕은 전부 흰색이에요. 리본은 1·2번 사진(그림자 없음)을 그대로 img로 넣었어요. 왼쪽 글·오른쪽 세로 이미지는 미리보기용이고, 작은 카드는 좁은 화면일 때예요.</p>
+<div class="grid">
+  <section class="opt">
+    <h2>1. 리본 드리프트</h2><p class="d">흰 바탕에 1번 리본이 왼쪽 아래에서 크게 흘러 들어오고, 2번은 오른쪽 위에서 살짝. 맨 아래 얇은 가사 줄.</p>
+    <div class="card">
+      <div class="bg w1" aria-hidden="true"><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><div class="tk"><span>♪ Wet a flame — Syndrome</span><span>Set me free</span><b>Call my name again…</b><span>Who was I?</span><span>Tell me now</span><i>*</i><span>Was it love, or a mask?</span><span>Perfect scene, perfect lie</span></div></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w1" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="m tr hide-n">Excerpt · Log <span data-layer="top" class="ast">*</span></span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg w1" aria-hidden="true"><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><div class="tk"><span>♪ Wet a flame — Syndrome</span><span>Set me free</span><b>Call my name again…</b><span>Who was I?</span><span>Tell me now</span><i>*</i><span>Was it love, or a mask?</span><span>Perfect scene, perfect lie</span></div></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w1" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="m tr hide-n">Excerpt · Log <span data-layer="top" class="ast">*</span></span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>2. 에디토리얼 머리글</h2><p class="d">사이트 제목처럼 Geist + 이탤릭 세리프 섞은 머리글과 (00) 번호. 매듭 리본이 왼쪽 아래 귀퉁이에.</p>
+    <div class="card">
+      <div class="bg w2" aria-hidden="true"><img class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w2" data-layer="top" aria-hidden="true"><span data-layer="top" class="hd">Wet <em>a</em> Flame<sup>(00)</sup><span data-layer="top" class="ast">*</span></span><span data-layer="top" class="m tr hide-n">Syndrome & Lia</span><span data-layer="top" class="m br hide-n">(18) Extra</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg w2" aria-hidden="true"><img class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w2" data-layer="top" aria-hidden="true"><span data-layer="top" class="hd">Wet <em>a</em> Flame<sup>(00)</sup><span data-layer="top" class="ast">*</span></span><span data-layer="top" class="m tr hide-n">Syndrome & Lia</span><span data-layer="top" class="m br hide-n">(18) Extra</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>3. 헤어라인 프레임</h2><p class="d">아주 옅은 선 테두리와 검정 꺾쇠 두 개. 1번 리본이 왼쪽 위 귀퉁이를 감싸요.</p>
+    <div class="card">
+      <div class="bg w3" aria-hidden="true"><div class="fr"></div><i class="cn a"></i><i class="cn b"></i><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w3" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="m br">Wet a flame <span data-layer="top" class="ast">*</span></span><span data-layer="top" class="ast big hide-n">*</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg w3" aria-hidden="true"><div class="fr"></div><i class="cn a"></i><i class="cn b"></i><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w3" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="m br">Wet a flame <span data-layer="top" class="ast">*</span></span><span data-layer="top" class="ast big hide-n">*</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>4. 포스터 하단 타이포 (수정)</h2><p class="d">보내준 이미지처럼 아주 굵고 납작한 WET (A) FLAME이 아래 선에 걸쳐 있고, 선이 글자 양옆으로 이어져요.</p>
+    <div class="card">
+      <div class="bg w4" aria-hidden="true"><div class="ln"></div><div class="big">WET (A) FLAME</div></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w4" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl2">SYNDROME & LIA</span><span data-layer="top" class="m tr hide-n">Excerpt · Log</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg w4" aria-hidden="true"><div class="ln"></div><div class="big">WET (A) FLAME</div></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w4" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl2">SYNDROME & LIA</span><span data-layer="top" class="m tr hide-n">Excerpt · Log</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>5. 위아래 가사 줄</h2><p class="d">위아래로 얇은 가사 줄, 한 줄만 진하게. 2번 리본이 왼쪽 아래, 매듭이 오른쪽 위 줄에 걸려요.</p>
+    <div class="card">
+      <div class="bg w5" aria-hidden="true"><div class="tk t"><span>SYNDROME & LIA</span><span>(00)</span><span>Excerpt · Log</span><i>*</i></div><div class="tk b"><span>♪ Wet a flame — Syndrome</span><span>Set me free</span><b>Call my name again…</b><span>Who was I?</span><span>Tell me now</span><i>*</i><span>Was it love, or a mask?</span><span>Perfect scene, perfect lie</span></div><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><img class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w5" data-layer="top" aria-hidden="true"></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg w5" aria-hidden="true"><div class="tk t"><span>SYNDROME & LIA</span><span>(00)</span><span>Excerpt · Log</span><i>*</i></div><div class="tk b"><span>♪ Wet a flame — Syndrome</span><span>Set me free</span><b>Call my name again…</b><span>Who was I?</span><span>Tell me now</span><i>*</i><span>Was it love, or a mask?</span><span>Perfect scene, perfect lie</span></div><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><img class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w5" data-layer="top" aria-hidden="true"></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>6. 매듭 태그</h2><p class="d">오른쪽 위 알약 태그에 흰 매듭이 묶여 있고, 1번 리본이 왼쪽 아래에서 올라와요.</p>
+    <div class="card">
+      <div class="bg w6" aria-hidden="true"><i class="hl"></i><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w6" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="tag">Wet a flame<sup>(01)</sup></span><img data-layer="top" class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""><span data-layer="top" class="m br hide-n">Excerpt · Log <span data-layer="top" class="ast">*</span></span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg w6" aria-hidden="true"><i class="hl"></i><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w6" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="tag">Wet a flame<sup>(01)</sup></span><img data-layer="top" class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""><span data-layer="top" class="m br hide-n">Excerpt · Log <span data-layer="top" class="ast">*</span></span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>7. 필기체 속삭임</h2><p class="d">왼쪽 아래 여백에 옅은 필기체 wet a flame, 리본 두 개가 대각선 귀퉁이에서 흘러요.</p>
+    <div class="card">
+      <div class="bg w7" aria-hidden="true"><div class="sc">wet a flame</div><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w7" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="m tr hide-n">(02) <span data-layer="top" class="n">Excerpt</span> · Log <span data-layer="top" class="ast">*</span></span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg w7" aria-hidden="true"><div class="sc">wet a flame</div><img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top w7" data-layer="top" aria-hidden="true"><span data-layer="top" class="s tl">SYNDROME & LIA</span><span data-layer="top" class="m tr hide-n">(02) <span data-layer="top" class="n">Excerpt</span> · Log <span data-layer="top" class="ast">*</span></span></div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
