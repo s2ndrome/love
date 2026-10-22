@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>발췌기 배경 시안</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;800;900&family=Geist+Mono:wght@400;500&display=swap");
+
+/* ── 미리보기 페이지 전용 (실제 배경 코드에는 안 들어가요) ── */
+body { margin: 0; padding: 32px 16px 64px; background: #eceef1; font-family: "Inter", system-ui, sans-serif; color: #2b2c31; }
+h1 { font-size: 18px; margin: 0 0 4px; }
+.lead { margin: 0 0 28px; font-size: 13px; color: #6b6e76; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; max-width: 1400px; }
+.opt h2 { font-size: 14px; margin: 0 0 10px; }
+.opt h2 small { font-weight: 500; color: #8c8f98; margin-left: 6px; }
+.card { position: relative; width: 100%; aspect-ratio: 3 / 4; box-shadow: 0 2px 14px rgba(30,40,60,.08); }
+.card.narrow { width: 260px; margin-top: 14px; }
+/* 발췌기가 얹는 글과 이미지를 흉내 낸 것 */
+.mock { position: absolute; inset: 0; z-index: 1; padding: 14% 13%; display: flex; flex-direction: column; gap: 12px;
+  font: 400 13px/1.75 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; color: #33353b; }
+.mock .img { flex: 0 0 34%; background: #dfe3e8; display: grid; place-items: center; font-size: 11px; color: #8c8f98; }
+.mock p { margin: 0; }
+.mock b { color: #1f2024; }
+.narrow .mock { font-size: 11px; gap: 8px; }
+
+/* ════════ A. 리본끈 ════════ */
+.rb { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; container-type: size;
+  background: repeating-linear-gradient(135deg, rgba(159,179,196,.13) 0 1px, rgba(255,255,255,0) 1px 9px), #f5f7f9; }
+.rb .pn { position: absolute; inset: 6cqmin; background: #fefefe; border: 1px solid #d6dbe0; }
+.rb .pn::after { content: ""; position: absolute; inset: 1.1cqmin; border: 1px dashed #e2e7eb; }
+/* 여백 안에만 지나가는 리본끈 (가로 + 세로) */
+.rb .bd { position: absolute; background: linear-gradient(180deg, #d3e0e8, #c0d1dc 45%, #b3c7d4); }
+.rb .bd.h { left: 0; right: 0; top: 2.1cqmin; height: 1.7cqmin; min-height: 6px; }
+.rb .bd.v { top: 0; bottom: 0; left: 2.1cqmin; width: 1.7cqmin; min-width: 6px; background: linear-gradient(90deg, #d3e0e8, #c0d1dc 45%, #b3c7d4); }
+.rb .bd::before { content: ""; position: absolute; inset: 0; border: 0 solid rgba(255,255,255,.75); }
+.rb .bd.h::before { border-top-width: 1px; border-bottom-width: 1px; top: 22%; bottom: 22%; }
+.rb .bd.v::before { border-left-width: 1px; border-right-width: 1px; left: 22%; right: 22%; }
+
+.rb-top { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; container-type: size; }
+/* 리본 매듭 — 가로 끈 위, 왼쪽 위 */
+.rb-top .bow { position: absolute; left: 16cqmin; top: 2.95cqmin; width: 0; height: 0; }
+.rb-top .bow i { position: absolute; display: block; }
+.rb-top .bow .lp { width: 8.4cqmin; height: 5.4cqmin; min-width: 22px; min-height: 14px; top: 0; border: 1.5px solid #9fb3c4; background: #d6e2ea; }
+.rb-top .bow .lp.l { right: 0; border-radius: 60% 25% 25% 60% / 70% 40% 40% 70%; transform: translateY(-50%) rotate(-12deg); transform-origin: right center; }
+.rb-top .bow .lp.r { left: 0; border-radius: 25% 60% 60% 25% / 40% 70% 70% 40%; transform: translateY(-50%) rotate(12deg); transform-origin: left center; }
+.rb-top .bow .lp::after { content: ""; position: absolute; top: 28%; bottom: 28%; width: 45%; border: 0 solid #b3c7d4; }
+.rb-top .bow .lp.l::after { right: 8%; border-top-width: 1px; border-bottom-width: 1px; border-radius: 50% 0 0 50%; }
+.rb-top .bow .lp.r::after { left: 8%; border-top-width: 1px; border-bottom-width: 1px; border-radius: 0 50% 50% 0; }
+.rb-top .bow .tl { width: 2.2cqmin; min-width: 6px; height: 6.4cqmin; min-height: 16px; top: 0; background: #c0d1dc; border: 1.5px solid #9fb3c4; border-top: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%); }
+.rb-top .bow .tl.l { right: -.2cqmin; transform: rotate(24deg); transform-origin: top center; }
+.rb-top .bow .tl.r { left: -.2cqmin; transform: rotate(-24deg); transform-origin: top center; }
+.rb-top .bow .kn { width: 3cqmin; height: 3.2cqmin; min-width: 8px; min-height: 9px; left: 0; top: 0; transform: translate(-50%, -50%);
+  background: #c0d1dc; border: 1.5px solid #9fb3c4; border-radius: 30%; }
+/* 테두리 선에 걸친 리본 태그 */
+.rb-top .tag { position: absolute; display: inline-flex; align-items: center; gap: .6em; padding: .55em 1.5em .55em 1em;
+  font: 400 max(8px, 1.05cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; white-space: nowrap;
+  color: #5d6a76; background: #e9f0f4; border: 1px solid #c0d1dc; clip-path: polygon(0 0, 100% 0, calc(100% - .8em) 50%, 100% 100%, 0 100%); }
+.rb-top .tag b { font: 800 max(9px, 1.2cqmin)/1 "Inter", sans-serif; letter-spacing: -.01em; text-transform: none; color: #2b2c31; }
+.rb-top .tag.a { right: 9cqmin; bottom: 6cqmin; transform: translateY(50%); }
+.rb-top .tag.b { right: 9cqmin; top: 6cqmin; transform: translateY(-50%); background: #fefefe; }
+.rb-top .st { position: absolute; left: 6cqmin; bottom: 6cqmin; transform: translate(-50%, 50%); padding: .2em; background: #f5f7f9;
+  font: 400 max(13px, 2.2cqmin)/1 "Inter", sans-serif; color: #9fb3c4; }
+@container (max-width: 380px) { .rb-top .tag.b { display: none; } .rb-top .tag.a i { display: none; } }
+
+/* ════════ B. 포트폴리오st ════════ */
+.pf { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; container-type: size;
+  background:
+    linear-gradient(90deg, rgba(150,160,175,.10) 1px, transparent 1px) 0 0 / 3cqmin 3cqmin,
+    linear-gradient(0deg, rgba(150,160,175,.10) 1px, transparent 1px) 0 0 / 3cqmin 3cqmin,
+    #f7f8f9; }
+.pf .pn { position: absolute; top: 7cqmin; right: 6cqmin; bottom: 7cqmin; left: 10cqmin; background: #fefefe; border: 1px solid #d6dbe0; }
+/* 위쪽 눈금자 */
+.pf .ru { position: absolute; left: 10cqmin; right: 6cqmin; top: 3.4cqmin; height: 1.4cqmin; min-height: 5px;
+  background: repeating-linear-gradient(90deg, #b9c0c8 0 1px, transparent 1px 2cqmin); border-bottom: 1px solid #b9c0c8; }
+.pf .ru::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, #8f98a3 0 1px, transparent 1px 10cqmin); }
+/* 왼쪽 인덱스 칸 */
+.pf .ix { position: absolute; left: 5cqmin; top: 50%; transform: translate(-50%, -50%) rotate(180deg); writing-mode: vertical-rl;
+  font: 400 max(7.5px, .95cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .34em; color: #a3a6ae; white-space: nowrap; }
+/* 네 귀퉁이 맞춤 표시 (+) */
+.pf .rg { position: absolute; width: 2.6cqmin; height: 2.6cqmin; min-width: 9px; min-height: 9px; transform: translate(-50%, -50%);
+  background: linear-gradient(#9fa7b1, #9fa7b1) center / 100% 1px no-repeat, linear-gradient(#9fa7b1, #9fa7b1) center / 1px 100% no-repeat; }
+.pf .rg::after { content: ""; position: absolute; inset: 28%; border: 1px solid #9fa7b1; border-radius: 50%; }
+
+.pf-top { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; container-type: size; }
+.pf-top .t { position: absolute; padding: 0 1.1cqmin; background: #fefefe; white-space: nowrap;
+  font: 400 max(8px, 1cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .18em; text-transform: uppercase; color: #8c8f98; }
+.pf-top .t b { font: 800 max(9px, 1.25cqmin)/1 "Inter", sans-serif; letter-spacing: -.02em; text-transform: none; color: #2b2c31; margin-right: .7em; }
+.pf-top .t.a { left: 13cqmin; top: 7cqmin; transform: translateY(-50%); }
+.pf-top .t.c { left: 13cqmin; bottom: 7cqmin; transform: translateY(50%); }
+.pf-top .t.d { right: 9cqmin; bottom: 7cqmin; transform: translateY(50%); color: #2b2c31; }
+.pf-top .chip { position: absolute; right: 9cqmin; top: 7cqmin; transform: translateY(-50%); padding: .6em .9em; background: #2b2c31; color: #f4f6f8;
+  font: 500 max(8px, 1cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .14em; white-space: nowrap; }
+.pf-top .chip i { font-style: normal; color: #c0d1dc; }
+.pf-top .sq { position: absolute; left: 10cqmin; top: 7cqmin; width: 1.6cqmin; height: 1.6cqmin; min-width: 6px; min-height: 6px; transform: translate(-50%, -50%); background: #c0d1dc; }
+@container (max-width: 380px) { .pf-top .t.c { display: none; } .pf-top .t.a span { display: none; } }
+
+/* ════════ C. 포스터형 ════════ */
+.ps { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; container-type: size;
+  background: radial-gradient(circle, rgba(255,255,255,.55) 22%, transparent 24%) 0 0 / 1.4cqmin 1.4cqmin, #dce6ed; }
+.ps .pn { position: absolute; top: 8cqmin; right: 5cqmin; bottom: 13cqmin; left: 5cqmin; background: #fdfefe; }
+.ps .pn::after { content: ""; position: absolute; inset: -1.4cqmin; border: 1px solid #b7c9d6; }
+/* 아래 여백에만 들어가는 큰 글씨 (아래로 살짝 잘려요) */
+.ps .big { position: absolute; left: 4.4cqmin; right: 0; bottom: -1.2cqmin; white-space: nowrap;
+  font: 900 11.5cqmin/.8 "Inter", "Arial Black", "Helvetica Neue", sans-serif; letter-spacing: -.06em; color: #c7d7e2; }
+.ps .big i { font-style: normal; color: #f1f5f8; }
+/* 위 여백 머리글 */
+.ps .hd { position: absolute; left: 5cqmin; right: 5cqmin; top: 3.2cqmin; display: flex; justify-content: space-between; white-space: nowrap;
+  font: 500 max(7.5px, .95cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .22em; text-transform: uppercase; color: #6f8494; }
+.ps .hd span + span::before { content: "— "; color: #a3b7c5; }
+
+.ps-top { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; container-type: size; }
+.ps-top .pill { position: absolute; left: 9cqmin; top: 6.6cqmin; transform: translateY(-50%); padding: .55em 1.1em; border-radius: 99px; background: #2b2c31; color: #fff;
+  font: 800 max(9px, 1.2cqmin)/1 "Inter", sans-serif; letter-spacing: -.01em; white-space: nowrap; }
+.ps-top .pill i { font-style: normal; color: #c0d1dc; margin: 0 .25em; }
+.ps-top .bc { position: absolute; right: 9cqmin; top: 6.6cqmin; transform: translateY(-50%); display: flex; align-items: center; gap: .8em; padding: .4em .8em;
+  background: #fdfefe; border: 1px solid #b7c9d6; font: 400 max(7.5px, .9cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .16em; color: #6f8494; }
+.ps-top .bc s { display: block; width: 6cqmin; min-width: 22px; height: 1.6cqmin; min-height: 7px;
+  background: repeating-linear-gradient(90deg, #2b2c31 0 1px, transparent 1px 2px, #2b2c31 2px 4px, transparent 4px 5px, #2b2c31 5px 6px, transparent 6px 8px); }
+.ps-top .st { position: absolute; right: 5cqmin; bottom: 13cqmin; transform: translate(50%, 50%); font: 900 max(18px, 3.6cqmin)/1 "Inter", sans-serif; color: #9fb3c4; }
+@container (max-width: 380px) { .ps .hd span:nth-child(2) { display: none; } .ps-top .bc span { display: none; } }
+</style>
+</head>
+<body>
+<h1>발췌기 배경 시안 — SYNDROME ୨୧ LIA 톤</h1>
+<p class="lead">가운데 글·회색 칸은 발췌기 내용을 흉내 낸 것이에요. 마음에 드는 걸 고르면 붙여넣기용 파일로 만들어 드릴게요. 아래 작은 카드는 좁은 화면일 때 모습이에요.</p>
+
+<div class="grid">
+
+  <!-- A -->
+  <section class="opt">
+    <h2>A. 리본끈 <small>여백에만 지나가는 리본 + 매듭, 테두리 위 리본 태그</small></h2>
+    <div class="card">
+      <div class="rb" aria-hidden="true"><i class="bd h"></i><i class="bd v"></i><div class="pn"></div></div>
+      <div class="mock"><div class="img">이미지 자리</div><p><b>“그러니까 끝까지 같이 가.”</b></p><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다. 손끝에 남은 온기가 오래도록 사라지지 않았다.</p></div>
+      <div class="rb-top" data-layer="top" aria-hidden="true">
+        <span class="bow" data-layer="top"><i class="tl l"></i><i class="tl r"></i><i class="lp l"></i><i class="lp r"></i><i class="kn"></i></span>
+        <span class="tag b" data-layer="top">with love</span>
+        <span class="tag a" data-layer="top"><b>SYNDROME ୨୧ LIA</b><i>Arch · Pyre</i></span>
+        <span class="st" data-layer="top">*</span>
+      </div>
+    </div>
+    <div class="card narrow">
+      <div class="rb" aria-hidden="true"><i class="bd h"></i><i class="bd v"></i><div class="pn"></div></div>
+      <div class="mock"><div class="img">이미지 자리</div><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다.</p></div>
+      <div class="rb-top" data-layer="top" aria-hidden="true">
+        <span class="bow" data-layer="top"><i class="tl l"></i><i class="tl r"></i><i class="lp l"></i><i class="lp r"></i><i class="kn"></i></span>
+        <span class="tag b" data-layer="top">with love</span>
+        <span class="tag a" data-layer="top"><b>SYNDROME ୨୧ LIA</b><i>Arch · Pyre</i></span>
+        <span class="st" data-layer="top">*</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="opt">
+    <h2>B. 포트폴리오st <small>모눈 여백, 눈금자, 맞춤 표시, 번호 칩</small></h2>
+    <div class="card">
+      <div class="pf" aria-hidden="true">
+        <div class="pn"></div><i class="ru"></i>
+        <span class="ix">PORTFOLIO — ARCH · PYRE SENTINEL ୨୧ AQUA GUIDE</span>
+        <i class="rg" style="left:3cqmin;top:3cqmin"></i><i class="rg" style="right:0;left:auto;top:3cqmin;transform:translate(-50%,-50%);margin-right:.4cqmin"></i>
+        <i class="rg" style="left:3cqmin;bottom:0;top:auto;transform:translate(-50%,-50%)"></i><i class="rg" style="right:0;bottom:0;transform:translate(-50%,-50%);margin-right:.4cqmin"></i>
+      </div>
+      <div class="mock" style="padding-left:16%"><div class="img">이미지 자리</div><p><b>“그러니까 끝까지 같이 가.”</b></p><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다. 손끝에 남은 온기가 오래도록 사라지지 않았다.</p></div>
+      <div class="pf-top" data-layer="top" aria-hidden="true">
+        <i class="sq" data-layer="top"></i>
+        <span class="t a" data-layer="top"><b>SYNDROME ୨୧ LIA</b><span>Selected Excerpts</span></span>
+        <span class="chip" data-layer="top">NO.<i>017</i></span>
+        <span class="t c" data-layer="top">Index 01 — 24</span>
+        <span class="t d" data-layer="top">P. 01</span>
+      </div>
+    </div>
+    <div class="card narrow">
+      <div class="pf" aria-hidden="true">
+        <div class="pn"></div><i class="ru"></i>
+        <span class="ix">PORTFOLIO — ARCH · PYRE</span>
+      </div>
+      <div class="mock" style="padding-left:16%"><div class="img">이미지 자리</div><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다.</p></div>
+      <div class="pf-top" data-layer="top" aria-hidden="true">
+        <i class="sq" data-layer="top"></i>
+        <span class="t a" data-layer="top"><b>SYNDROME ୨୧ LIA</b><span>Selected Excerpts</span></span>
+        <span class="chip" data-layer="top">NO.<i>017</i></span>
+        <span class="t c" data-layer="top">Index 01 — 24</span>
+        <span class="t d" data-layer="top">P. 01</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="opt">
+    <h2>C. 포스터형 <small>하늘색 망점 바탕, 아래 여백 큰 타이포, 알약 태그·바코드</small></h2>
+    <div class="card">
+      <div class="ps" aria-hidden="true">
+        <div class="hd"><span>Vol. 01</span><span>Poster Series 2026</span><span>Arch · Pyre</span></div>
+        <div class="pn"></div>
+        <div class="big">SYNDROME<i>*</i>LIA</div>
+      </div>
+      <div class="mock" style="padding:15% 12% 20%"><div class="img">이미지 자리</div><p><b>“그러니까 끝까지 같이 가.”</b></p><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다. 손끝에 남은 온기가 오래도록 사라지지 않았다.</p></div>
+      <div class="ps-top" data-layer="top" aria-hidden="true">
+        <span class="pill" data-layer="top">ARCH<i>୨୧</i>PYRE</span>
+        <span class="bc" data-layer="top"><s></s><span>EXCERPT · 017</span></span>
+        <span class="st" data-layer="top">*</span>
+      </div>
+    </div>
+    <div class="card narrow">
+      <div class="ps" aria-hidden="true">
+        <div class="hd"><span>Vol. 01</span><span>Poster Series 2026</span><span>Arch · Pyre</span></div>
+        <div class="pn"></div>
+        <div class="big">SYNDROME<i>*</i>LIA</div>
+      </div>
+      <div class="mock" style="padding:15% 12% 20%"><div class="img">이미지 자리</div><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다.</p></div>
+      <div class="ps-top" data-layer="top" aria-hidden="true">
+        <span class="pill" data-layer="top">ARCH<i>୨୧</i>PYRE</span>
+        <span class="bc" data-layer="top"><s></s><span>EXCERPT · 017</span></span>
+        <span class="st" data-layer="top">*</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
