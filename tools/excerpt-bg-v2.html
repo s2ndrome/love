@@ -47,7 +47,7 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
 .snt .st { position: absolute; right: calc(var(--fi) + 2.2cqmin); top: calc(var(--fi) + 1.8cqmin); font: 400 max(14px, 2.4cqmin)/1 "Inter", sans-serif; color: var(--ac); }
 .snt .hrt { width: .95em; height: .85em; vertical-align: -.08em; margin: 0 .04em; }
 /* 리본 사진 (배경이 투명한 PNG) */
-.snf .rb { position: absolute; display: block; }
+.snf .rb, .snt .rb { position: absolute; display: block; }
 /* 리본 시안: 여백에만 옅은 톤, 글 뒤 판은 원본 바탕 그대로. 리본은 판 뒤로 끼워져 여백에서만 보여요 */
 .tuck.snf { background: var(--mg, #d8dfe6); }
 .tuck .pn { position: absolute; inset: var(--fi); background: repeating-linear-gradient(180deg, rgba(120,130,145,.035) 0 1px, rgba(255,255,255,0) 1px 4px), var(--bg); }
@@ -55,14 +55,14 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
 
 /* ── 1. 끼운 리본 ── */
 .v1 { --fi: 5.6cqmin; }
-.v1 .r1 { width: 50cqmin; right: -22cqmin; top: -14cqmin; transform: rotate(-120deg); }
-.v1 .bw { width: 15cqmin; left: -2.5cqmin; bottom: -3cqmin; transform: rotate(200deg); }
+.v1 .t1, .v7 .t1 { width: 34cqmin; right: -9cqmin; top: -10cqmin; transform: rotate(-100deg); }
+.v1 .tb, .v7 .tb { width: 11cqmin; left: -1cqmin; bottom: -4.5cqmin; transform: rotate(-12deg); }
 .v1.snt .t, .v1.snt .v, .v1.snt .dots { --lb: var(--bg); }
 
 /* ── 2. 이중선 + 흐르는 리본 ── */
 .v2 { --fi: 5.6cqmin; }
 .v2 .fr2 { position: absolute; inset: calc(var(--fi) + 1.3cqmin); border: 1px solid #e7eaed; }
-.v2 .r2 { width: 34cqmin; left: -16cqmin; top: 14cqmin; transform: rotate(-8deg); }
+.v2 .t2 { width: 20cqmin; left: -6.5cqmin; bottom: -9cqmin; transform: rotate(-6deg); }
 .v2.snt .dots { left: auto; right: var(--fi); transform: translate(50%, -50%); }
 
 /* ── 3. 스펙 시트 ── */
@@ -104,8 +104,6 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
 .v7.snf { background: repeating-linear-gradient(180deg, rgba(255,255,255,.035) 0 1px, rgba(255,255,255,0) 1px 4px), #2b2c31; }
 .v7 .fr { border-color: #6c7480; }
 .v7 .c { border-color: var(--ac); }
-.v7 .r1 { width: 46cqmin; right: -18cqmin; top: -16cqmin; transform: rotate(-110deg); }
-.v7 .r2 { width: 30cqmin; left: -13cqmin; bottom: -24cqmin; transform: rotate(20deg); }
 .v7.snt .t { border: 1px solid #6c7480; padding: .45em 1.1em; border-radius: 99px; }
 .v7.snt .t.b, .v7.snt .t.d { background: #2b2c31; color: #c9d2d9; border-color: #2b2c31; }
 .v7.snt .v { color: #8f97a1; background: #2b2c31; }
@@ -117,10 +115,10 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
 <p class="lead">바탕·테두리·꺾쇠·선 위 라벨은 처음 파일 그대로고, 각 시안은 한 가지씩만 더했어요. 왼쪽 글·오른쪽 세로 이미지는 발췌기 결과물 배치를 흉내 낸 미리보기예요. 작은 카드는 좁은 화면일 때예요.</p>
 <div class="grid">
   <section class="opt">
-    <h2>1. 끼운 리본</h2><p class="d">여백만 옅은 회청색. 1번 리본이 오른쪽 위, 매듭은 왼쪽 아래에서 글 판 뒤로 끼워져 있어요.</p>
+    <h2>1. 코너 리본</h2><p class="d">여백만 옅은 회청색. 1번 리본이 오른쪽 위 꺾쇠에 걸치고, 매듭이 왼쪽 아래 꺾쇠에 묶여 있어요.</p>
     <div class="card">
       <div class="snf v1 tuck" aria-hidden="true">
-        <img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""><div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+        <div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
       </div>
       <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
       <div class="snt v1 tuck" data-layer="top" aria-hidden="true">
@@ -131,11 +129,12 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
         <span class="v hide-n" data-layer="top">WET A FLAME — SYNDROME & LIA</span>
         <span class="dots" data-layer="top"><s></s><s></s><s></s><s></s></span>
         <span class="st" data-layer="top">*</span>
+        <img class="rb t1" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb tb" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt="">
       </div>
     </div>
     <div class="card narrow">
       <div class="snf v1 tuck" aria-hidden="true">
-        <img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb bw" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt=""><div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+        <div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
       </div>
       <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
       <div class="snt v1 tuck" data-layer="top" aria-hidden="true">
@@ -146,18 +145,19 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
         <span class="v hide-n" data-layer="top">WET A FLAME — SYNDROME & LIA</span>
         <span class="dots" data-layer="top"><s></s><s></s><s></s><s></s></span>
         <span class="st" data-layer="top">*</span>
+        <img class="rb t1" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb tb" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt="">
       </div>
     </div>
   </section>
   <section class="opt">
-    <h2>2. 이중선 + 흐르는 리본</h2><p class="d">안쪽에 옅은 선을 하나 더. 2번 리본이 왼쪽 여백을 따라 판 뒤로 흘러요.</p>
+    <h2>2. 이중선 + 흐르는 리본</h2><p class="d">안쪽에 옅은 선을 하나 더. 2번 매듭 리본이 왼쪽 아래 꺾쇠에 걸쳐 있어요.</p>
     <div class="card">
       <div class="snf v2 tuck" aria-hidden="true">
-        <img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><div class="pn"></div><div class="fr"></div><div class="fr2"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+        <div class="pn"></div><div class="fr"></div><div class="fr2"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
       </div>
       <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
       <div class="snt v2 tuck" data-layer="top" aria-hidden="true">
-        <span class="t a" data-layer="top"><b>SYNDROME & LIA</b></span>
+        <img class="rb t2" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><span class="t a" data-layer="top"><b>SYNDROME & LIA</b></span>
         <span class="t b hide-n" data-layer="top">Excerpt <i>*</i> Log</span>
         <span class="t c2" data-layer="top">Wet a flame<i> ♡</i></span>
         <span class="t d hide-n" data-layer="top">End of transmission</span>
@@ -168,11 +168,11 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
     </div>
     <div class="card narrow">
       <div class="snf v2 tuck" aria-hidden="true">
-        <img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><div class="pn"></div><div class="fr"></div><div class="fr2"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+        <div class="pn"></div><div class="fr"></div><div class="fr2"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
       </div>
       <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
       <div class="snt v2 tuck" data-layer="top" aria-hidden="true">
-        <span class="t a" data-layer="top"><b>SYNDROME & LIA</b></span>
+        <img class="rb t2" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><span class="t a" data-layer="top"><b>SYNDROME & LIA</b></span>
         <span class="t b hide-n" data-layer="top">Excerpt <i>*</i> Log</span>
         <span class="t c2" data-layer="top">Wet a flame<i> ♡</i></span>
         <span class="t d hide-n" data-layer="top">End of transmission</span>
@@ -611,10 +611,10 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
     </div>
   </section>
   <section class="opt">
-    <h2>7. 나이트 프레임</h2><p class="d">여백만 짙게. 흰 리본 두 개가 어두운 여백에서 판 뒤로 끼워져요. 판은 원본처럼 밝게.</p>
+    <h2>7. 나이트 프레임</h2><p class="d">여백만 짙게. 1번처럼 리본이 두 귀퉁이에 걸쳐 있고, 판은 원본처럼 밝게.</p>
     <div class="card">
       <div class="snf v7 tuck" aria-hidden="true">
-        <img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+        <div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
       </div>
       <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
       <div class="snt v7 tuck" data-layer="top" aria-hidden="true">
@@ -625,11 +625,12 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
         <span class="v hide-n" data-layer="top">WET A FLAME — SYNDROME & LIA</span>
         <span class="dots" data-layer="top"><s></s><s></s><s></s><s></s></span>
         <span class="st" data-layer="top">*</span>
+        <img class="rb t1" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb tb" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt="">
       </div>
     </div>
     <div class="card narrow">
       <div class="snf v7 tuck" aria-hidden="true">
-        <img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb r2" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-2.png" alt=""><div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+        <div class="pn"></div><div class="fr"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
       </div>
       <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
       <div class="snt v7 tuck" data-layer="top" aria-hidden="true">
@@ -640,6 +641,7 @@ h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13
         <span class="v hide-n" data-layer="top">WET A FLAME — SYNDROME & LIA</span>
         <span class="dots" data-layer="top"><s></s><s></s><s></s><s></s></span>
         <span class="st" data-layer="top">*</span>
+        <img class="rb t1" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt=""><img class="rb tb" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt="">
       </div>
     </div>
   </section>
