@@ -1,0 +1,42 @@
+<!-- SYNDROME & LIA — 발췌기 배경 A. 에디토리얼 포스터 (스크립트 없음, 통째로 붙여넣기) -->
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@1&family=Archivo:wdth,wght@125,900&display=swap");
+html, body { height: 100%; margin: 0; }
+.wf-bg, .wf-top { position: absolute; inset: 0; pointer-events: none; overflow: hidden; container-type: size; }
+.wf-bg { z-index: 0; background: #ffffff; }
+.wf-top { z-index: 2; }
+
+/* 위 선 + 왼쪽 세로선 + 아래 선 */
+.wf-bg .ln { position: absolute; left: 3.2cqmin; right: 0; top: 3.6cqmin; bottom: 4.8cqmin; border: 0 solid #2b2c31; border-left-width: 1px; border-top-width: 1px; }
+.wf-bg .ln::after { content: ""; position: absolute; left: -1px; bottom: 0; width: 5cqmin; height: 1px; background: #2b2c31; }
+/* 아래 선에 걸친 굵은 WET (A) FLAME */
+.wf-bg .hv { position: absolute; left: 6.2cqmin; bottom: 4.8cqmin; transform: translateY(50%) scaleY(.82); transform-origin: left center; padding: 0 1.4cqmin; background: #ffffff; white-space: nowrap;
+  font: 900 8.6cqmin/.86 "Archivo", "Arial Black", "Helvetica Neue", Impact, sans-serif; font-stretch: 125%; letter-spacing: -.01em; color: #2b2c31; }
+.wf-bg .hv::after { content: ""; position: absolute; left: 100%; top: 50%; width: 100cqmin; height: 1px; background: #2b2c31; transform: scaleY(1.22); }
+/* 리본 사진 (그림자 없음, 흰 바탕에서 결이 보이게 밝기만 살짝 낮춤) */
+.wf-bg .rb, .wf-top .rb { position: absolute; display: block; filter: brightness(.9) contrast(1.08); }
+.wf-bg .r1 { width: 46cqmin; right: -17cqmin; top: -26cqmin; transform: rotate(-80deg); }
+
+/* 위 층: 위 선에 얹힌 머리글, 오른쪽 위 작은 글씨, 세로선 끝 매듭 */
+.wf-top .ed { position: absolute; left: 6cqmin; top: 3.6cqmin; transform: translateY(-55%); padding: 0 1cqmin; background: #ffffff; white-space: nowrap;
+  font: 400 max(13px, 3.2cqmin)/.92 "Geist", "Helvetica Neue", Arial, sans-serif; letter-spacing: -.055em; color: #0f0f10; }
+.wf-top .ed em { font: italic 400 1em/.92 "Instrument Serif", "Times New Roman", serif; letter-spacing: -.02em; }
+.wf-top .ed sup { font: 400 max(6px, .8cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: 0; color: #9b9b9f; vertical-align: 1.6em; margin-left: .3em; }
+.wf-top .ed .ast { font-size: .5em; color: #c0d1dc; }
+.wf-top .m { position: absolute; right: 3.4cqmin; top: 1.2cqmin; white-space: nowrap;
+  font: 400 max(7px, .9cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: #9b9b9f; }
+.wf-top .bw { width: 9cqmin; min-width: 28px; left: -1.2cqmin; bottom: 1cqmin; transform: rotate(-14deg); }
+
+/* 좁은 화면: 작은 글씨 숨김 */
+@container (max-width: 300px) { .wf-top .m { display: none; } }
+</style>
+<div class="wf-bg" aria-hidden="true">
+  <div class="ln"></div>
+  <div class="hv">WET (A) FLAME</div>
+  <img class="rb r1" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-1.png" alt="">
+</div>
+<div class="wf-top" data-layer="top" aria-hidden="true">
+  <span class="ed" data-layer="top">Syndrome <em>&amp;</em> Lia<sup>(00)</sup><span class="ast">*</span></span>
+  <span class="m" data-layer="top">Excerpt · Log</span>
+  <img class="rb bw" data-layer="top" src="https://raw.githubusercontent.com/s2ndrome/love/claude/dreamy-bardeen-gvhmuu/img/ribbon-bow.png" alt="">
+</div>
