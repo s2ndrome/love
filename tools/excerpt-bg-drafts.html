@@ -127,8 +127,10 @@ h1 { font-size: 18px; margin: 0 0 4px; }
 /* 아스키 아트: 화면을 덮도록 커지고, 가운데 판에 가려져 가장자리에만 보여요 */
 .dm pre { position: absolute; left: 50%; top: 50%; margin: 0; transform: translate(-50%, -50%); white-space: pre; letter-spacing: 0;
   font: 400 max(calc(100cqw / 54), calc(100cqh / 80))/1 "Geist Mono", "DejaVu Sans Mono", "Courier New", monospace; color: #e4e4e4; }
-/* 배경이 비치는 흰 새틴 리본 (그림 파일 없이 SVG로 그려요) */
-.dm svg.rib { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .88; }
+/* 흰 새틴 리본 사진 (배경이 투명한 PNG) */
+.dm .rib { position: absolute; display: block; opacity: .92; }
+.dm .rib.r1 { width: 62cqmin; left: -20cqmin; top: -16cqmin; transform: rotate(-18deg); }
+.dm .rib.r2 { width: 44cqmin; right: -14cqmin; bottom: -16cqmin; transform: rotate(8deg); }
 .dm .cd { position: absolute; top: 16cqmin; right: 7cqmin; bottom: 14cqmin; left: 7cqmin; background: #fbfbfb; border-radius: 1.6cqmin; box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
 .dm .cd::after { content: ""; position: absolute; inset: 3.4cqmin 2.2cqmin 3.6cqmin; border: 1px solid #a9a9ad; border-radius: 1.8cqmin; }
 /* 큰 제목형: 판 위쪽 띠에만 큰 글씨, 안쪽 틀은 그 아래부터 */
@@ -159,8 +161,8 @@ h1 { font-size: 18px; margin: 0 0 4px; }
 .ev .sw { position: absolute; white-space: nowrap; font: 400 100cqmin/.8 "Pinyon Script", "Snell Roundhand", "Apple Chancery", "URW Chancery L", cursive; }
 .ev .sw.a { right: -20cqmin; top: -10cqmin; font-size: 118cqmin; color: rgba(40,40,40,.16); }
 .ev .sw.b { left: -12cqmin; bottom: -34cqmin; font-size: 84cqmin; color: transparent; -webkit-text-stroke: 1.2px rgba(40,40,40,.32); }
-/* 리본 사진: 흰 바탕 사진이라 곱하기로 겹쳐서 흰 부분을 투명하게 해요 */
-.ev .rbn { position: absolute; display: block; mix-blend-mode: multiply; filter: contrast(1.35) brightness(.97); }
+/* 리본 사진 (배경이 투명한 PNG). 흰 바탕 위라 옅은 그림자로 윤곽만 살려요 */
+.ev .rbn { position: absolute; display: block; filter: drop-shadow(0 .3cqmin .5cqmin rgba(0,0,0,.14)); }
 .ev .rbn.r1 { width: 66cqmin; left: -22cqmin; top: -18cqmin; transform: rotate(-28deg); }
 .ev .rbn.r2 { width: 58cqmin; right: -20cqmin; bottom: -26cqmin; transform: rotate(150deg); }
 /* 글 뒤 판: 바탕과 거의 같은 흰색, 가장자리를 부드럽게 번지게 */
@@ -194,9 +196,8 @@ h1 { font-size: 18px; margin: 0 0 4px; }
     <div class="card">
       <div class="ev" aria-hidden="true">
         <span class="sw a">S</span><span class="sw b">L</span>
-        <!-- 리본 사진: src를 1번·2번 리본 이미지 주소로 바꿔 주세요 (지금은 사이트에 있는 img/ribbon.jpg로 미리보기) -->
-        <img class="rbn r1" src="../img/ribbon.jpg" alt="">
-        <img class="rbn r2" src="../img/ribbon.jpg" alt="">
+                <img class="rbn r1" src="../img/ribbon-1.png" alt="">
+        <img class="rbn r2" src="../img/ribbon-2.png" alt="">
         <div class="pn"></div>
       </div>
       <div class="mock" style="padding:19% 16%"><div class="img">이미지 자리</div><p><b>“그러니까 끝까지 같이 가.”</b></p><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다. 손끝에 남은 온기가 오래도록 사라지지 않았다.</p></div>
@@ -211,9 +212,8 @@ h1 { font-size: 18px; margin: 0 0 4px; }
     <div class="card narrow">
       <div class="ev" aria-hidden="true">
         <span class="sw a">S</span><span class="sw b">L</span>
-        <!-- 리본 사진: src를 1번·2번 리본 이미지 주소로 바꿔 주세요 (지금은 사이트에 있는 img/ribbon.jpg로 미리보기) -->
-        <img class="rbn r1" src="../img/ribbon.jpg" alt="">
-        <img class="rbn r2" src="../img/ribbon.jpg" alt="">
+                <img class="rbn r1" src="../img/ribbon-1.png" alt="">
+        <img class="rbn r2" src="../img/ribbon-2.png" alt="">
         <div class="pn"></div>
       </div>
       <div class="mock" style="padding:19% 16%"><div class="img">이미지 자리</div><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다.</p></div>
@@ -404,25 +404,7 @@ h1 { font-size: 18px; margin: 0 0 4px; }
                     .......                                . .....             .....
   .                                                                             .... .
            .    .                   . .   .       .                               ..</pre>
-        <svg class="rib" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <defs><linearGradient id="sat" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#e9e9ec" stop-opacity=".8"/><stop offset=".6" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#d9d9de" stop-opacity=".8"/></linearGradient></defs>
-          <g fill="none" stroke-linecap="butt" stroke-linejoin="round">
-            <!-- 긴 리본: 위 여백 → 오른쪽 → 아래 여백 -->
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="rgba(0,0,0,.35)" stroke-width="8.6"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="url(#sat)" stroke-width="7.4"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="#fff" stroke-opacity=".35" stroke-width="2.6"/>
-            <!-- 매듭 리본: 왼쪽 위 -->
-            <g transform="translate(46 30)">
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4" />
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="url(#sat)" stroke-width="4.4"/>
-              <ellipse cx="0" cy="0" rx="4" ry="3.4" fill="#f4f4f6" stroke="rgba(0,0,0,.35)" stroke-width=".8"/>
-            </g>
-          </g>
-        </svg>
+        <img class="rib r1" src="../img/ribbon-1.png" alt=""><img class="rib r2" src="../img/ribbon-2.png" alt="">
         <div class="cd"><div class="tt"><span><strong>THE STORY OF</strong>arch, a pyre sentinel, and lia, the aqua guide.</span><b>SYNDROME</b></div></div>
       </div>
       <div class="mock" style="padding:40% 14% 24%"><div class="img">이미지 자리</div><p><b>“그러니까 끝까지 같이 가.”</b></p><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다. 손끝에 남은 온기가 오래도록 사라지지 않았다.</p></div>
@@ -514,25 +496,7 @@ h1 { font-size: 18px; margin: 0 0 4px; }
                     .......                                . .....             .....
   .                                                                             .... .
            .    .                   . .   .       .                               ..</pre>
-        <svg class="rib" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <defs><linearGradient id="sat" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#e9e9ec" stop-opacity=".8"/><stop offset=".6" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#d9d9de" stop-opacity=".8"/></linearGradient></defs>
-          <g fill="none" stroke-linecap="butt" stroke-linejoin="round">
-            <!-- 긴 리본: 위 여백 → 오른쪽 → 아래 여백 -->
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="rgba(0,0,0,.35)" stroke-width="8.6"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="url(#sat)" stroke-width="7.4"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="#fff" stroke-opacity=".35" stroke-width="2.6"/>
-            <!-- 매듭 리본: 왼쪽 위 -->
-            <g transform="translate(46 30)">
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4" />
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="url(#sat)" stroke-width="4.4"/>
-              <ellipse cx="0" cy="0" rx="4" ry="3.4" fill="#f4f4f6" stroke="rgba(0,0,0,.35)" stroke-width=".8"/>
-            </g>
-          </g>
-        </svg>
+        <img class="rib r1" src="../img/ribbon-1.png" alt=""><img class="rib r2" src="../img/ribbon-2.png" alt="">
         <div class="cd"><div class="tt"><span><strong>THE STORY OF</strong>arch, a pyre sentinel, and lia, the aqua guide.</span><b>SYNDROME</b></div></div>
       </div>
       <div class="mock" style="padding:40% 14% 24%"><div class="img">이미지 자리</div><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다.</p></div>
@@ -627,25 +591,7 @@ h1 { font-size: 18px; margin: 0 0 4px; }
                     .......                                . .....             .....
   .                                                                             .... .
            .    .                   . .   .       .                               ..</pre>
-        <svg class="rib" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <defs><linearGradient id="sat" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#e9e9ec" stop-opacity=".8"/><stop offset=".6" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#d9d9de" stop-opacity=".8"/></linearGradient></defs>
-          <g fill="none" stroke-linecap="butt" stroke-linejoin="round">
-            <!-- 긴 리본: 위 여백 → 오른쪽 → 아래 여백 -->
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="rgba(0,0,0,.35)" stroke-width="8.6"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="url(#sat)" stroke-width="7.4"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="#fff" stroke-opacity=".35" stroke-width="2.6"/>
-            <!-- 매듭 리본: 왼쪽 위 -->
-            <g transform="translate(46 30)">
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4" />
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="url(#sat)" stroke-width="4.4"/>
-              <ellipse cx="0" cy="0" rx="4" ry="3.4" fill="#f4f4f6" stroke="rgba(0,0,0,.35)" stroke-width=".8"/>
-            </g>
-          </g>
-        </svg>
+        <img class="rib r1" src="../img/ribbon-1.png" alt=""><img class="rib r2" src="../img/ribbon-2.png" alt="">
         <div class="cd"></div>
       </div>
       <div class="mock" style="padding:26% 14% 24%"><div class="img">이미지 자리</div><p><b>“그러니까 끝까지 같이 가.”</b></p><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다. 손끝에 남은 온기가 오래도록 사라지지 않았다.</p></div>
@@ -737,25 +683,7 @@ h1 { font-size: 18px; margin: 0 0 4px; }
                     .......                                . .....             .....
   .                                                                             .... .
            .    .                   . .   .       .                               ..</pre>
-        <svg class="rib" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <defs><linearGradient id="sat" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#e9e9ec" stop-opacity=".8"/><stop offset=".6" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#d9d9de" stop-opacity=".8"/></linearGradient></defs>
-          <g fill="none" stroke-linecap="butt" stroke-linejoin="round">
-            <!-- 긴 리본: 위 여백 → 오른쪽 → 아래 여백 -->
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="rgba(0,0,0,.35)" stroke-width="8.6"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="url(#sat)" stroke-width="7.4"/>
-            <path d="M-20 74 C40 12 150 -2 228 22 S304 96 288 164 S258 282 282 330 S182 404 40 386 S-6 368 -30 356" stroke="#fff" stroke-opacity=".35" stroke-width="2.6"/>
-            <!-- 매듭 리본: 왼쪽 위 -->
-            <g transform="translate(46 30)">
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4" />
-              <path d="M0 0 C-20 -22 -40 -6 -30 6 C-22 14 -8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C18 -24 40 -10 30 4 C22 14 8 6 0 0 Z" stroke="url(#sat)" stroke-width="4.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="rgba(0,0,0,.35)" stroke-width="5.4"/>
-              <path d="M0 0 C-6 18 -24 30 -16 60 M0 0 C10 20 6 40 22 58" stroke="url(#sat)" stroke-width="4.4"/>
-              <ellipse cx="0" cy="0" rx="4" ry="3.4" fill="#f4f4f6" stroke="rgba(0,0,0,.35)" stroke-width=".8"/>
-            </g>
-          </g>
-        </svg>
+        <img class="rib r1" src="../img/ribbon-1.png" alt=""><img class="rib r2" src="../img/ribbon-2.png" alt="">
         <div class="cd"></div>
       </div>
       <div class="mock" style="padding:26% 14% 24%"><div class="img">이미지 자리</div><p>불길이 잦아든 자리에서 그는 아무렇지 않은 척 웃었다.</p></div>
