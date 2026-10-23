@@ -670,10 +670,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* 배너 */
 .bnr h5 { margin: 0 0 10px; font: 400 10px var(--mono); letter-spacing: .16em; color: #9fb3c4; }
 .bnr section + section { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--hair); }
-.bnr-list { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.bnr-list { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
 .bnr-list h5 { align-self: stretch; }
-.bnr img { display: block; max-width: 100%; height: auto; image-rendering: auto; }
-.bnr a { display: inline-block; transition: opacity .2s; }
+.bnr img { display: block; width: 100%; height: auto; }
+.bnr a { display: block; transition: opacity .2s; }
 .bnr a:hover { opacity: .75; }
 .bnr-empty { margin: 0; font: 400 12px var(--ko); color: var(--mid); }
 /* 관리 (나만 보여요 — 이 브라우저에 GitHub 토큰이 저장돼 있을 때만) */
