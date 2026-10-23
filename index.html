@@ -670,7 +670,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* 배너 */
 .bnr h5 { margin: 0 0 10px; font: 400 10px var(--mono); letter-spacing: .16em; color: #9fb3c4; }
 .bnr section + section { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--hair); }
-.bnr-list { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.bnr-list { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 8px; }
+.bnr-list .bnr-empty { grid-column: 1 / -1; }
 .bnr-list h5 { align-self: stretch; }
 .bnr img { display: block; width: 100%; height: auto; border-radius: 8px; }
 .bnr a { display: block; transition: opacity .2s; }
