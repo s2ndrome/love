@@ -667,6 +667,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .chat .who small { display: block; font: 400 10px/1 var(--mono); color: var(--mid); letter-spacing: .1em; margin-top: 6px; }
 .chat .who a { margin-left: auto; font: 400 10px var(--mono); color: #4f9ad0; text-decoration: none; }
 .chat iframe { flex: 1; width: 100%; border: 0; display: block; margin-top: 10px; background: transparent; }
+/* 배너 */
+.bnr h5 { margin: 0 0 10px; font: 400 10px var(--mono); letter-spacing: .16em; color: #9fb3c4; }
+.bnr section + section { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--hair); }
+.bnr-list { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.bnr-list h5 { align-self: stretch; }
+.bnr img { display: block; max-width: 100%; height: auto; image-rendering: auto; }
+.bnr a { display: inline-block; transition: opacity .2s; }
+.bnr a:hover { opacity: .75; }
+.bnr-code { display: flex; gap: 8px; margin-top: 10px; align-items: stretch; }
+.bnr-code textarea { flex: 1; min-width: 0; resize: none; padding: 7px 9px; border: 1px solid #c0d1dc; border-radius: 0; background: #fff; font: 400 10px/1.5 var(--mono); color: var(--mid); }
+.bnr-code .copy-button { width: auto; height: auto; margin: 0; padding: 0 12px; border-radius: 0; font: 400 10px var(--mono); letter-spacing: .12em; }
+.bnr-empty { margin: 0; font: 400 12px var(--ko); color: var(--mid); }
 /* 관리 (나만 보여요 — 이 브라우저에 GitHub 토큰이 저장돼 있을 때만) */
 .head .adm { display: flex; align-items: flex-start; gap: 14px; font: 400 10px/1.35 var(--mono); letter-spacing: .14em; }
 .head .adm[hidden] { display: none; }
@@ -725,7 +737,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 <script>
 // 사이트의 data/*.json을 바로 읽어요 — tools로 글을 올리면 새로고침만 해도 반영돼요.
 window.SITE = { data: {}, posts: { characters: {}, diary: {}, ooc: {}, world: {}, gallery: {} } };
-window.SITE_READY = Promise.all(['characters', 'diary', 'ooc', 'world', 'gallery'].map(function (k) {
+window.SITE_READY = Promise.all(['characters', 'diary', 'ooc', 'world', 'gallery', 'banners'].map(function (k) {
   return fetch('data/' + k + '.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }).then(function (v) { SITE.data[k] = v; });
 })).then(function () {
   SYN.log = SITE.data.diary.map(function (d) { return [d.label || d.id, d.locked ? 1 : 0]; });
@@ -756,10 +768,10 @@ SITE_READY.then(function () {
     { k: 'seol', t: 'Seol', n: '00', img: 'img/seol.jpg', cap: 'the keeper' },
     { k: 'characters', t: 'Charac<em>ters</em>', n: '01', img: 'img/sd.jpg', cap: 'syndrome & lia' },
     { k: 'archive', t: 'Archive', n: '02', img: 'img/g1.jpg', cap: 'log · gallery', lock: 1 },
-    { k: 'extra', t: '<em>Extra</em>', n: SYN.ooc.length + SYN.share.length, img: 'img/g2.jpg', cap: 'ooc · share · guestbook' }
+    { k: 'extra', t: '<em>Extra</em>', n: SYN.ooc.length + (SITE.data.banners || []).length, img: 'img/g2.jpg', cap: 'ooc · banner · guestbook' }
   ];
   var ix = document.getElementById('index'), fl = document.getElementById('float'), cur = document.getElementById('cursor');
-  var SUBS = { archive: [['log', 'Log', SYN.log.length], ['gallery', 'Gallery', SITE.data.gallery.length]], extra: [['ooc', 'Ooc', SYN.ooc.length], ['share', 'Share', SYN.share.length], ['guest', 'Guestbook', '✎']] };
+  var SUBS = { archive: [['log', 'Log', SYN.log.length], ['gallery', 'Gallery', SITE.data.gallery.length]], extra: [['ooc', 'Ooc', SYN.ooc.length], ['banner', 'Banner', (SITE.data.banners || []).length], ['guest', 'Guestbook', '✎']] };
   items.forEach(function (it) {
     var li = document.createElement('li'), b = document.createElement('button');
     b.innerHTML = '<span class="' + (it.lock ? 'lock' : '') + '">' + it.t + '</span><sup>(' + it.n + ')</sup>';
@@ -895,13 +907,13 @@ SITE_READY.then(function () {
   }
   var GROUPS = {
     archive: { title: 'Archive', sub: '둘 중 하나를 고르세요', opts: [['log', 'Log', '기록 · ' + SYN.log.length + ' entries'], ['gallery', 'Gallery', '사진 · ARCH / f(s) ² / S & L']] },
-    extra: { title: 'Extra', sub: '둘 중 하나를 고르세요', opts: [['ooc', 'Ooc', '캐붕 · ' + SYN.ooc.length + ' notes'], ['share', 'Share', '공유 · prompts']] }
+    extra: { title: 'Extra', sub: '둘 중 하나를 고르세요', opts: [['ooc', 'Ooc', '캐붕 · ' + SYN.ooc.length + ' notes'], ['banner', 'Banner', '배너 · ' + (SITE.data.banners || []).length + ' links']] }
   }, PARENT = {};
   function groupView(g) {
     var G = GROUPS[g];
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     render('<h2>' + G.title + '</h2><p class="sub">' + G.sub + '</p>', '<div class="gpick">' + G.opts.map(function (o, i) { return '<button data-sub="' + o[0] + '"><span class="gn">0' + (i + 1) + '</span><b>' + o[1] + '</b><small>' + o[2] + '</small><span class="ga">→</span></button>'; }).join('') + '</div>', null);
-    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com'; listView(b.dataset.sub); }; });
+    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { if (b.dataset.sub === 'banner') { nav('/banner'); bannerView(); return; } nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com'; listView(b.dataset.sub); }; });
   }
   var LIA_URL = 'https://lia-chat.jenojeno0423.workers.dev';
   function chatView() {
@@ -952,6 +964,19 @@ SITE_READY.then(function () {
   }
   // 방명록: posts/guestbook.html을 불러와서 Formspree로 보내요 (페이지 이동 없이)
   var GUEST = '<p class="guestbook-hint">남기고 싶은 말을 적어주세요 ~</p><p class="guestbook-hint">오직 SEOL만 열람합니다.</p><form class="message-form" action="https://formspree.io/f/xljrkazq" method="POST"><input type="text" name="name" placeholder="이름 (선택)"><textarea name="message" placeholder="메시지" rows="5" required></textarea><button type="submit">보내기</button><p class="message-form-status" aria-live="polite"></p></form>';
+  // 배너: 맨 위는 내 배너(퍼가기 코드 포함), 그 아래로 친구들 배너가 한 줄씩. 관리 → 배너에서 올려요.
+  function bannerView() {
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
+    var all = SITE.data.banners || [], mine = all.filter(function (b) { return b.mine; })[0], fr = all.filter(function (b) { return !b.mine; });
+    var abs = function (u) { return /^https?:/.test(u) ? u : 'https://xn--hy1bp1el5l.com/' + u; };
+    var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
+    var code = mine ? '<a href="https://xn--hy1bp1el5l.com" target="_blank"><img src="' + abs(mine.img) + '" alt="SYNDROME ୨୧ LIA"></a>' : '';
+    render('<h2>Banner</h2><p class="sub">' + (fr.length ? fr.length + ' friends' : '친구 배너를 기다리는 중') + '</p>',
+      '<div class="bnr">' + (mine ? '<section class="bnr-me"><h5>MY BANNER</h5>' + img(mine) + '<div class="bnr-code"><textarea readonly rows="2">' + SYN.esc(code) + '</textarea><button type="button" class="copy-button" aria-label="배너 코드 복사">COPY</button></div></section>' : '') +
+      '<section class="bnr-list"><h5>FRIENDS</h5>' + (fr.length ? fr.map(img).join('') : '<p class="bnr-empty">아직 없어요</p>') + '</section></div>', null);
+    var cb = txt.querySelector('.bnr-code button'), ta = txt.querySelector('.bnr-code textarea');
+    if (cb) cb.onclick = function () { ta.select(); (navigator.clipboard ? navigator.clipboard.writeText(ta.value) : Promise.reject()).catch(function () { try { document.execCommand('copy'); } catch (e) {} }); cb.textContent = 'COPIED'; setTimeout(function () { cb.textContent = 'COPY'; }, 1400); };
+  }
   function guestView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var show = function (html) {
@@ -973,7 +998,7 @@ SITE_READY.then(function () {
   // 창을 열면 주소창도 같이 바뀌고, 그 주소로 들어오면 그 창이 바로 열려요.
   // 글 번호는 오래된 글부터 1번 (캐릭터는 목록 순서대로).
   var PATH_OF = { seol: 'info', guest: 'guestbook', dressup: 'closet' };
-  var ROUTE = { info: 'seol', seol: 'seol', characters: 'characters', archive: 'archive', extra: 'extra', log: 'log', gallery: 'gallery', ooc: 'ooc', share: 'share', guestbook: 'guest', chat: 'chat', lia: 'chat', closet: 'dressup', admin: 'admin' };
+  var ROUTE = { info: 'seol', seol: 'seol', characters: 'characters', archive: 'archive', extra: 'extra', log: 'log', gallery: 'gallery', ooc: 'ooc', share: 'share', banner: 'banner', banners: 'banner', guestbook: 'guest', chat: 'chat', lia: 'chat', closet: 'dressup', admin: 'admin' };
   var routing = false;
   function nav(path) { if (routing || location.pathname === path) return; try { history.pushState(null, '', path); } catch (e) {} }
   function numOf(k, id) { var l = D[CAT[k]] || [], i = l.map(function (x) { return x.id; }).indexOf(id); return i < 0 ? '' : (CAT[k] === 'characters' ? i + 1 : l.length - i); }
@@ -1013,7 +1038,7 @@ SITE_READY.then(function () {
   }
   function openAdmin(tab, q) { ADM.tab = tab || 'post'; ADM.q = q || ''; open('admin'); }
   function adminView() {
-    var T = [['post', '글쓰기'], ['edit', '글 수정'], ['upload', '사진 업로드']];
+    var T = [['post', '글쓰기'], ['edit', '글 수정'], ['upload', '사진 업로드'], ['banner', '배너']];
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     render('', '<div class="adm-w"><nav class="adm-tabs">' + T.map(function (t) { return '<button data-t="' + t[0] + '"' + (t[0] === ADM.tab ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join('') +
       (tok() ? '<button class="out" data-out>로그아웃</button>' : '') + '</nav><iframe src="tools/' + ADM.tab + '.html?embed=1&v=' + Date.now() + ADM.q + '" title="관리"></iframe></div>', null);
@@ -1032,6 +1057,7 @@ SITE_READY.then(function () {
     win.classList.toggle('w-du', k === 'dressup');
     win.classList.toggle('w-adm', k === 'admin');
     if (k === 'admin') adminView();
+    else if (k === 'banner') bannerView();
     else if (k === 'guest') guestView();
     else if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
     else if (k === 'chat') chatView();

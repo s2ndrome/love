@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="embed.js"></script>
+<script src="dedupe.js"></script>
+<title>배너 관리 도구</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; padding: 40px 20px; background: #f2f2f5; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #1d1d1f; }
+  main { max-width: 640px; margin: 0 auto; background: #fff; border-radius: 14px; padding: 32px; box-shadow: 0 10px 40px rgba(0,0,0,.08); }
+  h1 { margin: 0 0 6px; font-size: 20px; }
+  h2 { margin: 26px 0 4px; font-size: 15px; }
+  p.hint { margin: 0 0 20px; color: #6e6e73; font-size: 13px; line-height: 1.6; }
+  label { display: block; margin: 16px 0 6px; font-size: 13px; font-weight: 600; }
+  input[type="text"], input[type="password"], input[type="url"] { width: 100%; padding: 10px 12px; border: 1px solid rgba(0,0,0,.12); border-radius: 8px; font: inherit; font-size: 13px; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+  .checkbox-row input { width: auto; margin: 0; }
+  .checkbox-row label { margin: 0; font-size: 13px; font-weight: 400; }
+  button { margin-top: 18px; padding: 10px 20px; border: 0; border-radius: 8px; background: #0a84ff; color: #fff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  .status { margin-top: 14px; font-size: 12.5px; color: #6e6e73; white-space: pre-line; }
+  .status.error { color: #d32f2f; }
+  .status.done { color: #1a8a3e; font-weight: 600; }
+  hr { border: 0; border-top: 1px solid rgba(0,0,0,.08); margin: 26px 0 0; }
+  .drop { padding: 12px; border: 1px dashed rgba(0,0,0,.18); border-radius: 8px; background: #fafafa; }
+  .drop.over { border-color: #0a84ff; background: #f0f7ff; }
+  .drop p { margin: 0 0 10px; font-size: 12.5px; color: #6e6e73; line-height: 1.6; }
+  .drop img[hidden] { display: none; }
+  .drop img { display: block; max-width: 100%; max-height: 120px; margin-bottom: 10px; border: 1px solid rgba(0,0,0,.08); }
+  .drop input[type=file] { width: 100%; font-size: 13px; }
+  .list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .item { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: center; padding: 10px; border: 1px solid rgba(0,0,0,.1); border-radius: 8px; }
+  .item.mine { border-color: #86c4ee; background: #f4f9fd; }
+  .item img { display: block; max-width: 100%; max-height: 70px; }
+  .item .meta { grid-column: 1 / -1; font-size: 12px; color: #6e6e73; word-break: break-all; }
+  .item .meta b { color: #1d1d1f; margin-right: 6px; }
+  .item .meta em { font-style: normal; color: #2a6f9c; font-weight: 600; margin-right: 6px; }
+  .item .acts { display: flex; gap: 4px; }
+  .item .acts button { margin: 0; padding: 5px 9px; font-size: 12px; background: #6e6e73; }
+  .item .acts button.del { background: #d32f2f; }
+  .item .acts button.me { background: #86c4ee; }
+  .empty { font-size: 13px; color: #6e6e73; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>배너 관리 도구</h1>
+  <p class="hint">배너를 올리면 Extra → Banner에 한 줄씩 보여요. <b>내 배너</b>는 항상 맨 위에 퍼가기 코드와 같이 나와요. 누르는 버튼마다 바로 저장돼요.</p>
+
+  <label for="token">GitHub 토큰</label>
+  <input type="password" id="token" placeholder="github_pat_...">
+
+  <h2>배너 추가</h2>
+  <label>배너 이미지</label>
+  <div class="drop" id="drop">
+    <p>배너를 <b>복사해서 붙여넣기</b> 하거나, 끌어다 놓거나, 아래에서 골라주세요. (움직이는 GIF도 돼요)</p>
+    <img id="preview" alt="" hidden>
+    <input type="file" id="file" accept="image/*">
+  </div>
+  <label for="url">또는 이미지 주소 (친구 사이트에 있는 배너를 그대로 쓸 때)</label>
+  <input type="url" id="url" placeholder="https://...">
+  <label for="name">이름</label>
+  <input type="text" id="name" placeholder="예: 리암네 집">
+  <label for="link">누르면 갈 주소 (선택)</label>
+  <input type="url" id="link" placeholder="https://...">
+  <div class="checkbox-row"><input type="checkbox" id="mine"><label for="mine">내 배너로 (맨 위에 고정, 기존 내 배너는 교체)</label></div>
+  <button id="add-btn" type="button">추가</button>
+
+  <hr>
+  <h2>올라간 배너</h2>
+  <button id="load-btn" type="button" style="margin-top:8px;background:#6e6e73;">불러오기</button>
+  <div class="list" id="list"></div>
+  <p class="status" id="status"></p>
+</main>
+
+<script>
+const OWNER = "s2ndrome", REPO = "love", BRANCH = "main";
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+const PATH = "data/banners.json";
+const $ = id => document.getElementById(id);
+const tokenInput = $("token"), status = $("status"), listEl = $("list");
+const savedToken = localStorage.getItem("gh_token");
+if (savedToken) tokenInput.value = savedToken;
+
+let banners = null, sha = null, picked = null;
+
+function setStatus(t, k) { status.textContent = t; status.className = "status" + (k ? " " + k : ""); }
+function esc(s) { return String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function utf8ToBase64(str) { const b = new TextEncoder().encode(str); let s = ""; b.forEach(x => s += String.fromCharCode(x)); return btoa(s); }
+function base64ToUtf8(b64) { const bin = atob(b64.replace(/\n/g, "")); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); }
+function readFileAsBase64(f) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(",")[1]); r.onerror = rej; r.readAsDataURL(f); }); }
+function token() { return tokenInput.value.trim(); }
+function headers() { return { Authorization: `Bearer ${token()}`, Accept: "application/vnd.github+json" }; }
+function src(b) { return /^https?:/.test(b.img) ? b.img : "../" + b.img; }
+
+// 배너는 크기 그대로, PNG로 다시 그려서 메타데이터를 지워요 (GIF는 움직임이 사라지지 않게 그대로)
+async function cleanImage(file) {
+  if (file.type === "image/gif" || /\.gif$/i.test(file.name)) return { blob: file, ext: "gif" };
+  const bm = await createImageBitmap(file);
+  const c = document.createElement("canvas"); c.width = bm.width; c.height = bm.height;
+  c.getContext("2d").drawImage(bm, 0, 0); bm.close && bm.close();
+  const blob = await new Promise(r => c.toBlob(r, "image/png"));
+  return { blob: blob || file, ext: "png" };
+}
+
+async function load() {
+  if (!token()) { setStatus("먼저 GitHub 토큰을 입력해주세요.", "error"); return false; }
+  localStorage.setItem("gh_token", token());
+  const r = await fetch(`${API}/${PATH}?ref=${BRANCH}`, { cache: "no-store", headers: headers() });
+  if (r.status === 404) { banners = []; sha = null; render(); return true; }
+  if (!r.ok) { setStatus(`배너 목록을 못 불러왔어요 (${r.status}) — 토큰을 확인해주세요.`, "error"); return false; }
+  const f = await r.json(); sha = f.sha;
+  try { banners = JSON.parse(base64ToUtf8(f.content)); } catch (e) { banners = []; }
+  render(); return true;
+}
+
+async function putFile(path, b64, message, fileSha) {
+  const body = { message, content: b64, branch: BRANCH }; if (fileSha) body.sha = fileSha;
+  const r = await fetch(`${API}/${path}`, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(`${path} 저장 실패 (${r.status}): ${d.message || ""}`);
+  return d;
+}
+
+async function save(message) {
+  // 내 배너는 항상 맨 위
+  banners.sort((a, b) => (b.mine ? 1 : 0) - (a.mine ? 1 : 0));
+  const d = await putFile(PATH, utf8ToBase64(JSON.stringify(banners, null, 2) + "\n"), message, sha);
+  sha = d.content && d.content.sha;
+  render();
+}
+
+function render() {
+  if (!banners) { listEl.innerHTML = ""; return; }
+  if (!banners.length) { listEl.innerHTML = '<p class="empty">아직 배너가 없어요.</p>'; return; }
+  listEl.innerHTML = banners.map((b, i) => `
+    <div class="item${b.mine ? " mine" : ""}">
+      <img src="${esc(src(b))}" alt="">
+      <div class="acts">
+        ${b.mine ? "" : `<button type="button" data-up="${i}" ${i === 0 || (banners[i - 1] && banners[i - 1].mine) ? "disabled" : ""}>▲</button>
+        <button type="button" data-down="${i}" ${i === banners.length - 1 ? "disabled" : ""}>▼</button>
+        <button type="button" class="me" data-me="${i}">내 배너</button>`}
+        <button type="button" class="del" data-del="${i}">삭제</button>
+      </div>
+      <div class="meta">${b.mine ? "<em>MY BANNER</em>" : ""}<b>${esc(b.name || "(이름 없음)")}</b>${esc(b.link || "")}</div>
+    </div>`).join("");
+  const act = async (fn, msg) => { try { fn(); setStatus("저장 중…"); await save(msg); setStatus("저장했어요. 1~2분 후 사이트에 반영돼요.", "done"); } catch (e) { setStatus(e.message, "error"); await load(); } };
+  listEl.querySelectorAll("[data-up]").forEach(b => b.onclick = () => { const i = +b.dataset.up; act(() => { [banners[i - 1], banners[i]] = [banners[i], banners[i - 1]]; }, "Reorder banners"); });
+  listEl.querySelectorAll("[data-down]").forEach(b => b.onclick = () => { const i = +b.dataset.down; act(() => { [banners[i + 1], banners[i]] = [banners[i], banners[i + 1]]; }, "Reorder banners"); });
+  listEl.querySelectorAll("[data-me]").forEach(b => b.onclick = () => { const i = +b.dataset.me; act(() => { banners.forEach((x, j) => { if (j === i) x.mine = true; else delete x.mine; }); }, "Set my banner"); });
+  listEl.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { const i = +b.dataset.del; if (!confirm(`"${banners[i].name || "이 배너"}"를 지울까요?`)) return; act(() => { banners.splice(i, 1); }, "Remove banner"); });
+}
+
+// 이미지 고르기: 파일 / 붙여넣기 / 끌어다 놓기
+function pick(file) {
+  if (!file || !file.type.startsWith("image/")) return;
+  picked = file; $("preview").src = URL.createObjectURL(file); $("preview").hidden = false; $("url").value = "";
+}
+$("file").addEventListener("change", () => pick($("file").files[0]));
+document.addEventListener("paste", async e => {
+  let files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
+  if (!files.length) return;
+  e.preventDefault(); files = await uniqueImages(files); pick(files[0]);
+});
+const drop = $("drop");
+drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", e => { e.preventDefault(); drop.classList.remove("over"); pick((e.dataTransfer?.files || [])[0]); });
+$("url").addEventListener("input", () => { if ($("url").value.trim()) { picked = null; $("preview").src = $("url").value.trim(); $("preview").hidden = false; } });
+
+$("load-btn").onclick = async () => { setStatus("불러오는 중…"); if (await load()) setStatus(""); };
+
+$("add-btn").onclick = async () => {
+  const url = $("url").value.trim(), name = $("name").value.trim(), link = $("link").value.trim(), mine = $("mine").checked;
+  if (!picked && !/^https?:\/\//.test(url)) { setStatus("배너 이미지를 넣어주세요.", "error"); return; }
+  if (link && !/^https?:\/\//.test(link)) { setStatus("누르면 갈 주소는 https:// 로 시작해야 해요.", "error"); return; }
+  const btn = $("add-btn"); btn.disabled = true;
+  try {
+    setStatus("배너 목록 불러오는 중…");
+    if (!(await load())) return;
+    let img = url;
+    if (picked) {
+      setStatus("이미지 정리 중…");
+      const { blob, ext } = await cleanImage(picked);
+      img = `img/banner/${crypto.randomUUID()}.${ext}`;
+      setStatus("이미지 업로드 중…");
+      await putFile(img, await readFileAsBase64(blob), `Add banner image: ${name || "banner"}`);
+    }
+    const entry = { img, name, link };
+    if (mine) { banners.forEach(b => delete b.mine); entry.mine = true; banners.unshift(entry); }
+    else banners.push(entry);
+    setStatus("저장 중…");
+    await save(`Add banner: ${name || img}`);
+    setStatus(`완료! "${name || "배너"}"를 올렸어요. 1~2분 후 사이트에 반영돼요.`, "done");
+    picked = null; $("file").value = ""; $("url").value = ""; $("name").value = ""; $("link").value = ""; $("mine").checked = false; $("preview").hidden = true;
+  } catch (e) { setStatus(e.message, "error"); }
+  finally { btn.disabled = false; }
+};
+
+if (token()) load();
+</script>
+</body>
+</html>
