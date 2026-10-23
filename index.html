@@ -675,9 +675,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .bnr img { display: block; max-width: 100%; height: auto; image-rendering: auto; }
 .bnr a { display: inline-block; transition: opacity .2s; }
 .bnr a:hover { opacity: .75; }
-.bnr-code { display: flex; gap: 8px; margin-top: 10px; align-items: stretch; }
-.bnr-code textarea { flex: 1; min-width: 0; resize: none; padding: 7px 9px; border: 1px solid #c0d1dc; border-radius: 0; background: #fff; font: 400 10px/1.5 var(--mono); color: var(--mid); }
-.bnr-code .copy-button { width: auto; height: auto; margin: 0; padding: 0 12px; border-radius: 0; font: 400 10px var(--mono); letter-spacing: .12em; }
 .bnr-empty { margin: 0; font: 400 12px var(--ko); color: var(--mid); }
 /* 관리 (나만 보여요 — 이 브라우저에 GitHub 토큰이 저장돼 있을 때만) */
 .head .adm { display: flex; align-items: flex-start; gap: 14px; font: 400 10px/1.35 var(--mono); letter-spacing: .14em; }
@@ -964,18 +961,14 @@ SITE_READY.then(function () {
   }
   // 방명록: posts/guestbook.html을 불러와서 Formspree로 보내요 (페이지 이동 없이)
   var GUEST = '<p class="guestbook-hint">남기고 싶은 말을 적어주세요 ~</p><p class="guestbook-hint">오직 SEOL만 열람합니다.</p><form class="message-form" action="https://formspree.io/f/xljrkazq" method="POST"><input type="text" name="name" placeholder="이름 (선택)"><textarea name="message" placeholder="메시지" rows="5" required></textarea><button type="submit">보내기</button><p class="message-form-status" aria-live="polite"></p></form>';
-  // 배너: 맨 위는 내 배너(퍼가기 코드 포함), 그 아래로 친구들 배너가 한 줄씩. 관리 → 배너에서 올려요.
+  // 배너: 맨 위는 내 배너(누르면 배너 이미지 저장), 그 아래로 친구들 배너가 한 줄씩. 관리 → 배너에서 올려요.
   function bannerView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var all = SITE.data.banners || [], mine = all.filter(function (b) { return b.mine; })[0], fr = all.filter(function (b) { return !b.mine; });
-    var abs = function (u) { return /^https?:/.test(u) ? u : 'https://xn--hy1bp1el5l.com/' + u; };
     var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
-    var code = mine ? '<a href="https://xn--hy1bp1el5l.com" target="_blank"><img src="' + abs(mine.img) + '" alt="SYNDROME ୨୧ LIA"></a>' : '';
     render('<h2>Banner</h2><p class="sub">' + (fr.length ? fr.length + ' friends' : '친구 배너를 기다리는 중') + '</p>',
-      '<div class="bnr">' + (mine ? '<section class="bnr-me"><h5>MY BANNER</h5>' + img(mine) + '<div class="bnr-code"><textarea readonly rows="2">' + SYN.esc(code) + '</textarea><button type="button" class="copy-button" aria-label="배너 코드 복사">COPY</button></div></section>' : '') +
+      '<div class="bnr">' + (mine ? '<section class="bnr-me"><h5>MY BANNER</h5><a href="' + SYN.esc(mine.img) + '" download="syndrome-lia-banner.' + ((mine.img.split('.').pop() || 'png').split('?')[0]) + '" title="눌러서 배너 저장"><img src="' + SYN.esc(mine.img) + '" alt="SYNDROME ୨୧ LIA"></a></section>' : '') +
       '<section class="bnr-list"><h5>FRIENDS</h5>' + (fr.length ? fr.map(img).join('') : '<p class="bnr-empty">아직 없어요</p>') + '</section></div>', null);
-    var cb = txt.querySelector('.bnr-code button'), ta = txt.querySelector('.bnr-code textarea');
-    if (cb) cb.onclick = function () { ta.select(); (navigator.clipboard ? navigator.clipboard.writeText(ta.value) : Promise.reject()).catch(function () { try { document.execCommand('copy'); } catch (e) {} }); cb.textContent = 'COPIED'; setTimeout(function () { cb.textContent = 'COPY'; }, 1400); };
   }
   function guestView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
