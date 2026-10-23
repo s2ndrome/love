@@ -867,7 +867,7 @@ SITE_READY.then(function () {
   }
   function detail(k, id) {
     var cat = CAT[k], it = D[cat].filter(function (x) { return x.id === id; })[0] || { id: id }, html = PST[cat][id];
-    galA = cat === 'gallery' && (it.group || 'A') === 'A';
+    galA = cat === 'gallery' && /^[AC]$/.test(it.group || 'A'); // ARCH, f(s) ²: 제목·카드 틀 없이 사진만
     var no = numOf(k, id); if (no) nav('/' + k + '/' + no);
     if (html == null) { fetchPost(cat, id).then(function (h) { PST[cat][id] = h; }, function () { PST[cat][id] = '<p>불러오지 못했어요.</p>'; }).then(function () { detail(k, id); }); return; }
     document.getElementById('wurl').textContent = 'www.syndrome.com';
