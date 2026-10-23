@@ -838,7 +838,7 @@ SITE_READY.then(function () {
     galA = false;
     var cat = CAT[k], all = D[cat], body;
     if (cat === 'gallery') all = all.filter(function (x) { return (x.group || 'A') === GG; });
-    var tabs = cat === 'gallery' ? '<nav class="gtabs"><button data-g="A"' + (GG === 'A' ? ' class="on"' : '') + '>ARCH</button><button data-g="B"' + (GG === 'B' ? ' class="on"' : '') + '>S &amp; L</button></nav>' : '';
+    var tabs = cat === 'gallery' ? '<nav class="gtabs"><button data-g="A"' + (GG === 'A' ? ' class="on"' : '') + '>ARCH</button><button data-g="C"' + (GG === 'C' ? ' class="on"' : '') + '>f(s) ²</button><button data-g="B"' + (GG === 'B' ? ' class="on"' : '') + '>S &amp; L</button></nav>' : '';
     var pages = Math.max(1, Math.ceil(all.length / PER)); pg = Math.max(0, Math.min(pages - 1, pg == null ? (PAGE[k] || 0) : pg)); PAGE[k] = pg;
     var items = all.slice(pg * PER, pg * PER + PER), base = all.length - pg * PER;
     if (cat === 'characters') {
@@ -856,7 +856,7 @@ SITE_READY.then(function () {
     else if (cat === 'gallery') body = '<div class="gallery-grid">' + items.map(function (it) { return '<button class="gallery-item" data-id="' + it.id + '">' + (it.locked ? LOCK : '') + (it.thumb ? '<img src="' + it.thumb + '" alt="' + (it.thumbLabel || '') + '"' + (it.blur ? ' class="thumb-blur"' : '') + '>' : it.thumbLabel) + '</button>'; }).join('') + '</div>';
     else body = '<ol class="rows">' + items.map(function (it, i) { return '<li><button data-id="' + SYN.esc(it.id) + '"><span class="rt">' + SYN.esc(label(it)) + '</span><span class="rl">' + (it.locked ? '*' : '') + '</span></button></li>'; }).join('') + '</ol>';
     var titles = { characters: 'Characters', log: 'Log', ooc: 'Ooc', share: 'Share', gallery: 'Gallery' };
-    var sub = { characters: 'SYNDROME ୨୧ LIA', log: all.length + ' entries · * 는 잠긴 기록', ooc: all.length + ' notes', share: 'prompts & worldbuilding', gallery: (GG === 'A' ? 'ARCH' : 'S & L') + ' · ' + all.length + ' frames' };
+    var sub = { characters: 'SYNDROME ୨୧ LIA', log: all.length + ' entries · * 는 잠긴 기록', ooc: all.length + ' notes', share: 'prompts & worldbuilding', gallery: ({ A: 'ARCH', B: 'S & L', C: 'f(s) ²' })[GG] + ' · ' + all.length + ' frames' };
     var pager = pages > 1 ? '<nav class="pager"><button data-pg="' + (pg - 1) + '"' + (pg ? '' : ' disabled') + '>← prev</button><span>' + String(pg + 1).padStart(2, '0') + ' / ' + String(pages).padStart(2, '0') + '</span><button data-pg="' + (pg + 1) + '"' + (pg < pages - 1 ? '' : ' disabled') + '>next →</button></nav>' : '';
     var up = PARENT[k] ? '<button class="back" id="gback">← ' + GROUPS[PARENT[k]].title + '</button>' : '';
     render(up + '<h2>' + titles[k] + '</h2><p class="sub">' + sub[k] + '</p>' + tabs, body + pager, null);
@@ -894,7 +894,7 @@ SITE_READY.then(function () {
     wire();
   }
   var GROUPS = {
-    archive: { title: 'Archive', sub: '둘 중 하나를 고르세요', opts: [['log', 'Log', '기록 · ' + SYN.log.length + ' entries'], ['gallery', 'Gallery', '사진 · ARCH / S & L']] },
+    archive: { title: 'Archive', sub: '둘 중 하나를 고르세요', opts: [['log', 'Log', '기록 · ' + SYN.log.length + ' entries'], ['gallery', 'Gallery', '사진 · ARCH / f(s) ² / S & L']] },
     extra: { title: 'Extra', sub: '둘 중 하나를 고르세요', opts: [['ooc', 'Ooc', '캐붕 · ' + SYN.ooc.length + ' notes'], ['share', 'Share', '공유 · prompts']] }
   }, PARENT = {};
   function groupView(g) {

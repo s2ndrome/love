@@ -157,6 +157,7 @@
       <label for="gallery-group">갤러리 구분</label>
       <select id="gallery-group">
         <option value="A">ARCH</option>
+    <option value="C">f(s) ²</option>
         <option value="B">S &amp; L</option>
       </select>
 
@@ -386,7 +387,7 @@ async function loadPostList() {
     }
     postSelect.innerHTML = list.map(item => {
       const title = item.label || item.name || item.thumbLabel || item.id;
-      const groupTag = category === "gallery" ? ` (${item.group === "B" ? "S & L" : "ARCH"})` : "";
+      const groupTag = category === "gallery" ? ` (${({ B: "S & L", C: "f(s) ²" })[item.group] || "ARCH"})` : "";
       return `<option value="${item.id.replace(/"/g, "&quot;")}">${title}${groupTag}${item.locked ? " 🔒" : ""}</option>`;
     }).join("");
     setStatus("");
@@ -535,7 +536,7 @@ async function openGalleryPostForEditing(token, id) {
     currentPost = { category: "gallery", title: id, sha: file.sha, locked: null, photos, thumbIndex };
 
     titleInput.value = title;
-    galleryGroupSelect.value = entry && entry.group === "B" ? "B" : "A";
+    galleryGroupSelect.value = entry && (entry.group === "B" || entry.group === "C") ? entry.group : "A";
     galleryBlurCheck.checked = !!(entry && entry.blur);
     galleryAddPhotoInput.value = "";
     renderPhotoList();
