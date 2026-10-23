@@ -1016,7 +1016,7 @@ SITE_READY.then(function () {
     var T = [['post', '글쓰기'], ['edit', '글 수정'], ['upload', '사진 업로드']];
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     render('', '<div class="adm-w"><nav class="adm-tabs">' + T.map(function (t) { return '<button data-t="' + t[0] + '"' + (t[0] === ADM.tab ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join('') +
-      (tok() ? '<button class="out" data-out>로그아웃</button>' : '') + '</nav><iframe src="tools/' + ADM.tab + '.html?embed=1' + ADM.q + '" title="관리"></iframe></div>', null);
+      (tok() ? '<button class="out" data-out>로그아웃</button>' : '') + '</nav><iframe src="tools/' + ADM.tab + '.html?embed=1&v=' + Date.now() + ADM.q + '" title="관리"></iframe></div>', null);
     document.getElementById('wn').textContent = '';
     txt.querySelectorAll('[data-t]').forEach(function (b) { b.onclick = function () { ADM.tab = b.dataset.t; ADM.q = ''; adminView(); }; });
     var o = txt.querySelector('[data-out]');
