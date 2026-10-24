@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="img/pav.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&family=Monsieur+La+Doulaise&family=Pinyon+Script&family=Noto+Sans+KR:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800;900&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&family=Monsieur+La+Doulaise&family=Pinyon+Script&family=Noto+Sans+KR:wght@300;400&display=swap">
 <style>
 /* layout: an editorial portfolio index — a micro-type header grid, one large text index on the left, a small chrome object as the only ornament; images surface only under the cursor, content opens as a full-bleed sheet */
 :root {
@@ -694,7 +694,73 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (max-width: 820px) { .head .adm { gap: 10px; font-size: 9.5px; } }
 /* 사진 보호: 모바일에서 꾹 눌러도 저장/복사 메뉴가 안 뜨게, 끌어서 저장도 안 되게 */
 img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; user-drag: none; }
+
+/* ===== 새 팝업 틀 (프리뷰) ===== */
+.win { background: #f6f6f4 !important; padding: 7px; border-radius: 22px !important; box-shadow: 0 0 0 1px #e6e6e3, 0 30px 70px -30px rgba(15,15,16,.32) !important; }
+.win > * { background: #fff; }
+.whd { padding: 18px 30px 12px; margin: 0; }
+.whd[hidden] { display: none; }
+.whd.nob h3 { border-bottom: 0; padding-bottom: 2px; }
+.whd h3:empty { display: none; }
+.whd .eye .back { margin: 0 !important; padding: 0; text-transform: none; letter-spacing: .06em; }
+.whd .eye .adm-edit { float: right; }
+.whd .eye:has(.back) { margin-bottom: 12px; }
+.whd .eye { margin: 0 0 7px; font: 500 10.5px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: #2b2c31; }
+.whd .eye b { color: #6f9fc4; font-weight: 500; }
+.whd h3 { margin: 0; padding-bottom: 12px; border-bottom: 2px solid var(--ink); font: 900 clamp(26px, 5vw, 40px)/.95 "Inter", var(--sans), var(--ko); letter-spacing: -.05em; text-transform: uppercase; text-wrap: balance; }
+.wbody { border-radius: 0 0 16px 16px; padding-bottom: 18px !important; }
+.wbody .in.nopic { padding-top: 14px !important; }
+.wbody .pic { border-radius: 8px; margin: 12px 30px 0; }
+.wbody .pic + .in { padding-top: 16px !important; }
+.wft { margin-top: 20px; padding-top: 12px; border-top: 0; font: 500 10.5px "Inter", var(--sans); letter-spacing: .18em; color: #2b2c31; }
+@media (max-width: 820px) { .whd { padding: 16px 20px 10px; } .wbody .pic { margin: 10px 20px 0; } }
+/* 갤러리: 2열 + 제목 */
+.gtabs { gap: 6px !important; margin: 0 0 14px !important; font: 500 11.5px "Inter", var(--sans) !important; letter-spacing: .02em !important; }
+.gtabs button { padding: 6px 12px !important; border: 1px solid #ececee !important; border-radius: 7px; }
+.gtabs button.on { border-color: var(--ink) !important; font-weight: 600; }
+.gallery-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; } /* PC 3개씩 2줄 */
+@media (max-width: 820px) { .gallery-grid { grid-template-columns: repeat(2, 1fr) !important; } } /* 모바일 2개씩 3줄 */
+.gallery-item { padding: 0 !important; border: 0 !important; background: none !important; box-shadow: none !important; }
+.gallery-item img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px !important; display: block; }
+.gallery-item .gcap { display: block; margin-top: 7px; font: 500 12.5px var(--ko); color: #2b2c31; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gallery-item .gcap small { font: 500 10px "Inter", var(--sans); color: #9a9ca3; letter-spacing: .06em; margin-right: 6px; }
+.wbody .back { font: 500 11px "Inter", var(--sans) !important; letter-spacing: .06em; }
+/* 글 안의 카드 테두리·파란 제목칸 없애기 (제목은 창 머리에 크게 나와요) */
+.wbody .note-card, .wbody .post .feed-card { border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+.wbody .note-tag, .wbody .post .feed-card > .card-header { display: none !important; }
+.wbody .note-compose { border-top: 0 !important; margin-top: 14px !important; padding-top: 0 !important; }
+.wbody .note-cursor, .wbody .note-icon { display: none !important; }
+
 @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+
+/* ===== 글 / 갤러리 글: 티스토리형 ===== */
+[data-pv] .ph .back { display: inline-block; margin: 0 0 22px !important; }
+[data-pv] .ph-t { margin: 0; font-family: "Pretendard Variable", Pretendard, var(--ko); color: var(--ink); text-wrap: balance; word-break: keep-all; }
+[data-pv] .ph-m i { display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: currentColor; margin: 0 9px; vertical-align: middle; opacity: .6; }
+[data-pv] .pn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+[data-pv] .pn-i { display: flex; flex-direction: column; gap: 6px; text-align: left; background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink); min-width: 0; }
+[data-pv] .pn-n { text-align: right; align-items: flex-end; }
+[data-pv] .pn-i small { font: 500 10px "Inter", var(--sans); letter-spacing: .16em; color: #9a9ca3; }
+[data-pv] .pn-i b { font: 600 13px/1.4 "Pretendard Variable", Pretendard, var(--ko); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+[data-pv] .pn-i img { width: 76px; height: 76px; object-fit: cover; border-radius: 6px; display: block; }
+[data-pv] .pn-x { opacity: .35; cursor: default; }
+[data-pv] .pe .wft { margin-top: 0; }
+[data-pv] .post .note-body p, [data-pv] .post .note-body { font-family: "Pretendard Variable", Pretendard, var(--ko); }
+
+/* A — 티스토리형: 가운데 정렬 머리, 얇은 선, 좁은 본문, 이전/다음 글 */
+[data-pv="a"] .ph { text-align: center; padding-bottom: 26px; margin-bottom: 30px; border-bottom: 1px solid #e6e6e8; }
+[data-pv="a"] .ph .back { display: block; text-align: left; }
+[data-pv="a"] .ph-no, [data-pv="a"] .ph-cr { display: none; }
+[data-pv="a"] .ph-cat { margin: 0 0 12px; font: 600 10.5px "Inter", var(--sans); letter-spacing: .24em; color: #6fb0dc; }
+[data-pv="a"] .ph-t { font-weight: 700; font-size: clamp(22px, 3.6vw, 30px); line-height: 1.3; letter-spacing: -.02em; }
+[data-pv="a"] .ph-g .ph-t { display: none; }
+[data-pv="a"] .ph-m { margin: 14px 0 0; font: 400 11.5px "Pretendard Variable", Pretendard, var(--ko); color: #9a9ca3; letter-spacing: .02em; }
+[data-pv="a"] .post { max-width: 620px; margin: 0 auto; }
+[data-pv="a"] .post .note-body p { font-size: 14px; line-height: 1.95; color: #333338; }
+[data-pv="a"] .pe { margin-top: 40px; padding-top: 22px; border-top: 1px solid #e6e6e8; }
+[data-pv="a"] .pn { margin-bottom: 30px; }
+[data-pv="a"] .pe .wft { text-align: center; }
+
 </style>
 </head>
 <body>
@@ -727,6 +793,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 
 <div class="wlayer" id="sheet"><section class="win" id="win" role="dialog" aria-modal="true" aria-label="상세">
   <header class="wbar" id="wbar"><span class="dots"><button class="d" id="close" aria-label="닫기"></button><i class="d"></i><i class="d"></i></span><span class="wurl" id="wurl">www.syndrome.com</span><span class="wn" id="wn"></span></header>
+  <div class="whd" id="whd"><p class="eye" id="weye"></p><h3 id="wttl"></h3></div>
   <div class="wbody" id="sheetTxt"></div>
 </section></div>
 
@@ -838,14 +905,41 @@ SITE_READY.then(function () {
     return html;
   }
   var galA = false; // ARCH 갤러리 글: 제목·카드 틀 없이 사진만
+  // 창 머리(작은 글씨 + 큰 제목)와 맨 아래 번호 라벨
+  var HD = { eye: '', title: '', foot: '' };
+  function setHead(eye, title, foot, nob) { HD = { eye: eye || '', title: title || '', foot: foot == null ? '' : foot }; window.__inpost = false; var h = document.getElementById('whd'); h.hidden = !title && !eye; h.classList.toggle('nob', !!nob); document.getElementById('weye').innerHTML = HD.eye; document.getElementById('wttl').textContent = HD.title; }
+  // 글 머리·끝: 티스토리형 (가운데 제목, 얇은 선, 이전/다음 글)
+  var PV = 'a'; document.documentElement.dataset.pv = PV;
+  function postFrame(k, cat, it, title, btn, DE) {
+    var L = (D[cat] || []).filter(function (x) { return cat !== 'gallery' || (x.group || 'A') === (it.group || 'A'); });
+    var i = L.map(function (x) { return x.id; }).indexOf(it.id), n = L.length, no = n - i, z = ('00' + no).slice(-3);
+    var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+    var cat1 = DE.charAt(0) + DE.slice(1).toLowerCase(); if (cat === 'gallery') cat1 = DE;
+    var big = title || DE;
+    var top = '<header class="ph' + (cat === 'gallery' ? ' ph-g' : '') + '">' + btn +
+      '<div class="ph-box"><span class="ph-no">' + no + '</span><div class="ph-tx"><p class="ph-cat">' + DE + '</p>' +
+      '<h1 class="ph-t' + (title ? '' : ' ph-t-cat') + '">' + esc(big) + '</h1>' +
+      '<p class="ph-m">SYNDROME ୨୧ LIA<i></i>No. ' + no + '</p></div></div>' +
+      '<dl class="ph-cr"><div><dt>Category</dt><dd>' + cat1 + '</dd></div><div><dt>No.</dt><dd>' + z + ' / ' + ('00' + n).slice(-3) + '</dd></div><div><dt>By</dt><dd>SYNDROME ୨୧ LIA</dd></div></dl></header>';
+    var pn = function (x, lab, cls) {
+      if (!x) return '<span class="pn-i pn-x ' + cls + '"><small>' + lab + '</small><b>—</b></span>';
+      var t = cat === 'gallery' ? '<img src="' + x.thumb + '" alt="">' : '<b>' + esc(label(x)) + '</b>';
+      return '<button class="pn-i ' + cls + '" data-pk="' + k + '" data-pid="' + esc(x.id).replace(/"/g, '&quot;') + '"><small>' + lab + '</small>' + t + '</button>';
+    };
+    var end = '<div class="pe"><nav class="pn">' + pn(L[i + 1], '이전 글', 'pn-p') + pn(L[i - 1], '다음 글', 'pn-n') + '</nav><footer class="wft">Wet (A) Flame !</footer></div>';
+    return { top: top, end: end };
+  }
   function render(head, body, pic) {
+    if (window.__inpost) body += window.__pend || '<footer class="wft">Wet (A) Flame !</footer>'; // 글을 열었을 때만 맨 아래 문구
     txt.innerHTML = (pic ? '<div class="pic"><img src="' + pic + '" alt=""></div>' : '') + '<div class="in' + (pic ? '' : ' nopic') + '">' + head + '<div class="post' + (galA ? ' gal-a' : '') + '">' + body + '</div></div>';
     txt.scrollTop = 0;
+    txt.querySelectorAll('[data-pk]').forEach(function (b) { b.onclick = function () { detail(b.dataset.pk, b.dataset.pid); }; });
     txt.querySelectorAll('.copy-button').forEach(function (b) { b.onclick = function () { var t = b.closest('.note-card').querySelector('.note-body').innerText.trim(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).catch(function () {}); b.classList.add('copied'); setTimeout(function () { b.classList.remove('copied'); }, 1400); }; });
   }
   var PAGE = {}, PER = 6, GG = 'A';
   function listView(k, pg) {
     galA = false;
+    var LH = { log: ['ARCHIVE / 01', 'LOG', '01 — log'], gallery: ['ARCHIVE / 02', 'GALLERY', ''], ooc: ['EXTRA / 01', 'OOC', '01 — ooc'], characters: ['ARCHIVE / 01', 'CHARACTERS', '01 — characters'], share: ['EXTRA', 'SHARE', ''] }[k]; if (LH) setHead(LH[0], LH[1], LH[2]);
     var cat = CAT[k], all = D[cat], body;
     if (cat === 'gallery') all = all.filter(function (x) { return (x.group || 'A') === GG; });
     var tabs = cat === 'gallery' ? '<nav class="gtabs"><button data-g="A"' + (GG === 'A' ? ' class="on"' : '') + '>ARCH</button><button data-g="C"' + (GG === 'C' ? ' class="on"' : '') + '>f(s) ²</button><button data-g="B"' + (GG === 'B' ? ' class="on"' : '') + '>S &amp; L</button></nav>' : '';
@@ -870,6 +964,7 @@ SITE_READY.then(function () {
     var pager = pages > 1 ? '<nav class="pager"><button data-pg="' + (pg - 1) + '"' + (pg ? '' : ' disabled') + '>← prev</button><span>' + String(pg + 1).padStart(2, '0') + ' / ' + String(pages).padStart(2, '0') + '</span><button data-pg="' + (pg + 1) + '"' + (pg < pages - 1 ? '' : ' disabled') + '>next →</button></nav>' : '';
     var up = PARENT[k] ? '<button class="back" id="gback">← ' + GROUPS[PARENT[k]].title + '</button>' : '';
     render(up + '<h2>' + titles[k] + '</h2><p class="sub">' + sub[k] + '</p>' + tabs, body + pager, null);
+    if (false) items.forEach(function (it) { var put = function (h) { var m = /card-title">([^<]*)/.exec(h || ''), el = txt.querySelector('[data-cap="' + it.id + '"]'); if (el && m) el.insertAdjacentHTML('beforeend', m[1]); }; if (PST.gallery[it.id] != null) put(PST.gallery[it.id]); else fetchPost('gallery', it.id).then(function (h) { PST.gallery[it.id] = h; put(h); }, function () {}); });
     if (up) document.getElementById('gback').onclick = function () { groupView(PARENT[k]); };
     txt.querySelectorAll('[data-id]').forEach(function (b) { b.onclick = function () { detail(k, b.dataset.id); }; });
     txt.querySelectorAll('[data-g]').forEach(function (b) { b.onclick = function () { if (GG === b.dataset.g) return; GG = b.dataset.g; PAGE[k] = 0; listView(k, 0); }; });
@@ -879,11 +974,16 @@ SITE_READY.then(function () {
     var cat = CAT[k], it = D[cat].filter(function (x) { return x.id === id; })[0] || { id: id }, html = PST[cat][id];
     galA = cat === 'gallery' && /^[AC]$/.test(it.group || 'A'); // ARCH, f(s) ²: 제목·카드 틀 없이 사진만
     var no = numOf(k, id); if (no) nav('/' + k + '/' + no);
+    var DE = { log: 'LOG', gallery: ({ A: 'ARCH', B: 'S & L', C: 'f(s) ²' })[it.group || 'A'] || 'GALLERY', ooc: 'OOC', share: 'SHARE', characters: 'CHARACTERS' }[k] || '';
+    var dtitle = label(it); if (cat === 'gallery') { var mm = /card-title">([^<]*)/.exec(html || ''); dtitle = mm ? mm[1].replace(/&amp;/g, '&') : label(it); }
     if (html == null) { fetchPost(cat, id).then(function (h) { PST[cat][id] = h; }, function () { PST[cat][id] = '<p>불러오지 못했어요.</p>'; }).then(function () { detail(k, id); }); return; }
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var head = '<button class="back" id="pback">← ' + ({ characters: 'Characters', log: 'Log', ooc: 'Ooc', share: 'Share', gallery: 'Gallery' })[k] + '</button>';
     var go = function () { nav('/' + k); listView(k); document.getElementById('wurl').textContent = 'www.syndrome.com'; };
     if (isAdmin() && /^(diary|ooc|world|gallery)$/.test(cat)) head += '<button class="back adm-edit" data-aedit>수정</button>';
+    // 뒤로가기 버튼은 제목 위로, LOG / 26 같은 작은 글씨는 없음
+    if (PV) { var PF = postFrame(k, cat, it, cat === 'gallery' ? '' : dtitle, head, DE); setHead('', '', '', true); head = PF.top; window.__inpost = true; window.__pend = PF.end; }
+    else { setHead(head, cat === 'gallery' ? '' : dtitle, '', true); head = ''; window.__inpost = true; window.__pend = ''; }
     var wire = function () { document.getElementById('pback').onclick = go; var e = txt.querySelector('[data-aedit]'); if (e) e.onclick = function () { openAdmin('edit', '&cat=' + cat + '&id=' + encodeURIComponent(id)); }; };
     if (cat === 'gallery' && it.blur) {
       render(head, '<div class="blur-gate"><span class="blur-gate-icon">⚠️</span><p class="blur-gate-hint">위험한 롬랑입니다! 열람하시겠습니까?</p><button class="blur-gate-submit" type="button">YES</button></div>', null);
@@ -909,12 +1009,14 @@ SITE_READY.then(function () {
   }, PARENT = {};
   function groupView(g) {
     var G = GROUPS[g];
+    setHead(g === 'archive' ? 'INDEX / 02' : 'INDEX / 03', G.title.toUpperCase(), '');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     render('<h2>' + G.title + '</h2><p class="sub">' + G.sub + '</p>', '<div class="gpick">' + G.opts.map(function (o, i) { return '<button data-sub="' + o[0] + '"><span class="gn">0' + (i + 1) + '</span><b>' + o[1] + '</b><small>' + o[2] + '</small><span class="ga">→</span></button>'; }).join('') + '</div>', null);
     txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { if (b.dataset.sub === 'banner') { nav('/banner'); bannerView(); return; } nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com'; listView(b.dataset.sub); }; });
   }
   var LIA_URL = 'https://lia-chat.jenojeno0423.workers.dev';
   function chatView() {
+    setHead('', '', '');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     document.getElementById('wn').textContent = '(chat)';
     var img = 'img/lia-fro.jpg';
@@ -964,6 +1066,7 @@ SITE_READY.then(function () {
   var GUEST = '<p class="guestbook-hint">남기고 싶은 말을 적어주세요 ~</p><p class="guestbook-hint">오직 SEOL만 열람합니다.</p><form class="message-form" action="https://formspree.io/f/xljrkazq" method="POST"><input type="text" name="name" placeholder="이름 (선택)"><textarea name="message" placeholder="메시지" rows="5" required></textarea><button type="submit">보내기</button><p class="message-form-status" aria-live="polite"></p></form>';
   // 배너: 맨 위는 내 배너(누르면 배너 이미지 저장), 그 아래로 친구들 배너가 한 줄씩. 관리 → 배너에서 올려요.
   function bannerView() {
+    setHead('EXTRA / 02', 'BANNER', '02 — banner');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var all = SITE.data.banners || [], mine = all.filter(function (b) { return b.mine; })[0], fr = all.filter(function (b) { return !b.mine; });
     var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy" referrerpolicy="no-referrer" onerror="var a=this.closest(\'a\')||this;a.remove()">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
@@ -972,6 +1075,7 @@ SITE_READY.then(function () {
       '<section class="bnr-list">' + (fr.length ? fr.map(img).join('') : '<p class="bnr-empty">아직 없어요</p>') + '</section></div>', null);
   }
   function guestView() {
+    setHead('EXTRA / 03', 'GUESTBOOK', '03 — guestbook');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var show = function (html) {
       render('', '<div class="guest">' + html + '</div>', null);
@@ -1050,6 +1154,8 @@ SITE_READY.then(function () {
     win.classList.toggle('w-info', k === 'seol');
     win.classList.toggle('w-du', k === 'dressup');
     win.classList.toggle('w-adm', k === 'admin');
+    var HEADS = { seol: ['', '', ''], characters: ['ARCHIVE / 01', 'CHARACTERS', '01 — characters'], archive: ['INDEX / 02', 'ARCHIVE', '02 — archive'], extra: ['INDEX / 03', 'EXTRA', '03 — extra'], log: ['ARCHIVE / 01', 'LOG', '01 — log'], gallery: ['ARCHIVE / 02', 'GALLERY', ''], ooc: ['EXTRA / 01', 'OOC', '01 — ooc'], banner: ['EXTRA / 02', 'BANNER', '02 — banner'], guest: ['EXTRA / 03', 'GUESTBOOK', '03 — guestbook'], dressup: ['SYNDROME ୨୧ LIA', 'CLOSET', ''], admin: ['ADMIN', 'MANAGE', ''] };
+    var hh = HEADS[k] || ['', '', '']; setHead(hh[0], hh[1], hh[2]);
     if (k === 'admin') adminView();
     else if (k === 'banner') bannerView();
     else if (k === 'guest') guestView();
