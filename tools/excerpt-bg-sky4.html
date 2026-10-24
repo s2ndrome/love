@@ -1,0 +1,41 @@
+<!-- SYNDROME & LIA — 발췌기 배경 시안5-4. 하늘색 미니멀 (스크립트 없음, 통째로 붙여넣기) -->
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@1&family=Archivo:wdth,wght@125,900&display=swap");
+html, body { height: 100%; margin: 0; }
+.sk-bg, .sk-top { position: absolute; inset: 0; pointer-events: none; overflow: hidden; container-type: size;
+  --sk: #a9bccb; --sk2: #8ea4b5; --sk3: #5f7889; --mid: #8f9aa4; }
+.sk-bg { z-index: 0; background: #ffffff; }
+.sk-top { z-index: 2; }
+
+/* 위 선 + 왼쪽 세로선 + 아래 선 (하늘색) */
+.sk-bg .ln { position: absolute; left: 3.2cqmin; right: 0; top: 3.6cqmin; bottom: 4.8cqmin; border: 0 solid var(--sk2); border-left-width: 1px; border-top-width: 1px; }
+.sk-bg .ln::after { content: ""; position: absolute; left: -1px; bottom: 0; width: 5cqmin; height: 1px; background: var(--sk2); }
+/* 아래 선에 걸친 WET (A) FLAME: 속은 흰색, 하늘색 1px 테두리 */
+.sk-bg .hv { position: absolute; left: 6.2cqmin; bottom: 4.8cqmin; transform: translateY(50%) scaleY(.82); transform-origin: left center; padding: 0 1.4cqmin; background: #ffffff; white-space: nowrap;
+  font: 900 8.6cqmin/.86 "Archivo", "Arial Black", "Helvetica Neue", Impact, sans-serif; font-stretch: 125%; letter-spacing: -.01em; color: #ffffff; -webkit-text-stroke: 1px var(--sk2); }
+.sk-bg .hv::after { content: ""; position: absolute; left: 100%; top: 50%; width: 100cqmin; height: 1px; background: var(--sk2); transform: scaleY(1.22); }
+
+/* 위 층: 위 선에 얹힌 머리글 · 바코드 · 알약 태그 */
+.sk-top .ed { position: absolute; left: 6cqmin; top: 3.6cqmin; transform: translateY(-55%); padding: 0 1cqmin; background: #ffffff; white-space: nowrap;
+  font: 400 max(13px, 3.2cqmin)/.92 "Geist", "Helvetica Neue", Arial, sans-serif; letter-spacing: -.055em; color: var(--sk3); }
+.sk-top .ed em { font: italic 400 1em/.92 "Instrument Serif", "Times New Roman", serif; letter-spacing: -.02em; }
+.sk-top .ed sup { font: 400 max(6px, .8cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: 0; color: var(--mid); vertical-align: 1.6em; margin-left: .3em; }
+.sk-top .pl { position: absolute; right: 4cqmin; top: 3.6cqmin; transform: translateY(-50%); display: flex; align-items: center; gap: .7cqmin; padding-left: 1cqmin; background: #ffffff; }
+.sk-top .pill { display: inline-block; padding: .5em 1em; border-radius: 99px; background: var(--sk2); color: #ffffff; white-space: nowrap;
+  font: 400 max(6.5px, .85cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+.sk-top .pill.o { background: #ffffff; color: var(--sk3); box-shadow: inset 0 0 0 1px var(--sk); }
+.sk-top .bcw { line-height: 0; margin-right: 1.6cqmin; }
+.sk-top .bc { display: inline-block; width: 8cqmin; min-width: 28px; height: 1.5cqmin; min-height: 6px;
+  background: repeating-linear-gradient(90deg, var(--sk3) 0 1px, transparent 1px 2px, var(--sk3) 2px 4px, transparent 4px 5px, var(--sk3) 5px 6px, transparent 6px 8px, var(--sk3) 8px 9px, transparent 9px 12px); }
+
+/* 좁은 화면: 작은 장식 숨김 */
+@container (max-width: 300px) { .sk-top .pill.o, .sk-top .bcw { display: none; } }
+</style>
+<div class="sk-bg" aria-hidden="true">
+  <div class="ln"></div>
+  <div class="hv">WET (A) FLAME</div>
+</div>
+<div class="sk-top" data-layer="top" aria-hidden="true">
+  <span class="ed" data-layer="top">Syndrome <em>&amp;</em> Lia<sup>(00)</sup></span>
+  <span class="pl" data-layer="top"><span class="bcw"><span class="bc"></span></span><span class="pill o">Excerpt</span><span class="pill">017</span></span>
+</div>

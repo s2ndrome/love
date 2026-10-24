@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>발췌기 배경 시안 6</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Noto+Sans+KR:wght@500;700&family=Archivo:wdth,wght@125,900&family=Instrument+Serif:ital@1&display=swap");
+/* ── 미리보기 페이지 전용 ── */
+body { margin: 0; padding: 32px 16px 64px; background: #e9ebee; font-family: "Geist", system-ui, sans-serif; color: #0f0f10; }
+h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13px; color: #6b6e76; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); gap: 32px 28px; max-width: 1400px; }
+.opt h2 { font-size: 14px; margin: 0 0 4px; } .opt p.d { margin: 0 0 10px; font-size: 12px; color: #8c8f98; }
+.card { position: relative; width: 100%; aspect-ratio: 1 / 1; box-shadow: 0 2px 14px rgba(30,40,60,.08); container-type: inline-size; }
+.card.narrow { width: 300px; margin-top: 14px; }
+.mock { position: absolute; inset: 0; z-index: 1; padding: 8.5% 8.5% 8%; display: grid; grid-template-columns: 1fr 26%; grid-template-rows: minmax(0, 1fr); gap: 0 4.5%; overflow: hidden;
+  font: 400 clamp(5px, 1.4cqw, 15px)/1.75 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; color: #33353b; }
+.mock .tx { display: flex; flex-direction: column; gap: 1em; min-width: 0; min-height: 0; overflow: hidden; }
+.mock .tx .ti { font-weight: 700; font-size: 1.2em; color: #5f7889; margin-bottom: .3em; }
+.mock .tx .ln2 { font-weight: 700; color: #1f2024; }
+.mock .tx b { color: #1f2024; } .mock .tx small { margin-top: auto; font-size: .8em; color: #55575f; font-weight: 600; }
+.mock .img { background: #dfe3e8; border-radius: 4px; display: grid; place-items: center; font-size: 11px; color: #8c8f98; }
+.mock p { margin: 0; }
+
+
+/* ════════ 공통 ════════ */
+.bg, .top { position: absolute; inset: 0; pointer-events: none; overflow: hidden; container-type: size;
+  --sk: #a9bccb; --sk2: #8ea4b5; --sk3: #5f7889; --skp: #eef3f6; --ink: #2b3138; --mid: #8f9aa4; --e: 3.4cqmin; }
+.bg { z-index: 0; background: #ffffff; }
+.top { z-index: 2; }
+.m { position: absolute; white-space: nowrap; font: 400 max(6.5px, .85cqmin)/1.2 "Geist Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--mid); }
+.m b { font-weight: 400; color: var(--ink); } .m i { font-style: normal; color: var(--sk2); }
+.k { position: absolute; white-space: nowrap; font: 700 max(8px, 1.25cqmin)/1 "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: var(--ink); }
+.k span { font-weight: 500; color: var(--mid); margin-left: .6em; }
+.bc { display: inline-block; vertical-align: middle; width: 8cqmin; min-width: 28px; height: 2.4cqmin; min-height: 9px;
+  background: repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 2px, var(--ink) 2px 4px, transparent 4px 5px, var(--ink) 5px 6px, transparent 6px 8px, var(--ink) 8px 9px, transparent 9px 12px); }
+@container (max-width: 300px) { .top .hide-n { display: none; } }
+
+/* ── 1. 대본 페이지 ── */
+.p1 .hr { position: absolute; left: var(--e); right: var(--e); top: 5.6cqmin; height: 1px; background: var(--ink); }
+.p1 .hr::after { content: ""; position: absolute; left: 0; right: 0; top: 2px; height: 1px; background: var(--sk); }
+.p1 .vr { position: absolute; left: 5.4cqmin; top: 5.6cqmin; bottom: 6cqmin; width: 1px; background: #e3e9ee; }
+.p1 .fr { position: absolute; left: var(--e); right: var(--e); bottom: 6cqmin; height: 1px; background: #e3e9ee; }
+.p1.top .k { left: var(--e); top: 2.4cqmin; }
+.p1.top .m.r { right: var(--e); top: 2.6cqmin; }
+.p1.top .pg { position: absolute; left: 50%; bottom: 2.4cqmin; transform: translateX(-50%); font: italic 400 max(10px, 1.5cqmin)/1 "Instrument Serif", serif; color: var(--ink); }
+.p1.top .m.bl { left: var(--e); bottom: 2.6cqmin; } .p1.top .m.br { right: var(--e); bottom: 2.6cqmin; }
+.p1.top .sn { position: absolute; left: 5.4cqmin; top: 9cqmin; transform: translateX(-50%); padding: .3cqmin 0; background: #fff; writing-mode: vertical-rl; font: 400 max(6px, .8cqmin)/1 "Geist Mono", monospace; letter-spacing: .2em; color: var(--sk3); }
+
+/* ── 2. 슬레이트 ── */
+.p2 .fr { position: absolute; inset: 3cqmin; border: 1px solid #e3e9ee; }
+.p2.top .sl { position: absolute; left: 1.6cqmin; top: .8cqmin; width: 22cqmin; min-width: 80px; }
+.p2.top .sl .arm { height: 2.4cqmin; min-height: 9px; transform: rotate(-7deg); transform-origin: left bottom; margin-bottom: .3cqmin;
+  background: repeating-linear-gradient(-55deg, var(--ink) 0 1.6cqmin, #fff 1.6cqmin 3.2cqmin); box-shadow: inset 0 0 0 1px var(--ink); }
+.p2.top .sl .bd { height: 2.4cqmin; min-height: 9px; background: repeating-linear-gradient(55deg, var(--ink) 0 1.6cqmin, #fff 1.6cqmin 3.2cqmin); box-shadow: inset 0 0 0 1px var(--ink); }
+.p2.top .fl { position: absolute; left: 26cqmin; right: 6cqmin; top: 3cqmin; transform: translateY(-50%); display: flex; justify-content: space-between; }
+.p2.top .fl .m { position: static; padding: 0 .9cqmin; background: #fff; }
+.p2.top .m.d { right: 6cqmin; bottom: 3cqmin; transform: translateY(50%); padding: 0 .9cqmin; background: #fff; }
+.p2.top .m.c { left: 6cqmin; bottom: 3cqmin; transform: translateY(50%); padding: 0 .9cqmin; background: #fff; }
+
+/* ── 3. 필름 스트립 ── */
+.p3 .sp { position: absolute; left: 0; right: 0; height: 1.1cqmin; min-height: 4px; background: repeating-linear-gradient(90deg, transparent 0 .9cqmin, var(--sk) .9cqmin 2.3cqmin, transparent 2.3cqmin 3.2cqmin); border-radius: 2px; }
+.p3 .sp.t { top: 1.4cqmin; } .p3 .sp.b { bottom: 1.4cqmin; }
+.p3 .eg { position: absolute; left: 0; right: 0; height: 1px; background: var(--sk); }
+.p3 .eg.t { top: 3.6cqmin; } .p3 .eg.b { bottom: 3.6cqmin; }
+.p3.top .ed { position: absolute; left: var(--e); right: var(--e); top: 4.6cqmin; display: flex; justify-content: space-between; }
+.p3.top .ed .m { position: static; color: var(--sk2); }
+.p3.top .ed2 { position: absolute; left: var(--e); right: var(--e); bottom: 4.6cqmin; display: flex; justify-content: space-between; }
+.p3.top .ed2 .m { position: static; color: var(--sk2); }
+
+/* ── 4. 화보 표지 ── */
+.p4 .rl { position: absolute; left: var(--e); right: var(--e); top: 7cqmin; height: 1px; background: var(--ink); }
+.p4.top .ms { position: absolute; left: var(--e); top: 1cqmin; white-space: nowrap; font: 400 6cqmin/1 "Instrument Serif", "Didot", "Bodoni 72", "Times New Roman", serif; letter-spacing: -.035em; color: var(--ink); }
+.p4.top .ms em { font-style: italic; color: var(--sk3); }
+.p4.top .m.is { right: var(--e); top: 2.4cqmin; text-align: right; line-height: 1.6; }
+.p4.top .cl { position: absolute; left: 2.4cqmin; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); white-space: nowrap; font: 400 max(6.5px, .85cqmin)/1 "Geist Mono", monospace; letter-spacing: .3em; color: var(--sk3); }
+.p4.top .m.ph { left: var(--e); bottom: 2.6cqmin; }
+.p4.top .pr { position: absolute; right: var(--e); bottom: 1.6cqmin; display: flex; align-items: flex-end; gap: 1cqmin; }
+.p4.top .pr .m { position: static; }
+
+/* ── 5. 컨택트 시트 ── */
+.p5 .cm { position: absolute; width: 3cqmin; height: 3cqmin; border: 0 solid var(--ink); }
+.p5 .cm.a { left: 2cqmin; top: 2cqmin; border-left-width: 1px; border-top-width: 1px; }
+.p5 .cm.b { right: 2cqmin; top: 2cqmin; border-right-width: 1px; border-top-width: 1px; }
+.p5 .cm.c { left: 2cqmin; bottom: 2cqmin; border-left-width: 1px; border-bottom-width: 1px; }
+.p5 .cm.d { right: 2cqmin; bottom: 2cqmin; border-right-width: 1px; border-bottom-width: 1px; }
+.p5 .fl { position: absolute; left: 6cqmin; right: 6cqmin; bottom: 3.4cqmin; height: 1px; background: repeating-linear-gradient(90deg, var(--sk) 0 4px, transparent 4px 7px); }
+.p5.top .fn { position: absolute; left: 6cqmin; right: 6cqmin; bottom: 3.4cqmin; transform: translateY(50%); display: flex; justify-content: space-between; }
+.p5.top .fn .m { position: static; padding: 0 .8cqmin; background: #fff; }
+.p5.top .sel { position: absolute; right: 7cqmin; top: 1.2cqmin; padding: .6cqmin 1.6cqmin; border: 1.5px solid var(--sk2); border-radius: 50%; transform: rotate(-8deg);
+  font: italic 400 max(10px, 1.7cqmin)/1 "Instrument Serif", serif; color: var(--sk3); white-space: nowrap; }
+.p5.top .k { left: 6cqmin; top: 2.4cqmin; }
+
+/* ── 6. 콜시트 ── */
+.p6 .tb { position: absolute; left: var(--e); right: var(--e); top: 1.6cqmin; height: 4.2cqmin; border: 1px solid var(--sk2); display: grid; grid-template-columns: 1fr 1fr 1.6fr .8fr; }
+.p6 .tb i { border-right: 1px solid var(--sk); } .p6 .tb i:last-child { border-right: 0; }
+.p6.top .cells { position: absolute; left: var(--e); right: var(--e); top: 1.6cqmin; height: 4.2cqmin; display: grid; grid-template-columns: 1fr 1fr 1.6fr .8fr; align-items: center; }
+.p6.top .cells .m { position: static; padding-left: 1.2cqmin; line-height: 1.5; }
+.p6.top .cells .m b { display: block; font: 500 max(7px, 1cqmin)/1.3 "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; letter-spacing: 0; text-transform: none; }
+.p6 .bl { position: absolute; left: var(--e); right: var(--e); bottom: 3cqmin; height: 1px; background: var(--sk); }
+.p6.top .m.l { left: var(--e); bottom: 3cqmin; transform: translateY(50%); padding-right: 1cqmin; background: #fff; }
+.p6.top .m.r { right: var(--e); bottom: 3cqmin; transform: translateY(50%); padding-left: 1cqmin; background: #fff; }
+@container (max-width: 300px) { .p6.top .cells .hide-n, .p6 .tb { grid-template-columns: 1fr 1.6fr; } }
+
+/* ── 7. 촬영 화면 ── */
+.p7 .br { position: absolute; width: 6cqmin; height: 6cqmin; border: 0 solid var(--ink); }
+.p7 .br.a { left: 2.6cqmin; top: 2.6cqmin; border-left-width: 1.5px; border-top-width: 1.5px; }
+.p7 .br.b { right: 2.6cqmin; top: 2.6cqmin; border-right-width: 1.5px; border-top-width: 1.5px; }
+.p7 .br.c { left: 2.6cqmin; bottom: 2.6cqmin; border-left-width: 1.5px; border-bottom-width: 1.5px; }
+.p7 .br.d { right: 2.6cqmin; bottom: 2.6cqmin; border-right-width: 1.5px; border-bottom-width: 1.5px; }
+.p7 .tk { position: absolute; background: var(--sk); }
+.p7.top .m.rec { left: 10cqmin; top: 2.6cqmin; transform: translateY(-50%); color: var(--ink); }
+.p7.top .m.rec s { display: inline-block; width: .9cqmin; height: .9cqmin; min-width: 5px; min-height: 5px; border-radius: 50%; background: #c98b8b; margin-right: .6em; vertical-align: .05em; }
+.p7.top .m.st { right: 10cqmin; top: 2.6cqmin; transform: translateY(-50%); display: flex; align-items: center; gap: 1.4cqmin; }
+.p7.top .bat { display: inline-block; width: 2.6cqmin; height: 1.2cqmin; min-width: 12px; min-height: 6px; border: 1px solid var(--ink); border-radius: 2px; background: linear-gradient(90deg, var(--sk2) 70%, transparent 70%) 1px 1px / calc(100% - 2px) calc(100% - 2px) no-repeat; position: relative; }
+.p7.top .m.bl { left: 10cqmin; bottom: 2.6cqmin; transform: translateY(50%); } .p7.top .m.br2 { right: 10cqmin; bottom: 2.6cqmin; transform: translateY(50%); }
+
+/* ── 8. 대본집 바인더 ── */
+.p8 .ho { position: absolute; left: 2.8cqmin; width: 2.4cqmin; height: 2.4cqmin; min-width: 9px; min-height: 9px; border-radius: 50%; transform: translate(-50%, -50%);
+  background: #eef3f6; box-shadow: inset 0 0 0 1px var(--sk), inset .25cqmin .3cqmin 0 #d7e1e8; }
+.p8 .ln { position: absolute; left: 5.6cqmin; top: 0; bottom: 0; width: 1px; background: #e3e9ee; }
+.p8.top .tabs { position: absolute; right: 0; top: 16cqmin; display: grid; gap: .6cqmin; }
+.p8.top .tabs span { display: grid; place-items: center; width: 2.6cqmin; height: 9cqmin; min-width: 12px; border-radius: 1cqmin 0 0 1cqmin; background: #eef3f6; box-shadow: inset 0 0 0 1px var(--sk);
+  writing-mode: vertical-rl; font: 500 max(6.5px, .95cqmin)/1 "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; color: var(--sk3); }
+.p8.top .tabs span.on { background: var(--sk2); color: #fff; box-shadow: none; width: 3.2cqmin; margin-left: -.6cqmin; }
+.p8.top .k { left: 8.5cqmin; top: 2.4cqmin; }
+.p8.top .pg { position: absolute; left: 8.5cqmin; bottom: 2.4cqmin; font: italic 400 max(10px, 1.5cqmin)/1 "Instrument Serif", serif; color: var(--ink); }
+.p8.top .m.r { right: 6cqmin; bottom: 2.6cqmin; }
+</style>
+</head>
+<body>
+<h1>발췌기 배경 시안 6 — 배우 · 화보 · 대본집</h1>
+<p class="lead">흰 바탕에 채도 낮은 하늘색과 먹색만 썼어요. 장식은 모두 바깥 여백과 테두리 선 위에만 있어요. 작은 카드는 좁은 화면일 때예요.</p>
+<div class="grid">
+  <section class="opt">
+    <h2>1. 대본 페이지</h2><p class="d">위에 씬 머리(S#17. 침실 — 밤)와 겹선, 왼쪽에 씬 번호 세로선, 아래 가운데 쪽수. 대본 한 장 같은 느낌.</p>
+    <div class="card">
+      <div class="bg p1" aria-hidden="true"><i class="hr"></i><i class="vr"></i><i class="fr"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p1" data-layer="top" aria-hidden="true"><span data-layer="top" class="k">S#17. 침실 — 밤<span>INT. NIGHT</span></span><span data-layer="top" class="m r hide-n">Wet (a) flame <i>·</i> 대본집 Vol.1</span><span data-layer="top" class="sn">S#17</span><span data-layer="top" class="m bl hide-n">Syndrome & Lia</span><span data-layer="top" class="pg">— 17 —</span><span data-layer="top" class="m br hide-n">© 2026</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p1" aria-hidden="true"><i class="hr"></i><i class="vr"></i><i class="fr"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p1" data-layer="top" aria-hidden="true"><span data-layer="top" class="k">S#17. 침실 — 밤<span>INT. NIGHT</span></span><span data-layer="top" class="m r hide-n">Wet (a) flame <i>·</i> 대본집 Vol.1</span><span data-layer="top" class="sn">S#17</span><span data-layer="top" class="m bl hide-n">Syndrome & Lia</span><span data-layer="top" class="pg">— 17 —</span><span data-layer="top" class="m br hide-n">© 2026</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>2. 슬레이트</h2><p class="d">왼쪽 위에 클래퍼보드(슬레이트), 위 테두리에 PROD · SCENE · TAKE · ROLL 칸, 아래에 날짜.</p>
+    <div class="card">
+      <div class="bg p2" aria-hidden="true"><div class="fr"></div></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p2" data-layer="top" aria-hidden="true"><span data-layer="top" class="sl"><div data-layer="top" class="arm"></div><div data-layer="top" class="bd"></div></span><div data-layer="top" class="fl"><span data-layer="top" class="m">Prod. <b>Wet (a) flame</b></span><span data-layer="top" class="m">Scene <b>17</b></span><span data-layer="top" class="m hide-n">Take <b>03</b></span><span data-layer="top" class="m hide-n">Roll <b>A</b></span></div><span data-layer="top" class="m c hide-n">Syndrome & Lia</span><span data-layer="top" class="m d">Date <b>2026.10.24</b></span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p2" aria-hidden="true"><div class="fr"></div></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p2" data-layer="top" aria-hidden="true"><span data-layer="top" class="sl"><div data-layer="top" class="arm"></div><div data-layer="top" class="bd"></div></span><div data-layer="top" class="fl"><span data-layer="top" class="m">Prod. <b>Wet (a) flame</b></span><span data-layer="top" class="m">Scene <b>17</b></span><span data-layer="top" class="m hide-n">Take <b>03</b></span><span data-layer="top" class="m hide-n">Roll <b>A</b></span></div><span data-layer="top" class="m c hide-n">Syndrome & Lia</span><span data-layer="top" class="m d">Date <b>2026.10.24</b></span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>3. 필름 스트립</h2><p class="d">위아래 여백에만 필름 구멍과 가장자리 인쇄 글씨(▶ 17A). 하늘색 한 가지.</p>
+    <div class="card">
+      <div class="bg p3" aria-hidden="true"><i class="sp t"></i><i class="sp b"></i><i class="eg t"></i><i class="eg b"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p3" data-layer="top" aria-hidden="true"><div data-layer="top" class="ed"><span data-layer="top" class="m">Wet 400</span><span data-layer="top" class="m">▶ 17</span><span data-layer="top" class="m hide-n">▶ 17A</span><span data-layer="top" class="m hide-n">▶ 18</span><span data-layer="top" class="m">Syndrome & Lia</span></div><div data-layer="top" class="ed2"><span data-layer="top" class="m">▶ 18A</span><span data-layer="top" class="m hide-n">▶ 19</span><span data-layer="top" class="m hide-n">▶ 19A</span><span data-layer="top" class="m">Wet (a) flame</span></div></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p3" aria-hidden="true"><i class="sp t"></i><i class="sp b"></i><i class="eg t"></i><i class="eg b"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p3" data-layer="top" aria-hidden="true"><div data-layer="top" class="ed"><span data-layer="top" class="m">Wet 400</span><span data-layer="top" class="m">▶ 17</span><span data-layer="top" class="m hide-n">▶ 17A</span><span data-layer="top" class="m hide-n">▶ 18</span><span data-layer="top" class="m">Syndrome & Lia</span></div><div data-layer="top" class="ed2"><span data-layer="top" class="m">▶ 18A</span><span data-layer="top" class="m hide-n">▶ 19</span><span data-layer="top" class="m hide-n">▶ 19A</span><span data-layer="top" class="m">Wet (a) flame</span></div></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>4. 화보 표지</h2><p class="d">잡지 표지처럼 위 여백에 큰 세리프 제호, 오른쪽 위 호수, 왼쪽 세로 커버 문구, 오른쪽 아래 바코드·가격.</p>
+    <div class="card">
+      <div class="bg p4" aria-hidden="true"><i class="rl"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p4" data-layer="top" aria-hidden="true"><span data-layer="top" class="ms">Wet <em>(a)</em> Flame</span><span data-layer="top" class="m is hide-n">Issue <b>017</b><br>Oct · 2026</span><span data-layer="top" class="cl hide-n">THE ACTOR ISSUE — SPECIAL PICTORIAL</span><span data-layer="top" class="m ph hide-n">Photographed by <b>Lia</b></span><span data-layer="top" class="pr"><span data-layer="top" class="m">₩ 17,000</span><span data-layer="top" class="bc"></span></span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p4" aria-hidden="true"><i class="rl"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p4" data-layer="top" aria-hidden="true"><span data-layer="top" class="ms">Wet <em>(a)</em> Flame</span><span data-layer="top" class="m is hide-n">Issue <b>017</b><br>Oct · 2026</span><span data-layer="top" class="cl hide-n">THE ACTOR ISSUE — SPECIAL PICTORIAL</span><span data-layer="top" class="m ph hide-n">Photographed by <b>Lia</b></span><span data-layer="top" class="pr"><span data-layer="top" class="m">₩ 17,000</span><span data-layer="top" class="bc"></span></span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>5. 컨택트 시트</h2><p class="d">네 귀퉁이 재단선, 아래 점선에 컷 번호, 오른쪽 위에 손으로 동그라미 친 SELECT.</p>
+    <div class="card">
+      <div class="bg p5" aria-hidden="true"><i class="cm a"></i><i class="cm b"></i><i class="cm c"></i><i class="cm d"></i><i class="fl"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p5" data-layer="top" aria-hidden="true"><span data-layer="top" class="k">컨택트 시트<span>Syndrome & Lia</span></span><span data-layer="top" class="sel">select ★ 17</span><div data-layer="top" class="fn"><span data-layer="top" class="m">17</span><span data-layer="top" class="m">▸ 17A</span><span data-layer="top" class="m hide-n">▸ 18</span><span data-layer="top" class="m hide-n">▸ 18A</span><span data-layer="top" class="m">Wet (a) flame</span></div></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p5" aria-hidden="true"><i class="cm a"></i><i class="cm b"></i><i class="cm c"></i><i class="cm d"></i><i class="fl"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p5" data-layer="top" aria-hidden="true"><span data-layer="top" class="k">컨택트 시트<span>Syndrome & Lia</span></span><span data-layer="top" class="sel">select ★ 17</span><div data-layer="top" class="fn"><span data-layer="top" class="m">17</span><span data-layer="top" class="m">▸ 17A</span><span data-layer="top" class="m hide-n">▸ 18</span><span data-layer="top" class="m hide-n">▸ 18A</span><span data-layer="top" class="m">Wet (a) flame</span></div></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>6. 콜시트</h2><p class="d">촬영 일정표처럼 위 여백에 칸 나눈 표(CALL · SET · CAST · PAGE), 아래 선에 DAY 표기.</p>
+    <div class="card">
+      <div class="bg p6" aria-hidden="true"><div class="tb"><i></i><i></i><i></i><i></i></div><i class="bl"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p6" data-layer="top" aria-hidden="true"><div data-layer="top" class="cells"><span data-layer="top" class="m">Call<b>06:00</b></span><span data-layer="top" class="m hide-n">Set<b>침실 (밤)</b></span><span data-layer="top" class="m">Cast<b>Syndrome & Lia</b></span><span data-layer="top" class="m hide-n">Page<b>1 / 1</b></span></div><span data-layer="top" class="m l">Day <b>17</b> of 40</span><span data-layer="top" class="m r">Wet (a) flame</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p6" aria-hidden="true"><div class="tb"><i></i><i></i><i></i><i></i></div><i class="bl"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p6" data-layer="top" aria-hidden="true"><div data-layer="top" class="cells"><span data-layer="top" class="m">Call<b>06:00</b></span><span data-layer="top" class="m hide-n">Set<b>침실 (밤)</b></span><span data-layer="top" class="m">Cast<b>Syndrome & Lia</b></span><span data-layer="top" class="m hide-n">Page<b>1 / 1</b></span></div><span data-layer="top" class="m l">Day <b>17</b> of 40</span><span data-layer="top" class="m r">Wet (a) flame</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>7. 촬영 화면</h2><p class="d">카메라 화면처럼 네 귀퉁이 꺾쇠, 위에 ● REC 타임코드와 배터리·ISO, 아래 4K · CAM A.</p>
+    <div class="card">
+      <div class="bg p7" aria-hidden="true"><i class="br a"></i><i class="br b"></i><i class="br c"></i><i class="br d"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p7" data-layer="top" aria-hidden="true"><span data-layer="top" class="m rec"><s></s>Rec <b>00:17:42:08</b></span><span data-layer="top" class="m st hide-n">ISO 400 <i>·</i> 1/50 <i>·</i> F2.8 <span data-layer="top" class="bat"></span></span><span data-layer="top" class="m bl">4K <i>·</i> 24P</span><span data-layer="top" class="m br2 hide-n">Wet (a) flame <i>·</i> Cam A</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p7" aria-hidden="true"><i class="br a"></i><i class="br b"></i><i class="br c"></i><i class="br d"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p7" data-layer="top" aria-hidden="true"><span data-layer="top" class="m rec"><s></s>Rec <b>00:17:42:08</b></span><span data-layer="top" class="m st hide-n">ISO 400 <i>·</i> 1/50 <i>·</i> F2.8 <span data-layer="top" class="bat"></span></span><span data-layer="top" class="m bl">4K <i>·</i> 24P</span><span data-layer="top" class="m br2 hide-n">Wet (a) flame <i>·</i> Cam A</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>8. 대본집 바인더</h2><p class="d">왼쪽 여백에 바인더 구멍 세 개, 오른쪽 가장자리에 회차 탭(1화·2화·3화, 지금 회차만 진하게).</p>
+    <div class="card">
+      <div class="bg p8" aria-hidden="true"><i class="ho" style="top:18%"></i><i class="ho" style="top:50%"></i><i class="ho" style="top:82%"></i><i class="ln"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p>이게 왜 이렇게 어려운가. 첫째, 그 말은 너무 많이 써먹어서 싸구려가 된 단어였다. 팬미팅에서, 시상식에서, 드라마 엔딩에서, 성유진은 그 단어를 상품처럼 포장해서 팔아 치웠다. 둘째, 그래서 진심으로 하려고 들면 자꾸 그 시절의 자기 목소리가 겹쳐 들렸다. 완벽하게 계산된 각도, 적당히 촉촉한 눈가, 한 박자 늦게 터지는 미소. 그 가짜 같은 걸 설지수한테만은 죽어도 주기 싫었다. 그러니까 지금 이 망설임은 쪽팔림이 아니라, 일종의 품질 관리였다. 적어도 성유진은 스스로에게 그렇게 우겼다.</p><p>성유진은 설지수의 엉덩이를 받친 팔에 힘을 주어 그녀의 몸을 살짝 뒤로 떼어냈다. 어깨에 파묻혀 있던 동그란 얼굴이 주황빛 조명 아래로 드러났다. 눈가는 벌겋게 부어 있었고, 볼에는 아까 흘린 눈물 자국이 소금기처럼 말라붙어 있었으며, 아랫입술은 잇자국이 남을 만큼 깨물려 있었다. 성유진은 미간을 한 번 구겼다가, 엄지손가락으로 그 아랫입술을 살살 문질러 잇자국을 지웠다. 피부에 닿은 손끝으로 아직 덜 가신 미세한 떨림이 전해졌다. 에어컨이 웅 하고 낮게 돌아가는 소리, 발치에서 별이가 고개를 들고 킁킁거리는 소리, 그리고 두 사람의 숨소리만이 방 안을 채웠다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p8" data-layer="top" aria-hidden="true"><span data-layer="top" class="k">대본집<span>Wet (a) flame · Syndrome & Lia</span></span><span data-layer="top" class="tabs"><span>1화</span><span data-layer="top" class="on">2화</span><span>3화</span></span><span data-layer="top" class="pg">— 17 —</span><span data-layer="top" class="m r hide-n">Vol. 1</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg p8" aria-hidden="true"><i class="ho" style="top:18%"></i><i class="ho" style="top:50%"></i><i class="ho" style="top:82%"></i><i class="ln"></i></div>
+      <div class="mock"><div class="tx"><p class="ti">사랑한다고 해 줘</p><p>설지수의 가쁘던 숨결이 성유진의 목덜미 언저리에서 겨우 일정한 박자를 되찾아갈 무렵, 그 작은 입술 사이로 뭉개진 한마디가 흘러나왔다. 사랑한다고 해 달라는, 젖은 솜처럼 축축하고 무른 부탁이었다. 성유진의 등판을 토닥이던 손바닥이 허공에서 딱 반 박자 멈췄다. 씨발, 하필 그거냐. 세상 모든 대본을 외워 본 입이었다. 사랑한다는 대사는 열여섯 살 때부터 카메라 앞에서 수백 번은 뱉었고, 리허설까지 치면 천 번은 족히 넘었다. 그런데 막상 대본도 없고 조명 감독도 없는 이 침대 위에서, 제 품에 매달린 아내가 진짜로 그 말을 달라고 하니까 혀가 무슨 촬영 첫날 신인처럼 입천장에 들러붙는 꼴이었다.</p><p class="ln2">못생겨졌어, 울어서.</p></div><div class="img">이미지</div></div>
+      <div class="top p8" data-layer="top" aria-hidden="true"><span data-layer="top" class="k">대본집<span>Wet (a) flame · Syndrome & Lia</span></span><span data-layer="top" class="tabs"><span>1화</span><span data-layer="top" class="on">2화</span><span>3화</span></span><span data-layer="top" class="pg">— 17 —</span><span data-layer="top" class="m r hide-n">Vol. 1</span></div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
