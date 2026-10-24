@@ -223,11 +223,12 @@ async function encryptPost(password, plaintext) {
 }
 
 async function putFile(path, base64Content, message, sha, retried) {
+  const url = `${API}/${encodeURIComponent(path).replace(/%2F/g, "/")}`; // 제목에 ? # 가 있어도 파일 이름이 안 잘리게
   const token = tokenInput.value.trim();
   const body = { message, content: base64Content, branch: BRANCH };
   if (sha) body.sha = sha;
 
-  const res = await fetch(`${API}/${path}`, {
+  const res = await fetch(url, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -246,7 +247,7 @@ async function putFile(path, base64Content, message, sha, retried) {
   // touched the file since (409). Either way, fetch the current sha
   // once and retry.
   if (!retried && (res.status === 409 || (res.status === 422 && /sha/i.test(detail.message || "")))) {
-    const existing = await fetch(`${API}/${path}?ref=${BRANCH}`, { cache: "no-store",
+    const existing = await fetch(`${url}?ref=${BRANCH}`, { cache: "no-store",
       headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }
     });
     if (existing.ok) {
