@@ -530,7 +530,7 @@ async function openGalleryPostForEditing(token, id) {
     const entry = list.find(x => x.id === id);
 
     const photos = photoSrcs.map(src => ({ kind: "existing", src }));
-    let thumbIndex = entry ? photoSrcs.indexOf(entry.thumb) : -1;
+    let thumbIndex = entry ? photoSrcs.indexOf(entry.thumbOf || entry.thumb) : -1;
     if (thumbIndex < 0) thumbIndex = 0;
 
     currentPost = { category: "gallery", title: id, sha: file.sha, locked: null, photos, thumbIndex };
@@ -655,6 +655,21 @@ ${finalPhotos.map(p => `  <img class="gallery-photo" src="${p}" alt="${safeTitle
     if (index === -1) throw new Error("목록에서 이 글을 찾을 수 없어요. 새로고침 후 다시 시도해주세요.");
 
     const entry = { id, thumbLabel: list[index].thumbLabel || id, thumb: finalPhotos[thumbIndex], group };
+    // 움짤이 대표사진이면 목록용 정지 이미지를 써요 (같은 움짤이면 전에 만든 걸 그대로)
+    if (/\.gif$/i.test(entry.thumb)) {
+      const src = entry.thumb;
+      if (list[index].thumbOf === src && list[index].thumb) entry.thumb = list[index].thumb;
+      else {
+        setStatus("움짤 썸네일 만드는 중…");
+        const p = currentPost.photos[thumbIndex];
+        const gifBlob = p.kind === "existing" ? await (await fetch(`../${src}`, { cache: "no-store" })).blob() : p.file;
+        const still = await compressImage(gifBlob, 900, 0.88);
+        const stillPath = `img/${id}-thumb-${Date.now().toString(36)}.jpg`;
+        await putFile(stillPath, await readFileAsBase64(still), `Add still thumbnail for ${id}`, undefined, token);
+        entry.thumb = stillPath;
+      }
+      entry.thumbOf = src;
+    }
     if (blur) entry.blur = true;
     list[index] = entry;
 

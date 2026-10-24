@@ -20,8 +20,9 @@
   {
     "id": "image-115",
     "thumbLabel": "IMAGE 115",
-    "thumb": "img/image-115-1.gif",
-    "group": "B"
+    "thumb": "img/image-115-thumb.jpg",
+    "group": "B",
+    "thumbOf": "img/image-115-1.gif"
   },
   {
     "id": "image-114",

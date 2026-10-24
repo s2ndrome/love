@@ -321,6 +321,14 @@ ${imgPaths.map(p => `  <img class="gallery-photo" src="${p}" alt="${safeTitle}" 
 
     setStatus("gallery.json 업데이트 중…");
     const entry = { id, thumbLabel: `IMAGE ${padded}`, thumb: imgPaths[0], group };
+    // 움짤이 대표사진이면 목록용으로 가벼운 정지 이미지를 따로 만들어요 (아이폰에서 큰 GIF 썸네일이 깨져 보여서)
+    if (/\.gif$/i.test(imgPaths[0])) {
+      setStatus("움짤 썸네일 만드는 중…");
+      const still = await compressImage(files[0], 900, 0.88);
+      const stillPath = `img/${id}-thumb.jpg`;
+      await putFile(stillPath, await readFileAsBase64(still), `Add still thumbnail for ${id}`);
+      entry.thumb = stillPath; entry.thumbOf = imgPaths[0];
+    }
     if (blur) entry.blur = true;
     gallery.unshift(entry);
     const newJsonText = JSON.stringify(gallery, null, 2) + "\n";
