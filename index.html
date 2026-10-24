@@ -673,7 +673,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .bnr-list { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 8px; }
 .bnr-list .bnr-empty { grid-column: 1 / -1; }
 .bnr-list h5 { align-self: stretch; }
-.bnr img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.bnr img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 1; object-fit: cover; border-radius: 8px; } /* 모든 배너를 내 배너(800×200) 비율로 */
 .bnr a { display: block; transition: opacity .2s; }
 .bnr a:hover { opacity: .75; }
 .bnr-empty { margin: 0; font: 400 12px var(--ko); color: var(--mid); }
