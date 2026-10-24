@@ -966,7 +966,7 @@ SITE_READY.then(function () {
   function bannerView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var all = SITE.data.banners || [], mine = all.filter(function (b) { return b.mine; })[0], fr = all.filter(function (b) { return !b.mine; });
-    var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
+    var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy" referrerpolicy="no-referrer" onerror="var a=this.closest(\'a\')||this;a.remove()">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
     render('<h2>Banner</h2><p class="sub">' + (fr.length ? fr.length + ' friends' : '친구 배너를 기다리는 중') + '</p>',
       '<div class="bnr">' + (mine ? '<section class="bnr-me"><a href="' + SYN.esc(mine.img) + '" download="syndrome-lia-banner.' + ((mine.img.split('.').pop() || 'png').split('?')[0]) + '" title="눌러서 배너 저장"><img src="' + SYN.esc(mine.img) + '" alt="SYNDROME ୨୧ LIA"></a></section>' : '') +
       '<section class="bnr-list">' + (fr.length ? fr.map(img).join('') : '<p class="bnr-empty">아직 없어요</p>') + '</section></div>', null);

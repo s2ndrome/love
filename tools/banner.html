@@ -137,7 +137,7 @@ function render() {
   if (!banners.length) { listEl.innerHTML = '<p class="empty">아직 배너가 없어요.</p>'; return; }
   listEl.innerHTML = banners.map((b, i) => `
     <div class="item${b.mine ? " mine" : ""}">
-      <img src="${esc(src(b))}" alt="">
+      <img src="${esc(src(b))}" alt="" referrerpolicy="no-referrer">
       <div class="acts">
         ${b.mine ? "" : `<button type="button" data-up="${i}" ${i === 0 || (banners[i - 1] && banners[i - 1].mine) ? "disabled" : ""}>▲</button>
         <button type="button" data-down="${i}" ${i === banners.length - 1 ? "disabled" : ""}>▼</button>
@@ -175,6 +175,12 @@ $("load-btn").onclick = async () => { setStatus("불러오는 중…"); if (awai
 $("add-btn").onclick = async () => {
   const url = $("url").value.trim(), name = $("name").value.trim(), link = $("link").value.trim(), mine = $("mine").checked;
   if (!picked && !/^https?:\/\//.test(url)) { setStatus("배너 이미지를 넣어주세요.", "error"); return; }
+  if (!picked) {
+    // 이미지 주소가 진짜 그림인지 먼저 열어봐요 (사이트 주소나, 다른 사이트에서 막아둔 그림은 홈에서 안 보여요)
+    setStatus("이미지 주소 확인 중…");
+    const ok = await new Promise(res => { const t = new Image(); t.referrerPolicy = "no-referrer"; t.onload = () => res(t.naturalWidth > 0); t.onerror = () => res(false); t.src = url; setTimeout(() => res(false), 8000); });
+    if (!ok) { setStatus("이 주소로는 배너 그림을 불러올 수 없어요.\n사이트 주소가 아니라 그림 자체의 주소여야 하고, 다른 사이트가 막아둔 그림일 수도 있어요.\n배너 그림을 저장해서 위 칸에 붙여넣거나 파일로 올려주세요. (움직이는 GIF는 파일로 올려야 움직여요)", "error"); return; }
+  }
   if (link && !/^https?:\/\//.test(link)) { setStatus("누르면 갈 주소는 https:// 로 시작해야 해요.", "error"); return; }
   const btn = $("add-btn"); btn.disabled = true;
   try {
