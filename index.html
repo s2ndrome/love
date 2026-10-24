@@ -759,6 +759,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 [data-pv="a"] .pe { margin-top: 40px; padding-top: 22px; border-top: 1px solid #e6e6e8; }
 [data-pv="a"] .pn { margin-bottom: 30px; }
 [data-pv="a"] .pe .wft { text-align: center; }
+[data-pv="a"] .pe.pe-g { margin-top: 28px; padding-top: 0; border-top: 0; }
 
 </style>
 </head>
@@ -925,7 +926,8 @@ SITE_READY.then(function () {
       var t = cat === 'gallery' ? '<img src="' + x.thumb + '" alt="">' : '<b>' + esc(label(x)) + '</b>';
       return '<button class="pn-i ' + cls + '" data-pk="' + k + '" data-pid="' + esc(x.id).replace(/"/g, '&quot;') + '"><small>' + lab + '</small>' + t + '</button>';
     };
-    var end = '<div class="pe"><nav class="pn">' + pn(L[i + 1], '이전 글', 'pn-p') + pn(L[i - 1], '다음 글', 'pn-n') + '</nav><footer class="wft">Wet (A) Flame !</footer></div>';
+    var end = cat === 'gallery' ? '<div class="pe pe-g"><footer class="wft">Wet (A) Flame !</footer></div>' // 갤러리는 이전/다음 글 없이
+      : '<div class="pe"><nav class="pn">' + pn(L[i + 1], '이전 글', 'pn-p') + pn(L[i - 1], '다음 글', 'pn-n') + '</nav><footer class="wft">Wet (A) Flame !</footer></div>';
     return { top: top, end: end };
   }
   function render(head, body, pic) {
