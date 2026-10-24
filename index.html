@@ -660,12 +660,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (min-width: 700px) { .info { grid-template-columns: 200px 1fr; gap: 0 30px; } .info-links { grid-column: 1 / -1; margin-top: 18px; } }
 /* chat with lia — the real AI chat (Cloudflare worker) embedded */
 .chat { display: flex; flex-direction: column; height: min(60vh, 520px); height: min(60dvh, 520px); }
-.chat .who { display: flex; align-items: center; gap: 10px; padding: 0 0 12px; border-bottom: 1px solid var(--hair); }
-.chat .who img { width: 40px; height: 40px; flex: none; object-fit: cover; object-position: center 20%; border-radius: 50%; }
-.chat .who > div { height: 40px; display: flex; flex-direction: column; justify-content: center; background: none !important; border: 0 !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; }
-.chat .who b { font: italic 400 20px/1 var(--serif); }
-.chat .who small { display: block; font: 400 10px/1 var(--mono); color: var(--mid); letter-spacing: .1em; margin-top: 6px; }
-.chat .who a { margin-left: auto; font: 400 10px var(--mono); color: #4f9ad0; text-decoration: none; }
+.chat .who { display: flex; align-items: center; gap: 9px; padding: 0 0 11px; border-bottom: 1px solid var(--ink); }
+.chat .who img { width: 28px; height: 28px; flex: none; object-fit: cover; object-position: center 20%; border-radius: 50%; }
+.chat .who b { font: italic 400 22px/1 var(--serif); }
+.chat .who .chip { padding: 3px 8px 2px; border: 1px solid #86b6dc; border-radius: 20px; font: 400 9px/1 var(--mono); letter-spacing: .1em; color: #4f88b8; }
+.chat .who .duty { margin-left: auto; display: flex; align-items: center; gap: 6px; font: 400 9.5px/1 var(--mono); letter-spacing: .12em; color: var(--mid); }
+.chat .who .duty i { width: 7px; height: 7px; border-radius: 50%; background: #86b6dc; box-shadow: 0 0 0 3px rgba(134,182,220,.25); }
 .chat iframe { flex: 1; width: 100%; border: 0; display: block; margin-top: 10px; background: transparent; }
 /* 배너 */
 .bnr h5 { margin: 0 0 10px; font: 400 10px var(--mono); letter-spacing: .16em; color: #9fb3c4; }
@@ -918,7 +918,7 @@ SITE_READY.then(function () {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     document.getElementById('wn').textContent = '(chat)';
     var img = 'img/lia-fro.jpg';
-    render('', '<div class="chat"><div class="who">' + (img ? '<img src="' + img + '" alt="">' : '') + '<div><b>Lia</b><small>SEOLJISU · AQUA GUIDE</small></div></div><iframe src="' + LIA_URL + '" title="리아와 채팅"></iframe></div>', null);
+    render('', '<div class="chat"><div class="who">' + (img ? '<img src="' + img + '" alt="">' : '') + '<b>Lia</b><span class="chip">AQUA</span><span class="chip">S</span><span class="duty"><i></i>ON DUTY</span></div><iframe src="' + LIA_URL + '" title="리아와 채팅"></iframe></div>', null);
   }
   // ======== Seol → INFO ========
   // 여기 글만 고치면 info 창에 그대로 나와요.
