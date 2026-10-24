@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>발췌기 배경 시안 5</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&family=Archivo:wdth,wght@125,900&family=Instrument+Serif:ital@1&display=swap");
+/* ── 미리보기 페이지 전용 ── */
+body { margin: 0; padding: 32px 16px 64px; background: #e9ebee; font-family: "Geist", system-ui, sans-serif; color: #0f0f10; }
+h1 { font-size: 18px; margin: 0 0 4px; } .lead { margin: 0 0 28px; font-size: 13px; color: #6b6e76; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 32px 28px; max-width: 1400px; }
+.opt h2 { font-size: 14px; margin: 0 0 4px; } .opt p.d { margin: 0 0 10px; font-size: 12px; color: #8c8f98; }
+.card { position: relative; width: 100%; aspect-ratio: 1 / 1; box-shadow: 0 2px 14px rgba(30,40,60,.08); container-type: inline-size; }
+.card.narrow { width: 300px; margin-top: 14px; }
+.mock { position: absolute; inset: 0; z-index: 1; padding: 8.5% 8.5% 8%; display: grid; grid-template-columns: 1fr 26%; gap: 0 4.5%;
+  font: 400 clamp(7px, 1.75cqw, 13px)/1.85 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; color: #33353b; }
+.mock .tx { display: flex; flex-direction: column; gap: 1.2em; min-width: 0; }
+.mock .tx b { color: #1f2024; } .mock .tx small { margin-top: auto; font-size: .8em; color: #55575f; font-weight: 600; }
+.mock .img { background: #dfe3e8; border-radius: 4px; display: grid; place-items: center; font-size: 11px; color: #8c8f98; }
+.mock p { margin: 0; }
+
+
+/* ════════ 공통 (채도 낮은 하늘색) ════════ */
+.bg, .top { position: absolute; inset: 0; pointer-events: none; overflow: hidden; container-type: size;
+  --sk: #a9bccb; --sk2: #8ea4b5; --sk3: #5f7889; --skp: #e9eff3; --ink: #2b3138; --mid: #8f9aa4; --e: 3.4cqmin; }
+.bg { z-index: 0; background: #ffffff; }
+.top { z-index: 2; }
+.top .m { position: absolute; white-space: nowrap; font: 400 max(6.5px, .85cqmin)/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--mid); }
+.top .m b { font: 500 max(8px, 1.15cqmin)/1 "Geist", "Helvetica Neue", Arial, sans-serif; letter-spacing: -.01em; text-transform: none; color: var(--ink); margin-right: .9em; }
+.top .m i { font-style: normal; color: var(--sk2); }
+.pill { display: inline-block; padding: .5em 1em; border-radius: 99px; background: var(--sk2); color: #fff; font: 500 max(6.5px, .85cqmin)/1 "Geist Mono", monospace; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+.pill.o { background: #fff; color: var(--sk3); box-shadow: inset 0 0 0 1px var(--sk); }
+.bc { display: inline-block; width: 8cqmin; min-width: 28px; height: 1.5cqmin; min-height: 6px;
+  background: repeating-linear-gradient(90deg, var(--sk3) 0 1px, transparent 1px 2px, var(--sk3) 2px 4px, transparent 4px 5px, var(--sk3) 5px 6px, transparent 6px 8px, var(--sk3) 8px 9px, transparent 9px 12px); }
+@container (max-width: 300px) { .top .hide-n { display: none; } }
+
+/* ── 1. HUD 패널 ── */
+.h1.bg { background: linear-gradient(160deg, #eef3f6, #e2eaf0); }
+.h1 .pn { position: absolute; inset: 5.4cqmin 5.4cqmin 6cqmin; background: #fff; border: 1px solid var(--sk); border-radius: 1.2cqmin; }
+.h1 .ru { position: absolute; left: 5.4cqmin; right: 16cqmin; top: 2.7cqmin; height: 1px; background: repeating-linear-gradient(90deg, var(--sk) 0 2px, transparent 2px 5px); }
+.h1 .tk { position: absolute; right: 2.2cqmin; top: 22cqmin; bottom: 22cqmin; width: 1.2cqmin; background: repeating-linear-gradient(180deg, var(--sk) 0 1px, transparent 1px 1.6cqmin); }
+.h1 .tk::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 2cqmin; background: repeating-linear-gradient(180deg, var(--sk2) 0 1px, transparent 1px 8cqmin); }
+.h1.top .m.a { left: 5.4cqmin; top: 2.7cqmin; transform: translateY(-50%); padding-right: 1.2cqmin; background: #edf2f5; }
+.h1.top .pl { position: absolute; right: 5.4cqmin; top: 2.7cqmin; transform: translateY(-50%); display: flex; gap: .7cqmin; }
+.h1.top .v { position: absolute; left: 2.7cqmin; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); }
+.h1.top .m.c { left: 5.4cqmin; bottom: 3cqmin; transform: translateY(50%); display: flex; align-items: center; gap: 1.2cqmin; }
+.h1.top .m.c .bar { display: inline-block; width: 10cqmin; height: 2px; background: linear-gradient(90deg, var(--sk2) 72%, var(--skp) 72%); }
+.h1.top .m.d { right: 5.4cqmin; bottom: 3cqmin; transform: translateY(50%); display: flex; align-items: center; gap: 1cqmin; }
+.h1.top .dot { position: absolute; left: 5.4cqmin; top: 5.4cqmin; width: 3cqmin; height: 3cqmin; min-width: 14px; min-height: 14px; transform: translate(-50%, -50%); border-radius: 50%;
+  background: var(--sk2); color: #fff; display: grid; place-items: center; font: 400 max(9px, 1.6cqmin)/1 "Geist", sans-serif; box-shadow: 0 0 0 .5cqmin #fff; }
+
+/* ── 2. 트랙 시트 ── */
+.h2 .fr { position: absolute; inset: 3cqmin; border: 1px solid #dfe6eb; }
+.h2 .ac { position: absolute; height: .7cqmin; min-height: 3px; background: var(--sk2); }
+.h2 .ac.a { right: 3cqmin; top: 3cqmin; width: 18cqmin; transform: translateY(-50%) skewX(-30deg); }
+.h2 .ac.b { left: 3cqmin; bottom: 3cqmin; width: 11cqmin; transform: translateY(50%) skewX(-30deg); background: var(--sk); }
+.h2.top .no { position: absolute; left: 6cqmin; top: 3cqmin; transform: translateY(-50%); display: flex; align-items: center; gap: .9cqmin; padding: 0 1cqmin; background: #fff; }
+.h2.top .no i { font: italic 400 max(14px, 3cqmin)/1 "Instrument Serif", "Times New Roman", serif; color: var(--ink); padding: 0 .3em; border: 1px solid var(--ink); }
+.h2.top .no span { font: 400 max(6px, .75cqmin)/1.2 "Geist Mono", monospace; letter-spacing: .14em; color: var(--mid); text-transform: uppercase; }
+.h2.top .m.b { right: 24cqmin; top: 3cqmin; transform: translateY(-50%); padding: 0 1cqmin; background: #fff; }
+.h2.top .st { position: absolute; left: 17cqmin; right: 12cqmin; bottom: 3cqmin; transform: translateY(50%); display: flex; justify-content: space-between; }
+.h2.top .st .m { position: static; padding: 0 .8cqmin; background: #fff; }
+.h2.top .pg { position: absolute; right: 3cqmin; bottom: 3cqmin; transform: translate(35%, 35%); width: 5cqmin; height: 5cqmin; min-width: 22px; min-height: 22px; border-radius: 50%;
+  background: #fff; box-shadow: inset 0 0 0 1px var(--sk2); display: grid; place-items: center; font: 400 max(7px, 1cqmin)/1 "Geist Mono", monospace; color: var(--sk3); }
+.h2.top .pg::before { content: ""; position: absolute; inset: .5cqmin; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--sk2); border-right-color: var(--sk2); }
+.h2.top .vt { position: absolute; right: 3cqmin; top: 50%; transform: translate(50%, -50%); writing-mode: vertical-rl; padding: 1cqmin 0; background: #fff;
+  font: italic 400 max(9px, 1.4cqmin)/1 "Instrument Serif", serif; color: var(--sk3); white-space: nowrap; }
+
+/* ── 3. 글라스 프레임 ── */
+.h3.bg { background: #f3f6f8; }
+.h3 .pn { position: absolute; inset: 4.4cqmin; background: #fff; border-radius: 1.6cqmin; box-shadow: inset 0 0 0 1px var(--sk); }
+.h3 .pn::after { content: ""; position: absolute; inset: -1.6cqmin; border-radius: 2.6cqmin; border: 1px solid #d8e2e9; }
+.h3 .cd { position: absolute; width: 1.2cqmin; height: 1.2cqmin; min-width: 6px; min-height: 6px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px var(--sk2); transform: translate(-50%, -50%); }
+.h3.top .tg { position: absolute; left: 8cqmin; top: 4.4cqmin; transform: translateY(-50%); display: flex; gap: .7cqmin; }
+.h3.top .tg2 { position: absolute; right: 8cqmin; bottom: 4.4cqmin; transform: translateY(50%); display: flex; gap: .7cqmin; }
+.h3.top .vt { position: absolute; left: 4.4cqmin; top: 50%; transform: translate(-50%, -50%) rotate(180deg); writing-mode: vertical-rl; padding: 1cqmin .2cqmin; background: #f3f6f8;
+  font: italic 400 max(9px, 1.4cqmin)/1 "Instrument Serif", serif; color: var(--sk3); white-space: nowrap; }
+.h3.top .m.n { left: 8cqmin; bottom: 4.4cqmin; transform: translateY(50%); padding: 0 .8cqmin; background: #fff; }
+.h3.top .m.r { right: 8cqmin; top: 4.4cqmin; transform: translateY(-50%); padding: 0 .8cqmin; background: #fff; }
+
+/* ── 4. 하늘색 미니멀 (흰 바탕) ── */
+.h4 .ln { position: absolute; left: 3.2cqmin; right: 0; top: 3.6cqmin; bottom: 4.8cqmin; border: 0 solid var(--sk2); border-left-width: 1px; border-top-width: 1px; }
+.h4 .ln::after { content: ""; position: absolute; left: -1px; bottom: 0; width: 5cqmin; height: 1px; background: var(--sk2); }
+.h4 .hv { position: absolute; left: 6.2cqmin; bottom: 4.8cqmin; transform: translateY(50%) scaleY(.82); transform-origin: left center; padding: 0 1.4cqmin; background: #fff; white-space: nowrap;
+  font: 900 8.6cqmin/.86 "Archivo", "Arial Black", "Helvetica Neue", Impact, sans-serif; font-stretch: 125%; letter-spacing: -.01em; color: #fff; -webkit-text-stroke: 1px var(--sk2); }
+.h4 .hv::after { content: ""; position: absolute; left: 100%; top: 50%; width: 100cqmin; height: 1px; background: var(--sk2); transform: scaleY(1.22); }
+.h4.top .ed { position: absolute; left: 6cqmin; top: 3.6cqmin; transform: translateY(-55%); padding: 0 1cqmin; background: #fff; white-space: nowrap;
+  font: 400 max(13px, 3.2cqmin)/.92 "Geist", "Helvetica Neue", Arial, sans-serif; letter-spacing: -.055em; color: var(--sk3); }
+.h4.top .ed em { font: italic 400 1em/.92 "Instrument Serif", "Times New Roman", serif; letter-spacing: -.02em; }
+.h4.top .ed sup { font: 400 max(6px, .8cqmin)/1 "Geist Mono", monospace; letter-spacing: 0; color: var(--mid); vertical-align: 1.6em; margin-left: .3em; }
+.h4.top .pl { position: absolute; right: 4cqmin; top: 3.6cqmin; transform: translateY(-50%); display: flex; gap: .7cqmin; }
+.h4.top .bcw { position: absolute; right: 22cqmin; top: 3.6cqmin; transform: translateY(-50%); padding: 0 1cqmin; background: #fff; line-height: 0; }
+</style>
+</head>
+<body>
+<h1>발췌기 배경 시안 5 — 채도 낮은 하늘색</h1>
+<p class="lead">하늘색은 #a9bccb · #8ea4b5 · #5f7889 세 단계만 썼어요. 글 뒤는 모두 흰색이고, 장식은 테두리 선 위와 바깥 여백에만 있어요. 작은 카드는 좁은 화면일 때예요.</p>
+<div class="grid">
+  <section class="opt">
+    <h2>1. HUD 패널</h2><p class="d">하늘빛 여백에 흰 패널. 위 점선 눈금, 오른쪽 세로 눈금, 아래 진행 막대·바코드, 왼쪽 위 동그라미 배지.</p>
+    <div class="card">
+      <div class="bg h1" aria-hidden="true"><div class="pn"></div><i class="ru"></i><i class="tk"></i></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h1" data-layer="top" aria-hidden="true"><span data-layer="top" class="m a"><b>SYNDROME & LIA</b>EXC-017 <i>·</i> Wet (a) flame</span><span data-layer="top" class="pl"><span data-layer="top" class="pill o hide-n">Excerpt</span><span data-layer="top" class="pill">Log</span></span><span data-layer="top" class="m v hide-n">Syndrome & Lia — Wet (a) flame — 2026</span><span data-layer="top" class="dot">*</span><span data-layer="top" class="m c hide-n">72% <span data-layer="top" class="bar"></span> 96.5</span><span data-layer="top" class="m d"><span data-layer="top" class="bc"></span>No. 17</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg h1" aria-hidden="true"><div class="pn"></div><i class="ru"></i><i class="tk"></i></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h1" data-layer="top" aria-hidden="true"><span data-layer="top" class="m a"><b>SYNDROME & LIA</b>EXC-017 <i>·</i> Wet (a) flame</span><span data-layer="top" class="pl"><span data-layer="top" class="pill o hide-n">Excerpt</span><span data-layer="top" class="pill">Log</span></span><span data-layer="top" class="m v hide-n">Syndrome & Lia — Wet (a) flame — 2026</span><span data-layer="top" class="dot">*</span><span data-layer="top" class="m c hide-n">72% <span data-layer="top" class="bar"></span> 96.5</span><span data-layer="top" class="m d"><span data-layer="top" class="bc"></span>No. 17</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>2. 트랙 시트</h2><p class="d">흰 바탕에 아주 옅은 테두리. 비스듬한 하늘색 띠 두 개, 왼쪽 위 번호, 아래 기록 줄, 오른쪽 아래 페이지 원.</p>
+    <div class="card">
+      <div class="bg h2" aria-hidden="true"><div class="fr"></div><i class="ac a"></i><i class="ac b"></i></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h2" data-layer="top" aria-hidden="true"><span data-layer="top" class="no"><i>17</i><span>Syndrome<br>& Lia</span></span><span data-layer="top" class="m b hide-n">Wet (a) flame <i>*</i></span><div data-layer="top" class="st"><span data-layer="top" class="m">Wet (a) flame</span><span data-layer="top" class="m hide-n">Syndrome & Lia</span><span data-layer="top" class="m hide-n">2026.10</span><span data-layer="top" class="m">Log 017</span></div><span data-layer="top" class="pg">01</span><span data-layer="top" class="vt hide-n">good night, wet a flame</span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg h2" aria-hidden="true"><div class="fr"></div><i class="ac a"></i><i class="ac b"></i></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h2" data-layer="top" aria-hidden="true"><span data-layer="top" class="no"><i>17</i><span>Syndrome<br>& Lia</span></span><span data-layer="top" class="m b hide-n">Wet (a) flame <i>*</i></span><div data-layer="top" class="st"><span data-layer="top" class="m">Wet (a) flame</span><span data-layer="top" class="m hide-n">Syndrome & Lia</span><span data-layer="top" class="m hide-n">2026.10</span><span data-layer="top" class="m">Log 017</span></div><span data-layer="top" class="pg">01</span><span data-layer="top" class="vt hide-n">good night, wet a flame</span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>3. 글라스 프레임</h2><p class="d">연한 회청 바탕에 둥근 흰 패널, 바깥에 한 겹 더 둥근 선. 네 모서리 작은 원, 알약 태그, 왼쪽 세로 이탤릭.</p>
+    <div class="card">
+      <div class="bg h3" aria-hidden="true"><div class="pn"></div><i class="cd" style="left:4.4cqmin;top:4.4cqmin"></i><i class="cd" style="left:calc(100% - 4.4cqmin);top:4.4cqmin"></i><i class="cd" style="left:4.4cqmin;top:calc(100% - 4.4cqmin)"></i><i class="cd" style="left:calc(100% - 4.4cqmin);top:calc(100% - 4.4cqmin)"></i></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h3" data-layer="top" aria-hidden="true"><span data-layer="top" class="tg"><span data-layer="top" class="pill">Syndrome & Lia</span><span data-layer="top" class="pill o hide-n">Wet (a) flame</span></span><span data-layer="top" class="m r hide-n">No. 17 <i>*</i></span><span data-layer="top" class="vt hide-n">stay a little longer, wet a flame</span><span data-layer="top" class="m n">2026 · Excerpt</span><span data-layer="top" class="tg2"><span data-layer="top" class="pill o">Log</span><span data-layer="top" class="pill hide-n">017</span></span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg h3" aria-hidden="true"><div class="pn"></div><i class="cd" style="left:4.4cqmin;top:4.4cqmin"></i><i class="cd" style="left:calc(100% - 4.4cqmin);top:4.4cqmin"></i><i class="cd" style="left:4.4cqmin;top:calc(100% - 4.4cqmin)"></i><i class="cd" style="left:calc(100% - 4.4cqmin);top:calc(100% - 4.4cqmin)"></i></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h3" data-layer="top" aria-hidden="true"><span data-layer="top" class="tg"><span data-layer="top" class="pill">Syndrome & Lia</span><span data-layer="top" class="pill o hide-n">Wet (a) flame</span></span><span data-layer="top" class="m r hide-n">No. 17 <i>*</i></span><span data-layer="top" class="vt hide-n">stay a little longer, wet a flame</span><span data-layer="top" class="m n">2026 · Excerpt</span><span data-layer="top" class="tg2"><span data-layer="top" class="pill o">Log</span><span data-layer="top" class="pill hide-n">017</span></span></div>
+    </div>
+  </section>
+  <section class="opt">
+    <h2>4. 하늘색 미니멀</h2><p class="d">흰 바탕. A번 구조를 하늘색으로: 선과 WET (A) FLAME 테두리(1px)를 하늘색, 오른쪽 위 알약 태그와 바코드.</p>
+    <div class="card">
+      <div class="bg h4" aria-hidden="true"><div class="ln"></div><div class="hv">WET (A) FLAME</div></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><p>그는 그녀의 귓가에, 마치 성호를 긋듯 신중하고 경건하게 다시 한번 속삭였다. 이것은 길들이기 위한 기만도, 상황을 모면하기 위한 거짓말도 아니었다.</p><p><b>“다시 한번 말할게. 사랑해.”</b></p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h4" data-layer="top" aria-hidden="true"><span data-layer="top" class="ed">Syndrome <em>&</em> Lia<sup>(00)</sup></span><span data-layer="top" class="pl"><span data-layer="top" class="pill o hide-n">Excerpt</span><span data-layer="top" class="pill">017</span></span><span data-layer="top" class="bcw hide-n"><span data-layer="top" class="bc"></span></span></div>
+    </div>
+    <div class="card narrow">
+      <div class="bg h4" aria-hidden="true"><div class="ln"></div><div class="hv">WET (A) FLAME</div></div>
+      <div class="mock"><div class="tx"><p><b>“그러니까 끝까지 같이 가.”</b></p><p>마침내 그가 입을 열었다. 목소리는 물기에 젖어 떨리고 있었지만, 그 어느 때보다도 확고하고 선명했다. 그토록 부정하고 입에 담기조차 꺼렸던 그 말. 하지만 지금 이 순간, 그 말은 그의 존재 자체를 건 유일한 진심이었다.</p><small>LIA</small></div><div class="img">이미지</div></div>
+      <div class="top h4" data-layer="top" aria-hidden="true"><span data-layer="top" class="ed">Syndrome <em>&</em> Lia<sup>(00)</sup></span><span data-layer="top" class="pl"><span data-layer="top" class="pill o hide-n">Excerpt</span><span data-layer="top" class="pill">017</span></span><span data-layer="top" class="bcw hide-n"><span data-layer="top" class="bc"></span></span></div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
