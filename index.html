@@ -725,9 +725,9 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 .gallery-item .gcap small { font: 500 10px "Inter", var(--sans); color: #9a9ca3; letter-spacing: .06em; margin-right: 6px; }
 .wbody .back { font: 500 11px "Inter", var(--sans) !important; letter-spacing: .06em; }
 /* 글 안의 카드 테두리·파란 제목칸 없애기 (제목은 창 머리에 크게 나와요) */
-.wbody .note-card, .wbody .post .feed-card { border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
-.wbody .note-tag, .wbody .post .feed-card > .card-header { display: none !important; }
-.wbody .note-compose { border-top: 0 !important; margin-top: 14px !important; padding-top: 0 !important; }
+.wbody .note-card:not(.ooc-card), .wbody .post .feed-card { border: 0 !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+.wbody .note-card:not(.ooc-card) .note-tag, .wbody .post .feed-card > .card-header { display: none !important; }
+.wbody .note-card:not(.ooc-card) .note-compose { border-top: 0 !important; margin-top: 14px !important; padding-top: 0 !important; }
 .wbody .note-cursor, .wbody .note-icon { display: none !important; }
 
 @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
@@ -900,7 +900,7 @@ SITE_READY.then(function () {
   }
   function wrap(cat, it, html) {
     if (cat === 'diary') return '<div class="note-card"><span class="note-tag">' + label(it) + '</span><div class="note-body">' + html + '</div><div class="note-compose"><span class="note-cursor">|</span><span class="note-icon">' + NOTE + '</span></div></div>';
-    if (cat === 'ooc') return '<div class="note-card"><span class="note-tag">' + label(it) + '</span><div class="note-body">' + html + '</div><div class="note-compose"><button class="copy-button" type="button" aria-label="복사하기">' + COPY + '</button></div></div>';
+    if (cat === 'ooc') return '<div class="note-card ooc-card"><span class="note-tag">' + label(it) + '</span><div class="note-body">' + html + '</div><div class="note-compose"><button class="copy-button" type="button" aria-label="복사하기">' + COPY + '</button></div></div>';
     return html;
   }
   var galA = false; // ARCH 갤러리 글: 제목·카드 틀 없이 사진만
@@ -938,7 +938,7 @@ SITE_READY.then(function () {
   var PAGE = {}, PER = 6, GG = 'A';
   function listView(k, pg) {
     galA = false;
-    var LH = { log: ['ARCHIVE / 01', 'LOG', '01 — log'], gallery: ['ARCHIVE / 02', 'GALLERY', ''], ooc: ['EXTRA / 01', 'OOC', '01 — ooc'], characters: ['ARCHIVE / 01', 'CHARACTERS', '01 — characters'], share: ['EXTRA', 'SHARE', ''] }[k]; if (LH) setHead(LH[0], LH[1], LH[2]);
+    var LH = { log: ['ARCHIVE / 01', 'LOG', '01 — log'], gallery: ['ARCHIVE / 02', 'GALLERY', ''], ooc: ['', '', ''], characters: ['ARCHIVE / 01', 'CHARACTERS', '01 — characters'], share: ['EXTRA', 'SHARE', ''] }[k]; if (LH) setHead(LH[0], LH[1], LH[2]);
     var cat = CAT[k], all = D[cat], body;
     if (cat === 'gallery') all = all.filter(function (x) { return (x.group || 'A') === GG; });
     var tabs = cat === 'gallery' ? '<nav class="gtabs"><button data-g="A"' + (GG === 'A' ? ' class="on"' : '') + '>ARCH</button><button data-g="C"' + (GG === 'C' ? ' class="on"' : '') + '>f(s) ²</button><button data-g="B"' + (GG === 'B' ? ' class="on"' : '') + '>S &amp; L</button></nav>' : '';
@@ -981,7 +981,8 @@ SITE_READY.then(function () {
     var go = function () { nav('/' + k); listView(k); document.getElementById('wurl').textContent = 'www.syndrome.com'; };
     if (isAdmin() && /^(diary|ooc|world|gallery)$/.test(cat)) head += '<button class="back adm-edit" data-aedit>수정</button>';
     // 뒤로가기 버튼은 제목 위로, LOG / 26 같은 작은 글씨는 없음
-    if (PV) { var PF = postFrame(k, cat, it, cat === 'gallery' ? '' : dtitle, head, DE); setHead('', '', '', true); head = PF.top; window.__inpost = true; window.__pend = PF.end; }
+    if (cat === 'ooc') { setHead('', '', ''); window.__pend = ''; } // ooc는 예전 모양 그대로 (카드 + 뒤로가기)
+    else if (PV) { var PF = postFrame(k, cat, it, cat === 'gallery' ? '' : dtitle, head, DE); setHead('', '', '', true); head = PF.top; window.__inpost = true; window.__pend = PF.end; }
     else { setHead(head, cat === 'gallery' ? '' : dtitle, '', true); head = ''; window.__inpost = true; window.__pend = ''; }
     var wire = function () { document.getElementById('pback').onclick = go; var e = txt.querySelector('[data-aedit]'); if (e) e.onclick = function () { openAdmin('edit', '&cat=' + cat + '&id=' + encodeURIComponent(id)); }; };
     if (cat === 'gallery' && it.blur) {
@@ -1065,7 +1066,7 @@ SITE_READY.then(function () {
   var GUEST = '<p class="guestbook-hint">남기고 싶은 말을 적어주세요 ~</p><p class="guestbook-hint">오직 SEOL만 열람합니다.</p><form class="message-form" action="https://formspree.io/f/xljrkazq" method="POST"><input type="text" name="name" placeholder="이름 (선택)"><textarea name="message" placeholder="메시지" rows="5" required></textarea><button type="submit">보내기</button><p class="message-form-status" aria-live="polite"></p></form>';
   // 배너: 맨 위는 내 배너(누르면 배너 이미지 저장), 그 아래로 친구들 배너가 한 줄씩. 관리 → 배너에서 올려요.
   function bannerView() {
-    setHead('EXTRA / 02', 'BANNER', '02 — banner');
+    setHead('', '', '');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var all = SITE.data.banners || [], mine = all.filter(function (b) { return b.mine; })[0], fr = all.filter(function (b) { return !b.mine; });
     var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy" referrerpolicy="no-referrer" onerror="var a=this.closest(\'a\')||this;a.remove()">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
@@ -1074,7 +1075,7 @@ SITE_READY.then(function () {
       '<section class="bnr-list">' + (fr.length ? fr.map(img).join('') : '<p class="bnr-empty">아직 없어요</p>') + '</section></div>', null);
   }
   function guestView() {
-    setHead('EXTRA / 03', 'GUESTBOOK', '03 — guestbook');
+    setHead('', '', '');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var show = function (html) {
       render('', '<div class="guest">' + html + '</div>', null);
@@ -1153,7 +1154,7 @@ SITE_READY.then(function () {
     win.classList.toggle('w-info', k === 'seol');
     win.classList.toggle('w-du', k === 'dressup');
     win.classList.toggle('w-adm', k === 'admin');
-    var HEADS = { seol: ['', '', ''], characters: ['ARCHIVE / 01', 'CHARACTERS', '01 — characters'], archive: ['INDEX / 02', 'ARCHIVE', '02 — archive'], extra: ['INDEX / 03', 'EXTRA', '03 — extra'], log: ['ARCHIVE / 01', 'LOG', '01 — log'], gallery: ['ARCHIVE / 02', 'GALLERY', ''], ooc: ['EXTRA / 01', 'OOC', '01 — ooc'], banner: ['EXTRA / 02', 'BANNER', '02 — banner'], guest: ['EXTRA / 03', 'GUESTBOOK', '03 — guestbook'], dressup: ['SYNDROME ୨୧ LIA', 'CLOSET', ''], admin: ['ADMIN', 'MANAGE', ''] };
+    var HEADS = { seol: ['', '', ''], characters: ['ARCHIVE / 01', 'CHARACTERS', '01 — characters'], archive: ['INDEX / 02', 'ARCHIVE', '02 — archive'], extra: ['INDEX / 03', 'EXTRA', '03 — extra'], log: ['ARCHIVE / 01', 'LOG', '01 — log'], gallery: ['ARCHIVE / 02', 'GALLERY', ''], ooc: ['', '', ''], banner: ['', '', ''], guest: ['', '', ''], dressup: ['SYNDROME ୨୧ LIA', 'CLOSET', ''], admin: ['ADMIN', 'MANAGE', ''] };
     var hh = HEADS[k] || ['', '', '']; setHead(hh[0], hh[1], hh[2]);
     if (k === 'admin') adminView();
     else if (k === 'banner') bannerView();
