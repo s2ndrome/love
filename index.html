@@ -1067,11 +1067,16 @@ SITE_READY.then(function () {
   // 방명록: posts/guestbook.html을 불러와서 Formspree로 보내요 (페이지 이동 없이)
   var GUEST = '<p class="guestbook-hint">남기고 싶은 말을 적어주세요 ~</p><p class="guestbook-hint">오직 SEOL만 열람합니다.</p><form class="message-form" action="https://formspree.io/f/xljrkazq" method="POST"><input type="text" name="name" placeholder="이름 (선택)"><textarea name="message" placeholder="메시지" rows="5" required></textarea><button type="submit">보내기</button><p class="message-form-status" aria-live="polite"></p></form>';
   // 배너: 맨 위는 내 배너(누르면 배너 이미지 저장), 그 아래로 친구들 배너가 한 줄씩. 관리 → 배너에서 올려요.
+  // 배너 이미지가 안 뜨면: 먼저 주소 정보(referrer)를 붙여 한 번 더 불러보고, 그래도 안 되면 숨겨요
+  window.bnrErr = function (i) {
+    if (!i.dataset.r) { var n = i.cloneNode(); n.dataset.r = '1'; n.removeAttribute('referrerpolicy'); n.removeAttribute('loading'); i.replaceWith(n); return; }
+    (i.closest('a') || i).remove();
+  };
   function bannerView() {
     setHead('', '', '');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     var all = SITE.data.banners || [], mine = all.filter(function (b) { return b.mine; })[0], fr = all.filter(function (b) { return !b.mine; });
-    var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy" referrerpolicy="no-referrer" onerror="var a=this.closest(\'a\')||this;a.remove()">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
+    var img = function (b) { var i = '<img src="' + SYN.esc(b.img) + '" alt="' + SYN.esc(b.name || '') + '" loading="lazy" referrerpolicy="no-referrer" onerror="bnrErr(this)">'; return /^https?:\/\//.test(b.link || '') ? '<a href="' + SYN.esc(b.link) + '" target="_blank" rel="noopener" title="' + SYN.esc(b.name || '') + '">' + i + '</a>' : i; };
     render('<h2>Banner</h2><p class="sub">' + (fr.length ? fr.length + ' friends' : '친구 배너를 기다리는 중') + '</p>',
       '<div class="bnr">' + (mine ? '<section class="bnr-me"><a href="' + SYN.esc(mine.img) + '" download="syndrome-lia-banner.' + ((mine.img.split('.').pop() || 'png').split('?')[0]) + '" title="눌러서 배너 저장"><img src="' + SYN.esc(mine.img) + '" alt="SYNDROME ୨୧ LIA"></a></section>' : '') +
       '<section class="bnr-list">' + (fr.length ? fr.map(img).join('') : '<p class="bnr-empty">아직 없어요</p>') + '</section></div>', null);
