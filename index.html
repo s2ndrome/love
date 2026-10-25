@@ -1227,8 +1227,9 @@ SITE_READY.then(function () {
   au.addEventListener('loadedmetadata', sync);
   au.addEventListener('ended', function () { load(ti + 1); au.currentTime = 0; au.play().catch(function () {}); });
   document.getElementById('pp').onclick = toggle;
-  document.getElementById('prev').onclick = function () { if (au.currentTime > 3) au.currentTime = 0; else { load(ti - 1); au.currentTime = 0; } };
-  document.getElementById('next').onclick = function () { load(ti + 1); au.currentTime = 0; };
+  // 이전/다음 곡을 누르면 바로 재생
+  document.getElementById('prev').onclick = function () { if (au.currentTime > 3) au.currentTime = 0; else { load(ti - 1); au.currentTime = 0; } au.play().catch(function () {}); };
+  document.getElementById('next').onclick = function () { load(ti + 1); au.currentTime = 0; au.play().catch(function () {}); };
   window.__toggle = toggle;
   load(0);
 
