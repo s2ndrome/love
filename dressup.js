@@ -32,7 +32,7 @@
     host.innerHTML =
       '<div class="du"><div class="du-stage"><img id="duImg" src="' + SETS[0].img + '" alt="SYNDROME & LIA" draggable="false"></div>' +
       '<div class="du-side"><h5 class="du-h">CLOSET</h5><div class="du-sets">' + SETS.map(function (s, i) {
-        return '<button data-i="' + i + '"' + (i ? '' : ' class="on"') + '><i>' + String(i + 1).padStart(2, '0') + (s.sub ? ' <small>' + s.sub + '</small>' : '') + '</i><span>' + s.name + '</span></button>';
+        return '<button data-i="' + i + '"' + (i ? '' : ' class="on"') + '><i>' + String(i + 1).padStart(2, '0') + '</i><span>' + s.name + '</span>' + (s.sub ? '<small>' + s.sub.replace(/\s*ver$/i, '') + '</small>' : '') + '</button>';
       }).join('') + '</div></div></div>';
     var img = host.querySelector('#duImg');
     SETS.forEach(function (s) { new Image().src = s.img; }); // 미리 불러와서 바로 갈아입게
