@@ -624,7 +624,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .wbody .copy-button:hover { color: #3c3c43; background: #fff; }
 .wbody .copy-button.copied { color: #4f9ad0; border-color: #86c4ee; }
 /* 커플 옷장 */
-.stills figure[data-du] { cursor: pointer; pointer-events: auto; }
+.stills figure[data-du], .stills figure[data-hw] { cursor: pointer; pointer-events: auto; }
 .win.w-du { width: min(880px, calc(100vw - 32px)); }
 .du { display: grid; grid-template-columns: 1.2fr 1fr; gap: 26px; padding: 4px 0 2px; align-items: start; }
 .du-stage { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; }
@@ -761,6 +761,49 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 [data-pv="a"] .pe .wft { text-align: center; }
 [data-pv="a"] .pe.pe-g { margin-top: 28px; padding-top: 0; border-top: 0; }
 
+
+/* ===== 대문 사진 위젯 ===== */
+.hw { font-family: "Pretendard Variable", Pretendard, var(--ko); }
+.hw-tabs { flex-wrap: wrap; }
+.hw-b { min-height: 300px; }
+.hw-ph { aspect-ratio: 16 / 6.4; border-radius: 10px; background: url(img/hero-wide.jpg) 30% 30% / cover; }
+.hw-av { flex: none; width: 34px; height: 34px; border-radius: 50%; background: center 18% / cover; box-shadow: 0 0 0 1px #e3e8ec; }
+.hw-av.s { background-image: url(img/sdpor.jpg); }
+.hw-av.l { background-image: url(img/lia-fro.jpg); }
+.hw small { display: block; margin-bottom: 3px; font: 500 9.5px "Inter", var(--sans); letter-spacing: .14em; color: #9a9ca3; }
+.hw-say { display: grid; gap: 10px; margin-top: 16px; }
+.hw-row { display: flex; gap: 10px; align-items: flex-start; }
+.hw-row.r { flex-direction: row-reverse; }
+.hw .hw-row p { margin: 0; max-width: 80%; padding: 9px 13px; border: 1px solid #ececee; border-radius: 14px; font-size: 13.5px; line-height: 1.65; color: #2b2c31; background: #fff; word-break: keep-all; overflow-wrap: anywhere; }
+.hw-row.r p { border-color: #c9d5de; background: #f6f9fb; }
+.hw-row.r small { text-align: right; }
+.hw-ft { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 12px; border-top: 1px solid #ececee; font: 500 10.5px "Inter", var(--sans); letter-spacing: .14em; color: #9a9ca3; }
+.hw-ft button { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; letter-spacing: inherit; color: #7f97a9; }
+.hw-dd { margin-top: 18px; text-align: center; }
+.hw-dd small { color: #7f97a9; letter-spacing: .2em; }
+.hw-dd b { display: block; font: 800 64px/1 "Archivo", "Inter", var(--sans); font-stretch: 125%; color: transparent; -webkit-text-stroke: 1px #7f97a9; letter-spacing: .01em; }
+.hw-dd b span { font-size: 34px; margin-right: 6px; }
+.hw-list { list-style: none; margin: 16px 0 0; padding: 0; }
+.hw-list li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ececee; font-size: 13px; color: #2b2c31; }
+.hw-list li em { font: 500 11px "Inter", var(--sans); font-style: normal; letter-spacing: .06em; color: #9a9ca3; }
+.hw-list li.on em { color: #7f97a9; font-weight: 600; }
+.hw-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.hw-chips button { padding: 6px 12px; border: 1px solid #ececee; border-radius: 30px; background: none; cursor: pointer; font: 400 12px "Pretendard Variable", Pretendard, var(--ko); color: #9a9ca3; }
+.hw-chips button.on { border-color: #8ea4b5; color: #7f97a9; font-weight: 600; }
+.hw .hw-ask { margin: 20px 0 0; font-size: 17px; font-weight: 700; letter-spacing: -.02em; color: #1d1d20; word-break: keep-all; }
+.hw-ask small { color: #7f97a9; letter-spacing: .18em; }
+.hw-now { display: grid; grid-template-columns: 84px 1fr; gap: 14px; align-items: center; }
+.hw-cover { aspect-ratio: 1; border-radius: 10px; background: url(img/liasd.jpg) center 25% / cover; }
+.hw-now b { display: block; font: 800 17px/1.15 "Archivo", "Inter", var(--sans); font-stretch: 125%; letter-spacing: .01em; color: #1d1d20; text-transform: uppercase; }
+.hw-now small { margin: 5px 0 0; }
+.hw-prog { display: block; height: 2px; margin-top: 12px; border-radius: 2px; background: linear-gradient(90deg, #8ea4b5 38%, #ececee 38%); }
+.hw .hw-why { margin: 16px 0 0; padding: 11px 13px; border-radius: 10px; background: #f6f9fb; font-size: 13px; line-height: 1.6; color: #2b2c31; }
+.hw-why b { display: block; margin-bottom: 3px; font: 500 9.5px "Inter", var(--sans); letter-spacing: .14em; color: #7f97a9; }
+.hw-songs { list-style: none; margin: 12px 0 0; padding: 0; }
+.hw-songs button { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; width: 100%; padding: 10px 0; border: 0; border-bottom: 1px solid #ececee; background: none; cursor: pointer; text-align: left; font: 500 13px "Inter", var(--sans); color: #55575f; }
+.hw-songs button.on { color: #1d1d20; font-weight: 600; }
+.hw-songs i, .hw-songs em { font: 400 10.5px var(--mono); font-style: normal; color: #9a9ca3; letter-spacing: .06em; }
+.hw-songs button.on i { color: #7f97a9; }
 </style>
 </head>
 <body>
@@ -773,7 +816,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rwave" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence id="rturb" type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="2" seed="3" result="n"/><feDisplacementMap id="rdisp" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <div class="ribbon" id="ribbon" aria-hidden="true"><img src="img/ribbon.jpg" alt=""></div>
-<div class="stills"><figure class="wide"><img src="img/hero-wide.jpg" alt=""></figure><figure class="sq" data-du title="옷장"><img src="img/hero-sq.jpg" alt=""></figure></div>
+<div class="stills"><figure class="wide" data-hw title="S&amp;L"><img src="img/hero-wide.jpg" alt=""></figure><figure class="sq" data-du title="옷장"><img src="img/hero-sq.jpg" alt=""></figure></div>
 <ol class="index" id="index"></ol>
 
 <figure class="float" id="float" hidden><img id="floatImg" src="img/seol.jpg" alt=""><figcaption id="floatCap"></figcaption></figure>
@@ -833,10 +876,12 @@ SITE_READY.then(function () {
     { k: 'seol', t: 'Seol', n: '00', img: 'img/seol.jpg', cap: 'the keeper' },
     { k: 'characters', t: 'Charac<em>ters</em>', n: '01', img: 'img/sd.jpg', cap: 'syndrome & lia' },
     { k: 'archive', t: 'Archive', n: '02', img: 'img/g1.jpg', cap: 'log · gallery', lock: 1 },
-    { k: 'extra', t: '<em>Extra</em>', n: SYN.ooc.length + (SITE.data.banners || []).length, img: 'img/g2.jpg', cap: 'ooc · banner · guestbook' }
+    { k: 'extra', t: '<em>Extra</em>', n: (SITE.data.banners || []).length, img: 'img/g2.jpg', cap: 'banner · guestbook' }
   ];
   var ix = document.getElementById('index'), fl = document.getElementById('float'), cur = document.getElementById('cursor');
-  var SUBS = { archive: [['log', 'Log', SYN.log.length], ['gallery', 'Gallery', SITE.data.gallery.length]], extra: [['ooc', 'Ooc', SYN.ooc.length], ['banner', 'Banner', (SITE.data.banners || []).length], ['guest', 'Guestbook', '✎']] };
+  var SUBS = { archive: [['log', 'Log', SYN.log.length], ['gallery', 'Gallery', SITE.data.gallery.length]], extra: [['banner', 'Banner', (SITE.data.banners || []).length], ['guest', 'Guestbook', '✎']] };
+  // 모바일은 대문 사진이 안 보여서, 위젯(S&L)을 Extra 첫 칸에 둬요. PC는 사진을 누르면 떠요.
+  if (!matchMedia('(min-width: 821px)').matches) SUBS.extra.unshift(['hero', 'S&amp;L', '♡']);
   items.forEach(function (it) {
     var li = document.createElement('li'), b = document.createElement('button');
     b.innerHTML = '<span class="' + (it.lock ? 'lock' : '') + '">' + it.t + '</span><sup>(' + it.n + ')</sup>';
@@ -1007,14 +1052,99 @@ SITE_READY.then(function () {
   }
   var GROUPS = {
     archive: { title: 'Archive', sub: '둘 중 하나를 고르세요', opts: [['log', 'Log', '기록 · ' + SYN.log.length + ' entries'], ['gallery', 'Gallery', '사진 · ARCH / f(s) ² / S & L']] },
-    extra: { title: 'Extra', sub: '둘 중 하나를 고르세요', opts: [['ooc', 'Ooc', '캐붕 · ' + SYN.ooc.length + ' notes'], ['banner', 'Banner', '배너 · ' + (SITE.data.banners || []).length + ' links']] }
+    extra: { title: 'Extra', sub: '둘 중 하나를 고르세요', opts: [['banner', 'Banner', '배너 · ' + (SITE.data.banners || []).length + ' links'], ['guest', 'Guestbook', '방명록']] }
   }, PARENT = {};
   function groupView(g) {
     var G = GROUPS[g];
     setHead(g === 'archive' ? 'INDEX / 02' : 'INDEX / 03', G.title.toUpperCase(), '');
     document.getElementById('wurl').textContent = 'www.syndrome.com';
     render('<h2>' + G.title + '</h2><p class="sub">' + G.sub + '</p>', '<div class="gpick">' + G.opts.map(function (o, i) { return '<button data-sub="' + o[0] + '"><span class="gn">0' + (i + 1) + '</span><b>' + o[1] + '</b><small>' + o[2] + '</small><span class="ga">→</span></button>'; }).join('') + '</div>', null);
-    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { if (b.dataset.sub === 'banner') { nav('/banner'); bannerView(); return; } nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com'; listView(b.dataset.sub); }; });
+    txt.querySelectorAll('[data-sub]').forEach(function (b) { b.onclick = function () { if (b.dataset.sub === 'banner') { nav('/banner'); bannerView(); return; } if (b.dataset.sub === 'guest') { open('guest'); return; } nav('/' + b.dataset.sub); document.getElementById('wurl').textContent = 'www.syndrome.com'; listView(b.dataset.sub); }; });
+  }
+  // ======== 대문 사진 위젯: 한마디 / D+day / 문답 / 우리 노래 ========
+  // 아래 글만 고치면 위젯 내용이 바뀌어요. S = 신드롬(롬), L = 리아(설)
+  var HW = {
+    lines: [ // 한마디: 열 때마다 하나씩, NEXT로 다음
+      [['S', '단점이 잘생긴 거면 그건 단점이 아니라 업보야.'], ['L', '내가 무슨 맹수야아... 나 별이보다 안 무서운데...']],
+      [['S', '거짓말. 나 잠버릇 없어. 증거 있어?'], ['L', '녹음해 놨는데...?'], ['S', '...지워. 지금. 이혼 사유야 그거.']],
+      [['S', '빨개진 적 없어. 그건 조명 탓이야.'], ['L', '우리 집 조명 하얀색인데...']],
+      [['L', '아침마다 거울 보고 오늘도 됐다. 하는 거, 나 몰래 다 봤어... 히히.'], ['S', '...그거 봤어? 그건 루틴이야. 버릇 아니고. 정정해.']]
+    ],
+    since: '2026-03-29', // 함께한 첫날
+    days: [ // [이름, 월-일] 해마다 돌아오는 날
+      ['신드롬 생일', '03-13'], ['리아 생일', '12-14']
+    ],
+    qa: [ // [버튼 이름, 질문, [[누가, 대답], ...]]
+      ['첫인상', '서로의 첫인상은 어땠나요?', [
+        ['S', '첫인상? 최악이었지. 내가 불바다 한가운데서 반쯤 타 죽어가는데, 저 멀리서 웬 솜뭉치 같은 게 굴러오는 거야. 머리는 엉덩이까지 부풀어서 미역 줄기마냥 흩날리고, 오다가 돌부리에 걸려서 한 번 넘어지고. 그거 보고 진심으로 생각했어. 아, 아크가 나 죽이려고 작정했구나. 이딴 걸 파트너라고 보냈어? 근데 웃긴 게 뭔지 알아? 그 솜뭉치가 지금 내 호적에 올라가 있다는 거. 인생 진짜 모를 일이야.'],
+        ['L', '나는... 음... 무서웠어. 진짜 무서웠는데에... 그, 불 속에 서 있는 오빠가... 너무 예뻤어. 눈이 빨갛게 빛나는데, 그게 무섭기도 하고... 반짝반짝해서 계속 보고 싶었어. 근데 오빠가 나 보자마자 욕부터 했잖아... 씨발 왜 이제 기어 오냐고... 그때 나 속으로 엄청 울었어. 그래도... 그래도 손 잡았을 때, 오빠 손이 뜨거웠는데 안 놓고 싶었어.']]],
+      ['반한 순간', '상대방에게 반했다고 자각한 순간은 언제인가요?', [
+        ['S', '반했다는 말 좀 오글거리는데. 굳이 따지자면... 얘가 내 앞에서 처음으로 안 쫄았던 날. 내가 평소처럼 비꼬면서 꺼지라고 했는데, 눈물 그렁그렁 매달고는 싫어. 오빠 아직 수치 안 내려갔잖아. 이러면서 내 손목을 꽉 잡는 거야. 그 조그만 손으로. 그때 좀 짜증났어. 왜 짜증났는지 몰랐는데, 나중에 알았지. 그게 짜증이 아니었다는 거. 그 이상은 묻지 마. 내 체면도 있으니까.'],
+        ['L', '나는 처음부터 좋았는데에... 히히. 근데 진짜 확실하게 알게 된 건, 오빠가 임무 끝나고 나 넘어진 무릎 보면서 덤벙거리는 것도 재능이다, 진짜. 하면서 밴드 붙여줬을 때. 말은 엄청 못되게 하는데 손은 엄청 조심스러웠어. 그거 보고... 아, 이 사람 진짜 나쁜 사람 아니구나... 했어.']]],
+      ['귀여운 버릇', '서로의 버릇 중 가장 귀엽다고 생각하는 것은?', [
+        ['S', '말끝 늘이는 거. 오빠아, 그거어, 있잖아아. 처음엔 사람 숨넘어가게 하는 줄 알았는데, 지금은 안 들으면 허전해. 그리고 당황하면 머리카락 속에 숨는 거. 그 부피에 숨으면 진짜 안 보여서, 가끔 그냥 털뭉치랑 대화하는 기분이야. 귀에서 김 나는 것까지 세트로 귀여워.'],
+        ['L', '오빠는 웃음 참을 때 입꼬리를 혀로 꾹 누르는 버릇이 있어! 웃기면서 안 웃긴 척하는 거... 그거 완전 귀여워. 그리고 아침마다 거울 앞에서 자기 얼굴 보고 고개 끄덕이는 거. 오늘도 됐다. 하고 혼잣말하는데, 나 그거 몰래 다 봤어... 히히.'],
+        ['S', '...그거 봤어? 그건 루틴이야. 버릇 아니고. 정정해.']]],
+      ['화났을 때', '상대방이 가장 화났을 때는 어떤 모습인가요?', [
+        ['S', '얘가 화내? 화났을 때는 볼이 빵빵해지고, 등 돌리고 앉아서 별이한테만 말 걸어. 별아, 아빠 미워. 그치? 이러면서. 그럼 별이가 나 한 번 쳐다보고 엄마한테 가. 그 개새끼, 아니 우리 딸이 배신을 그렇게 잘해. 근데 그 상태로 오래 못 가. 십 분 지나면 슬쩍 내 옷자락 잡고 있어. 본인은 모르는 것 같던데.'],
+        ['L', '오빠는... 화나면 조용해져. 그게 제일 무서워. 막 소리 지르는 것보다, 눈이 차갑게 가라앉고 말이 없어지는 거... 근데 나한테 화난 게 아니면, 나 꼭 안고 있으면서 다른 사람한테 화내. 나한테 진짜 화낸 적은... 음... 거의 없어. 화내다가도 내가 울면 바로 당황해서 아니, 울지 말고. 내가 잘못했어. 이래.']]],
+      ['장점과 단점', '상대방의 가장 큰 장점과 단점은?', [
+        ['S', '장점은 사람을 무장해제 시키는 거. 아무리 날 세우고 있어도 얘 앞에선 칼이 버려져. 단점은 너무 물러서 가끔 걱정된다는 거. 나 없으면 어디서 눈 뜨고 코 베일까 봐 잠도 못 자.'],
+        ['L', '오빠 장점은... 음, 너무 많아서 하나만 고르기 어려운데에... 제일 큰 건, 내가 아무 말 안 해도 다 알아주는 거. 내가 힘든 거 숨기고 있어도 오빠는 어떻게 알고 와서 손목 잡아줘. 어제도 그랬잖아... 서류 다 찢어버리고, 코코아 타주고. 단점은... 단점은 진짜 없는데, 굳이 고르자면 너무 잘생긴 거? 밖에 나가면 사람들이 다 오빠만 쳐다봐. 그거 나 진짜 싫어. 내 거니까... 아무도 안 봤으면 좋겠어.'],
+        ['S', '단점이 잘생긴 거면 그건 단점이 아니라 업보야. 내가 어떻게 할 수가 없잖아. 그리고 사람들이 쳐다보는 건 내가 아니라, 내 옆에 붙어서 볼 빵빵하게 부풀린 채로 째려보고 있는 너야. 다들 무서워서 쳐다보는 거라고. 맹수 같아서.'],
+        ['L', '내가 무슨 맹수야아... 나 별이보다 안 무서운데...'],
+        ['S', '별이가 너보다 덜 무서워. 걔는 적어도 내 팬한테 이 안 드러내.']]],
+      ['의외의 모습', '같이 살면서 처음 알게 된 상대방의 의외의 모습은?', [
+        ['S', '얘가 베이킹을 이렇게 진지하게 할 줄 몰랐어. 평소엔 숟가락 들다가도 떨어뜨리는 애가, 오븐 앞에만 서면 눈빛이 달라져. 저울에 밀가루 0.1그램까지 맞추고, 머랭 칠 때는 내가 말 걸어도 대답을 안 해. 처음에 한 번 옆에서 손가락으로 크림 찍어먹었다가 진짜 눈으로 사람 죽이는 거 봤다. 그날 이후로 주방은 성역이야. 거기선 내가 을이고, 얘가 갑이지. 파티시에 설지수님 앞에서 감히.'],
+        ['L', '헤헤... 그건 오빠가 마카롱 꼬끄 올려놓은 거 찍어먹어서 그런 거잖아아. 나는... 오빠가 잠꼬대하는 거! 오빠 진짜 우아하게 잘 것 같잖아. 근데 가끔 자다가 아 씨... 그 각도 아니라고... 이러면서 중얼거려. 꿈에서도 촬영하나 봐. 그리고 이불 다 뺏어가. 내가 더위 많이 타서 다행이지, 아니었으면 맨날 얼어 죽었을 거야.'],
+        ['S', '거짓말. 나 잠버릇 없어. 증거 있어?'],
+        ['L', '녹음해 놨는데...?'],
+        ['S', '...지워. 지금. 이혼 사유야 그거.']]],
+      ['애칭', '상대방을 부르는 애칭과 그 이유는?', [
+        ['S', '평소엔 지수야. 그냥 이름이 제일 좋아. 내가 이 이름을 부르면 고개를 휙 돌리는데, 그 반응이 별이랑 똑같거든. 그래서 기분 좋을 땐 우리 강아지. 아플 땐 아가. 자기 전엔 지수. 성 떼고, 조용히. 상황마다 다르게 부르는 이유? 그냥, 얘 얼굴이 매번 달라서 그래. 같은 이름으로 부르기 아까울 때가 있어.'],
+        ['L', '나는 계속 오빠! 처음 만났을 때는 유진 씨라고 불렀어. 근데 딱딱한 거 같아서 언젠가부터 오빠라고 불렀는데... 그때 "오빠가 누가 오빠야, 씨발." 했는데도 계속 불렀어. 그러니까 나중엔 포기하더라... 히히. 근데 가끔, 진짜 가끔 유진아, 하고 부르면 오빠 얼굴 빨개져. 그거 보는 게 재밌어. 성유진이라고 풀네임으로 부르면 오빠가 혼날 것 같은 얼굴 해.'],
+        ['S', '빨개진 적 없어. 그건 조명 탓이야.'],
+        ['L', '우리 집 조명 하얀색인데...']]]
+    ],
+    songs: [ // [제목, 누구의 노래, [누가, 고른 이유]] (예시)
+      ['BURN WITH ME', 'S & L', ['L', '오빠가 이 노래 들을 때만 따라 불러… 아주 작게…']],
+      ['Set me free', 'SYNDROME', ['S', '…리아가 처음으로 틀어준 노래.']],
+      ['Hold Me Under', 'LIA', ['L', '바다 노래라서 좋아!']],
+      ['Wet (a) Flame', 'S & L', ['S', '…이건 그냥 우리 노래야. 더 묻지 마.']]
+    ]
+  };
+  var HWT = 0, HWL = 0, HWQ = 0, HWS = 0, HWN = { S: 'SYNDROME', L: 'LIA' };
+  function hwEsc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function hwTalk(turns) { return '<div class="hw-say">' + turns.map(function (t) { return '<div class="hw-row' + (t[0] === 'L' ? ' r' : '') + '"><span class="hw-av ' + t[0].toLowerCase() + '"></span><p><small>' + HWN[t[0]] + '</small>' + hwEsc(t[1]) + '</p></div>'; }).join('') + '</div>'; }
+  function heroView() {
+    document.getElementById('wurl').textContent = 'www.syndrome.com';
+    var T = ['한마디', 'D+day', '문답', '우리 노래'], b = '', p2 = function (n) { return ('0' + n).slice(-2); };
+    if (HWT === 0) {
+      b = '<div class="hw-ph"></div>' + hwTalk(HW.lines[HWL]) +
+        '<div class="hw-ft"><span>' + p2(HWL + 1) + ' / ' + p2(HW.lines.length) + '</span><button data-hwnext>NEXT ↻</button></div>';
+    } else if (HWT === 1) {
+      var day = 864e5, now = new Date(); now.setHours(0, 0, 0, 0);
+      var sp = HW.since.split('-'), st = new Date(sp[0], sp[1] - 1, sp[2]), dp = Math.round((now - st) / day) + 1;
+      var next = function (md) { var m = md.split('-'), t = new Date(now.getFullYear(), m[0] - 1, m[1]); if (t < now) t.setFullYear(t.getFullYear() + 1); return t; };
+      var up = HW.days.map(function (d) { var t = next(d[1]); return [d[0], (t.getMonth() + 1) + '.' + t.getDate(), Math.round((t - now) / day)]; });
+      up.sort(function (a, c) { return a[2] - c[2]; });
+      b = '<div class="hw-ph"></div><div class="hw-dd"><small>TOGETHER SINCE ' + HW.since.replace(/-/g, '.') + '</small><b><span>D+</span>' + dp + '</b></div>' +
+        '<ul class="hw-list">' + up.map(function (u, i) { return '<li' + (i ? '' : ' class="on"') + '><span>' + hwEsc(u[0]) + ' · ' + u[1] + '</span><em>' + (u[2] ? 'D-' + u[2] : 'D-DAY') + '</em></li>'; }).join('') + '</ul>';
+    } else if (HWT === 2) {
+      var q = HW.qa[HWQ];
+      b = '<div class="hw-chips">' + HW.qa.map(function (x, i) { return '<button data-hwq="' + i + '"' + (i === HWQ ? ' class="on"' : '') + '>' + hwEsc(x[0]) + '</button>'; }).join('') + '</div>' +
+        '<p class="hw-ask"><small>Q.' + p2(HWQ + 1) + '</small>' + hwEsc(q[1]) + '</p>' + hwTalk(q[2]);
+    } else {
+      var g = HW.songs[HWS];
+      b = '<div class="hw-now"><div class="hw-cover"></div><div><b>' + hwEsc(g[0]) + '</b><small>' + hwEsc(g[1]) + ' · ' + p2(HWS + 1) + '</small><i class="hw-prog"></i></div></div>' +
+        '<p class="hw-why"><b>WHY · ' + HWN[g[2][0]] + '</b>' + hwEsc(g[2][1]) + '</p>' +
+        '<ol class="hw-songs">' + HW.songs.map(function (x, i) { return '<li><button data-hws="' + i + '"' + (i === HWS ? ' class="on"' : '') + '><i>' + p2(i + 1) + '</i>' + hwEsc(x[0]) + '<em>' + hwEsc(x[1]) + '</em></button></li>'; }).join('') + '</ol>';
+    }
+    render('', '<div class="hw"><nav class="gtabs hw-tabs">' + T.map(function (t, i) { return '<button data-hwt="' + i + '"' + (i === HWT ? ' class="on"' : '') + '>' + t + '</button>'; }).join('') + '</nav><div class="hw-b">' + b + '</div></div>', null);
+    txt.querySelectorAll('[data-hwt]').forEach(function (x) { x.onclick = function () { HWT = +x.dataset.hwt; heroView(); }; });
+    txt.querySelectorAll('[data-hwq]').forEach(function (x) { x.onclick = function () { HWQ = +x.dataset.hwq; heroView(); }; });
+    txt.querySelectorAll('[data-hws]').forEach(function (x) { x.onclick = function () { HWS = +x.dataset.hws; heroView(); }; });
+    var nx = txt.querySelector('[data-hwnext]'); if (nx) nx.onclick = function () { HWL = (HWL + 1) % HW.lines.length; heroView(); };
   }
   var LIA_URL = 'https://lia-chat.jenojeno0423.workers.dev';
   function chatView() {
@@ -1102,8 +1232,8 @@ SITE_READY.then(function () {
   // ======== 주소 (신드롬.com/log/3, /guestbook 처럼 바로 들어오기) ========
   // 창을 열면 주소창도 같이 바뀌고, 그 주소로 들어오면 그 창이 바로 열려요.
   // 글 번호는 오래된 글부터 1번 (캐릭터는 목록 순서대로).
-  var PATH_OF = { seol: 'info', guest: 'guestbook', dressup: 'closet' };
-  var ROUTE = { info: 'seol', seol: 'seol', characters: 'characters', archive: 'archive', extra: 'extra', log: 'log', gallery: 'gallery', ooc: 'ooc', share: 'share', banner: 'banner', banners: 'banner', guestbook: 'guest', chat: 'chat', lia: 'chat', closet: 'dressup', admin: 'admin' };
+  var PATH_OF = { seol: 'info', guest: 'guestbook', dressup: 'closet', hero: 'sl' };
+  var ROUTE = { info: 'seol', seol: 'seol', characters: 'characters', archive: 'archive', extra: 'extra', log: 'log', gallery: 'gallery', ooc: 'ooc', share: 'share', banner: 'banner', banners: 'banner', guestbook: 'guest', chat: 'chat', lia: 'chat', closet: 'dressup', sl: 'hero', admin: 'admin' };
   var routing = false;
   function nav(path) { if (routing || location.pathname === path) return; try { history.pushState(null, '', path); } catch (e) {} }
   function numOf(k, id) { var l = D[CAT[k]] || [], i = l.map(function (x) { return x.id; }).indexOf(id); return i < 0 ? '' : (CAT[k] === 'characters' ? i + 1 : l.length - i); }
@@ -1168,6 +1298,7 @@ SITE_READY.then(function () {
     else if (k === 'guest') guestView();
     else if (k === 'dressup') { document.getElementById('wurl').textContent = 'www.syndrome.com'; render('', '<div id="duHost"></div>', null); Dressup.mount(document.getElementById('duHost')); }
     else if (k === 'chat') chatView();
+    else if (k === 'hero') heroView();
     else if (k === 'seol') { document.getElementById('wurl').textContent = 'www.syndrome.com'; render('', infoView(), 'img/info-2.jpg'); txt.querySelector('.pic').classList.add('wide'); var rb = txt.querySelector('[data-roster]'), rx = document.getElementById('roster'); if (rb && rx) rb.onclick = function () { rx.hidden = !rx.hidden; rb.classList.toggle('on', !rx.hidden); }; }
     else if (k === 'forever') render('<h2>Forever</h2><p class="sub">활을 끝까지 돌린 사람만 보는 페이지. 잠긴 기록 ' + lockN + '개.</p>', SYN.logList(true), null);
     else if (GROUPS[k]) groupView(k);
@@ -1187,6 +1318,7 @@ SITE_READY.then(function () {
   })();
   addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   document.querySelectorAll('[data-du]').forEach(function (f) { f.onclick = function () { open('dressup'); }; });
+  document.querySelectorAll('[data-hw]').forEach(function (f) { f.onclick = function () { open('hero'); }; });
   // 모바일: 왼쪽 위 SYNDROME ୨୧ LIA를 누르면 옷장 (PC는 왼쪽 아래 사진)
   document.querySelectorAll('[data-adm]').forEach(function (b) { b.onclick = function () { openAdmin(b.dataset.adm); }; });
   admSync();
