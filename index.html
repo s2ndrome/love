@@ -817,10 +817,10 @@ document.addEventListener('error', function (e) {
 // posts/<category>/<id>.html — Mac에서 올린 한글 파일명(NFD)도 한 번 더 찾아봐요.
 window.fetchPost = function (cat, id) {
   var p = 'posts/' + cat + '/' + encodeURIComponent(id) + '.html'; // 제목에 ? # 같은 글자가 있어도 안전하게
-  return fetch(p).then(function (r) {
+  return fetch(p, { cache: 'no-cache' }).then(function (r) {
     if (r.ok) return r.text();
     var n = p.normalize('NFD');
-    return n !== p ? fetch(n).then(function (r2) { if (r2.ok) return r2.text(); throw 0; }) : Promise.reject();
+    return n !== p ? fetch(n, { cache: 'no-cache' }).then(function (r2) { if (r2.ok) return r2.text(); throw 0; }) : Promise.reject();
   });
 };
 </script>
