@@ -754,7 +754,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 [data-pv="a"] .ph-t { font-weight: 700; font-size: clamp(22px, 3.6vw, 30px); line-height: 1.3; letter-spacing: -.02em; }
 [data-pv="a"] .ph-g .ph-t { display: none; }
 [data-pv="a"] .ph-m { margin: 14px 0 0; font: 400 11.5px "Pretendard Variable", Pretendard, var(--ko); color: #9a9ca3; letter-spacing: .02em; }
-[data-pv="a"] .post { max-width: 620px; margin: 0 auto; }
+[data-pv="a"] .post.inpost { max-width: 620px; margin: 0 auto; } /* 글 본문만 좁게 (옷장·배너 같은 창은 원래 폭) */
 [data-pv="a"] .post .note-body p { font-size: 14px; line-height: 1.95; color: #333338; }
 [data-pv="a"] .pe { margin-top: 40px; padding-top: 22px; border-top: 1px solid #e6e6e8; }
 [data-pv="a"] .pn { margin-bottom: 30px; }
@@ -977,7 +977,7 @@ SITE_READY.then(function () {
   }
   function render(head, body, pic) {
     if (window.__inpost) body += window.__pend || '<footer class="wft">Wet (A) Flame !</footer>'; // 글을 열었을 때만 맨 아래 문구
-    txt.innerHTML = (pic ? '<div class="pic"><img src="' + pic + '" alt=""></div>' : '') + '<div class="in' + (pic ? '' : ' nopic') + '">' + head + '<div class="post' + (galA ? ' gal-a' : '') + '">' + body + '</div></div>';
+    txt.innerHTML = (pic ? '<div class="pic"><img src="' + pic + '" alt=""></div>' : '') + '<div class="in' + (pic ? '' : ' nopic') + '">' + head + '<div class="post' + (galA ? ' gal-a' : '') + (window.__inpost ? ' inpost' : '') + '">' + body + '</div></div>';
     txt.scrollTop = 0;
     txt.querySelectorAll('[data-pk]').forEach(function (b) { b.onclick = function () { detail(b.dataset.pk, b.dataset.pid); }; });
     txt.querySelectorAll('.copy-button').forEach(function (b) { b.onclick = function () { var t = b.closest('.note-card').querySelector('.note-body').innerText.trim(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).catch(function () {}); b.classList.add('copied'); setTimeout(function () { b.classList.remove('copied'); }, 1400); }; });
