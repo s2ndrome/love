@@ -881,7 +881,7 @@ SITE_READY.then(function () {
   var ix = document.getElementById('index'), fl = document.getElementById('float'), cur = document.getElementById('cursor');
   var SUBS = { archive: [['log', 'Log', SYN.log.length], ['gallery', 'Gallery', SITE.data.gallery.length]], extra: [['banner', 'Banner', (SITE.data.banners || []).length], ['guest', 'Guestbook', '✎']] };
   // 모바일은 대문 사진이 안 보여서, 위젯(S&L)을 Extra 첫 칸에 둬요. PC는 사진을 누르면 떠요.
-  if (!matchMedia('(min-width: 821px)').matches) SUBS.extra.unshift(['hero', 'S&amp;L', '♡']);
+  if (!matchMedia('(min-width: 821px)').matches) SUBS.extra.unshift(['hero', 's &amp; l', '♡']);
   items.forEach(function (it) {
     var li = document.createElement('li'), b = document.createElement('button');
     b.innerHTML = '<span class="' + (it.lock ? 'lock' : '') + '">' + it.t + '</span><sup>(' + it.n + ')</sup>';
