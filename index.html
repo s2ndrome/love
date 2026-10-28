@@ -1125,7 +1125,7 @@ SITE_READY.then(function () {
   function hwTalk(turns) { return '<div class="hw-say">' + turns.map(function (t) { return '<div class="hw-row' + (t[0] === 'L' ? ' r' : '') + '"><span class="hw-av ' + t[0].toLowerCase() + '"></span><p><small>' + HWN[t[0]] + '</small>' + hwEsc(t[1]) + '</p></div>'; }).join('') + '</div>'; }
   function heroView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
-    var T = [[1, '디데이'], [0, '한마디'], [2, '문답'], [3, '플리']], b = '', p2 = function (n) { return ('0' + n).slice(-2); };
+    var T = [[1, 'A'], [0, 'B'], [2, 'C'], [3, 'D']] /* A 디데이 · B 한마디 · C 문답 · D 플리 */, b = '', p2 = function (n) { return ('0' + n).slice(-2); };
     if (HWT === 0) {
       b = '<div class="hw-ph"></div>' + hwTalk(HW.lines[HWL]) +
         '<div class="hw-ft"><span>' + p2(HWL + 1) + ' / ' + p2(HW.lines.length) + '</span><button data-hwnext>NEXT ↻</button></div>';
