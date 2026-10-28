@@ -763,7 +763,12 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 
 
 /* ===== 대문 사진 위젯 ===== */
-.hw-soon { margin: 0; padding: 70px 0; text-align: center; font: 500 12px "Pretendard Variable", Pretendard, var(--ko); letter-spacing: .1em; color: #9a9ca3; }
+.hw-yt { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #111; }
+.hw-yt iframe, .hw-yt > button { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.hw-yt > button { cursor: pointer; background: center / cover no-repeat; }
+.hw-yt > button i { display: grid; place-items: center; width: 54px; height: 54px; margin: auto; border-radius: 50%; background: rgba(255,255,255,.88); color: #7f97a9; font: 400 18px/1 sans-serif; font-style: normal; padding-left: 3px; }
+.hw-songs li button em { white-space: nowrap; }
+.hw-songs button.on em { color: #7f97a9; }
 .hw { font-family: "Pretendard Variable", Pretendard, var(--ko); }
 .hw-tabs { flex-wrap: wrap; }
 .hw-b { min-height: 300px; }
@@ -1107,14 +1112,15 @@ SITE_READY.then(function () {
         ['S', '빨개진 적 없어. 그건 조명 탓이야.'],
         ['L', '우리 집 조명 하얀색인데...']]]
     ],
-    songs: [ // [제목, 누구의 노래, [누가, 고른 이유]] (예시)
-      ['BURN WITH ME', 'S & L', ['L', '오빠가 이 노래 들을 때만 따라 불러… 아주 작게…']],
-      ['Set me free', 'SYNDROME', ['S', '…리아가 처음으로 틀어준 노래.']],
-      ['Hold Me Under', 'LIA', ['L', '바다 노래라서 좋아!']],
-      ['Wet (a) Flame', 'S & L', ['S', '…이건 그냥 우리 노래야. 더 묻지 마.']]
+    songs: [ // 플리: [제목, 유튜브 영상 ID] — 곡을 누르면 위에서 바로 재생돼요
+      ['Cigarette Light', 'HYGeF9u9cgc'],
+      ['Better Me', 'GU9hcvI5vuM'],
+      ['Broken Water', 'HLnp6S-Ures'],
+      ['Target for Love', '3nAs-iAPoeM'],
+      ['Apple Pie', '4k_HiMxY_gg']
     ]
   };
-  var HWT = 0, HWL = 0, HWQ = 0, HWS = 0, HWN = { S: 'SYNDROME', L: 'LIA' };
+  var HWT = 0, HWL = 0, HWQ = 0, HWS = 0, HWP = false, HWN = { S: 'SYNDROME', L: 'LIA' };
   function hwEsc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function hwTalk(turns) { return '<div class="hw-say">' + turns.map(function (t) { return '<div class="hw-row' + (t[0] === 'L' ? ' r' : '') + '"><span class="hw-av ' + t[0].toLowerCase() + '"></span><p><small>' + HWN[t[0]] + '</small>' + hwEsc(t[1]) + '</p></div>'; }).join('') + '</div>'; }
   function heroView() {
@@ -1136,12 +1142,15 @@ SITE_READY.then(function () {
       b = '<div class="hw-chips">' + HW.qa.map(function (x, i) { return '<button data-hwq="' + i + '"' + (i === HWQ ? ' class="on"' : '') + '>' + hwEsc(x[0]) + '</button>'; }).join('') + '</div>' +
         '<p class="hw-ask"><small>Q.' + p2(HWQ + 1) + '</small>' + hwEsc(q[1]) + '</p>' + hwTalk(q[2]);
     } else {
-      b = '<p class="hw-soon">준비중</p>'; // 플리: 아직 비워둠
+      var g = HW.songs[HWS], yt = 'https://img.youtube.com/vi/';
+      b = '<div class="hw-yt">' + (HWP ? '<iframe src="https://www.youtube-nocookie.com/embed/' + g[1] + '?autoplay=1&playsinline=1&rel=0" title="' + hwEsc(g[0]) + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'
+        : '<button data-hws="' + HWS + '" style="background-image:url(' + yt + g[1] + '/hqdefault.jpg)" aria-label="재생"><i>▶</i></button>') + '</div>' +
+        '<ol class="hw-songs">' + HW.songs.map(function (x, i) { return '<li><button data-hws="' + i + '"' + (i === HWS && HWP ? ' class="on"' : '') + '><i>' + p2(i + 1) + '</i>' + hwEsc(x[0]) + '<em>' + (i === HWS && HWP ? '♪ NOW' : '▶') + '</em></button></li>'; }).join('') + '</ol>';
     }
     render('', '<div class="hw"><nav class="gtabs hw-tabs">' + T.map(function (t, i) { return '<button data-hwt="' + i + '"' + (i === HWT ? ' class="on"' : '') + '>' + t + '</button>'; }).join('') + '</nav><div class="hw-b">' + b + '</div></div>', null);
-    txt.querySelectorAll('[data-hwt]').forEach(function (x) { x.onclick = function () { HWT = +x.dataset.hwt; heroView(); }; });
+    txt.querySelectorAll('[data-hwt]').forEach(function (x) { x.onclick = function () { HWT = +x.dataset.hwt; HWP = false; heroView(); }; });
     txt.querySelectorAll('[data-hwq]').forEach(function (x) { x.onclick = function () { HWQ = +x.dataset.hwq; heroView(); }; });
-    txt.querySelectorAll('[data-hws]').forEach(function (x) { x.onclick = function () { HWS = +x.dataset.hws; heroView(); }; });
+    txt.querySelectorAll('[data-hws]').forEach(function (x) { x.onclick = function () { HWS = +x.dataset.hws; HWP = true; var au = document.getElementById('au'); if (au) au.pause(); heroView(); }; }); // 곡을 누르면 홈 플레이어는 멈추고 이 곡 재생
     var nx = txt.querySelector('[data-hwnext]'); if (nx) nx.onclick = function () { HWL = (HWL + 1) % HW.lines.length; heroView(); };
   }
   var LIA_URL = 'https://lia-chat.jenojeno0423.workers.dev';
