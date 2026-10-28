@@ -1120,12 +1120,12 @@ SITE_READY.then(function () {
       ['Apple Pie', '4k_HiMxY_gg']
     ]
   };
-  var HWT = 0, HWL = 0, HWQ = 0, HWS = 0, HWP = false, HWN = { S: 'SYNDROME', L: 'LIA' };
+  var HWT = 1, HWL = 0, HWQ = 0, HWS = 0, HWP = false, HWN = { S: 'SYNDROME', L: 'LIA' };
   function hwEsc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function hwTalk(turns) { return '<div class="hw-say">' + turns.map(function (t) { return '<div class="hw-row' + (t[0] === 'L' ? ' r' : '') + '"><span class="hw-av ' + t[0].toLowerCase() + '"></span><p><small>' + HWN[t[0]] + '</small>' + hwEsc(t[1]) + '</p></div>'; }).join('') + '</div>'; }
   function heroView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
-    var T = ['한마디', 'D+day', '문답', '플리'], b = '', p2 = function (n) { return ('0' + n).slice(-2); };
+    var T = [[1, '디데이'], [0, '한마디'], [2, '문답'], [3, '플리']], b = '', p2 = function (n) { return ('0' + n).slice(-2); };
     if (HWT === 0) {
       b = '<div class="hw-ph"></div>' + hwTalk(HW.lines[HWL]) +
         '<div class="hw-ft"><span>' + p2(HWL + 1) + ' / ' + p2(HW.lines.length) + '</span><button data-hwnext>NEXT ↻</button></div>';
@@ -1147,7 +1147,7 @@ SITE_READY.then(function () {
         : '<button data-hws="' + HWS + '" style="background-image:url(' + yt + g[1] + '/hqdefault.jpg)" aria-label="재생"><i>▶</i></button>') + '</div>' +
         '<ol class="hw-songs">' + HW.songs.map(function (x, i) { return '<li><button data-hws="' + i + '"' + (i === HWS && HWP ? ' class="on"' : '') + '><i>' + p2(i + 1) + '</i>' + hwEsc(x[0]) + '<em>' + (i === HWS && HWP ? '♪ NOW' : '▶') + '</em></button></li>'; }).join('') + '</ol>';
     }
-    render('', '<div class="hw"><nav class="gtabs hw-tabs">' + T.map(function (t, i) { return '<button data-hwt="' + i + '"' + (i === HWT ? ' class="on"' : '') + '>' + t + '</button>'; }).join('') + '</nav><div class="hw-b">' + b + '</div></div>', null);
+    render('', '<div class="hw"><nav class="gtabs hw-tabs">' + T.map(function (t) { return '<button data-hwt="' + t[0] + '"' + (t[0] === HWT ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join('') + '</nav><div class="hw-b">' + b + '</div></div>', null);
     txt.querySelectorAll('[data-hwt]').forEach(function (x) { x.onclick = function () { HWT = +x.dataset.hwt; HWP = false; heroView(); }; });
     txt.querySelectorAll('[data-hwq]').forEach(function (x) { x.onclick = function () { HWQ = +x.dataset.hwq; heroView(); }; });
     txt.querySelectorAll('[data-hws]').forEach(function (x) { x.onclick = function () { HWS = +x.dataset.hws; HWP = true; var au = document.getElementById('au'); if (au) au.pause(); heroView(); }; }); // 곡을 누르면 홈 플레이어는 멈추고 이 곡 재생
