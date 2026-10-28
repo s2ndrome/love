@@ -763,6 +763,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 
 
 /* ===== 대문 사진 위젯 ===== */
+.hw-soon { margin: 0; padding: 70px 0; text-align: center; font: 500 12px "Pretendard Variable", Pretendard, var(--ko); letter-spacing: .1em; color: #9a9ca3; }
 .hw { font-family: "Pretendard Variable", Pretendard, var(--ko); }
 .hw-tabs { flex-wrap: wrap; }
 .hw-b { min-height: 300px; }
@@ -1118,7 +1119,7 @@ SITE_READY.then(function () {
   function hwTalk(turns) { return '<div class="hw-say">' + turns.map(function (t) { return '<div class="hw-row' + (t[0] === 'L' ? ' r' : '') + '"><span class="hw-av ' + t[0].toLowerCase() + '"></span><p><small>' + HWN[t[0]] + '</small>' + hwEsc(t[1]) + '</p></div>'; }).join('') + '</div>'; }
   function heroView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
-    var T = ['한마디', 'D+day', '문답', '우리 노래'], b = '', p2 = function (n) { return ('0' + n).slice(-2); };
+    var T = ['한마디', 'D+day', '문답', '플리'], b = '', p2 = function (n) { return ('0' + n).slice(-2); };
     if (HWT === 0) {
       b = '<div class="hw-ph"></div>' + hwTalk(HW.lines[HWL]) +
         '<div class="hw-ft"><span>' + p2(HWL + 1) + ' / ' + p2(HW.lines.length) + '</span><button data-hwnext>NEXT ↻</button></div>';
@@ -1135,10 +1136,7 @@ SITE_READY.then(function () {
       b = '<div class="hw-chips">' + HW.qa.map(function (x, i) { return '<button data-hwq="' + i + '"' + (i === HWQ ? ' class="on"' : '') + '>' + hwEsc(x[0]) + '</button>'; }).join('') + '</div>' +
         '<p class="hw-ask"><small>Q.' + p2(HWQ + 1) + '</small>' + hwEsc(q[1]) + '</p>' + hwTalk(q[2]);
     } else {
-      var g = HW.songs[HWS];
-      b = '<div class="hw-now"><div class="hw-cover"></div><div><b>' + hwEsc(g[0]) + '</b><small>' + hwEsc(g[1]) + ' · ' + p2(HWS + 1) + '</small><i class="hw-prog"></i></div></div>' +
-        '<p class="hw-why"><b>WHY · ' + HWN[g[2][0]] + '</b>' + hwEsc(g[2][1]) + '</p>' +
-        '<ol class="hw-songs">' + HW.songs.map(function (x, i) { return '<li><button data-hws="' + i + '"' + (i === HWS ? ' class="on"' : '') + '><i>' + p2(i + 1) + '</i>' + hwEsc(x[0]) + '<em>' + hwEsc(x[1]) + '</em></button></li>'; }).join('') + '</ol>';
+      b = '<p class="hw-soon">준비중</p>'; // 플리: 아직 비워둠
     }
     render('', '<div class="hw"><nav class="gtabs hw-tabs">' + T.map(function (t, i) { return '<button data-hwt="' + i + '"' + (i === HWT ? ' class="on"' : '') + '>' + t + '</button>'; }).join('') + '</nav><div class="hw-b">' + b + '</div></div>', null);
     txt.querySelectorAll('[data-hwt]').forEach(function (x) { x.onclick = function () { HWT = +x.dataset.hwt; heroView(); }; });
