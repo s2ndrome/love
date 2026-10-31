@@ -21,6 +21,10 @@
     w.style.top = (small ? 64 + n * 14 : (o.top != null ? o.top : 70 + n * 22)) + 'px';
     w.style.zIndex = ++top;
     layer.appendChild(w);
+    if (o.center && !small) { // 화면 한가운데
+      w.style.left = Math.max(12, (innerWidth - w.offsetWidth) / 2) + 'px';
+      w.style.top = Math.max(12, (innerHeight - w.offsetHeight) / 2) + 'px';
+    }
     w.querySelector('.lw-x').onclick = function () { w.remove(); };
     w.addEventListener('pointerdown', function () { w.style.zIndex = ++top; });
     drag(w, w.querySelector('.lw-bar'));
