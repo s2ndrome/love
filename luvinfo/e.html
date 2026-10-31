@@ -169,6 +169,20 @@ button { font: inherit; color: inherit; }
 .thr { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin: 6px 0 6px; } .thr i { height: 6px; background: var(--ink); }
 .cr { display: block; padding: 2px 0; } .cr b { font: 900 17px/1 var(--cond); margin-right: 6px; } .cr em { font-style: normal; font: 500 10px/1 var(--mono); color: var(--g2); margin-right: 6px; }
 .cr i { font-style: normal; font: 500 10px/1 var(--mono); background: var(--ink); color: var(--paper); padding: 1px 4px; margin-right: 6px; }
+/* 03 LE MANS 인터뷰 팝업 */
+.iv-h { border-bottom: 1px solid var(--ink); padding-bottom: 10px; margin-bottom: 4px; }
+.iv-h span { display: block; font: 500 9.5px/1 var(--mono); letter-spacing: .14em; color: var(--g2); }
+.iv-h b { display: block; font: 900 36px/.9 var(--cond); text-transform: uppercase; margin-top: 8px; letter-spacing: -.01em; }
+.iv-h em { display: block; font: italic 500 14px/1.3 var(--it); letter-spacing: .04em; margin-top: 4px; }
+.iv-q, .iv-a { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 12px 0; }
+.iv-q { border-top: 1px solid var(--g4); }
+.iv-q i, .iv-a i { font: 500 10.5px/1 var(--mono); font-style: normal; padding: 4px 0; text-align: center; height: max-content; border: 1px solid var(--ink); }
+.iv-a i { background: var(--ink); color: var(--paper); }
+.iv-q p { margin: 0; font: 400 12.5px/1.65 var(--ko); color: var(--g2); word-break: keep-all; }
+.iv-a { padding-top: 0; }
+.iv-a small { display: block; font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); margin: 3px 0 6px; }
+.iv-a .en { margin: 0; font: italic 600 16.5px/1.3 var(--it); letter-spacing: .005em; }
+.iv-a .ko { margin: 6px 0 0; font: 400 12.5px/1.65 var(--ko); word-break: keep-all; }
 /* 태블릿 */
 @media (max-width: 1100px) {
   .spread { grid-template-columns: minmax(0, 1fr) 280px; }
@@ -327,11 +341,20 @@ button { font: inherit; color: inherit; }
       '<dl class="pf-dl">' + V.rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' +
       '<p class="pf-kw">' + V.tags.map(function (k) { return '<span>#' + k + '</span>'; }).join(' ') + '</p></div>';
   }
+  // 03 LE MANS 팝업: 이반 인터뷰
+  function interviewPop() {
+    var I = L.interview;
+    return '<div class="iv"><div class="iv-h"><span>MEDIA PEN · FRI · PRE-Q</span><b>' + e(I.title) + '</b><em>' + e(I.sub) + '</em></div>' +
+      I.qa.map(function (q, i) {
+        return '<div class="iv-q"><i>Q' + (i + 1) + '</i><p>' + e(q[0]) + '</p></div>' +
+          '<div class="iv-a"><i>A' + (i + 1) + '</i><div><small>YVAN STADEL · ATLAS FACTORY</small><p class="en">“' + e(q[1]) + '”</p><p class="ko">' + e(q[2]) + '</p></div></div>';
+      }).join('') + '</div>';
+  }
   var one = function (f) { return function () { if (innerWidth <= 720) K.closeAll(); f(); }; };
   K.bind({
     p0: one(function () { K.open('p0', 'TRACK 01 — YVAN', yvanPop(), { left: 230, top: 90, w: 440 }); }),
     p1: one(function () { K.open('p1', 'TRACK 02 — LIA', liaPop(), { left: 300, top: 130, w: 440 }); }),
-    rel: one(function () { K.open('rel', 'TRACK 03 — LE MANS', K.relation(), { w: 380 }); }),
+    rel: one(function () { K.open('rel', 'TRACK 03 — LE MANS', interviewPop(), { left: 260, top: 70, w: 480 }); }),
     route: one(function () { K.open('route', 'TRACK 04 — ROUTE 75', K.route() + K.bike(), { w: 340 }); }),
     bread: one(function () { K.open('bread', 'TRACK 05 — REÇU', K.receipt(), { w: 300 }); }),
     notice: one(function () { K.open('notice', 'TRACK 06 — NOTICE', K.notice(), { w: 340 }); })

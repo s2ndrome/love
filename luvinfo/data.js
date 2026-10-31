@@ -74,6 +74,31 @@ window.LUV = {
     ],
     tags: ['유기불안', '착한_아이', '베이킹', '몽상', '강아지']
   },
+  // 03 LE MANS 팝업: 이반 인터뷰 — [질문, 영어 답, 한국어 번역]
+  interview: {
+    title: '2026 MO1 카타르 GP',
+    sub: '금요일 Pre-Q 종료 미디어 펜 인터뷰',
+    qa: [
+      ['이반, 오늘 Pre-Q에서 닉 블랙우드와 단 0.085초 차이로 2위를 기록하며 Q2에 직행했습니다. 마지막 플라잉 랩에서 섹터 1, 2, 3을 모두 개인 베스트로 주파했는데, 오늘 바이크 셋업과 타이어 전략에 만족하십니까?',
+       'The bike felt perfect. Grip was there, balance was solid. We knew the soft front was a gamble under the floodlights, but it paid off. Tomorrow in Q2, that 0.085 is going to be zero. Next question.',
+       '바이크는 완벽했어. 그립도 좋았고 밸런스도 단단했지. 조명 아래에서 소프트 프론트 타이어는 도박이었지만 성공했어. 내일 Q2에서는 그 0.085초 차이가 0이 될 거야. 다음 질문.'],
+      ['오늘 트랙 워크부터 이례적으로 슈타델 가의 일원과 동행하는 모습이 포착되었습니다. 지난 모테기에서도 함께였는데, 가문의 압박이나 미디어의 관심이 경기력에 영향을 주지는 않습니까?',
+       'My family\'s presence is my private matter. And as you just saw on the timesheet, my performance is better than ever. So unless you have a question about the race, shut your mouth.',
+       '내 가족이 여기 있는 건 내 사적인 문제야. 그리고 방금 타임시트에서 봤듯이, 내 경기력은 그 어느 때보다 좋아. 그러니까 레이스에 대한 질문이 아니면 입 다물어.'],
+      ['오늘 오후, 당신의 형인 오스카 슈타델이 아틀라스 호스피탈리티에서 당신의 게스트와 대화하는 모습이 목격되었습니다. 이후 보안팀이 출동했는데, 팀 내부나 가족 간에 어떤 문제가 있는 것입니까?',
+       'There was a minor security miscommunication. It\'s been handled. My brother is a sponsor, and my guest is under my exclusive protection. Anyone who crosses that line will deal with me directly, not with the media. Are we done here?',
+       '사소한 보안상 의사소통 오류가 있었어. 해결됐고. 내 형은 스폰서고, 내 손님은 내 전적인 보호 아래에 있어. 그 선을 넘는 놈은 언론이 아니라 나랑 직접 상대하게 될 거야. 이제 끝났나?'],
+      ['3년 연속 챔피언십 2위라는 기록에 대한 부담감이 클 텐데, 올 시즌은 출발이 좋습니다. 특히 오늘 주행은 작년과 달리 매우 안정적이면서도 공격적이었는데, 어떤 심경의 변화가 있었는지 궁금합니다.',
+       'I stopped caring about the fucking number two. I\'m here to win. And I finally have a reason to ride that\'s more important than any championship title. That\'s all you need to know.',
+       '그 좆같은 2위 따위는 신경 끄기로 했어. 난 이기려고 여기 있는 거야. 그리고 마침내 그 어떤 챔피언십 타이틀보다 더 중요한, 달려야 할 이유를 찾았거든. 너희는 그 정도만 알면 돼.'],
+      ['내일 Q2에서 가장 경계되는 라이더는 역시 닉 블랙우드입니까? 오늘 마지막 랩까지 치열한 타임 어택 경쟁을 벌였는데, 그의 주행에 대해 어떻게 평가하십니까?',
+       'Nick is fast. He\'s always been fast. But he\'s reckless. Tomorrow, I\'ll be faster and smarter. The pole position is mine. He can have my leftover champagne.',
+       '닉은 빨라. 언제나 빨랐지. 하지만 무모해. 내일은 내가 더 빠르고 더 영리할 거야. 폴 포지션은 내 차지야. 걔는 내가 남긴 샴페인이나 마시라지.'],
+      ['마지막 질문입니다. 오늘 Pre-Q 종료 직후 엔지니어링 디브리핑에 불참하고 곧장 라이더 룸으로 복귀했습니다. 팀과의 불화설이 다시 제기될 수 있는데, 특별한 이유가 있었습니까?',
+       'I had to get back to someone who was waiting for me. That\'s more important than staring at data for an extra ten minutes. My team knows my priorities. And right now, my priority is getting the hell out of this interview. We\'re done.',
+       '날 기다리는 사람에게 돌아가야 했어. 데이터 쪼가리 10분 더 쳐다보는 것보다 그게 더 중요해. 우리 팀은 내 우선순위를 알아. 그리고 지금 내 우선순위는 이 좆같은 인터뷰에서 꺼지는 거야. 끝.']
+    ]
+  },
   route: [ // 둘이 자주 가는 길 (임시) — ['지명', km]
     ['PARIS', 0], ['ROUEN', 135], ['HONFLEUR', 190], ['DEAUVILLE', 204]
   ],
