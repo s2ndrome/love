@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YVAN LIA Issue 01</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Mrs+Saint+Delafield&family=Barlow+Condensed:ital,wght@0,500;0,600;1,500;1,600&family=Noto+Sans+KR:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* E v2 — ISSUE 01 : 흑백 화보 한 장(스프레드). PC는 스크롤 없이 한 화면, 모바일도 거의 한 화면.
+   가운데 검은 패널 = 서킷 리본 위를 와이어프레임 바이크가 달림. 오른쪽 = 트랙 리스트와 주행 계기판 */
+:root {
+  --paper: #f4f4f1;
+  --ink: #0d0d0d;
+  --night: #0b0b0b;
+  --g1: #2a2a2a; --g2: #6c6c6a; --g3: #a6a6a3; --g4: #d6d6d2;
+  --cond: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --script: "Mrs Saint Delafield", "Snell Roundhand", cursive;
+  --it: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ko: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --ease: cubic-bezier(.7, 0, .2, 1);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--paper); color: var(--ink); font: 400 13px/1.55 var(--ko); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .32; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+button { font: inherit; color: inherit; }
+
+/* 티커 */
+.ticker { position: relative; height: 26px; background: var(--ink); color: var(--paper); overflow: hidden; white-space: nowrap; font: italic 500 12px/26px var(--it); letter-spacing: .32em; text-transform: uppercase; }
+.ticker div { display: inline-block; animation: tick 38s linear infinite; padding-left: 100%; }
+.ticker div span { margin-right: 2.4em; }
+@keyframes tick { to { transform: translateX(-100%); } }
+
+/* 스프레드 */
+.spread { height: calc(100% - 26px); min-height: 640px; max-width: 1480px; margin: 0 auto; display: grid;
+  grid-template-columns: 170px minmax(0, 1fr) 300px; grid-template-rows: auto auto; align-content: start; gap: 18px 28px;
+  padding: 22px max(24px, env(safe-area-inset-right, 0px)) 18px max(24px, env(safe-area-inset-left, 0px)); }
+.fr { position: relative; border: 1px solid var(--ink); }
+.fr > .hd { position: absolute; width: 7px; height: 7px; background: var(--paper); border: 1px solid var(--ink); z-index: 3; }
+.hd.a { left: -4px; top: -4px; } .hd.b { right: -4px; top: -4px; } .hd.c { left: -4px; bottom: -4px; } .hd.d { right: -4px; bottom: -4px; }
+
+/* 왼쪽 */
+.left { grid-column: 1; grid-row: 1 / 3; display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 10px; min-height: 0; }
+.date .num { background: var(--ink); color: var(--paper); font: 900 96px/.84 var(--cond); padding: 10px 10px 2px; text-align: center; letter-spacing: -.03em; }
+.date .mon { font: 900 46px/.82 var(--cond); letter-spacing: -.02em; margin-top: 8px; transform: scaleY(1.3); transform-origin: top; }
+.via { justify-self: start; border: 1px solid var(--ink); font: italic 500 12px/1 var(--it); padding: 4px 7px; margin-top: 14px; }
+.sw { display: flex; gap: 6px; } .sw i { width: 20px; height: 20px; }
+.coords { font: 400 10px/1.7 var(--mono); color: var(--g2); align-self: end; }
+.coords b { color: var(--ink); font-weight: 500; }
+.side-n { font: 500 9.5px/1 var(--mono); letter-spacing: .14em; color: var(--g3); writing-mode: vertical-rl; transform: rotate(180deg); align-self: end; justify-self: start; }
+
+/* 패널 */
+.panel { grid-column: 2; grid-row: 1; background: #0b0b0b; min-height: 0; overflow: hidden; aspect-ratio: 16 / 10; max-height: max(320px, calc(100vh - 290px)); }
+#loop { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; cursor: grab; }
+#loop:active { cursor: grabbing; }
+.panel .grain { position: absolute; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.panel .vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.55)); }
+.ui { position: absolute; z-index: 2; font: 500 10px/1.4 var(--mono); letter-spacing: .1em; color: #cfcfcb; pointer-events: none; }
+.ui.tl { left: 14px; top: 12px; } .ui.tr { right: 14px; top: 12px; text-align: right; } .ui.bl { left: 14px; bottom: 12px; }
+.ui .rec { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #e8e8e4; margin-right: 6px; animation: blink 1.2s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.wp { position: absolute; z-index: 2; pointer-events: none; font: 500 9.5px/1 var(--mono); letter-spacing: .1em; color: #e8e8e4; white-space: nowrap; transform: translate(10px, -50%); }
+.wp b { font: 900 15px/1 var(--cond); letter-spacing: .02em; margin-right: 5px; }
+.wp.on b { background: #e8e8e4; color: #0b0b0b; padding: 0 3px; }
+.lines { position: absolute; left: 4%; top: 16%; display: grid; justify-items: start; gap: 6px; z-index: 3; background: none; border: 0; padding: 0; cursor: pointer; }
+.lines span { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); padding: 2px 8px 0; font: italic 600 19px/1.15 var(--it); letter-spacing: .01em; text-transform: uppercase; }
+.lines span:last-child { background: var(--ink); color: var(--paper); border-color: var(--paper); font-weight: 700; }
+.lines:hover span:last-child, .lines:focus-visible span:last-child { background: var(--paper); color: var(--ink); }
+.lines:focus-visible { outline: 1px dashed var(--paper); outline-offset: 6px; }
+.tagr { position: absolute; right: 5%; bottom: 9%; z-index: 2; color: var(--paper); font: 400 clamp(40px, 4.4vw, 64px)/1 var(--script); transform: rotate(-7deg); pointer-events: none; }
+
+/* 타이틀 */
+.title { grid-column: 2; grid-row: 2; position: relative; min-width: 0; }
+.rib { display: flex; gap: 18px; font: italic 500 11px/1 var(--it); letter-spacing: .5em; text-transform: uppercase; margin-bottom: 8px; }
+.title h1 { margin: 0; font: 900 clamp(56px, min(8.4vw, 14vh), 150px)/.78 var(--cond); letter-spacing: -.035em; text-transform: uppercase; white-space: nowrap; }
+.title h1 .amp { font: 400 .8em/0 var(--script); text-transform: none; letter-spacing: 0; vertical-align: -.05em; margin: 0 -.06em; }
+.title .scr { position: absolute; left: 44%; top: 2%; font: 400 clamp(60px, min(8vw, 13vh), 130px)/1 var(--script); color: var(--paper); -webkit-text-stroke: 1.4px var(--ink); transform: rotate(-9deg); pointer-events: none; }
+.title .meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 10px; font: italic 500 11px/1 var(--it); letter-spacing: .3em; text-transform: uppercase; }
+
+/* 오른쪽 */
+.right { grid-column: 3; grid-row: 1 / 3; display: grid; grid-template-rows: auto auto 1fr auto; gap: 16px; min-height: 0; }
+.track h2 { margin: 0; display: flex; align-items: end; gap: 6px; font: italic 600 40px/1 var(--it); letter-spacing: -.02em; border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+.track h2 small { background: var(--g4); font: italic 500 10px/1 var(--it); padding: 2px 4px; margin-bottom: 6px; letter-spacing: .04em; }
+.track h2 em { margin-left: auto; font: 500 10px/1 var(--mono); font-style: normal; border: 1px solid var(--ink); padding: 3px 5px; margin-bottom: 6px; }
+.track p { margin: 10px 0 0; font: 400 13px/1.55 var(--ko); text-align: justify; word-break: keep-all; }
+.track .last { font: italic 600 22px/1.05 var(--it); margin-top: 10px; letter-spacing: -.01em; text-align: left; }
+.list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.list button { width: 100%; display: grid; grid-template-columns: 30px 1fr auto; align-items: baseline; gap: 8px; background: none; border: 0; border-bottom: 1px solid var(--g4); padding: 7px 0; cursor: pointer; text-align: left; position: relative; overflow: hidden; }
+.list button::before { content: ""; position: absolute; inset: 0; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); z-index: -1; }
+.list li { position: relative; z-index: 0; }
+.list i { font: 500 10.5px/1 var(--mono); font-style: normal; color: var(--g2); }
+.list b { font: 900 25px/1 var(--cond); letter-spacing: .01em; text-transform: uppercase; }
+.list span { font: 400 11px/1 var(--ko); color: var(--g2); }
+.list button:hover::before, .list button:focus-visible::before { transform: scaleX(1); }
+.list button:hover, .list button:focus-visible { color: var(--paper); outline: none; padding-left: 8px; transition: padding .35s var(--ease); }
+.list button:hover i, .list button:hover span, .list button:focus-visible i, .list button:focus-visible span { color: var(--g3); }
+.tele { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr) auto auto; min-height: 0; }
+.tele .map { display: grid; grid-template-rows: auto minmax(150px, 1fr); padding: 0 !important; }
+.rs-tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--ink); }
+.rs-tabs button { border: 0; background: none; padding: 7px 8px; font: 900 15px/1 var(--cond); letter-spacing: .03em; text-align: left; cursor: pointer; color: var(--g2); }
+.rs-tabs button + button { border-left: 1px solid var(--ink); }
+.rs-tabs button i { font: 500 9px/1 var(--mono); font-style: normal; margin-right: 6px; vertical-align: 2px; }
+.rs-tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+.rs-tabs button:focus-visible { outline: 2px dashed var(--ink); outline-offset: -4px; }
+.rs-l[hidden], .rs-t[hidden] { display: none; }
+.rs-k { display: flex; justify-content: space-between; font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); }
+.rs-k em { font-style: normal; }
+.rs-l { position: relative; background: var(--night); color: #e8e8e4; padding: 8px 10px; display: grid; grid-template-rows: auto 1fr auto; gap: 6px; cursor: pointer; min-height: 0; }
+.rs-l .rs-k { color: #8a8a86; }
+.rs-l:focus-visible { outline: 2px dashed var(--ink); outline-offset: 2px; }
+.rs-g { display: flex; justify-content: center; align-items: center; gap: 7px; }
+.rs-g i { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #5a5a58; background: #151515; }
+.rs-g i.on { background: #f4f4f1; border-color: #f4f4f1; box-shadow: 0 0 12px rgba(255,255,250,.45); }
+.rs-lo { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-46%); text-align: center; font: 900 30px/1 var(--cond); letter-spacing: .02em; opacity: 0; pointer-events: none; }
+.rs-l.out .rs-lo { opacity: 1; } .rs-l.out .rs-g { opacity: 0; }
+.rs-r { display: flex; justify-content: space-between; font: 500 8.5px/1 var(--mono); letter-spacing: .1em; color: #8a8a86; }
+.rs-r b { font: 900 15px/1 var(--cond); color: #e8e8e4; letter-spacing: 0; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.rs-t { padding: 8px 10px; display: grid; grid-template-rows: auto 1fr; gap: 6px; min-height: 0; }
+.rs-ty { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; }
+.ty1 { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; gap: 3px 8px; align-items: center; }
+.ty1 .pr { grid-row: 1 / 4; width: 30px; height: 58px; border: 1.5px solid var(--ink); border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; }
+.ty1 .pr i { transition: background .4s; }
+.ty1 .cp { font: 900 14px/1 var(--cond); letter-spacing: .02em; } .ty1 .cp small { font: 500 8px/1 var(--mono); color: var(--g2); margin-right: 4px; letter-spacing: .08em; }
+.ty1 .dg { font: 900 22px/1 var(--cond); font-variant-numeric: tabular-nums; } .ty1 .dg small { font: 500 8px/1 var(--mono); margin-left: 1px; }
+.ty1 .wr { height: 4px; border: 1px solid var(--ink); position: relative; } .ty1 .wr i { position: absolute; inset: 0 auto 0 0; background: var(--ink); }
+.tele svg { width: 100%; height: 100%; display: block; margin-top: 6px; overflow: visible; }
+.tele > div { padding: 8px 10px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.tele > div:nth-child(2n) { border-right: 0; } .tele > div:nth-last-child(-n+2) { border-bottom: 0; }
+.tele dt { font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); }
+.tele dd { margin: 5px 0 0; font: 900 26px/1 var(--cond); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tele .wide { grid-column: 1 / -1; border-right: 0; }
+.bar { height: 4px; background: var(--g4); margin-top: 7px; } .bar i { display: block; height: 100%; width: 0; background: var(--ink); }
+.dd { display: flex; justify-content: space-between; align-items: end; padding: 10px 12px; }
+.dd b { font: 900 44px/.8 var(--cond); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.lap .lk { display: block; font: 500 9.5px/1 var(--mono); letter-spacing: .1em; margin-bottom: 6px; }
+.lap .lk b { font: 900 15px/1 var(--cond); letter-spacing: 0; margin-left: 2px; }
+.lap .lk em { font-style: normal; color: var(--g3); margin-left: 4px; }
+.lap .best { white-space: nowrap; }
+.lap strong { font: 900 17px/1.2 var(--cond); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.lap.pb #lapT { animation: pb .9s steps(2) 3; }
+@keyframes pb { 50% { background: var(--ink); color: var(--paper); } }
+.dd span { font: 500 9.5px/1.5 var(--mono); text-align: right; letter-spacing: .06em; }
+
+/* 등장 연출 (한 번) */
+.intro .panel { clip-path: inset(0 0 100% 0); }
+.intro .title h1, .intro .title .scr, .intro .date, .intro .list li { opacity: 0; transform: translateY(14px); }
+.ready .panel { clip-path: inset(0); transition: clip-path 1s var(--ease); }
+.ready .title h1, .ready .title .scr, .ready .date, .ready .list li { opacity: 1; transform: none; transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.ready .title .scr { transform: rotate(-9deg); transition-delay: .55s; }
+.ready .title h1 { transition-delay: .35s; }
+.ready .list li:nth-child(1) { transition-delay: .5s; } .ready .list li:nth-child(2) { transition-delay: .56s; } .ready .list li:nth-child(3) { transition-delay: .62s; }
+.ready .list li:nth-child(4) { transition-delay: .68s; } .ready .list li:nth-child(5) { transition-delay: .74s; } .ready .list li:nth-child(6) { transition-delay: .8s; }
+
+/* 팝업 */
+#wins { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
+.lw { position: absolute; width: 400px; max-width: calc(100vw - 24px); background: var(--paper); border: 1px solid var(--ink); pointer-events: auto; box-shadow: 14px 14px 0 -1px var(--paper), 14px 14px 0 0 var(--ink); }
+.lw::before, .lw::after { content: ""; position: absolute; width: 7px; height: 7px; background: var(--paper); border: 1px solid var(--ink); z-index: 2; }
+.lw::before { left: -4px; top: -4px; } .lw::after { right: -4px; top: -4px; }
+.lw-pop { animation: pop .42s var(--ease) both; } @keyframes pop { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 -20px -20px 0); } }
+.lw-bar { display: flex; justify-content: space-between; align-items: center; background: var(--ink); color: var(--paper); padding: 7px 10px; cursor: move; touch-action: none; }
+.lw-t { font: italic 600 17px/1 var(--it); letter-spacing: .02em; }
+.lw-x { border: 1px solid var(--paper); background: none; color: var(--paper); font: 500 10.5px/1 var(--mono); padding: 4px 7px; cursor: pointer; letter-spacing: .08em; }
+.lw-x:hover, .lw-x:focus-visible { background: var(--paper); color: var(--ink); outline: none; }
+.lw-body { padding: 16px 16px 18px; max-height: 70vh; overflow: auto; }
+.pf { display: grid; }
+.pf-head { display: grid; grid-template-columns: 1fr auto; align-items: end; position: relative; border-bottom: 1px solid var(--ink); padding-bottom: 8px; }
+.pf-name { font: 900 82px/.76 var(--cond); text-transform: uppercase; letter-spacing: -.03em; }
+.pf-ko { display: none; }
+.pf-plate { display: inline-flex; gap: 5px; border: 1px solid var(--ink); font: 500 11.5px/1.6 var(--mono); margin-bottom: 4px; }
+.pf-plate i, .pf-plate s { font-style: normal; text-decoration: none; background: var(--ink); color: var(--paper); padding: 0 4px; }
+.pf-line { margin: 12px 0 0; justify-self: start; background: var(--ink); color: var(--paper); padding: 3px 8px; font: 700 14px/1.6 var(--ko); word-break: keep-all; }
+.pf-dl { display: grid; grid-template-columns: 62px 1fr 62px 1fr; margin: 14px 0 0; border-top: 1px solid var(--ink); }
+.pf-dl dt, .pf-dl dd { margin: 0; padding: 6px 0; border-bottom: 1px solid var(--g4); }
+.pf-dl dt { font: 500 9.5px/1.9 var(--mono); color: var(--g2); letter-spacing: .06em; } .pf-dl dd { word-break: keep-all; padding-right: 8px; }
+.pf-dl dt:nth-of-type(n+5), .pf-dl dd:nth-of-type(n+5) { grid-column: span 1; }
+.pf-dl dd:nth-of-type(n+5) { grid-column: span 3; }
+.pf-kw { margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 5px; } .pf-kw span { border: 1px solid var(--ink); padding: 1px 7px; font: italic 500 13px/1.5 var(--it); }
+.rl { margin: 0; padding: 0; list-style: none; counter-reset: r; } .rl li { counter-increment: r; display: grid; grid-template-columns: 34px 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--g4); word-break: keep-all; }
+.rl li::before { content: "0" counter(r); font: 900 22px/1 var(--cond); }
+.nt { margin: 0; padding-left: 16px; } .nt li { margin-bottom: 6px; word-break: keep-all; }
+.lk { display: grid; } .lk a { display: flex; justify-content: space-between; color: var(--ink); text-decoration: none; font: 900 30px/1 var(--cond); text-transform: uppercase; padding: 8px 0; border-bottom: 1px solid var(--ink); } .lk a:hover { text-decoration: line-through; } .lk i { font-style: normal; }
+.rt { list-style: none; margin: 0 0 12px; padding: 0; } .rt li { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0 8px; border-bottom: 1px solid var(--g4); position: relative; }
+.rt li::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--p) * 100%); background: var(--ink); }
+.rt b { font: 900 26px/1 var(--cond); } .rt span { font: 500 11px/1 var(--mono); }
+.bk { display: grid; grid-template-columns: 62px 1fr; margin: 0; } .bk dt { font: 500 9.5px/2 var(--mono); color: var(--g2); } .bk dd { margin: 0; padding: 2px 0; }
+.rc { font: 400 12px/1.6 var(--mono); } .rc-h { text-align: center; margin: 0; font-weight: 500; } .rc-m, .rc-t, .rc li { display: flex; justify-content: space-between; } .rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed var(--ink); } .rc-t { font-weight: 500; margin: 0; } .rc-f, .rc-m { color: var(--g2); margin: 6px 0 0; } .rc-f { text-align: center; }
+
+/* 01 YVAN 팝업 추가분 (레이아웃은 .pf 그대로) */
+.pf-sub { margin: 6px 0 0; font: 400 12.5px/1.5 var(--ko); color: var(--g2); word-break: keep-all; }
+.pf-dl dd b { font-weight: 700; }
+.pf-dl dd { line-height: 1.65; }
+.thr { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin: 6px 0 6px; } .thr i { height: 6px; background: var(--ink); }
+.cr { display: block; padding: 2px 0; } .cr b { font: 900 17px/1 var(--cond); margin-right: 6px; } .cr em { font-style: normal; font: 500 10px/1 var(--mono); color: var(--g2); margin-right: 6px; }
+.cr i { font-style: normal; font: 500 10px/1 var(--mono); background: var(--ink); color: var(--paper); padding: 1px 4px; margin-right: 6px; }
+/* 03 LE MANS 인터뷰 팝업 */
+.iv-h { border-bottom: 1px solid var(--ink); padding-bottom: 10px; margin-bottom: 4px; }
+.iv-h span { display: block; font: 500 9.5px/1 var(--mono); letter-spacing: .14em; color: var(--g2); }
+.iv-h b { display: block; font: 900 36px/.9 var(--cond); text-transform: uppercase; margin-top: 8px; letter-spacing: -.01em; }
+.iv-h em { display: block; font: italic 500 14px/1.3 var(--it); letter-spacing: .04em; margin-top: 4px; }
+.iv-q, .iv-a { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 12px 0; }
+.iv-q { border-top: 1px solid var(--g4); }
+.iv-q i, .iv-a i { font: 500 10.5px/1 var(--mono); font-style: normal; padding: 4px 0; text-align: center; height: max-content; border: 1px solid var(--ink); }
+.iv-a i { background: var(--ink); color: var(--paper); }
+.iv-q p { margin: 0; font: 400 12.5px/1.65 var(--ko); color: var(--g2); word-break: keep-all; }
+.iv-a { padding-top: 0; }
+.iv-a small { display: block; font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); margin: 3px 0 6px; }
+.iv-a .en { margin: 0; font: italic 600 16.5px/1.3 var(--it); letter-spacing: .005em; }
+.iv-a .ko { margin: 6px 0 0; font: 400 12.5px/1.65 var(--ko); word-break: keep-all; }
+@media (min-width: 721px) and (max-height: 960px) { .track p:not(.last) { display: none; } .track .last { margin-top: 8px; } }
+/* 06 NOTICE + BGM 버튼 */
+.nt-e b { display: block; font: 900 30px/1 var(--cond); letter-spacing: .01em; text-transform: uppercase; }
+.nt-e ul { margin: 8px 0 0; padding-left: 16px; } .nt-e li { word-break: keep-all; }
+.bgm { margin-top: 16px; width: 100%; display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 10px; background: var(--night); color: #e8e8e4; border: 1px solid var(--ink); padding: 10px 12px; cursor: pointer; text-align: left; }
+.bgm:focus-visible { outline: 2px dashed var(--ink); outline-offset: 3px; }
+.bgm-ic { display: flex; align-items: end; gap: 2px; height: 16px; }
+.bgm-ic i { width: 3px; height: 4px; background: #e8e8e4; }
+.bgm.on .bgm-ic i { animation: eq .9s ease-in-out infinite; } .bgm.on .bgm-ic i:nth-child(2) { animation-delay: .2s; } .bgm.on .bgm-ic i:nth-child(3) { animation-delay: .45s; } .bgm.on .bgm-ic i:nth-child(4) { animation-delay: .1s; }
+@keyframes eq { 0%, 100% { height: 4px; } 50% { height: 16px; } }
+.bgm-k { font: 500 9.5px/1 var(--mono); letter-spacing: .14em; border: 1px solid #8a8a86; padding: 3px 5px; color: #a6a6a3; }
+.bgm-t { min-width: 0; } .bgm-t b { display: block; font: 900 19px/1 var(--cond); letter-spacing: .02em; text-transform: uppercase; overflow-wrap: anywhere; }
+.bgm-t em { display: block; font: italic 500 12.5px/1.2 var(--it); color: #a6a6a3; letter-spacing: .06em; margin-top: 2px; }
+.bgm-s { font: 500 10px/1 var(--mono); letter-spacing: .1em; background: #e8e8e4; color: var(--night); padding: 6px 8px; }
+.bgm:hover .bgm-s { background: #fff; }
+.bgm-frame { position: fixed; left: -9999px; top: 0; width: 200px; height: 200px; border: 0; }
+@media (prefers-reduced-motion: reduce) { .bgm.on .bgm-ic i { animation: none; height: 10px; } }
+/* 작은 폰 / 가로 폰 */
+@media (max-width: 720px) and (max-height: 620px) { .panel, .title { aspect-ratio: 1 / .88 !important; } .spread { gap: 8px !important; } }
+@media (max-width: 360px) { .list b { font-size: 16px !important; white-space: nowrap; } .list button { padding-left: 6px !important; padding-right: 4px !important; } .bgm { gap: 7px; padding: 9px 9px; } .bgm-k { display: none; } }
+@media (max-height: 520px) and (min-width: 721px) { .lw { top: 8px !important; } .lw-body { max-height: calc(100vh - 64px); } }
+/* 태블릿 */
+@media (max-width: 1100px) {
+  .spread { grid-template-columns: minmax(0, 1fr) 280px; height: auto; }
+  .left { display: none; }
+  .panel, .title { grid-column: 1; }
+  .right { grid-column: 2; }
+}
+/* 모바일: 한 화면 앱처럼 */
+@media (max-width: 720px) {
+  html, body { height: auto; }
+  .ticker { height: 22px; font-size: 10px; line-height: 22px; }
+  .spread { position: relative; height: auto; min-height: 0; grid-template-columns: 1fr; grid-template-rows: auto; gap: 10px; padding: 10px max(14px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); }
+  .right { display: contents; }
+  .panel, .title, .right, .tele, .list { grid-column: 1; grid-row: auto; }
+  .mtop { display: flex !important; }
+  .panel { aspect-ratio: 1 / 1.02; order: 1; }
+  .title { order: 2; position: absolute; left: 14px; right: 14px; top: 64px; aspect-ratio: 1 / 1.02; pointer-events: none; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 10px 10px; }
+  .title .rib, .title .meta span:last-child { display: none; }
+  .title h1 { color: var(--paper); font-size: 11vw; letter-spacing: -.03em; }
+  .wp:not(.on) { display: none; }
+  .title .scr { color: transparent; -webkit-text-stroke: 1.2px var(--paper); left: 40%; top: auto; bottom: 7%; font-size: 13vw; }
+  .title .meta { color: var(--g3); font-size: 9px; letter-spacing: .2em; margin-top: 6px; }
+  .tagr { display: none; }
+  .lines { top: 13%; left: 10px; } .lines span { font-size: 14px; padding: 1px 5px 0; }
+  .ui.bl { display: none; } .ui { font-size: 8.5px; } .wp { font-size: 8px; } .wp b { font-size: 12px; }
+    .track { display: none; }
+  .tele { order: 3; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; }
+  .tele > div { padding: 6px 8px; border-bottom: 0; } .tele > div:nth-child(2n) { border-right: 1px solid var(--ink); } .tele > div:last-child { border-right: 0; }
+  .tele .wide { grid-column: auto; border-right: 1px solid var(--ink); }
+  .tele .map { display: none; }
+  .tele dd { font-size: 19px; } .tele dt { font-size: 8px; } .bar { display: none; }
+  .list { order: 4; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border: 0; }
+  .list button { grid-template-columns: 1fr; gap: 2px; border: 1px solid var(--ink); padding: 8px 8px 7px; }
+  .list b { font-size: 20px; } .list span { display: none; }
+  .list button:hover, .list button:focus-visible { padding-left: 8px; }
+  .dd { display: none; }
+  /* 팝업 = 아래에서 올라오는 시트 */
+  .lw { left: 0 !important; right: 0; top: auto !important; bottom: 0; width: 100% !important; max-width: none; border-width: 1px 0 0; box-shadow: 0 -12px 0 -1px var(--paper), 0 -12px 0 0 var(--ink); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .lw::before, .lw::after { display: none; }
+  .lw { box-shadow: 0 -6px 24px rgba(0,0,0,.18); border-top: 2px solid var(--ink); }
+  .lw-pop { animation: sheet .4s var(--ease) both; } @keyframes sheet { from { transform: translateY(100%); } }
+  .lw-body { max-height: 62vh; }
+  .pf-name { font-size: 64px; }
+  .pf-dl { grid-template-columns: 54px 1fr 54px 1fr; font-size: 12px; }
+}
+.mtop { display: none; order: 0; justify-content: space-between; align-items: center; gap: 10px; height: 44px; }
+.mtop .md { display: flex; align-items: stretch; gap: 6px; }
+.mtop .md b { background: var(--ink); color: var(--paper); font: 900 34px/1 var(--cond); padding: 4px 6px 0; }
+.mtop .md span { font: 900 17px/.9 var(--cond); display: grid; align-content: center; }
+.mtop .md span small { font: italic 500 9px/1.2 var(--it); letter-spacing: .1em; }
+.mtop .mdd { font: 900 26px/1 var(--cond); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mtop .mdd small { font: 500 9px/1 var(--mono); color: var(--g2); margin: 0 3px 0 6px; vertical-align: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .ticker div, .ui .rec { animation: none; }
+  .intro .panel, .intro .title h1, .intro .title .scr, .intro .date, .intro .list li { clip-path: none; opacity: 1; transform: none; }
+  .lw-pop { animation: none; }
+}
+</style>
+</head>
+<body class="intro">
+<div class="ticker" aria-hidden="true"><div id="tick"></div></div>
+<div class="spread">
+  <div class="mtop"><div class="md"><b id="mnum"></b><span id="mmon"></span></div><div class="mdd" id="mdd"></div></div>
+  <aside class="left">
+    <div class="date"><div class="num fr" id="dnum"></div><div class="mon" id="dmon"></div></div>
+    <span class="via">[since the first ride]</span>
+    <div class="sw" aria-hidden="true"><i style="background:var(--ink)"></i><i style="background:var(--g2)"></i><i style="background:var(--g3)"></i><i style="background:var(--g4)"></i></div>
+    <div class="side-n">YVAN // LIA // ROUTE 75 // BOULANGERIE</div>
+    <div class="coords">START<br><b>48.8566° N</b><br><b>2.3522° E</b><br>PARIS 75<br><br>FINISH<br><b>49.3600° N</b><br><b>0.0750° E</b><br>DEAUVILLE 14</div>
+  </aside>
+  <section class="panel fr">
+    <canvas id="loop" aria-label="서킷 모양 리본 위를 달리는 3D 바이크. 드래그해서 돌릴 수 있어요"></canvas>
+    <div class="vig"></div><div class="grain"></div>
+    <div id="wps"></div>
+    <span class="ui tl"><i class="rec"></i>REC · IMG_0314.RAW</span>
+    <span class="ui tr" id="uitr">ISO 3200 · 1/60</span>
+    <span class="ui bl">DRAG TO ROTATE</span>
+    <button class="lines" type="button" data-open="p1" id="lines" aria-label="Hold on tight. Lights out and away we go. 리아 프로필 열기"></button>
+  </section>
+  <section class="title">
+    <div class="rib"><span>MO1</span><span>//</span><span>ATLAS</span><span>//</span><span>NO.2</span></div>
+    <h1>Unstoppable</h1>
+    <div class="meta"><span>→ Issue 01 · Paris 75 → Deauville 14</span></div>
+  </section>
+  <aside class="right">
+    <div class="track">
+      <h2>TRACK <small>INDEX.01</small><em>Ride Out</em></h2>
+    </div>
+    <ol class="list">
+      <li><button type="button" data-open="p0"><i>01</i><b>Yvan</b><span>RIDER</span></button></li>
+      <li><button type="button" data-open="p1"><i>02</i><b>Lia</b><span>SIS</span></button></li>
+      <li><button type="button" data-open="rel"><i>03</i><b>Le Mans</b><span>INTERVIEW</span></button></li>
+      <li><button type="button" data-open="route"><i>04</i><b>Route</b><span>204 km</span></button></li>
+      <li><button type="button" data-open="bread"><i>05</i><b>Reçu</b><span>boulangerie</span></button></li>
+      <li><button type="button" data-open="notice"><i>06</i><b>Notice</b></button></li>
+    </ol>
+    <dl class="tele fr" aria-live="off">
+      <div class="wide map rs">
+        <div class="rs-tabs" role="tablist" aria-label="위젯 선택"><button type="button" role="tab" id="rsTabL" aria-selected="true" aria-controls="rsL"><i>01</i>START LIGHTS</button><button type="button" role="tab" id="rsTabT" aria-selected="false" aria-controls="rsT"><i>02</i>TYRES</button></div>
+        <div class="rs-l" role="tabpanel" id="rsL" role="button" tabindex="0" aria-label="출발 신호등. 불이 꺼지는 순간 누르면 반응속도를 재요">
+          <span class="rs-k">START · LIGHTS</span>
+          <div class="rs-g" id="rsG"></div>
+          <b class="rs-lo" id="rsLo">LIGHTS OUT</b>
+          <span class="rs-r"><span>REACTION <b id="rsRt">—</b></span><span>BEST <b id="rsRb">—</b></span></span>
+        </div>
+        <div class="rs-t" id="rsT" role="tabpanel" hidden><span class="rs-k">TYRE · TEMP / WEAR<em id="rsLap">LAP 01</em></span><div class="rs-ty" id="rsTy"></div></div>
+      </div>
+      <div class="wide"><dt>NOW RIDING</dt><dd id="tNow">PARIS → ROUEN</dd><div class="bar"><i id="tBar"></i></div></div>
+      <div><dt>KM</dt><dd id="tKm">0</dd></div>
+      <div><dt>KM/H</dt><dd id="tSp">0</dd></div>
+    </dl>
+    <div class="dd fr lap"><div><span class="lk">LAP <b id="lapN">01</b><em>/ ∞</em></span><b id="lapT">0:00.000</b></div><span class="best">BEST LAP<br><strong id="lapB">—</strong></span></div>
+  </aside>
+</div>
+<div id="wins"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* YVAN ୨୧ LIA — 러브인포 시안 6종이 같이 쓰는 내용.
+   여기만 고치면 a~f 시안 전부에 반영돼요.
+   ※ 표시(임시)가 붙은 값은 자리 채우기용 예시라서 실제 설정으로 바꿔 주세요. */
+window.LUV = {
+  pair: 'YVAN ୨୧ LIA',
+  pairKo: '이반 ୨୧ 리아',
+  since: '2026-03-14',              // 임시: 처음 만난 날 / 연성 시작일 (D+ 계산용)
+  tagline: '운전은 이반, 뒷자리는 리아', // 임시
+  city: 'PARIS',
+  bike: { model: 'CAFÉ RACER', cc: '900', year: '1974', color: 'NOIR / CHROME' }, // 임시: 이반의 바이크
+  chars: [
+    {
+      key: 'Y', name: 'YVAN', ko: '이반', full: 'YVAN STADEL', fullKo: '이반 슈타델',
+      role: '라이더 · 바이크 정비사',  // 임시
+      plate: 'YV-211-AN', dept: '75',       // 임시: 프랑스식 번호판 (75 = 파리)
+      age: '25', height: '186', birth: '02.18',
+      color: '#2b3a67', colorName: 'MIDNIGHT INK', // 임시
+      keywords: ['가죽 재킷', '무심한 다정', '헬멧은 늘 두 개'], // 임시
+      line: '씨발, 또 2등?',
+      likes: '새벽 국도, 엔진 정비, 리아의 잔소리',  // 임시
+      dislikes: '비 오는 날 주행, 소란'              // 임시
+    },
+    {
+      key: 'L', name: 'LIA', ko: '리아', full: 'LIA STADEL', fullKo: '리아 슈타델',
+      role: '골목 빵집 직원',  // 임시
+      plate: 'LI-121-4A', dept: '75',       // 임시
+      age: '21', height: '159', birth: '04.23',
+      color: '#6fb6e0', colorName: 'SHALLOW AQUA',
+      keywords: ['뒷자리 단골', '버터 냄새', '먼저 손 내미는 쪽'], // 임시
+      line: '좋아해 줘.',
+      likes: '갓 구운 바게트, 센 강 산책, 이반의 등', // 임시
+      dislikes: '혼자 남겨지는 밤'                    // 임시
+    }
+  ],
+  // 이반 상세 (01 YVAN 팝업). <b>…</b> = 굵게
+  yvan: {
+    tiles: [['NAME', '이반 슈타델'], ['RIDER NAME', '이반'], ['BASIC', '프랑스 · 25세 · 186cm'], ['TEAM', '아틀라스 No.2']],
+    looks: [
+      '짙은 회색 머리와 새까만 눈동자, 창백한 피부. 날카롭게 찢어진 눈매와 조각처럼 또렷한 이목구비. 길고 단단하게 다져진 몸. <b>가만히 서 있기만 해도 위에서 내려다보는 것 같은 얼굴.</b>',
+      '어두운 톤의 니트와 셔츠, 테일러드 슬랙스. <b>로고 하나 없이도 소재와 핏에서 값이 드러나는 옷</b>을 입는다.'
+    ],
+    personality: [
+      '지독하게 냉소적이고 오만하다.<br>완벽주의에 자존심이 하늘을 찌른다. 세 시즌 연속 준우승이 남긴 건 굴욕과 열등감뿐. 칭찬은 의심하고, 위로는 동정으로 받아들인다.'
+    ],
+    habits: [
+      '<b>짧고 건조한 말투.</b> 비꼬는 말은 정확하고 유려하다.',
+      '스트레스가 쌓이면 담배를 줄줄이 태운다. 끊을 생각은 없다.'
+    ],
+    off: [['BIRTH', '2월 18일'], ['LIKE', '레몬 타르트 / 체스 / 날 귀찮게 하지 않는 것'], ['HATE', '2등 / 미지근한 커피 / {{user}}'], ['SCENT', '프라다 인퓨전 디리스 세드르'], ['DRINK', '와인은 사교용. <b>주량은 형편없다.</b>']],
+    race: {
+      head: '씨발, 또 2등?',
+      sub: '이제 슬슬 참을성의 한계가 몰려오기 시작했다.',
+      lean: '코너에 억지로 쑤셔 넣고, 미끄러지면 손으로 억지로 붙잡는다.',
+      style: '풀 스로틀 모드',
+      styleText: '참을성은 바닥, 스로틀은 끝까지.<br>앞에 누가 있으면 일단 꽂고 본다.<br>안정성이 철학인 팀과는 늘 삐걱인다.',
+      timeline: [
+        ['2022', '21세', '', '아틀라스 팩토리 데뷔.'],
+        ['2023', '22세', 'P2', '그랑프리 우승만 여러 번. 그리고 나인에게 밀려 준우승.'],
+        ['2024', '', 'P2', '이번엔 에이트. 또 준우승.'],
+        ['2025', '', 'P2', '세븐. 세 시즌 연속 준우승, 세 번 다 다른 챔피언.'],
+        ['현재', '', '', '다섯 번째 시즌. 올해는. 올해만큼은.']
+      ]
+    }
+  },
+  // 리아 상세 (02 LIA 팝업). <b>…</b> = 굵게
+  lia: {
+    sub: '버려지는 게 죽는 것보다 무서운 거, 오빠는 알아?',
+    rows: [
+      ['NAME', '리아 슈타델'], ['BIRTH', '4월 23일'], ['BASIC', '한일 · 21세 · 159cm'], ['DRINK', '과일주 한 잔까지.'],
+      ['LIKE', '베이킹 / 몽상 / 강아지'], ['HATE', '커피 / 시끄러운 것'], ['SCENT', '샤넬 레조드 파리-베니스'],
+      ['LOOKS', '어두운 검정색 머리와 밝은 회색 눈동자. 둥글고 처진 눈매와 늘 어딘가 불쌍해 보이고 처연해 보이는 얼굴상. 작은 키에 글래머러스한 몸. <b>눈가가 빨갛게 짓물러 있다.</b>'],
+      ['PERSONA', '유기불안과 분리불안을 지니고 있다. 가족에게 언젠가 버림 받을 것이라는 생각을 가지고 있다. 늘 착한 아이가 되고 싶어 한다.'],
+      ['TONE', '느리고 눈치보는 말투. 상대방이 조금이라도 부정적인 반응을 꺼내면 즉각적으로 불안을 느낀다.']
+    ],
+    tags: ['유기불안', '착한_아이', '베이킹', '몽상', '강아지']
+  },
+  // 03 LE MANS 팝업: 이반 인터뷰 — [질문, 영어 답, 한국어 번역]
+  interview: {
+    title: '2026 MO1 카타르 GP',
+    sub: '금요일 Pre-Q 종료 미디어 펜 인터뷰',
+    qa: [
+      ['이반, 오늘 Pre-Q에서 닉 블랙우드와 단 0.085초 차이로 2위를 기록하며 Q2에 직행했습니다. 마지막 플라잉 랩에서 섹터 1, 2, 3을 모두 개인 베스트로 주파했는데, 오늘 바이크 셋업과 타이어 전략에 만족하십니까?',
+       'The bike felt perfect. Grip was there, balance was solid. We knew the soft front was a gamble under the floodlights, but it paid off. Tomorrow in Q2, that 0.085 is going to be zero. Next question.',
+       '바이크는 완벽했어. 그립도 좋았고 밸런스도 단단했지. 조명 아래에서 소프트 프론트 타이어는 도박이었지만 성공했어. 내일 Q2에서는 그 0.085초 차이가 0이 될 거야. 다음 질문.'],
+      ['오늘 트랙 워크부터 이례적으로 슈타델 가의 일원과 동행하는 모습이 포착되었습니다. 지난 모테기에서도 함께였는데, 가문의 압박이나 미디어의 관심이 경기력에 영향을 주지는 않습니까?',
+       'My family\'s presence is my private matter. And as you just saw on the timesheet, my performance is better than ever. So unless you have a question about the race, shut your mouth.',
+       '내 가족이 여기 있는 건 내 사적인 문제야. 그리고 방금 타임시트에서 봤듯이, 내 경기력은 그 어느 때보다 좋아. 그러니까 레이스에 대한 질문이 아니면 입 다물어.'],
+      ['오늘 오후, 당신의 형인 오스카 슈타델이 아틀라스 호스피탈리티에서 당신의 게스트와 대화하는 모습이 목격되었습니다. 이후 보안팀이 출동했는데, 팀 내부나 가족 간에 어떤 문제가 있는 것입니까?',
+       'There was a minor security miscommunication. It\'s been handled. My brother is a sponsor, and my guest is under my exclusive protection. Anyone who crosses that line will deal with me directly, not with the media. Are we done here?',
+       '사소한 보안상 의사소통 오류가 있었어. 해결됐고. 내 형은 스폰서고, 내 손님은 내 전적인 보호 아래에 있어. 그 선을 넘는 놈은 언론이 아니라 나랑 직접 상대하게 될 거야. 이제 끝났나?'],
+      ['3년 연속 챔피언십 2위라는 기록에 대한 부담감이 클 텐데, 올 시즌은 출발이 좋습니다. 특히 오늘 주행은 작년과 달리 매우 안정적이면서도 공격적이었는데, 어떤 심경의 변화가 있었는지 궁금합니다.',
+       'I stopped caring about the fucking number two. I\'m here to win. And I finally have a reason to ride that\'s more important than any championship title. That\'s all you need to know.',
+       '그 좆같은 2위 따위는 신경 끄기로 했어. 난 이기려고 여기 있는 거야. 그리고 마침내 그 어떤 챔피언십 타이틀보다 더 중요한, 달려야 할 이유를 찾았거든. 너희는 그 정도만 알면 돼.'],
+      ['내일 Q2에서 가장 경계되는 라이더는 역시 닉 블랙우드입니까? 오늘 마지막 랩까지 치열한 타임 어택 경쟁을 벌였는데, 그의 주행에 대해 어떻게 평가하십니까?',
+       'Nick is fast. He\'s always been fast. But he\'s reckless. Tomorrow, I\'ll be faster and smarter. The pole position is mine. He can have my leftover champagne.',
+       '닉은 빨라. 언제나 빨랐지. 하지만 무모해. 내일은 내가 더 빠르고 더 영리할 거야. 폴 포지션은 내 차지야. 걔는 내가 남긴 샴페인이나 마시라지.'],
+      ['마지막 질문입니다. 오늘 Pre-Q 종료 직후 엔지니어링 디브리핑에 불참하고 곧장 라이더 룸으로 복귀했습니다. 팀과의 불화설이 다시 제기될 수 있는데, 특별한 이유가 있었습니까?',
+       'I had to get back to someone who was waiting for me. That\'s more important than staring at data for an extra ten minutes. My team knows my priorities. And right now, my priority is getting the hell out of this interview. We\'re done.',
+       '날 기다리는 사람에게 돌아가야 했어. 데이터 쪼가리 10분 더 쳐다보는 것보다 그게 더 중요해. 우리 팀은 내 우선순위를 알아. 그리고 지금 내 우선순위는 이 좆같은 인터뷰에서 꺼지는 거야. 끝.']
+    ]
+  },
+  // 06 NOTICE 팝업 (첫 줄은 제목처럼 굵게)
+  noticeE: ['MO1 YVAN', '로그 누수 / 백업 목적 계정', '따로 교류는 안 하고 있어요.'],
+  // BGM 버튼 — 유튜브 영상 ID
+  bgm: { title: 'Unstoppable Now', artist: 'The Phantoms', yt: 'DKgFy49fLP4' },
+  route: [ // 둘이 자주 가는 길 (임시) — ['지명', km]
+    ['PARIS', 0], ['ROUEN', 135], ['HONFLEUR', 190], ['DEAUVILLE', 204]
+  ],
+  bakery: [ // 리아네 빵집 메뉴판 (임시) — ['메뉴', '가격 €']
+    ['CROISSANT', '1.40'], ['PAIN AU CHOCOLAT', '1.60'], ['BAGUETTE TRADITION', '1.30'], ['CAFÉ CRÈME', '2.80']
+  ],
+  relation: [ // 관계 키워드 / 설정 (임시)
+    '첫 만남은 빵집 앞에 세워 둔 바이크 때문에.',
+    '매일 새벽 6시, 이반은 빵집 앞에서 시동을 끄고 기다린다.',
+    '싸우면 먼저 연락하는 건 리아, 먼저 찾아가는 건 이반.',
+    '서로를 부르는 호칭: 이반 → “리아야”, 리아 → “반아”.'
+  ],
+  notice: [ // 안내 (임시)
+    'ONLY 성향이에요. 동담은 어려워요.',
+    '연성 · 썰은 자유롭게 이용 가능, 출처만 남겨 주세요.',
+    '문의는 DM으로 편하게 주세요.'
+  ],
+  links: [ // ['이름', '주소'] (임시)
+    ['Twitter', 'https://twitter.com/'],
+    ['Tistory', 'https://syndrome.love/'],
+    ['Info', 'https://luvinfo.me/']
+  ]
+};
+LUV.esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+LUV.days = function () {
+  var a = new Date(LUV.since + 'T00:00:00'), b = new Date(); b.setHours(0, 0, 0, 0);
+  return Math.floor((b - a) / 864e5) + 1;
+};
+LUV.reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+</script>
+<script>
+/* 러브인포 시안 공통 엔진 — 팝업 창, 위젯 내용, 3D 바이크.
+   시안마다 CSS만 다르게 입혀요. 내용은 data.js 에서 가져와요. */
+(function () {
+  var L = window.LUV, e = L.esc, K = window.KIT = {};
+  var top = 10, layer;
+
+  /* ---------- 팝업 창 ---------- */
+  // K.open(id, title, html, opts)  opts: { x, y, w, cls }
+  K.open = function (id, title, html, o) {
+    o = o || {};
+    layer = layer || document.getElementById('wins') || document.body;
+    var w = document.getElementById('w-' + id);
+    if (w) { w.style.zIndex = ++top; w.classList.remove('lw-pop'); void w.offsetWidth; w.classList.add('lw-pop'); return w; }
+    w = document.createElement('section');
+    w.className = 'lw lw-pop ' + (o.cls || ''); w.id = 'w-' + id; w.setAttribute('role', 'dialog'); w.setAttribute('aria-label', title.replace(/<[^>]+>/g, ''));
+    w.innerHTML = '<header class="lw-bar"><span class="lw-t">' + title + '</span><button type="button" class="lw-x" aria-label="닫기">' + (o.x || '×') + '</button></header><div class="lw-body">' + html + '</div>';
+    var small = innerWidth < 640;
+    if (o.w) w.style.width = small ? '' : o.w + 'px';
+    var n = layer.querySelectorAll('.lw').length;
+    w.style.left = (small ? 12 : (o.left != null ? o.left : 80 + n * 26)) + 'px';
+    w.style.top = (small ? 64 + n * 14 : (o.top != null ? o.top : 70 + n * 22)) + 'px';
+    w.style.zIndex = ++top;
+    layer.appendChild(w);
+    w.querySelector('.lw-x').onclick = function () { w.remove(); };
+    w.addEventListener('pointerdown', function () { w.style.zIndex = ++top; });
+    drag(w, w.querySelector('.lw-bar'));
+    return w;
+  };
+  // 미리보기용: 주소 끝이 #pop 이면 팝업 몇 개를 미리 띄워 둠. list = [['p0', left, top], ...]
+  K.demo = function (list) {
+    if ((location.hash !== '#pop' && !window.DEMO) || !K.map) return;
+    setTimeout(function () {
+      list.forEach(function (d) {
+        var f = K.map[d[0]]; if (!f) return; f();
+        var w = document.getElementById('w-' + d[0]); if (!w || innerWidth < 640) return;
+        w.style.left = d[1] + 'px'; w.style.top = d[2] + 'px'; w.classList.remove('lw-pop');
+      });
+    }, 300);
+  };
+  K.closeAll = function () { document.querySelectorAll('.lw').forEach(function (w) { w.remove(); }); };
+  function drag(w, h) {
+    var s = null;
+    h.addEventListener('pointerdown', function (ev) {
+      if (ev.target.closest('button')) return;
+      s = { x: ev.clientX - w.offsetLeft, y: ev.clientY - w.offsetTop }; h.setPointerCapture(ev.pointerId);
+    });
+    h.addEventListener('pointermove', function (ev) {
+      if (!s) return;
+      var x = Math.max(-w.offsetWidth + 80, Math.min(innerWidth - 60, ev.clientX - s.x));
+      var y = Math.max(0, Math.min(innerHeight - 40, ev.clientY - s.y));
+      w.style.left = x + 'px'; w.style.top = y + 'px';
+    });
+    h.addEventListener('pointerup', function () { s = null; });
+  }
+  // data-open="profile-0" 같은 버튼을 자동으로 연결
+  K.bind = function (map) {
+    K.map = map;
+    // 키보드: role=button 요소도 Enter/Space 로 열기
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'Enter' && ev.key !== ' ') return;
+      var b = ev.target.closest('[data-open]'); if (!b || b.tagName === 'BUTTON' || b.tagName === 'SELECT') return;
+      ev.preventDefault(); var f = map[b.getAttribute('data-open')]; if (f) f(b);
+    });
+    document.addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-open]'); if (!b) return;
+      ev.preventDefault(); var k = b.getAttribute('data-open'), f = map[k]; if (f) f(b);
+    });
+  };
+
+  /* ---------- 내용 ---------- */
+  K.dday = function () { return L.days(); };
+  K.since = function (sep) { return L.since.split('-').join(sep || '.'); };
+  K.profile = function (i) {
+    var c = L.chars[i];
+    return '<div class="pf pf-' + c.key.toLowerCase() + '">' +
+      '<div class="pf-head"><b class="pf-name">' + c.name + '</b><span class="pf-ko">' + c.ko + '</span><span class="pf-plate"><i>F</i>' + c.plate + '<s>' + c.dept + '</s></span></div>' +
+      '<p class="pf-line">' + e(c.line) + '</p>' +
+      '<dl class="pf-dl">' +
+      '<dt>ROLE</dt><dd>' + e(c.role) + '</dd>' +
+      '<dt>AGE</dt><dd>' + c.age + '</dd>' +
+      '<dt>HEIGHT</dt><dd>' + c.height + 'cm</dd>' +
+      '<dt>BIRTH</dt><dd>' + c.birth + '</dd>' +
+      '<dt>LIKE</dt><dd>' + e(c.likes) + '</dd>' +
+      '<dt>DISLIKE</dt><dd>' + e(c.dislikes) + '</dd></dl>' +
+      '<p class="pf-kw">' + c.keywords.map(function (k) { return '<span>#' + e(k).replace(/ /g, '_') + '</span>'; }).join(' ') + '</p></div>';
+  };
+  K.relation = function () { return '<ol class="rl">' + L.relation.map(function (t) { return '<li>' + e(t) + '</li>'; }).join('') + '</ol>'; };
+  K.notice = function () { return '<ul class="nt">' + L.notice.map(function (t) { return '<li>' + e(t) + '</li>'; }).join('') + '</ul>'; };
+  K.links = function () { return '<nav class="lk">' + L.links.map(function (l) { return '<a href="' + e(l[1]) + '" target="_blank" rel="noopener">' + e(l[0]) + '<i>↗</i></a>'; }).join('') + '</nav>'; };
+  K.route = function () {
+    var max = L.route[L.route.length - 1][1];
+    return '<ol class="rt">' + L.route.map(function (r) { return '<li style="--p:' + (r[1] / max) + '"><b>' + r[0] + '</b><span>' + r[1] + ' km</span></li>'; }).join('') + '</ol>';
+  };
+  K.bike = function () { var b = L.bike; return '<dl class="bk"><dt>MODEL</dt><dd>' + e(b.model) + '</dd><dt>CC</dt><dd>' + b.cc + '</dd><dt>YEAR</dt><dd>' + b.year + '</dd><dt>COLOR</dt><dd>' + e(b.color) + '</dd><dt>PLATE</dt><dd>' + L.chars[0].plate + ' · ' + L.chars[0].dept + '</dd></dl>'; };
+  K.receipt = function () {
+    var now = new Date(), t = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    return '<div class="rc"><p class="rc-h">BOULANGERIE Y·L<br><small>12 RUE DES ROSIERS 75004</small></p>' +
+      '<p class="rc-m"><span>' + K.since('/') + '</span><span>' + t + '</span></p><ul>' +
+      L.bakery.map(function (m) { return '<li><span>1 × ' + e(m[0]) + '</span><span>' + m[1] + '</span></li>'; }).join('') +
+      '</ul><p class="rc-t"><span>TOTAL</span><span>€ ' + L.bakery.reduce(function (a, m) { return a + parseFloat(m[1]); }, 0).toFixed(2) + '</span></p><p class="rc-f">MERCI · À DEMAIN 06:00</p></div>';
+  };
+
+  /* ---------- 3D 오토바이 (카페 레이서, 선으로만) ---------- */
+  // K.bike3D(THREE, { line, faint, accent, dims, ground }) → Group.  앞 = +x, 위 = +y
+  K.bike3D = function (T, o) {
+    o = o || {};
+    var col = o.line != null ? o.line : 0x111111;
+    var main = new T.LineBasicMaterial({ color: col });
+    var faint = new T.LineBasicMaterial({ color: o.faint != null ? o.faint : col, transparent: true, opacity: .4 });
+    var acc = new T.LineBasicMaterial({ color: o.accent != null ? o.accent : 0x2546a8 });
+    var root = new T.Group(), R = 1, WB = 3.3, fx = WB / 2, rx = -WB / 2;
+    function add(x, p, r) { if (p) x.position.set(p[0], p[1], p[2] || 0); if (r) x.rotation.set(r[0] || 0, r[1] || 0, r[2] || 0); root.add(x); return x; }
+    function ed(g, m, th) { return new T.LineSegments(new T.EdgesGeometry(g, th || 24), m || main); }
+    function seg(pts, m) { return new T.Line(new T.BufferGeometry().setFromPoints(pts.map(function (p) { return new T.Vector3(p[0], p[1], p[2] || 0); })), m || main); }
+    function both(fn) { fn(1); fn(-1); }
+    function circ(r, n) { var p = []; for (var i = 0; i <= n; i++) { var a = i / n * Math.PI * 2; p.push(new T.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0)); } return p; }
+    function ring(r, m, n) { return new T.Line(new T.BufferGeometry().setFromPoints(circ(r, n || 40)), m || main); }
+    function tube(a, b, r, m) { // a→b 원통을 선 두 줄로
+      var A = new T.Vector3(a[0], a[1], a[2] || 0), B = new T.Vector3(b[0], b[1], b[2] || 0), d = B.clone().sub(A).normalize();
+      var n = new T.Vector3(0, 0, 1).cross(d).normalize().multiplyScalar(r);
+      var g = new T.BufferGeometry().setFromPoints([A.clone().add(n), B.clone().add(n), A.clone().sub(n), B.clone().sub(n), A.clone().add(n), A.clone().sub(n), B.clone().add(n), B.clone().sub(n)]);
+      var l = new T.LineSegments(g, m || main); root.add(l); return l;
+    }
+    function ellipsoid(c, sx, sy, sz, m) { // 등고선으로 그린 타원체
+      var g = new T.Group(); g.position.set(c[0], c[1], c[2] || 0);
+      [-.55, 0, .55].forEach(function (k) { var rr = Math.sqrt(1 - k * k), e = ring(1, m, 40); e.scale.set(sx * rr, sz * rr, 1); e.rotation.x = Math.PI / 2; e.position.y = k * sy; g.add(e); });
+      var side = ring(1, m, 40); side.scale.set(sx, sy, 1); g.add(side);
+      var cross = ring(1, faint, 30); cross.scale.set(sz, sy, 1); cross.rotation.y = Math.PI / 2; g.add(cross);
+      [-.5, .5].forEach(function (k) { var c2 = ring(1, faint, 30); var rr = Math.sqrt(1 - k * k); c2.scale.set(sz * rr, sy * rr, 1); c2.rotation.y = Math.PI / 2; c2.position.x = k * sx; g.add(c2); });
+      root.add(g); return g;
+    }
+    root.wheels = [];
+    // 바퀴: 두꺼운 타이어 + 림 + 5스포크 캐스트 휠 + 디스크
+    [[rx, false], [fx, true]].forEach(function (w) {
+      var g = new T.Group(); g.position.x = w[0];
+      g.add(ring(R, main, 56));
+      [-.19, .19].forEach(function (z) { var c = ring(R - .16, main, 56); c.position.z = z; g.add(c); });
+      g.add(ring(R - .38, main, 48));
+      [-.16, .16].forEach(function (z) { var c = ring(R - .38, faint, 48); c.position.z = z; g.add(c); });
+      var tr = []; for (var q = 0; q < 36; q++) { var qa = q / 36 * Math.PI * 2, ca = Math.cos(qa), sa = Math.sin(qa);
+        tr.push(new T.Vector3(ca * R, sa * R, 0), new T.Vector3(ca * (R - .16), sa * (R - .16), q % 2 ? .19 : -.19)); }
+      g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(tr), faint));
+      var sp = []; for (var i = 0; i < 5; i++) { var a = i / 5 * Math.PI * 2, b = .16;
+        [-.05, .05].forEach(function (z) { sp.push(new T.Vector3(Math.cos(a - b) * .17, Math.sin(a - b) * .17, z), new T.Vector3(Math.cos(a - .05) * (R - .4), Math.sin(a - .05) * (R - .4), z),
+          new T.Vector3(Math.cos(a + b) * .17, Math.sin(a + b) * .17, z), new T.Vector3(Math.cos(a + .05) * (R - .4), Math.sin(a + .05) * (R - .4), z)); }); }
+      g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(sp), main));
+      g.add(ring(.17, main, 20));
+      var disc = ring(w[1] ? .5 : .38, main, 36); disc.position.z = w[1] ? .22 : -.22; g.add(disc);
+      var cal = ed(new T.BoxGeometry(.22, .3, .1)); cal.position.set(w[1] ? -.35 : .3, w[1] ? .3 : .22, w[1] ? .26 : -.26); g.add(cal);
+      root.add(g); root.wheels.push(g);
+    });
+    // 앞 포크 (굵은 2개) + 트리플 클램프
+    both(function (s) { tube([fx, 0, .2 * s], [fx - .55, 1.75, .2 * s], .075); tube([fx - .2, .65, .2 * s], [fx - .55, 1.75, .2 * s], .1, faint); });
+    add(ed(new T.BoxGeometry(.24, .1, .62)), [fx - .52, 1.7], [0, 0, .3]); add(ed(new T.BoxGeometry(.2, .08, .56)), [fx - .62, 1.96], [0, 0, .3]);
+    // 클립온 핸들 + 미러 없는 짧은 바
+    both(function (s) { add(seg([[fx - .55, 1.84, .22 * s], [fx - .72, 1.8, .62 * s], [fx - .86, 1.76, .66 * s]])); });
+    // 원형 헤드라이트
+    [[.3, fx - .1], [.26, fx - .36]].forEach(function (h) { var c = ring(h[0], main, 30); c.rotation.y = Math.PI / 2; c.position.set(h[1], 1.55, 0); root.add(c); });
+    var lens = ring(.2, faint, 24); lens.rotation.y = Math.PI / 2; lens.position.set(fx - .06, 1.55, 0); root.add(lens);
+    both(function (s) { add(seg([[fx - .1, 1.55 + .3 * (s > 0 ? 1 : -1) * 0, .3 * s], [fx - .36, 1.55, .26 * s]])); });
+    // 앞 펜더
+    function arc(cx, r, a0, a1, z, m) { var p = []; for (var i = 0; i <= 20; i++) { var a = a0 + (a1 - a0) * i / 20; p.push([cx + Math.cos(a) * r, Math.sin(a) * r, z]); } add(seg(p, m)); }
+    both(function (s) { arc(fx, R + .08, Math.PI * .2, Math.PI * .75, .2 * s, faint); });
+    // 연료탱크 (크고 긴 물방울형)
+    ellipsoid([.25, 1.6], .88, .36, .4, main);
+    // 카페 레이서 시트 + 테일 험프
+    both(function (s) { add(seg([[-.45, 1.5, .24 * s], [-.5, 1.62, .22 * s], [-1.35, 1.6, .22 * s], [-1.5, 1.82, .18 * s], [-1.9, 1.78, .16 * s], [-1.95, 1.45, .16 * s], [-.45, 1.42, .24 * s], [-.45, 1.5, .24 * s]])); });
+    [[-.5, 1.62, .22], [-1.35, 1.6, .22], [-1.5, 1.82, .18], [-1.9, 1.78, .16], [-1.95, 1.45, .16]].forEach(function (p) { add(seg([[p[0], p[1], p[2]], [p[0], p[1], -p[2]]], faint)); });
+    // 프레임
+    add(seg([[fx - .62, 1.84], [-.15, 1.72], [-1.75, 1.42]]));
+    add(seg([[fx - .62, 1.84], [.75, .9], [.3, .15], [-.45, .2], [-.45, .75], [-.15, 1.72]]));
+    add(seg([[-.45, .75], [-1.75, 1.42]], faint));
+    // 엔진: 크랭크케이스 + 2기통 실린더(냉각핀) + 사이드 커버
+    add(ed(new T.BoxGeometry(1.15, .55, .62)), [.12, .45]);
+    both(function (s) { var c = ring(.3, main, 30); c.position.set(-.05, .45, .33 * s); root.add(c); var c2 = ring(.18, faint, 24); c2.position.set(.4, .4, .33 * s); root.add(c2); });
+    var cyl = new T.Group(); cyl.position.set(.32, .78, 0); cyl.rotation.z = -.32; root.add(cyl);
+    cyl.add(ed(new T.BoxGeometry(.5, .6, .56))); cyl.add(ed(new T.BoxGeometry(.6, .12, .62))); cyl.children[1].position.y = .34;
+    var fins = []; for (var f = 0; f < 6; f++) { var y = -.24 + f * .09; fins.push(new T.Vector3(-.3, y, .3), new T.Vector3(.3, y, .3), new T.Vector3(-.3, y, -.3), new T.Vector3(.3, y, -.3)); }
+    cyl.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(fins), faint));
+    // 카뷰레터 / 에어필터
+    both(function (s) { var c = ring(.12, main, 18); c.rotation.y = Math.PI / 2; c.position.set(-.25, 1.0, .2 * s); root.add(c); add(seg([[-.25, 1.0, .2 * s], [.05, .98, .2 * s]], faint)); });
+    // 머플러 2개 (메가폰)
+    both(function (s) {
+      add(seg([[.55, .95, .2 * s], [.75, .55, .3 * s], [.55, .1, .34 * s], [-.4, .12, .4 * s]]));
+      [[.1, -.4, .12], [.15, -1.7, .3]].forEach(function (m) { var c = ring(m[0], main, 20); c.rotation.y = Math.PI / 2; c.position.set(m[1], m[2], .42 * s); root.add(c); });
+      add(seg([[-.4, .22, .42 * s], [-1.7, .45, .42 * s]])); add(seg([[-.4, .02, .42 * s], [-1.7, .15, .42 * s]]));
+    });
+    // 스윙암 + 쇼크업소버
+    both(function (s) {
+      tube([-.45, .5, .26 * s], [rx, 0, .26 * s], .06);
+      tube([-1.3, .2, .3 * s], [-1.62, 1.38, .3 * s], .06, faint);
+      var coil = []; for (var c = 0; c <= 24; c++) { var tt = c / 24, a = tt * Math.PI * 12; coil.push([-1.33 - tt * .26 + Math.cos(a) * .1, .32 + tt * .92, .3 * s + Math.sin(a) * .1]); }
+      add(seg(coil, main));
+    });
+    // 뒤 펜더 짧게
+    both(function (s) { arc(rx, R + .08, Math.PI * .45, Math.PI * .85, .2 * s, faint); });
+    // 발판
+    both(function (s) { add(seg([[-.55, .35, .3 * s], [-.55, .35, .55 * s]])); add(seg([[.5, .3, .3 * s], [.5, .3, .55 * s]])); });
+    if (o.dims !== false) {
+      var dy = -1.45;
+      add(seg([[rx, dy], [fx, dy]], acc)); add(seg([[rx, dy - .15], [rx, -1.12]], acc)); add(seg([[fx, dy - .15], [fx, -1.12]], acc));
+      add(seg([[2.35, -R], [2.35, 2.0]], acc)); add(seg([[2.22, 2.0], [2.48, 2.0]], acc)); add(seg([[2.22, -R], [2.48, -R]], acc));
+    }
+    if (o.ground !== false) { var gr = new T.GridHelper(8, 16); gr.material = faint; gr.position.y = -R - .01; root.add(gr); }
+    root.tick = function (t) { root.wheels.forEach(function (w) { w.rotation.z = -t * 1.2; }); };
+    return root;
+  };
+
+  /* ---------- 3D 공통 셋업 ---------- */
+  // K.stage(canvas, { fov, z }) → { scene, cam, renderer, loop(fn) }
+  K.stage = function (cv, o) {
+    o = o || {};
+    var T = window.THREE; if (!T) return null;
+    var r = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, preserveDrawingBuffer: true });
+    r.setPixelRatio(Math.min(devicePixelRatio, 2));
+    var scene = new T.Scene(), cam = new T.PerspectiveCamera(o.fov || 30, 1, .1, 200);
+    cam.position.set(0, o.y || 0, o.z || 10);
+    function size() { var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return; r.setSize(w, h, false); cam.aspect = w / h; if (o.fit) o.fit(cam, w, h); cam.updateProjectionMatrix(); }
+    addEventListener('resize', size); size();
+    return { T: T, scene: scene, cam: cam, renderer: r, size: size, loop: function (fn) {
+      (function f(t) { t = (t || 0) / 1000; fn(L.reduced ? 0 : t, t); r.render(scene, cam); requestAnimationFrame(f); })();
+    } };
+  };
+  // 드래그로 돌리기
+  K.spin = function (cv, obj, base) {
+    var d = null, rx = base.x, ry = base.y;
+    cv.addEventListener('pointerdown', function (ev) { d = { x: ev.clientX, y: ev.clientY }; cv.setPointerCapture(ev.pointerId); });
+    cv.addEventListener('pointermove', function (ev) { if (!d) return; ry += (ev.clientX - d.x) * .006; rx = Math.max(-.6, Math.min(.9, rx + (ev.clientY - d.y) * .004)); d = { x: ev.clientX, y: ev.clientY }; });
+    cv.addEventListener('pointerup', function () { d = null; });
+    var last = 0;
+    return function (t, auto) { var dt = Math.min(.05, t - last); last = t; if (!d && dt > 0) ry += dt * (auto || 0); obj.rotation.x = rx; obj.rotation.y = ry; };
+  };
+})();
+
+</script>
+<script>
+(function () {
+  var L = LUV, K = KIT, e = L.esc, Y = L.chars[0], Li = L.chars[1];
+  document.querySelectorAll('.fr').forEach(function (f) { ['a', 'b', 'c', 'd'].forEach(function (k) { var i = document.createElement('i'); i.className = 'hd ' + k; i.setAttribute('aria-hidden', 'true'); f.appendChild(i); }); });
+  var sd = new Date(L.since + 'T00:00:00'), mons = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+  var dd = String(sd.getDate()).padStart(2, '0'), mon = mons[sd.getMonth()];
+  document.getElementById('dnum').insertAdjacentText('afterbegin', dd);
+  document.getElementById('dmon').textContent = mon;
+  document.getElementById('mnum').textContent = dd;
+  document.getElementById('mmon').innerHTML = mon.slice(0, 3) + '<small>SINCE</small>';
+  var tk = ['Yvan', 'Lia', 'Issue 01', 'Route 75', 'Paris → Deauville', 'Café Racer 900', 'Lap ∞', 'Boulangerie Y·L', Y.plate, Li.plate];
+  document.getElementById('tick').innerHTML = tk.concat(tk).map(function (t) { return '<span>' + e(t) + '</span><span>//</span>'; }).join('');
+  // 리아 대사를 박스 줄로
+  // 패널 위 박스 문구 (레이싱 콜) — 바꾸려면 이 배열만 고치면 돼요
+  var chunks = ['Hold on tight.', 'Lights out', 'and away', 'we go.'];
+  document.getElementById('lines').innerHTML = chunks.map(function (c) { return '<span>' + e(c) + '</span>'; }).join('');
+
+  // 01 YVAN 팝업: 기존 프로필 레이아웃 그대로, 내용만 data.js 의 LUV.yvan 에서
+  function yvanPop() {
+    var V = L.yvan, R = V.race, tile = {}; V.tiles.forEach(function (t) { tile[t[0]] = t[1]; });
+    var off = {}; V.off.forEach(function (o) { off[o[0]] = o[1]; });
+    function row(k, v) { return '<dt>' + k + '</dt><dd>' + v + '</dd>'; }
+    var career = R.timeline.map(function (t) { return '<span class="cr"><b>' + t[0] + '</b>' + (t[1] ? '<em>' + t[1] + '</em>' : '') + (t[2] ? '<i>' + t[2] + '</i>' : '') + t[3] + '</span>'; }).join('');
+    return '<div class="pf pf-y">' +
+      '<div class="pf-head"><b class="pf-name">YVAN</b><span class="pf-plate"><i>No</i>ATLAS<s>2</s></span></div>' +
+      '<p class="pf-line">' + e(R.head) + '</p><p class="pf-sub">' + e(R.sub) + '</p>' +
+      '<dl class="pf-dl">' +
+      row('NAME', tile['NAME']) + row('RIDER', tile['RIDER NAME']) +
+      row('BASIC', tile['BASIC']) + row('BIRTH', off['BIRTH']) +
+      row('TEAM', tile['TEAM']) + row('LIKE', off['LIKE']) + row('HATE', e(off['HATE'])) + row('SCENT', off['SCENT']) + row('DRINK', off['DRINK']) +
+      row('LOOKS', V.looks.join('<br>')) + row('PERSONA', V.personality.join('<br>')) + row('TONE', V.habits.join('<br>')) +
+      row('STYLE', '<b>' + R.style + '</b><span class="thr"><i></i><i></i><i></i><i></i><i></i></span>' + R.styleText) +
+      row('LEAN', R.lean) + row('CAREER', career) +
+      '</dl><p class="pf-kw">' + ['풀_스로틀', '만년_2등', '냉소', '완벽주의', '체스', '레몬_타르트'].map(function (k) { return '<span>#' + k + '</span>'; }).join(' ') + '</p></div>';
+  }
+  // 02 LIA 팝업: 이반과 같은 레이아웃, 내용은 data.js 의 LUV.lia
+  function liaPop() {
+    var V = L.lia;
+    return '<div class="pf pf-l">' +
+      '<div class="pf-head"><b class="pf-name">LIA</b><span class="pf-plate"><i>P</i>PASSENGER<s>2</s></span></div>' +
+      '<p class="pf-line">' + e(L.chars[1].line) + '</p><p class="pf-sub">' + e(V.sub) + '</p>' +
+      '<dl class="pf-dl">' + V.rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' +
+      '<p class="pf-kw">' + V.tags.map(function (k) { return '<span>#' + k + '</span>'; }).join(' ') + '</p></div>';
+  }
+  // 03 LE MANS 팝업: 이반 인터뷰
+  function interviewPop() {
+    var I = L.interview;
+    return '<div class="iv"><div class="iv-h"><span>MEDIA PEN · FRI · PRE-Q</span><b>' + e(I.title) + '</b><em>' + e(I.sub) + '</em></div>' +
+      I.qa.map(function (q, i) {
+        return '<div class="iv-q"><i>Q' + (i + 1) + '</i><p>' + e(q[0]) + '</p></div>' +
+          '<div class="iv-a"><i>A' + (i + 1) + '</i><div><small>YVAN STADEL · ATLAS FACTORY</small><p class="en">“' + e(q[1]) + '”</p><p class="ko">' + e(q[2]) + '</p></div></div>';
+      }).join('') + '</div>';
+  }
+  // 06 NOTICE: 안내 3줄 + BGM 버튼 (유튜브, 팝업을 닫아도 계속 재생)
+  var bgm = { frame: null, on: false };
+  function noticePop() {
+    var N = L.noticeE, B = L.bgm;
+    return '<div class="nt-e"><b>' + e(N[0]) + '</b><ul>' + N.slice(1).map(function (t) { return '<li>' + e(t) + '</li>'; }).join('') + '</ul></div>' +
+      '<button type="button" class="bgm" aria-pressed="false"><span class="bgm-ic"><i></i><i></i><i></i><i></i></span><span class="bgm-k">BGM</span><span class="bgm-t"><b>' + e(B.title) + '</b><em>' + e(B.artist) + '</em></span><span class="bgm-s">PLAY</span></button>';
+  }
+  function ytCmd(f) { if (bgm.frame) bgm.frame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: f, args: [] }), '*'); }
+  function paintBgm() { document.querySelectorAll('.bgm').forEach(function (b) { b.setAttribute('aria-pressed', bgm.on); b.classList.toggle('on', bgm.on); b.querySelector('.bgm-s').textContent = bgm.on ? 'PAUSE' : 'PLAY'; }); }
+  function bindBgm(w) {
+    var b = w.querySelector('.bgm');
+    b.onclick = function () {
+      if (!bgm.frame) {
+        var id = L.bgm.yt, f = document.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&playsinline=1&loop=1&playlist=' + id + '&enablejsapi=1&rel=0';
+        f.allow = 'autoplay; encrypted-media'; f.title = 'BGM ' + L.bgm.title; f.className = 'bgm-frame'; f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
+        document.body.appendChild(f); bgm.frame = f; bgm.on = true;
+      } else { bgm.on = !bgm.on; ytCmd(bgm.on ? 'playVideo' : 'pauseVideo'); }
+      paintBgm();
+    };
+    paintBgm();
+  }
+  var one = function (f) { return function () { if (innerWidth <= 720) K.closeAll(); f(); }; };
+  K.bind({
+    p0: one(function () { K.open('p0', 'TRACK 01 — YVAN', yvanPop(), { left: 230, top: 90, w: 440 }); }),
+    p1: one(function () { K.open('p1', 'TRACK 02 — LIA', liaPop(), { left: 300, top: 130, w: 440 }); }),
+    rel: one(function () { K.open('rel', 'TRACK 03 — LE MANS', interviewPop(), { left: 260, top: 70, w: 480 }); }),
+    route: one(function () { K.open('route', 'TRACK 04 — ROUTE 75', K.route() + K.bike(), { w: 340 }); }),
+    bread: one(function () { K.open('bread', 'TRACK 05 — REÇU', K.receipt(), { w: 300 }); }),
+    notice: one(function () { var w = K.open('notice', 'TRACK 06 — NOTICE', noticePop(), { w: 340 }); bindBgm(w); })
+  });
+  K.demo([['p1', 440, 70], ['route', 880, 300], ['bread', 110, 400]]);
+
+  // 등장 연출 한 번
+  requestAnimationFrame(function () { requestAnimationFrame(function () { document.body.classList.add('ready'); document.body.classList.remove('intro'); }); });
+
+  // 위젯 칸 탭: 01 START LIGHTS / 02 TYRES
+  (function () {
+    var tabs = [[document.getElementById('rsTabL'), document.getElementById('rsL')], [document.getElementById('rsTabT'), document.getElementById('rsT')]];
+    function pick(k) { tabs.forEach(function (t, i) { t[0].setAttribute('aria-selected', i === k); t[1].hidden = i !== k; }); }
+    tabs.forEach(function (t, i) {
+      t[0].onclick = function () { pick(i); };
+      t[0].onkeydown = function (ev) { if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') { ev.preventDefault(); var n = 1 - i; pick(n); tabs[n][0].focus(); } };
+    });
+  })();
+  // 위젯 칸: 출발 신호등 (눌러서 반응속도)
+  (function () {
+    var box = document.getElementById('rsL'), g = document.getElementById('rsG'), rt = document.getElementById('rsRt'), rb = document.getElementById('rsRb');
+    g.innerHTML = '<i></i><i></i><i></i><i></i><i></i>';
+    var lights = g.querySelectorAll('i'), state = 'idle', outAt = 0, best = null, tm = [];
+    function clear() { tm.forEach(clearTimeout); tm = []; }
+    function run() {
+      clear(); state = 'arming'; box.classList.remove('out'); lights.forEach(function (l) { l.classList.remove('on'); });
+      for (var i = 0; i < 5; i++) (function (i) { tm.push(setTimeout(function () { lights[i].classList.add('on'); }, 700 + i * 900)); })(i);
+      tm.push(setTimeout(function () {
+        lights.forEach(function (l) { l.classList.remove('on'); }); box.classList.add('out'); state = 'out'; outAt = performance.now();
+        tm.push(setTimeout(function () { if (state === 'out') { state = 'idle'; tm.push(setTimeout(run, 1800)); } }, 2200));
+      }, 700 + 4 * 900 + 600 + Math.random() * 1800));
+    }
+    function hit() {
+      if (state === 'out') { var r = (performance.now() - outAt) / 1000; rt.textContent = r.toFixed(3); if (best === null || r < best) { best = r; rb.textContent = r.toFixed(3); } state = 'idle'; clear(); tm.push(setTimeout(run, 2200)); }
+      else if (state === 'arming') { rt.textContent = 'JUMP'; clear(); lights.forEach(function (l) { l.classList.remove('on'); }); state = 'idle'; tm.push(setTimeout(run, 1800)); }
+    }
+    box.addEventListener('pointerdown', hit);
+    box.addEventListener('keydown', function (ev) { if (ev.key === ' ' || ev.key === 'Enter') { ev.preventDefault(); hit(); } });
+    if (L.reduced) { rt.textContent = '—'; } else run();
+  })();
+  // 위젯 칸: 타이어 온도 / 마모 (서킷 한 바퀴 = 약 36초에 맞춤)
+  (function () {
+    var el = document.getElementById('rsTy'), lapEl = document.getElementById('rsLap'), LAPS = 1 / .028, t0 = performance.now(), last = 0;
+    var ty = [['FRONT', 'SOFT'], ['REAR', 'MEDIUM']];
+    el.innerHTML = ty.map(function (t, i) { return '<div class="ty1"><div class="pr" id="tp' + i + '"><i></i><i></i><i></i></div><span class="cp"><small>' + t[0] + '</small>' + t[1] + '</span><span class="dg" id="td' + i + '">—</span><div class="wr"><i id="tw' + i + '"></i></div></div>'; }).join('');
+    function shade(tp) { var k = Math.max(0, Math.min(1, (tp - 92) / 30)), v = Math.round(232 - k * 215); return 'rgb(' + v + ',' + v + ',' + (v - 2) + ')'; }
+    (function loop() {
+      var t = (performance.now() - t0) / 1000;
+      if (t - last > .3) { last = t;
+        var u = (t % LAPS) / LAPS, lap = Math.floor(t / LAPS), side = Math.sin(u * Math.PI * 6);
+        [0, 1].forEach(function (i) {
+          var base = i ? 96 : 104, temps = [base + Math.max(0, -side) * 16 + Math.random() * 2, base + 4 + Math.random() * 2, base + Math.max(0, side) * 16 + Math.random() * 2];
+          var cells = document.querySelectorAll('#tp' + i + ' i'); temps.forEach(function (tp, k) { cells[k].style.background = shade(tp); });
+          document.getElementById('td' + i).innerHTML = Math.round(Math.max.apply(null, temps)) + '<small>°C</small>';
+          document.getElementById('tw' + i).style.width = Math.max(18, 100 - (lap + u) * (i ? 9 : 14)) + '%';
+        });
+        lapEl.textContent = 'LAP ' + String(lap + 1).padStart(2, '0');
+      }
+      requestAnimationFrame(loop);
+    })();
+  })();
+
+  var cv = document.getElementById('loop');
+  var S = K.stage(cv, { fov: 30, z: 14, y: 5, fit: function (c, w, h) { var a = w / h, z = Math.max(13.5, 11.6 / (.536 * a)); c.position.set(0, z * .36, z); c.lookAt(0, a < 1.1 ? -1.6 : -.4, 0); } });
+  if (!S) return;
+  var T = S.T;
+  // 서킷: 꼬인 닫힌 곡선
+  var pts = [];
+  for (var k = 0; k < 16; k++) {
+    var a = k / 16 * Math.PI * 2;
+    pts.push(new T.Vector3(Math.cos(a) * (4.4 + Math.sin(a * 3) * .9), Math.sin(a * 2) * .7 + Math.cos(a * 5) * .2, Math.sin(a) * (2.5 + Math.cos(a * 2) * .6)));
+  }
+  var curve = new T.CatmullRomCurve3(pts, true, 'centripetal');
+  var grp = new T.Group(); S.scene.add(grp); grp.rotation.set(0, 0, -.06);
+  var tubeG = new T.TubeGeometry(curve, 600, .055, 8, true);
+  var tube = new T.Mesh(tubeG, new T.MeshBasicMaterial({ color: 0xf0f0ec })); grp.add(tube);
+  var total = tubeG.index.count; tubeG.setDrawRange(0, L.reduced ? total : 0);
+  // 바깥 가이드선 + 점선 그림자
+  var outer = curve.getPoints(500).map(function (p) { return new T.Vector3(p.x * 1.1, p.y - .3, p.z * 1.14); });
+  grp.add(new T.Line(new T.BufferGeometry().setFromPoints(outer), new T.LineBasicMaterial({ color: 0x5a5a58 })));
+  var shadow = new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(500).map(function (p) { return new T.Vector3(p.x, -1.6, p.z); })), new T.LineDashedMaterial({ color: 0x3a3a38, dashSize: .12, gapSize: .1 }));
+  shadow.computeLineDistances(); grp.add(shadow);
+  var grid = new T.GridHelper(14, 28, 0x2a2a2a, 0x1c1c1c); grid.position.y = -1.62; grp.add(grid);
+  // 경유지 (km / 전체 km = 곡선 위치)
+  var maxKm = L.route[L.route.length - 1][1], wpEl = document.getElementById('wps');
+  var wps = L.route.map(function (r, idx) {
+    var u = idx / (L.route.length - 1) * .88, p = curve.getPointAt(u);
+    var tick = new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(p.x, -1.6, p.z), p]), new T.LineBasicMaterial({ color: 0x8a8a86 })); grp.add(tick);
+    var dot = new T.Mesh(new T.SphereGeometry(.07, 12, 12), new T.MeshBasicMaterial({ color: 0xffffff })); dot.position.copy(p); grp.add(dot);
+    var el = document.createElement('span'); el.className = 'wp'; el.innerHTML = '<b>' + r[0] + '</b>' + r[1] + 'KM'; wpEl.appendChild(el);
+    return { p: p, el: el, u: u, name: r[0], km: r[1] };
+  });
+  // 체커 스타트/피니시 라인 (u = 0)
+  (function () {
+    var c = document.createElement('canvas'); c.width = 64; c.height = 16; var g = c.getContext('2d');
+    for (var x = 0; x < 8; x++) for (var y = 0; y < 2; y++) { g.fillStyle = (x + y) % 2 ? '#0b0b0b' : '#f0f0ec'; g.fillRect(x * 8, y * 8, 8, 8); }
+    var tx = new T.CanvasTexture(c); tx.magFilter = T.NearestFilter;
+    var p0 = curve.getPointAt(0), t0v = curve.getTangentAt(0);
+    var flag = new T.Mesh(new T.PlaneGeometry(1.1, .28), new T.MeshBasicMaterial({ map: tx, side: T.DoubleSide }));
+    flag.position.copy(p0).add(new T.Vector3(0, .02, 0)); flag.rotation.x = -Math.PI / 2;
+    flag.rotation.z = Math.atan2(t0v.x, t0v.z); grp.add(flag);
+    // 갠트리 (기둥 두 개 + 가로대)
+    var side = new T.Vector3(t0v.z, 0, -t0v.x).normalize().multiplyScalar(.7), m = new T.LineBasicMaterial({ color: 0xe8e8e4 });
+    var a = p0.clone().add(side), b = p0.clone().sub(side), up = new T.Vector3(0, 1.1, 0);
+    grp.add(new T.LineSegments(new T.BufferGeometry().setFromPoints([a, a.clone().add(up), b, b.clone().add(up), a.clone().add(up), b.clone().add(up)]), m));
+    var ban = new T.Mesh(new T.PlaneGeometry(1.4, .22), new T.MeshBasicMaterial({ map: tx, side: T.DoubleSide }));
+    ban.position.copy(p0).add(new T.Vector3(0, 1.02, 0)); ban.lookAt(ban.position.clone().add(t0v)); grp.add(ban);
+  })();
+  // 바이크
+  var bike = K.bike3D(T, { line: 0xffffff, faint: 0xbdbdb9, dims: false, ground: false });
+  bike.scale.setScalar(.46); grp.add(bike);
+  var trailN = 80, tp = new Float32Array(trailN * 3), tg = new T.BufferGeometry(); tg.setAttribute('position', new T.BufferAttribute(tp, 3));
+  grp.add(new T.Line(tg, new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: .6 })));
+  var spin = K.spin(cv, grp, { x: 0, y: 0 });
+  var X = new T.Vector3(1, 0, 0), v = new T.Vector3(), t0 = null, lastTxt = 0;
+  var lapT = document.getElementById('lapT'), lapN = document.getElementById('lapN'), lapB = document.getElementById('lapB'), lapBox = document.querySelector('.lap'), mdd = document.getElementById('mdd');
+  var lapPrev = -1, lastLapT = 0, best = null;
+  function fmt(sec) { var m = Math.floor(sec / 60), s2 = sec - m * 60; return m + ':' + (s2 < 10 ? '0' : '') + s2.toFixed(3); }
+  var tNow = document.getElementById('tNow'), tKm = document.getElementById('tKm'), tSp = document.getElementById('tSp'), tBar = document.getElementById('tBar'), uitr = document.getElementById('uitr');
+  S.loop(function (t, real) {
+    if (t0 === null) t0 = real;
+    var since = real - t0;
+    if (!L.reduced) tubeG.setDrawRange(0, Math.min(total, Math.floor(total * Math.min(1, since / 1.8)) * 1));
+    spin(t, .05);
+    var u = L.reduced ? .32 : (t * .028) % 1;
+    var p = curve.getPointAt(u), tan = curve.getTangentAt(u);
+    bike.position.copy(p).add(new T.Vector3(0, .52, 0));
+    bike.quaternion.setFromUnitVectors(X, tan);
+    bike.tick(t * 6);
+    for (var j = 0; j < trailN; j++) { var q = curve.getPointAt((u - j * .0018 + 1) % 1); tp[j * 3] = q.x; tp[j * 3 + 1] = q.y + .05; tp[j * 3 + 2] = q.z; }
+    tg.attributes.position.needsUpdate = true;
+    // 경유지 라벨 위치
+    var w = cv.clientWidth, h = cv.clientHeight;
+    grp.updateMatrixWorld();
+    wps.forEach(function (wp) {
+      v.copy(wp.p).applyMatrix4(grp.matrixWorld).project(S.cam);
+      wp.el.style.left = Math.max(4, Math.min((v.x * .5 + .5) * w, w - (wp.el.offsetWidth || 90) - 16)) + 'px'; wp.el.style.top = ((-v.y * .5 + .5) * h) + 'px';
+    });
+    // 랩 타이머: 한 바퀴 = 실제 약 36초 → 화면에는 레이스 랩 타임처럼 (×2.5, 랩마다 조금씩 다르게)
+    var lapI = Math.floor(t * .028), k = 2.42 + ((Math.sin(lapI * 12.9898) * 43758.5453) % 1 + 1) % 1 * .16;
+    if (lapI !== lapPrev) { if (lapPrev >= 0 && !L.reduced) { var done = lastLapT; if (best === null || done < best) { best = done; lapBox.classList.remove('pb'); void lapBox.offsetWidth; lapBox.classList.add('pb'); } lapB.textContent = fmt(best); } lapPrev = lapI; }
+    lastLapT = u / .028 * k;
+    if (real - lastTxt > .05) {
+      lapT.textContent = fmt(lastLapT); lapN.textContent = String(lapI + 1).padStart(2, '0');
+      mdd.innerHTML = '<small>LAP</small>' + String(lapI + 1).padStart(2, '0') + ' <small>·</small>' + fmt(lastLapT).slice(0, -2);
+    }
+    if (real - lastTxt > .12) {
+      lastTxt = real;
+      var back = u > .88, n1 = L.route.length - 1, sg = Math.min(n1 - 1e-6, u / .88 * n1), si = Math.floor(sg);
+      var km = back ? maxKm : Math.round(L.route[si][1] + (sg - si) * (L.route[si + 1][1] - L.route[si][1]));
+      var prev = back ? L.route[n1][0] : L.route[si][0], next = back ? 'PARIS' : L.route[si + 1][0];
+      tNow.textContent = back ? 'RETOUR → PARIS' : prev + ' → ' + next; tKm.textContent = km; tSp.textContent = Math.round(78 + Math.sin(real * .9) * 14 + Math.sin(real * 2.3) * 4);
+      tBar.style.width = (u * 100).toFixed(1) + '%';
+      wps.forEach(function (wp) { wp.el.classList.toggle('on', wp.name === prev); });
+      var hh = 6 + Math.floor(u * 160 / 60), mm = Math.floor(u * 160) % 60;
+      uitr.textContent = String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + ' CET · ISO 3200';
+    }
+  });
+})();
+</script>
+</body>
+</html>
