@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>yvan&amp;lia 06:00</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Michroma&family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500&display=swap">
+<style>
+/* D — Y2K 콜라주: 흰 바탕에 조각들을 흩어 붙임. VCR 화면 속 새벽 주행(3D), 크롬 물방울, LCD 위젯, 셀렉트 박스 */
+:root {
+  --bg: #fdfdfc;
+  --ink: #1d1d1f;
+  --gray: #b9bcc0;
+  --steel: #5b6470;
+  --tile: #46505c;
+  --lcd: #e7e9e4;
+  --vt: "VT323", ui-monospace, monospace;
+  --wide: "Michroma", "Arial Black", sans-serif;
+  --serif: "Times New Roman", "Noto Serif KR", serif;
+  --ko: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 400 14px/1.5 var(--serif); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0; overflow-x: hidden; }
+button, select { font: inherit; color: inherit; }
+.board { position: relative; max-width: 1180px; height: max(780px, 100vh); margin: 0 auto; }
+.board > * { position: absolute; }
+.bar { right: 9%; top: 0; bottom: 0; width: 74px; background: #c9cbcd; }
+.wing { left: 13%; top: 10px; width: 330px; height: 70px; }
+.vcr { left: 2%; top: 92px; width: 47%; aspect-ratio: 4 / 3; background: #0d0f14; cursor: pointer; overflow: hidden; border: 0; padding: 0; }
+.vcr canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.vcr::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(transparent 0 2px, rgba(0,0,0,.28) 2px 3px); pointer-events: none; }
+.osd { position: absolute; font: 400 22px/1 var(--vt); color: #f2f2f2; letter-spacing: .04em; text-shadow: 1px 1px 0 rgba(0,0,0,.6); pointer-events: none; text-align: left; z-index: 1; }
+.o1 { left: 6%; top: 7%; } .o2 { right: 6%; top: 7%; text-align: right; } .o3 { left: 6%; bottom: 7%; }
+.vcr:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
+.card { left: 52%; top: 44px; width: 250px; height: 250px; background: #ececea; border: 0; padding: 14px; cursor: pointer; text-align: left; }
+.card .jp { font: 600 50px/1.05 "Noto Serif KR", serif; color: #9aa0a8; letter-spacing: -.02em; word-break: keep-all; }
+.card small { position: absolute; left: 10px; top: 100px; writing-mode: vertical-rl; font: 400 9px/1 var(--ko); color: var(--steel); }
+#bubbles { position: absolute; inset: -30px -40px -20px -10px; width: calc(100% + 50px); height: calc(100% + 50px); pointer-events: none; }
+.card:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
+.lcdw { left: 67%; top: 268px; width: 300px; border: 2px solid #888; border-radius: 10px; background: #d4d6d3; padding: 8px; box-shadow: inset 0 0 0 2px #f4f4f2; font: 400 18px/1 var(--vt); }
+.lcd { background: var(--lcd); border: 1.5px solid #777; border-radius: 4px; padding: 6px 10px 8px; }
+.lcd-top { display: flex; justify-content: space-between; border-bottom: 1.5px solid #777; padding-bottom: 4px; }
+.lcd-mid { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 8px; padding: 8px 0 4px; }
+.lcd-mid b { font: 400 42px/1 var(--vt); font-weight: 400; }
+.lcd-week { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; border-top: 1.5px solid #777; padding-top: 5px; font-size: 15px; }
+.lcd-week i { font-style: normal; display: block; }
+.lcd-btns { display: flex; justify-content: center; gap: 6px; padding-top: 6px; }
+.lcd-btns span { border: 1.5px solid #777; border-radius: 3px; padding: 0 8px; background: #eceeea; font-size: 15px; }
+.tile { left: 60%; top: 330px; width: 76px; height: 76px; background: var(--tile); color: #fff; border: 0; font: 600 24px/1 var(--ko); cursor: pointer; z-index: 2; }
+.tile:hover, .tile:focus-visible { background: var(--ink); outline: none; }
+.logo { left: 18%; top: 63%; display: flex; align-items: baseline; gap: 10px; }
+.logo b { font: 400 clamp(46px, 7vw, 88px)/1 var(--wide); letter-spacing: -.04em; color: transparent; background: linear-gradient(180deg, #e9ecef 0%, #8c949d 38%, #3e4650 50%, #c9ced3 62%, #7d858f 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: .6px #59616b; }
+.logo sup { font: 400 13px/1 var(--wide); color: #59616b; }
+.def { left: 30%; top: calc(63% + 92px); width: 300px; font: 400 13px/1.35 var(--serif); color: #7a7d80; }
+.form { left: 6%; top: 74%; font: 400 15px/1.3 var(--serif); }
+.form label { display: block; margin-bottom: 4px; }
+.form select { font: 400 15px/1.2 var(--serif); padding: 1px 2px; border: 1.5px solid #333; background: #fff; border-radius: 0; min-width: 130px; }
+.ascii { left: 52%; top: 52%; width: 280px; height: 220px; pointer-events: none; opacity: .9; }
+.cams { left: 63%; top: 58%; width: 190px; height: 190px; border-radius: 50%; border: 1px solid #aaa; display: grid; place-items: center; cursor: pointer; background: none; padding: 0; }
+.cams span { width: 130px; height: 130px; border-radius: 50%; border: 1px solid #ccc; display: grid; place-items: center; font: 400 12px/1.3 var(--vt); color: var(--steel); text-align: center; font-size: 17px; }
+.cams:hover span, .cams:focus-visible span { border-color: var(--ink); color: var(--ink); }
+.cams:focus-visible { outline: none; }
+.stk { font: 400 11px/1 var(--ko); color: #8d9096; }
+.stk.s1 { left: 76%; top: 30px; } .stk.s2 { left: 4%; top: calc(92px + 36vw); display: none; }
+.mini-links { right: 9%; bottom: 20px; width: 74px; display: grid; gap: 10px; justify-items: center; }
+.mini-links a { writing-mode: vertical-rl; color: #fff; text-decoration: none; font: 400 18px/1 var(--vt); letter-spacing: .08em; }
+.mini-links a:hover { color: var(--ink); }
+
+/* 팝업: 회색 플래티넘 창 */
+#wins { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
+.lw { position: absolute; width: 380px; max-width: calc(100vw - 24px); background: #eeeeec; border: 1px solid #555; box-shadow: 2px 2px 0 #555, inset 1px 1px 0 #fff; pointer-events: auto; }
+.lw-pop { animation: pop .12s steps(2) both; } @keyframes pop { from { opacity: 0; } }
+.lw-bar { display: flex; align-items: center; gap: 8px; height: 24px; padding: 0 6px; cursor: move; touch-action: none; background: repeating-linear-gradient(#eeeeec 0 2px, #b5b5b2 2px 3px); }
+.lw-t { order: 2; background: #eeeeec; padding: 0 8px; margin: 0 auto; font: 400 18px/1 var(--vt); }
+.lw-x { order: 1; width: 14px; height: 14px; padding: 0; border: 1px solid #555; background: #eeeeec; font-size: 0; cursor: pointer; box-shadow: inset 1px 1px 0 #fff; }
+.lw-x:hover, .lw-x:focus-visible { background: #555; outline: none; }
+.lw-body { margin: 0 6px 6px; background: #fff; border: 1px solid #888; padding: 14px 16px 16px; max-height: 66vh; overflow: auto; font: 400 14px/1.6 var(--ko); }
+.pf-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pf-name { font: 400 28px/1 var(--wide); letter-spacing: -.04em; }
+.pf-ko { color: var(--steel); }
+.pf-plate { margin-left: auto; display: inline-flex; gap: 5px; border: 1px solid #333; font: 400 17px/1.2 var(--vt); }
+.pf-plate i, .pf-plate s { font-style: normal; text-decoration: none; background: #2546a8; color: #fff; padding: 0 4px; }
+.pf-line { font: 400 15px/1.6 var(--serif); font-style: italic; margin: 10px 0; word-break: keep-all; }
+.pf-dl { display: grid; grid-template-columns: 70px 1fr; margin: 0; font-size: 13px; }
+.pf-dl dt { font: 400 16px/1.5 var(--vt); color: var(--steel); } .pf-dl dd { margin: 0; word-break: keep-all; }
+.pf-kw { margin: 10px 0 0; font: 400 16px/1.4 var(--vt); color: var(--steel); }
+.rl, .nt { margin: 0; padding-left: 18px; } .rl li, .nt li { word-break: keep-all; margin-bottom: 5px; }
+.lk { display: grid; gap: 6px; } .lk a { color: #2546a8; } .lk i { font-style: normal; margin-left: 4px; }
+.rt { list-style: none; margin: 0 0 10px; padding: 0; font: 400 18px/1.4 var(--vt); } .rt li { display: flex; justify-content: space-between; border-bottom: 1px dotted #999; }
+.bk { display: grid; grid-template-columns: 70px 1fr; margin: 0; font-size: 13px; } .bk dt { font: 400 16px/1.5 var(--vt); color: var(--steel); } .bk dd { margin: 0; }
+.rc { font: 400 17px/1.25 var(--vt); } .rc-h { text-align: center; margin: 0; } .rc-m, .rc-t, .rc li { display: flex; justify-content: space-between; } .rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed #333; } .rc-t { margin: 0; } .rc-f, .rc-m { color: #888; margin: 6px 0 0; } .rc-f { text-align: center; }
+
+@media (max-width: 860px) {
+  .board { height: auto; display: grid; gap: 22px; padding: 16px 0 60px; }
+  .board > * { position: relative; left: auto !important; top: auto !important; right: auto; }
+  .bar, .wing, .ascii, .stk, .mini-links { display: none; }
+  .vcr { width: 100%; }
+  .card { width: 100%; height: 220px; overflow: hidden; }
+  .lcdw { width: 100%; max-width: 320px; }
+  .tile { position: absolute; right: 0; top: 330px !important; }
+  .logo { justify-self: start; } .def { width: auto; }
+  .cams { justify-self: center; }
+}
+@media (prefers-reduced-motion: reduce) { .lw-pop { animation: none; } }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="bar" aria-hidden="true"></div>
+  <svg class="wing" viewBox="0 0 330 70" aria-hidden="true" id="wing"></svg>
+  <button class="vcr" type="button" data-open="route" aria-label="새벽 주행 영상. 누르면 루트가 열려요">
+    <canvas id="ride"></canvas>
+    <span class="osd o1">CAMERA1<br>PLAY<br><span id="tc">00:00:00</span></span>
+    <span class="osd o2">VCR TAPE<br>A13 RN</span>
+    <span class="osd o3">06:00<br><span id="vdate"></span></span>
+  </button>
+  <button class="card" type="button" data-open="rel" aria-label="관계 메모 열기">
+    <div class="jp">새벽<br>여섯 시의<br>뒷자리</div><small>PARIS — DEAUVILLE</small>
+    <canvas id="bubbles"></canvas>
+  </button>
+  <span class="stk s1">@yvan_lia</span>
+  <div class="lcdw" role="group" aria-label="라이드 로그 위젯">
+    <div class="lcd">
+      <div class="lcd-top"><span>Bonne nuit</span><span>▮▮▮▯ 75%</span></div>
+      <div class="lcd-mid"><span>☾</span><div><b id="lday"></b><div style="font-size:15px">since <span id="lsince"></span></div></div><span style="font-size:15px;text-align:right">PARIS<br>75</span></div>
+      <div class="lcd-week" id="week"></div>
+    </div>
+    <div class="lcd-btns"><span id="b1"></span><span id="b2"></span><span id="clock">--:--</span></div>
+  </div>
+  <button class="tile" type="button" data-open="bread">빵집</button>
+  <div class="logo"><b>yvan&amp;lia</b><sup>★ 75</sup></div>
+  <p class="def">a person who always carries two helmets, as quietness, patience, or an extra croissant.</p>
+  <div class="form"><label for="seat">Seat:</label><select id="seat"><option value="">— choose —</option><option value="p0">Rider</option><option value="p1">Passenger</option><option value="bread">Baker</option></select></div>
+  <canvas class="ascii" id="ascii" aria-hidden="true"></canvas>
+  <button class="cams" type="button" data-open="notice"><span>NOTICE<br>· LINK ·</span></button>
+  <div class="mini-links" id="ml"></div>
+</div>
+<div id="wins"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="data.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var L = LUV, K = KIT, e = L.esc;
+  var dn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'], sd = new Date(L.since + 'T00:00:00');
+  document.getElementById('vdate').textContent = String(sd.getDate()).padStart(2, '0') + '.' + String(sd.getMonth() + 1).padStart(2, '0') + '.' + sd.getFullYear() + ' ' + dn[sd.getDay()];
+  document.getElementById('lday').textContent = 'D+' + L.days();
+  document.getElementById('lsince').textContent = K.since('.');
+  document.getElementById('b1').textContent = L.chars[0].birth; document.getElementById('b2').textContent = L.chars[1].birth;
+  var ride = [1, 0, 0, 1, 0, 1, 1]; // 주행한 요일 (임시)
+  document.getElementById('week').innerHTML = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(function (d, i) { return '<span>' + d + '<i>' + (ride[i] ? '●' : '○') + '</i></span>'; }).join('');
+  document.getElementById('ml').innerHTML = L.links.map(function (l) { return '<a href="' + e(l[1]) + '" target="_blank" rel="noopener">' + e(l[0]) + '</a>'; }).join('');
+  var t0 = Date.now();
+  setInterval(function () { var s = Math.floor((Date.now() - t0) / 1000); document.getElementById('tc').textContent = '00:' + String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); var n = new Date(); document.getElementById('clock').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0'); }, 1000);
+
+  var W = {
+    p0: function () { K.open('p0', 'rider.txt', K.profile(0), { left: 120, top: 120 }); },
+    p1: function () { K.open('p1', 'passenger.txt', K.profile(1), { left: 170, top: 160 }); },
+    rel: function () { K.open('rel', 'us.txt', '<p style="margin:0 0 8px">' + e(L.tagline) + '</p>' + K.relation()); },
+    route: function () { K.open('route', 'route.mov — info', K.route() + K.bike(), { w: 340 }); },
+    bread: function () { K.open('bread', 'reçu', K.receipt(), { w: 300 }); },
+    notice: function () { K.open('notice', 'read me', K.notice() + '<hr style="border:0;border-top:1px dotted #999;margin:12px 0">' + K.links(), { w: 340 }); }
+  };
+  K.bind(W);
+  K.demo([['p0', 520, 150], ['notice', 880, 400], ['bread', 160, 430]]);
+  document.getElementById('seat').onchange = function () { var v = this.value; if (W[v]) W[v](); };
+
+  // 날개 (얇은 선 다발)
+  var wing = '';
+  for (var side = -1; side <= 1; side += 2) for (var i = 0; i < 16; i++) {
+    var y0 = 34 + i * 1.4, len = 150 - i * 6, cx = 165 + side * 8;
+    wing += '<path d="M' + cx + ' 40 Q ' + (cx + side * len * .5) + ' ' + (y0 - 30 + i) + ' ' + (cx + side * len) + ' ' + (y0 - 18 + i * 1.6) + '" fill="none" stroke="#bbb" stroke-width=".7"/>';
+  }
+  document.getElementById('wing').innerHTML = wing;
+
+  // ASCII 소용돌이
+  (function () {
+    var c = document.getElementById('ascii'), g = c.getContext('2d'), w = c.width = 560, h = c.height = 440;
+    g.fillStyle = '#9a9ea4'; g.font = '13px VT323, monospace';
+    var chars = 'yvanlia75·:+*', k = 0;
+    for (var a = 0; a < 26; a += .08) {
+      var r = 6 + a * 7.2, x = 300 + Math.cos(a) * r * 1.2, y = 200 + Math.sin(a) * r * .6 + a * 3;
+      if (x > 0 && x < w && y > 0 && y < h) g.fillText(chars[k++ % chars.length], x, y);
+    }
+  })();
+
+  if (!window.THREE) return;
+  // VCR: 새벽 국도를 달리는 바이크
+  var S = K.stage(document.getElementById('ride'), { fov: 50, z: 7, y: 1.6 });
+  if (S) {
+    var T = S.T; S.scene.fog = new T.Fog(0x0d0f14, 6, 34);
+    var bike = K.bike3D(T, { line: 0xf2f2f2, faint: 0xf2f2f2, dims: false, ground: false });
+    bike.scale.setScalar(.9); bike.position.set(0, -.15, 0); bike.rotation.y = -.95; S.scene.add(bike);
+    var road = new T.Group(); S.scene.add(road);
+    var dm = new T.LineBasicMaterial({ color: 0xd8d8d8 });
+    for (var z = 0; z < 20; z++) { var g = new T.BufferGeometry().setFromPoints([new T.Vector3(2.4, -1, -z * 2), new T.Vector3(2.4, -1, -z * 2 - 1)]); road.add(new T.Line(g, dm)); }
+    var edge = new T.BufferGeometry().setFromPoints([new T.Vector3(-3, -1, 6), new T.Vector3(-3, -1, -40)]); S.scene.add(new T.Line(edge, dm));
+    var edge2 = new T.BufferGeometry().setFromPoints([new T.Vector3(7.5, -1, 6), new T.Vector3(7.5, -1, -40)]); S.scene.add(new T.Line(edge2, dm));
+    var poles = new T.Group(); S.scene.add(poles);
+    for (var p = 0; p < 8; p++) { var pg = new T.BufferGeometry().setFromPoints([new T.Vector3(-4.2, -1, -p * 6), new T.Vector3(-4.2, 4, -p * 6), new T.Vector3(-4.2, 4, -p * 6), new T.Vector3(-3.4, 4.2, -p * 6)]); poles.add(new T.LineSegments(pg, new T.LineBasicMaterial({ color: 0x8b9099 }))); }
+    S.cam.lookAt(0, .4, -4);
+    S.loop(function (t) {
+      bike.tick(t * 4); bike.position.y = -.15 + Math.sin(t * 9) * .015;
+      road.position.z = (t * 6) % 2; poles.position.z = (t * 6) % 6;
+    });
+  }
+  // 크롬 물방울
+  var B = K.stage(document.getElementById('bubbles'), { fov: 30, z: 10 });
+  if (B) {
+    var T2 = B.T, mc = document.createElement('canvas'); mc.width = mc.height = 256; var g2 = mc.getContext('2d');
+    var lg = g2.createLinearGradient(0, 0, 0, 256); lg.addColorStop(0, '#ffffff'); lg.addColorStop(.42, '#c7ccd2'); lg.addColorStop(.5, '#2a3038'); lg.addColorStop(.58, '#9aa2ab'); lg.addColorStop(1, '#f2f4f6');
+    g2.fillStyle = lg; g2.beginPath(); g2.arc(128, 128, 128, 0, Math.PI * 2); g2.fill();
+    g2.fillStyle = '#fff'; g2.beginPath(); g2.ellipse(84, 70, 26, 14, -.6, 0, Math.PI * 2); g2.fill();
+    var mat = new T2.MeshMatcapMaterial({ matcap: new T2.CanvasTexture(mc), transparent: true, opacity: .92 });
+    var drops = [[-1.6, 1.4, .55], [.6, 1.9, .8], [1.9, .9, .45], [-.2, .1, 1.05], [2.2, -1.3, .7], [-2.1, -1.2, .35], [.9, -2.1, .5]].map(function (d, i) {
+      var m = new T2.Mesh(new T2.SphereGeometry(d[2], 40, 30), mat); m.position.set(d[0], d[1], 0); m.userData = { y: d[1], k: i }; B.scene.add(m); return m;
+    });
+    B.loop(function (t) { drops.forEach(function (m) { m.position.y = m.userData.y + Math.sin(t * .8 + m.userData.k) * .08; }); });
+  }
+})();
+</script>
+</body>
+</html>

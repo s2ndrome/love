@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YVAN LIA Carton</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;800;900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;700;900&display=swap">
+<style>
+/* F — 전개도: 바이크 부품 상자의 도무송 시트. 면을 누르면 팝업, 버튼으로 접으면 3D 상자. 오른쪽엔 영수증 위젯 */
+:root {
+  --sheet: #f3f2ee;
+  --board: #e6e4dd;
+  --ink: #121212;
+  --mute: #74726c;
+  --cut: #121212;
+  --blue: #2546a8;
+  --S: 172px;
+  --g: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --ko: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--sheet); color: var(--ink); font: 400 13px/1.55 var(--g), var(--ko); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0; overflow-x: hidden; }
+button { font: inherit; color: inherit; }
+.sheet { position: relative; max-width: 1200px; margin: 0 auto; min-height: 100vh; padding: 26px 0 40px; display: grid; grid-template-columns: 250px minmax(0, 1fr) 250px; gap: 24px; }
+.crop { position: absolute; width: 22px; height: 22px; }
+.crop::before, .crop::after { content: ""; position: absolute; background: var(--ink); }
+.crop::before { width: 22px; height: 1px; top: 11px; } .crop::after { width: 1px; height: 22px; left: 11px; }
+.k1 { left: -6px; top: 6px; } .k2 { right: -6px; top: 6px; } .k3 { left: -6px; bottom: 6px; } .k4 { right: -6px; bottom: 6px; }
+
+.info { display: grid; align-content: start; gap: 18px; }
+.info h1 { margin: 0; font: 900 64px/.84 var(--g); letter-spacing: -.05em; }
+.info h1 span { display: block; color: var(--blue); }
+.spec { font: 400 11px/1.7 var(--mono); border-top: 2px solid var(--ink); padding-top: 8px; }
+.spec div { display: flex; justify-content: space-between; border-bottom: 1px solid #cfcdc6; }
+.legend { display: grid; gap: 6px; font: 400 11px/1.4 var(--mono); }
+.legend i { display: inline-block; width: 34px; vertical-align: middle; margin-right: 8px; border-top: 1.5px solid var(--ink); }
+.legend .d i { border-top-style: dashed; } .legend .b i { border-color: var(--blue); }
+.warn { display: grid; grid-template-columns: repeat(3, 44px); gap: 6px; }
+.warn span { height: 44px; border: 2px solid var(--ink); display: grid; place-items: center; font: 800 9px/1.1 var(--g); text-align: center; letter-spacing: .02em; }
+.btn { justify-self: start; font: 800 13px/1 var(--g); letter-spacing: .04em; padding: 12px 16px; border: 2px solid var(--ink); background: var(--ink); color: var(--sheet); cursor: pointer; }
+.btn:hover, .btn:focus-visible { background: var(--blue); border-color: var(--blue); outline: none; }
+
+.table { position: relative; display: grid; place-items: center; min-height: calc(var(--S) * 4 + 120px); perspective: 1600px; overflow: hidden; }
+.net { position: relative; width: var(--S); height: calc(var(--S) * .6); transform-style: preserve-3d; transform-origin: 50% 50% calc(var(--S) * -.5); transform: translateY(calc(var(--S) * -.7)) rotateX(14deg); transition: transform 1.2s cubic-bezier(.6,.1,.2,1); }
+.folded .net { transform: translateY(0) rotateX(-26deg) rotateY(-36deg); }
+.folded.spin .net { animation: spin 14s linear 1.2s infinite; }
+@keyframes spin { from { transform: rotateX(-26deg) rotateY(-36deg); } to { transform: rotateX(-26deg) rotateY(324deg); } }
+/* 상자: 가로 S, 세로 0.6S, 깊이 S */
+.f { position: absolute; transform-style: preserve-3d; background: var(--board); border: 1.5px solid var(--cut); transition: transform 1.2s cubic-bezier(.6,.1,.2,1); cursor: pointer; padding: 8px; text-align: left; display: block; }
+.f:hover, .f:focus-visible { background: #fff; outline: none; }
+.f.front { left: 0; top: 0; width: var(--S); height: calc(var(--S) * .6); }
+.f.top { left: -1.5px; bottom: calc(100% - 1.5px); width: var(--S); height: var(--S); transform-origin: 50% 100%; border-bottom-style: dashed; }
+.f.bottom { left: -1.5px; top: calc(100% - 1.5px); width: var(--S); height: var(--S); transform-origin: 50% 0; border-top-style: dashed; }
+.f.back { left: -1.5px; top: calc(100% - 1.5px); width: var(--S); height: calc(var(--S) * .6); transform-origin: 50% 0; border-top-style: dashed; }
+.f.left { right: calc(100% - 1.5px); top: -1.5px; width: var(--S); height: calc(var(--S) * .6); transform-origin: 100% 50%; border-right-style: dashed; }
+.f.right { left: calc(100% - 1.5px); top: -1.5px; width: var(--S); height: calc(var(--S) * .6); transform-origin: 0 50%; border-left-style: dashed; }
+.folded .f.top { transform: rotateX(90deg); }
+.folded .f.bottom, .folded .f.back { transform: rotateX(-90deg); }
+.folded .f.left { transform: rotateY(-90deg); }
+.folded .f.right { transform: rotateY(90deg); }
+.flap { position: absolute; background: var(--board); border: 1.5px solid var(--cut); pointer-events: none; }
+.flap.l { right: 100%; top: 10%; width: 22px; height: 80%; clip-path: polygon(100% 0, 0 18%, 0 82%, 100% 100%); }
+.flap.r { left: 100%; top: 10%; width: 22px; height: 80%; clip-path: polygon(0 0, 100% 18%, 100% 82%, 0 100%); }
+.folded .flap { opacity: 0; transition: opacity .3s; }
+.lbl { position: absolute; right: 6px; bottom: 5px; font: 400 8px/1 var(--mono); color: var(--mute); letter-spacing: .06em; }
+.f b { font: 900 22px/.9 var(--g); letter-spacing: -.04em; display: block; }
+.f .sm { font: 400 9.5px/1.4 var(--mono); }
+.f.front { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.f.front:hover, .f.front:focus-visible { background: var(--blue); }
+.f.front svg { position: absolute; right: 6px; top: 8px; width: 58%; }
+.f.front .lbl { color: #9a9890; }
+.f.top .big { font: 900 44px/.9 var(--g); color: var(--blue); letter-spacing: -.05em; }
+.f.left b, .f.right b { font-size: 26px; }
+.arrow { font: 900 30px/1 var(--g); }
+.dim { position: absolute; font: 400 10px/1 var(--mono); color: var(--mute); }
+.dim.w { left: 50%; bottom: 18px; transform: translateX(-50%); }
+.hint { position: absolute; left: 0; top: 0; font: 400 11px/1.5 var(--mono); color: var(--mute); }
+
+.side { display: grid; align-content: start; gap: 22px; }
+.rcpt { background: #fff; padding: 16px 16px 26px; font: 400 11.5px/1.6 var(--mono); clip-path: polygon(0 0, 100% 0, 100% 100%, 94% 98%, 88% 100%, 82% 98%, 76% 100%, 70% 98%, 64% 100%, 58% 98%, 52% 100%, 46% 98%, 40% 100%, 34% 98%, 28% 100%, 22% 98%, 16% 100%, 10% 98%, 4% 100%, 0 98%); cursor: pointer; border: 0; text-align: left; width: 100%; }
+.rcpt:focus-visible { outline: 2px dashed var(--ink); }
+.rcpt .rc-h { text-align: center; margin: 0; font-weight: 500; } .rcpt .rc-m, .rcpt .rc-t, .rcpt li { display: flex; justify-content: space-between; } .rcpt ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed var(--ink); } .rcpt .rc-t { font-weight: 500; margin: 0; } .rcpt .rc-f, .rcpt .rc-m { color: var(--mute); margin: 6px 0 0; } .rcpt .rc-f { text-align: center; }
+.rcpt li { animation: print .3s steps(2) both; } .rcpt li:nth-child(2) { animation-delay: .3s; } .rcpt li:nth-child(3) { animation-delay: .6s; } .rcpt li:nth-child(4) { animation-delay: .9s; }
+@keyframes print { from { opacity: .2; } }
+.barcode { height: 34px; background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 8px, var(--ink) 8px 11px, transparent 11px 12px); }
+.links { display: grid; gap: 6px; }
+.links a { display: flex; justify-content: space-between; color: var(--ink); text-decoration: none; font: 800 15px/1 var(--g); border-bottom: 2px solid var(--ink); padding: 6px 0; }
+.links a:hover, .links a:focus-visible { color: var(--blue); border-color: var(--blue); outline: none; }
+
+/* 팝업 = 배송 라벨 */
+#wins { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
+.lw { position: absolute; width: 360px; max-width: calc(100vw - 24px); background: #fff; border: 2px solid var(--ink); pointer-events: auto; }
+.lw-pop { animation: pop .18s ease-out both; } @keyframes pop { from { transform: rotate(-2deg) translateY(6px); opacity: 0; } }
+.lw-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--ink); padding: 8px 10px; cursor: move; touch-action: none; background: repeating-linear-gradient(-45deg, #fff 0 6px, #ececea 6px 12px); }
+.lw-t { background: var(--ink); color: #fff; font: 800 12px/1 var(--g); letter-spacing: .06em; padding: 5px 8px; }
+.lw-x { border: 2px solid var(--ink); background: #fff; width: 26px; height: 26px; font: 800 14px/1 var(--g); cursor: pointer; }
+.lw-x:hover, .lw-x:focus-visible { background: var(--ink); color: #fff; outline: none; }
+.lw-body { padding: 14px 14px 16px; max-height: 66vh; overflow: auto; }
+.pf-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pf-name { font: 900 40px/.9 var(--g); letter-spacing: -.05em; }
+.pf-ko { color: var(--mute); }
+.pf-plate { margin-left: auto; display: inline-flex; gap: 5px; border: 2px solid var(--ink); font: 500 12px/1.6 var(--mono); }
+.pf-plate i, .pf-plate s { font-style: normal; text-decoration: none; background: var(--blue); color: #fff; padding: 0 4px; }
+.pf-line { margin: 10px 0; font: 700 14px/1.6 var(--ko); word-break: keep-all; }
+.pf-dl { display: grid; grid-template-columns: 74px 1fr; margin: 0; border-top: 2px solid var(--ink); }
+.pf-dl dt, .pf-dl dd { margin: 0; padding: 5px 0; border-bottom: 1px solid #ddd; }
+.pf-dl dt { font: 500 10.5px/1.8 var(--mono); color: var(--mute); } .pf-dl dd { word-break: keep-all; }
+.pf-kw { margin: 10px 0 0; color: var(--blue); font-weight: 500; }
+.rl, .nt { margin: 0; padding-left: 18px; } .rl li, .nt li { margin-bottom: 6px; word-break: keep-all; }
+.rt { list-style: none; margin: 0 0 12px; padding: 0; } .rt li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #ddd; font-weight: 800; } .rt span { font: 400 11px/1.6 var(--mono); }
+.bk { display: grid; grid-template-columns: 74px 1fr; margin: 0; } .bk dt { font: 500 10.5px/1.9 var(--mono); color: var(--mute); } .bk dd { margin: 0; padding: 2px 0; }
+.lw .rc { font: 400 12px/1.6 var(--mono); } .lw .rc-h { text-align: center; margin: 0; } .lw .rc-m, .lw .rc-t, .lw .rc li { display: flex; justify-content: space-between; } .lw .rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed var(--ink); } .lw .rc-t { margin: 0; font-weight: 500; } .lw .rc-f, .lw .rc-m { color: var(--mute); margin: 6px 0 0; } .lw .rc-f { text-align: center; }
+.lk { display: grid; } .lk a { display: flex; justify-content: space-between; color: var(--ink); text-decoration: none; font-weight: 800; padding: 8px 0; border-bottom: 2px solid var(--ink); } .lk i { font-style: normal; }
+
+@media (max-width: 1000px) {
+  :root { --S: 104px; }
+  .sheet { grid-template-columns: 1fr; }
+  .info h1 { font-size: 52px; }
+  .table { min-height: calc(var(--S) * 4 + 80px); order: -1; }
+  .f { padding: 5px; } .f b { font-size: 15px; } .f.left b, .f.right b { font-size: 17px; } .f .sm { font-size: 8px; } .f.top .big { font-size: 30px; } .lbl { display: none; }
+  .rcpt { max-width: 300px; }
+}
+@media (prefers-reduced-motion: reduce) { .net, .f { transition: none; } .folded.spin .net { animation: none; } .rcpt li, .lw-pop { animation: none; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <span class="crop k1"></span><span class="crop k2"></span><span class="crop k3"></span><span class="crop k4"></span>
+  <aside class="info">
+    <h1>YVAN<span>&amp;LIA</span></h1>
+    <div class="spec" id="spec"></div>
+    <div class="legend"><span><i></i>CUT 재단선</span><span class="d"><i></i>FOLD 접는선</span><span class="b"><i></i>D+ 인쇄</span></div>
+    <div class="warn" aria-hidden="true"><span>THIS<br>SIDE<br>UP</span><span>FRA-<br>GILE</span><span>KEEP<br>DRY</span></div>
+    <button class="btn" type="button" id="fold">상자 접기</button>
+  </aside>
+  <section class="table" id="table" aria-label="바이크 부품 상자 전개도. 면을 누르면 내용이 열려요">
+    <span class="hint">DIE-LINE / CARTON YL-06<br>면을 누르면 열려요</span>
+    <div class="net">
+      <div class="f front" role="button" tabindex="0" data-open="machine">
+        <svg viewBox="0 0 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="22" cy="44" r="16"/><circle cx="98" cy="44" r="16"/><path d="M22 44 L44 30 L70 32 L98 44 M44 30 L40 18 L58 14 L74 18 L70 32 M86 12 L98 44 M80 10 L92 12 M28 20 L44 20"/></g></svg>
+        <b>ATELIER<br>Y·L</b><span class="sm">PARIS 75</span><span class="lbl">FACE 1</span>
+      </div>
+      <div class="f top" role="button" tabindex="0" data-open="rel"><span class="sm">TOGETHER SINCE <span id="fs"></span></span><div class="big" id="fd"></div><span class="sm" id="ft"></span><span class="lbl">FACE 2</span></div>
+      <div class="f left" role="button" tabindex="0" data-open="p0"><i class="flap l"></i><span class="sm">RIDER</span><b>YVAN</b><span class="sm" id="fy"></span><span class="lbl">FACE 3</span></div>
+      <div class="f right" role="button" tabindex="0" data-open="p1"><i class="flap r"></i><span class="sm">PASSENGER</span><b>LIA</b><span class="sm" id="fl"></span><span class="lbl">FACE 4</span></div>
+      <div class="f bottom" role="button" tabindex="0" data-open="route"><span class="sm">ROUTE</span><b id="fr"></b><span class="arrow">↗</span><span class="lbl">FACE 5</span>
+        <span class="f back" role="button" tabindex="0" data-open="notice"><span class="sm">NOTICE</span><b>읽어 주세요</b><span class="lbl">FACE 6</span></span>
+      </div>
+    </div>
+    <span class="dim w" id="dimw"></span>
+  </section>
+  <aside class="side">
+    <div class="rcpt" role="button" tabindex="0" data-open="bread" id="rcpt" aria-label="빵집 영수증 크게 보기"></div>
+    <div class="barcode" aria-hidden="true"></div>
+    <nav class="links" id="links"></nav>
+  </aside>
+</div>
+<div id="wins"></div>
+
+<script src="data.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var L = LUV, K = KIT, e = L.esc, Y = L.chars[0], Li = L.chars[1];
+  document.getElementById('spec').innerHTML = [['ITEM', L.bike.model], ['CC', L.bike.cc], ['YEAR', L.bike.year], ['FROM', 'PARIS 75'], ['TO', 'DEAUVILLE 14'], ['FOR', L.pair]].map(function (r) { return '<div><span>' + r[0] + '</span><span>' + e(r[1]) + '</span></div>'; }).join('');
+  document.getElementById('fs').textContent = K.since('.');
+  document.getElementById('fd').textContent = 'D+' + L.days();
+  document.getElementById('ft').textContent = L.tagline;
+  document.getElementById('fy').textContent = Y.birth + ' · ' + Y.height + 'cm';
+  document.getElementById('fl').textContent = Li.birth + ' · ' + Li.height + 'cm';
+  document.getElementById('fr').innerHTML = 'PARIS<br>→ ' + L.route[L.route.length - 1][0];
+  document.getElementById('dimw').textContent = '← 450 × 270 × 450 mm →';
+  document.getElementById('rcpt').innerHTML = K.receipt();
+  document.getElementById('links').innerHTML = L.links.map(function (l) { return '<a href="' + e(l[1]) + '" target="_blank" rel="noopener">' + e(l[0]) + '<span>↗</span></a>'; }).join('');
+  var W = {
+    p0: function () { K.open('p0', 'FACE 3 · RIDER', K.profile(0), { left: 300, top: 120 }); },
+    p1: function () { K.open('p1', 'FACE 4 · PASSENGER', K.profile(1), { left: 360, top: 160 }); },
+    rel: function () { K.open('rel', 'FACE 2 · US', K.relation()); },
+    route: function () { K.open('route', 'FACE 5 · ROUTE', K.route(), { w: 320 }); },
+    machine: function () { K.open('machine', 'FACE 1 · CONTENTS', K.bike(), { w: 320 }); },
+    notice: function () { K.open('notice', 'FACE 6 · NOTICE', K.notice() + '<div style="height:10px"></div>' + K.links(), { w: 340 }); },
+    bread: function () { K.open('bread', 'REÇU · BOULANGERIE', K.receipt(), { w: 300 }); }
+  };
+  K.bind(W);
+
+  K.demo([['p0', 40, 300], ['notice', 900, 430]]);
+  var table = document.getElementById('table'), btn = document.getElementById('fold');
+  function fold() { var f = !table.classList.contains('folded'); table.classList.toggle('folded', f); table.classList.toggle('spin', f && !L.reduced); btn.textContent = f ? '다시 펼치기' : '상자 접기'; }
+  btn.onclick = fold;
+  if (location.hash === '#pop') fold();
+})();
+</script>
+</body>
+</html>

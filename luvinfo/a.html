@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ATELIER.EXE</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Archivo:wght@400;500&display=swap">
+<style>
+/* A — ATELIER.EXE : 회색 레트로 OS 데스크톱. 아이콘 누르면 메모장 창이 뜸. 가운데는 선으로만 그린 바이크 */
+:root {
+  --desk: #ecebe7;
+  --panel: #f7f7f5;
+  --bar: #d9d8d3;
+  --ink: #1b1b1b;
+  --line: #8a8a86;
+  --blue: #2c3fa0;
+  --pix: "DotGothic16", "MS Gothic", monospace;
+  --big: "Archivo", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--desk); color: var(--ink); font: 400 14px/1.6 var(--pix); -webkit-font-smoothing: none; }
+button { font: inherit; color: inherit; }
+.os { height: 100%; display: grid; grid-template-rows: auto auto 1fr auto; border: 2px solid var(--line); padding-left: max(0px, env(safe-area-inset-left, 0px)); padding-right: max(0px, env(safe-area-inset-right, 0px)); }
+.title { display: grid; grid-template-columns: 34px 1fr 34px 34px; align-items: center; border-bottom: 2px solid var(--line); background: var(--panel); height: 36px; }
+.title h1 { margin: 0; text-align: center; font: 400 17px/1 var(--pix); letter-spacing: .06em; }
+.sq { height: 100%; border-left: 2px solid var(--line); display: grid; place-items: center; background: var(--bar); font-size: 11px; }
+.sq:first-child { border-left: 0; border-right: 2px solid var(--line); }
+.menu { display: flex; gap: 0; border-bottom: 2px solid var(--line); background: var(--panel); padding: 0 6px; overflow-x: auto; }
+.menu button { background: none; border: 0; padding: 6px 14px; cursor: pointer; color: var(--line); white-space: nowrap; letter-spacing: .04em; }
+.menu button:first-child { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.menu button:hover, .menu button:focus-visible { color: var(--ink); outline: 1px dotted var(--ink); }
+
+.desk { position: relative; display: grid; grid-template-columns: 120px 1fr 230px; min-height: 0; }
+.icons { display: grid; align-content: start; gap: 18px; padding: 18px 10px; }
+.ic { background: none; border: 0; cursor: pointer; display: grid; justify-items: center; gap: 6px; padding: 4px; font-size: 12px; }
+.ic:focus-visible span, .ic:hover span { background: var(--blue); color: #fff; outline: 1px dotted var(--ink); }
+.doc { width: 30px; height: 36px; border: 2px solid var(--ink); background: #fff repeating-linear-gradient(transparent 0 6px, #bbb 6px 7px) 4px 8px / 18px 22px no-repeat; clip-path: polygon(0 0, 70% 0, 100% 24%, 100% 100%, 0 100%); }
+.fold { width: 38px; height: 30px; border: 2px solid var(--ink); background: #fff; position: relative; margin-top: 6px; }
+.fold::before { content: ""; position: absolute; left: -2px; top: -8px; width: 16px; height: 8px; border: 2px solid var(--ink); border-bottom: 0; background: #fff; }
+.exe { width: 32px; height: 32px; border: 2px solid var(--ink); background: #fff; box-shadow: inset 0 6px 0 var(--ink); }
+
+.stage { position: relative; min-width: 0; border-left: 2px solid var(--line); border-right: 2px solid var(--line); background: #fff; overflow: hidden; }
+.stage h2 { position: absolute; left: 18px; top: 4px; margin: 0; font: 500 clamp(56px, 9vw, 128px)/1 var(--big); letter-spacing: -.06em; pointer-events: none; }
+.stage h2 small { font: 400 15px/1 var(--pix); letter-spacing: .04em; margin-left: 6px; vertical-align: top; position: relative; top: 18px; }
+#bike { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+.cap { position: absolute; font: 400 12px/1.5 var(--pix); pointer-events: none; }
+.cap.c1 { right: 16px; top: 18px; text-align: right; }
+.cap.c2 { left: 18px; bottom: 14px; }
+.cap.c3 { right: 16px; bottom: 14px; color: var(--blue); }
+
+.side { padding: 14px 14px; display: grid; align-content: start; gap: 18px; background: var(--panel); overflow-y: auto; }
+.side h3 { margin: 0 0 4px; font: 400 15px/1 var(--pix); text-decoration: underline; text-underline-offset: 3px; }
+.side p { margin: 0; font-size: 12.5px; line-height: 1.7; word-break: keep-all; }
+.side a { color: var(--ink); }
+.clock { font-size: 34px; line-height: 1; letter-spacing: .02em; }
+.dd { border: 2px solid var(--ink); padding: 8px 10px; background: #fff; }
+.dd b { display: block; font-size: 30px; line-height: 1; font-weight: 400; color: var(--blue); }
+
+.status { display: grid; grid-template-columns: 1fr 140px 90px; border-top: 2px solid var(--line); background: var(--panel); font-size: 13px; }
+.status > * { padding: 5px 10px; border-left: 2px solid var(--line); color: var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.status > :first-child { border-left: 0; }
+
+/* 팝업 = 메모장 */
+#wins { position: fixed; inset: 0; pointer-events: none; z-index: 20; }
+.lw { position: absolute; width: 440px; max-width: calc(100vw - 24px); background: #fff; border: 2px solid var(--line); pointer-events: auto; box-shadow: 6px 6px 0 rgba(0,0,0,.08); }
+.lw-pop { animation: pop .14s steps(3) both; }
+@keyframes pop { from { transform: scale(.94); opacity: .4; } }
+.lw-bar { display: grid; grid-template-columns: 1fr 32px; height: 30px; align-items: center; border-bottom: 2px solid var(--line); background: var(--panel); cursor: move; touch-action: none; }
+.lw-t { text-align: center; font-size: 14px; letter-spacing: .04em; padding-left: 32px; }
+.lw-x { height: 100%; border: 0; border-left: 2px solid var(--line); background: var(--bar); cursor: pointer; }
+.lw-x:hover, .lw-x:focus-visible { background: var(--ink); color: #fff; outline: none; }
+.lw-body { padding: 14px 18px 18px; max-height: 70vh; overflow: auto; font-size: 13.5px; line-height: 1.7; }
+.lw-body::before { content: "FILE    EDIT    HELP"; display: block; white-space: pre; color: var(--line); font-size: 12px; margin: -6px 0 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+.pf-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pf-name { font: 500 46px/1 var(--big); letter-spacing: -.05em; }
+.pf-plate { margin-left: auto; border: 2px solid var(--ink); display: inline-flex; align-items: stretch; font-size: 13px; }
+.pf-plate i { font-style: normal; background: var(--blue); color: #fff; padding: 0 5px; }
+.pf-plate s { text-decoration: none; background: var(--blue); color: #fff; padding: 0 5px; }
+.pf-plate { gap: 6px; }
+.pf-line { margin: 10px 0; }
+.pf-dl { display: grid; grid-template-columns: 90px 1fr; margin: 0; }
+.pf-dl dt::after { content: ":"; } .pf-dl dd { margin: 0; word-break: keep-all; }
+.pf-kw { margin: 10px 0 0; color: var(--blue); }
+.rl, .nt { margin: 0; padding-left: 22px; } .rl li, .nt li { word-break: keep-all; }
+.lk { display: grid; gap: 4px; } .lk a { color: var(--ink); } .lk i { font-style: normal; margin-left: 6px; }
+.rt { list-style: none; margin: 0; padding: 0; } .rt li { display: grid; grid-template-columns: 1fr auto; position: relative; padding: 4px 0 8px; }
+.rt li::after { content: ""; position: absolute; left: 0; bottom: 2px; height: 3px; width: calc(var(--p) * 100%); background: var(--ink); }
+.bk { display: grid; grid-template-columns: 90px 1fr; margin: 12px 0 0; } .bk dd { margin: 0; }
+.rc { width: 240px; margin: 0 auto; font-size: 12.5px; } .rc-h { text-align: center; margin: 0; } .rc-m, .rc-t, .rc li { display: flex; justify-content: space-between; }
+.rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-top: 1px dashed var(--ink); border-bottom: 1px dashed var(--ink); }
+.rc-t { font-size: 15px; margin: 0; } .rc-f { text-align: center; color: var(--line); margin: 8px 0 0; } .rc-m { margin: 6px 0 0; color: var(--line); }
+
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  .os { height: auto; min-height: 100%; }
+  .desk { grid-template-columns: 1fr; }
+  .icons { grid-template-columns: repeat(4, 1fr); padding: 14px 8px; order: 2; border-top: 2px solid var(--line); }
+  .stage { height: 62vh; min-height: 380px; border: 0; order: 1; }
+  .side { order: 3; border-top: 2px solid var(--line); }
+  .status { grid-template-columns: 1fr 90px; } .status > :nth-child(2) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .lw-pop { animation: none; } }
+</style>
+</head>
+<body>
+<div class="os">
+  <div class="title"><span class="sq">━</span><h1>FILE EXPLORER-YVAN&amp;LIA</h1><span class="sq">▼</span><span class="sq">▲</span></div>
+  <nav class="menu" aria-label="메뉴">
+    <button type="button" data-open="home">HOME</button>
+    <button type="button" data-open="p0">RIDER</button>
+    <button type="button" data-open="p1">PASSENGER</button>
+    <button type="button" data-open="route">ROUTE</button>
+    <button type="button" data-open="bread">BOULANGERIE</button>
+    <button type="button" data-open="notice">NOTICE</button>
+  </nav>
+  <div class="desk">
+    <div class="icons">
+      <button class="ic" type="button" data-open="p0"><i class="doc"></i><span>yvan.txt</span></button>
+      <button class="ic" type="button" data-open="p1"><i class="doc"></i><span>lia.txt</span></button>
+      <button class="ic" type="button" data-open="rel"><i class="doc"></i><span>us.txt</span></button>
+      <button class="ic" type="button" data-open="route"><i class="fold"></i><span>ROUTE</span></button>
+      <button class="ic" type="button" data-open="machine"><i class="exe"></i><span>bike.dwg</span></button>
+      <button class="ic" type="button" data-open="bread"><i class="doc"></i><span>reçu.txt</span></button>
+      <button class="ic" type="button" data-open="notice"><i class="doc"></i><span>readme</span></button>
+    </div>
+    <section class="stage" aria-label="바이크 3D 도면. 드래그해서 돌릴 수 있어요">
+      <canvas id="bike"></canvas>
+      <h2>yvan&amp;lia<small id="sinceS"></small></h2>
+      <div class="cap c1">DWG. YL-0001<br>SCALE 1:10<br>WHEELBASE 1450</div>
+      <div class="cap c2">&lt;-- drag to rotate --&gt;</div>
+      <div class="cap c3" id="mach"></div>
+    </section>
+    <aside class="side">
+      <div><h3>NOW_PARIS</h3><div class="clock" id="clock">--:--</div><p id="date"></p></div>
+      <div class="dd">D-DAY<b id="dday"></b><p id="since"></p></div>
+      <div><h3>CONTACT_INFO</h3><p id="links"></p></div>
+      <div><h3>README</h3><p>아이콘이나 위 메뉴를 누르면 창이 열려요. 창은 제목 줄을 잡고 옮길 수 있어요.</p></div>
+    </aside>
+  </div>
+  <div class="status"><span>C:/atelier/yvan_lia.dwg</span><span id="stat"></span><span>1 of 6</span></div>
+</div>
+<div id="wins"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="data.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var L = LUV, K = KIT;
+  document.getElementById('sinceS').textContent = 'since ' + K.since('.');
+  document.getElementById('dday').textContent = 'D+' + L.days();
+  document.getElementById('since').textContent = K.since('.') + ' ~';
+  document.getElementById('stat').textContent = 'D+' + L.days();
+  document.getElementById('mach').textContent = L.bike.model + ' / ' + L.bike.cc + 'CC / ' + L.bike.year;
+  document.getElementById('links').innerHTML = L.links.map(function (l) { return l[0].toLowerCase() + ':<br><a href="' + L.esc(l[1]) + '" target="_blank" rel="noopener">' + L.esc(l[1].replace(/^https?:\/\//, '')) + '</a>'; }).join('<br><br>');
+  function tick() {
+    var d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
+    document.getElementById('clock').textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    document.getElementById('date').textContent = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1) + ' · 75 PARIS';
+  }
+  tick(); setInterval(tick, 20000);
+
+  var Y = L.chars[0], Li = L.chars[1];
+  var W = {
+    home: function () { K.closeAll(); },
+    p0: function () { K.open('p0', 'NOTEPAD.EXE-yvan.txt', K.profile(0), { left: 150, top: 96 }); },
+    p1: function () { K.open('p1', 'NOTEPAD.EXE-lia.txt', K.profile(1), { left: 260, top: 150 }); },
+    rel: function () { K.open('rel', 'NOTEPAD.EXE-us.txt', '<p style="margin:0 0 8px">' + L.esc(L.tagline) + '</p>' + K.relation()); },
+    route: function () { K.open('route', 'ROUTE-paris_deauville', K.route(), { w: 360 }); },
+    machine: function () { K.open('machine', 'bike.dwg-properties', '<p style="margin:0">이반의 바이크</p>' + K.bike(), { w: 340 }); },
+    bread: function () { K.open('bread', 'reçu.txt', K.receipt(), { w: 300 }); },
+    notice: function () { K.open('notice', 'readme.txt', K.notice() + '<p style="margin:12px 0 0">' + L.esc(L.pair) + '</p>', { w: 380 }); }
+  };
+  K.bind(W);
+  K.demo([['p1', 560, 96], ['bread', 930, 330], ['route', 200, 430]]);
+  if (innerWidth > 860 && location.hash !== '#pop') K.open('p0', 'NOTEPAD.EXE-yvan.txt', K.profile(0), { left: innerWidth - 720, top: 250 });
+
+  var S = K.stage(document.getElementById('bike'), { fov: 28, z: 10, fit: function (c, w, h) { c.position.z = Math.max(9, 7.6 / (.4986 * w / h)); } });
+  if (!S) return;
+  var bike = K.bike3D(S.T, { line: 0x1b1b1b, accent: 0x2c3fa0 });
+  bike.position.y = -.35; S.scene.add(bike);
+  var spin = K.spin(S.renderer.domElement, bike, { x: .2, y: -.5 });
+  S.loop(function (t) { spin(t, .25); bike.tick(t); });
+})();
+</script>
+</body>
+</html>

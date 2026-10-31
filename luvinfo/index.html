@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YVAN LIA 러브인포 시안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;700&display=swap">
+<style>
+/* 시안 보드: 시안마다 한 줄. 왼쪽 메인 화면, 오른쪽 팝업 연 화면. 실제 페이지를 축소해서 넣음 */
+:root {
+  --bg: #eeede9;
+  --ink: #141414;
+  --mute: #75736d;
+  --rule: #c9c7c0;
+  --blue: #2546a8;
+  --head: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --ko: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 400 13px/1.6 var(--ko); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 60px; }
+.wrap { max-width: 1440px; margin: 0 auto; }
+header.top { display: grid; grid-template-columns: 1fr auto; gap: 12px 24px; align-items: end; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+header.top h1 { margin: 0; font: 800 clamp(34px, 5vw, 60px)/.92 var(--head); letter-spacing: -.045em; text-wrap: balance; }
+header.top h1 span { color: var(--blue); }
+header.top p { margin: 0; font: 400 11.5px/1.7 var(--mono); color: var(--mute); text-align: right; }
+.note { margin: 14px 0 0; max-width: 70ch; color: #3b3a36; word-break: keep-all; }
+.note b { font-weight: 700; }
+nav.jump { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+nav.jump a { font: 500 12px/1 var(--mono); color: var(--ink); text-decoration: none; border: 1.5px solid var(--ink); padding: 7px 10px; }
+nav.jump a:hover, nav.jump a:focus-visible { background: var(--ink); color: var(--bg); outline: none; }
+
+section.d { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; padding: 34px 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 12px; }
+.meta { display: grid; align-content: start; gap: 10px; }
+.meta .L { font: 800 92px/.8 var(--head); letter-spacing: -.06em; }
+.meta h2 { margin: 0; font: 800 20px/1.1 var(--head); letter-spacing: -.02em; }
+.meta p { margin: 0; word-break: keep-all; color: #3b3a36; }
+.meta dl { margin: 4px 0 0; display: grid; grid-template-columns: 52px 1fr; gap: 3px 8px; font: 400 11px/1.55 var(--mono); }
+.meta dt { color: var(--mute); } .meta dd { margin: 0; word-break: keep-all; }
+.meta a.open { justify-self: start; font: 500 12px/1 var(--mono); color: var(--blue); text-decoration: none; border-bottom: 1.5px solid var(--blue); padding-bottom: 3px; }
+.meta a.open:hover { color: var(--ink); border-color: var(--ink); }
+.shots { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-width: 0; }
+figure { margin: 0; min-width: 0; }
+figcaption { display: flex; justify-content: space-between; font: 500 11px/1 var(--mono); color: var(--mute); margin-bottom: 7px; letter-spacing: .04em; }
+.frame { position: relative; width: 100%; aspect-ratio: 1280 / 800; overflow: hidden; border: 1.5px solid var(--ink); background: #fff; }
+.frame iframe { position: absolute; left: 0; top: 0; width: 1280px; height: 800px; border: 0; transform-origin: 0 0; }
+.frame .cover { position: absolute; inset: 0; display: block; }
+.frame .cover:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+.foot { margin-top: 26px; font: 400 11.5px/1.7 var(--mono); color: var(--mute); }
+
+@media (max-width: 900px) {
+  section.d { grid-template-columns: 1fr; gap: 14px; }
+  .meta { grid-template-columns: auto 1fr; align-items: end; column-gap: 16px; }
+  .meta .L { font-size: 64px; grid-row: span 2; }
+  .meta p, .meta dl, .meta a.open { grid-column: 1 / -1; }
+  .shots { grid-template-columns: 1fr; }
+  header.top { grid-template-columns: 1fr; } header.top p { text-align: left; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>YVAN <span>୨୧</span> LIA<br>러브인포 시안 A–F</h1>
+    <p>KEYWORD · 바이크 / 프랑스 / 베이커리(조금)<br>3D OBJECT · BLUEPRINT · POPUP · WIDGET</p>
+  </header>
+  <p class="note">시안마다 왼쪽은 <b>메인 화면</b>, 오른쪽은 <b>팝업을 연 화면</b>이에요. 미리보기는 실제 페이지라서 3D가 움직여요. 누르면 해당 시안이 새 탭에서 열리고, 거기서 아이콘이나 메뉴를 눌러 팝업을 직접 열어 볼 수 있어요. 캐릭터 정보는 전부 임시 문구예요.</p>
+  <nav class="jump" id="jump"></nav>
+  <div id="list"></div>
+  <p class="foot">파일 위치 · luvinfo/a.html ~ f.html · 내용 수정은 luvinfo/data.js 한 군데에서 해요.</p>
+</div>
+
+<script>
+(function () {
+  var D = [
+    { k: 'A', f: 'a.html', name: 'ATELIER.EXE', d: '회색 레트로 OS 데스크톱. 아이콘과 메뉴를 누르면 메모장 창이 떠요. 가운데는 선으로만 그린 카페 레이서 3D 도면.', ref: '2 (OS 창)', obj: '와이어프레임 바이크 (드래그로 회전)', pop: '메모장 창 · 시계 · D-day 위젯' },
+    { k: 'B', f: 'b.html', name: 'R@UTE 75', d: '이벤트 포스터. 번진 대형 타이틀, 파란 태그, 생일 블록. 오른쪽 헬멧은 하프톤 셰이더로 찍은 3D.', ref: '6, 7 (카페 포스터)', obj: '하프톤 3D 헬멧', pop: '검은 그림자 박스 팝업' },
+    { k: 'C', f: 'c.html', name: 'INDEX', d: '포트폴리오 목차처럼 다섯 칸. 큰 회색 숫자 아래 누르는 항목. 03 칸에서 앞바퀴가 분해돼요.', ref: '1 (목차 그리드)', obj: '앞바퀴 분해도 (슬라이더)', pop: '인덱스 시트 · 영수증 · 세로 루트' },
+    { k: 'D', f: 'd.html', name: '06:00', d: 'Y2K 콜라주. VCR 화면 속 새벽 국도 주행, 크롬 물방울, LCD 위젯, Seat 셀렉트 박스.', ref: '3 (Y2K 콜라주)', obj: '주행 중인 바이크 · 크롬 물방울', pop: '플래티넘 창 · LCD 위젯' },
+    { k: 'E', f: 'e.html', name: 'ISSUE 01', d: '흑백 매거진. 모서리 핸들 프레임, 콘덴스드 대형 타이포에 손글씨 겹침. 서킷 리본 위를 점 두 개가 돌아요.', ref: '4, 5 (흑백 화보)', obj: '3D 서킷 리본 루프', pop: '트랙 리스트 → 프레임 팝업' },
+    { k: 'F', f: 'f.html', name: 'CARTON YL-06', d: '바이크 부품 상자 전개도. 면을 누르면 배송 라벨 팝업, 버튼을 누르면 3D 상자로 접혀요.', ref: '1, 7 + 설계도', obj: 'CSS 3D 접히는 상자', pop: '배송 라벨 · 영수증 위젯' }
+  ];
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  document.getElementById('jump').innerHTML = D.map(function (x) { return '<a href="#d-' + x.k.toLowerCase() + '">' + x.k + ' · ' + esc(x.name) + '</a>'; }).join('');
+  function shot(x, hash, cap) {
+    return '<figure><figcaption><span>' + cap + '</span><span>1280 × 800</span></figcaption><div class="frame"><iframe loading="lazy" title="' + esc(x.name + ' ' + cap) + '" src="' + x.f + hash + '" tabindex="-1"></iframe>' +
+      '<a class="cover" href="' + x.f + hash + '" target="_blank" rel="noopener" aria-label="' + esc(x.name) + ' ' + cap + ' 새 탭에서 열기"></a></div></figure>';
+  }
+  document.getElementById('list').innerHTML = D.map(function (x) {
+    return '<section class="d" id="d-' + x.k.toLowerCase() + '"><div class="meta"><div class="L">' + x.k + '</div><h2>' + esc(x.name) + '</h2><p>' + esc(x.d) + '</p>' +
+      '<dl><dt>REF</dt><dd>' + esc(x.ref) + '</dd><dt>3D</dt><dd>' + esc(x.obj) + '</dd><dt>POPUP</dt><dd>' + esc(x.pop) + '</dd></dl>' +
+      '<a class="open" href="' + x.f + '" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>' +
+      '<div class="shots">' + shot(x, '', 'MAIN') + shot(x, '#pop', 'POPUP') + '</div></section>';
+  }).join('');
+  function fit() {
+    document.querySelectorAll('.frame').forEach(function (f) { var i = f.querySelector('iframe'); i.style.transform = 'scale(' + (f.clientWidth / 1280) + ')'; });
+  }
+  fit(); addEventListener('resize', fit);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(fit); document.querySelectorAll('.frame').forEach(function (f) { ro.observe(f); }); }
+})();
+</script>
+</body>
+</html>

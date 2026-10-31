@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YVAN LIA Issue 01</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Mrs+Saint+Delafield&family=Barlow+Condensed:ital,wght@0,500;1,500;1,600&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* E — 흑백 매거진: 모서리 핸들이 달린 프레임 조각들. 검은 패널 안에 3D 서킷 리본 + 그 위를 도는 점(바이크). 트랙 리스트 누르면 팝업 */
+:root {
+  --paper: #f6f6f4;
+  --ink: #0e0e0e;
+  --g1: #2b2b2b; --g2: #6f6f6f; --g3: #a7a7a7; --g4: #d4d4d2;
+  --cond: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --script: "Mrs Saint Delafield", "Snell Roundhand", cursive;
+  --it: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ko: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 400 13px/1.55 var(--ko); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0; overflow-x: hidden; }
+body::before { content: ""; position: fixed; left: 0; top: 0; bottom: 0; width: 40px; pointer-events: none; opacity: .5;
+  background: radial-gradient(circle, var(--g3) 30%, transparent 34%) 0 0 / 5px 5px; -webkit-mask: linear-gradient(90deg, #000, transparent); mask: linear-gradient(90deg, #000, transparent); }
+button { font: inherit; color: inherit; }
+.mag { position: relative; max-width: 1200px; margin: 0 auto; padding: 30px 0 40px; display: grid; grid-template-columns: 200px minmax(0, 1fr) 300px; gap: 28px; }
+.fr { position: relative; border: 1px solid var(--ink); }
+.fr > .hd { position: absolute; width: 7px; height: 7px; background: var(--paper); border: 1px solid var(--ink); z-index: 3; }
+.hd.a { left: -4px; top: -4px; } .hd.b { right: -4px; top: -4px; } .hd.c { left: -4px; bottom: -4px; } .hd.d { right: -4px; bottom: -4px; }
+
+.date { display: grid; gap: 4px; align-content: start; }
+.date .num { background: var(--ink); color: var(--paper); font: 900 92px/.9 var(--cond); padding: 8px 12px 0; text-align: center; letter-spacing: -.02em; }
+.date .mon { font: 900 52px/.85 var(--cond); letter-spacing: -.02em; transform: scaleY(1.25); transform-origin: top; margin-bottom: 16px; }
+.date .via { border: 1px solid var(--ink); font: italic 500 13px/1 var(--it); padding: 4px 8px; justify-self: start; }
+.sw { display: flex; gap: 8px; margin-top: 22px; } .sw i { width: 22px; height: 22px; }
+.chk { width: 28px; height: 28px; margin-top: 22px; background: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0) 0 0 / 7px 7px; }
+.side-n { margin-top: 30px; font: 500 10px/1.7 var(--mono); letter-spacing: .08em; writing-mode: vertical-rl; transform: rotate(180deg); color: var(--g2); }
+
+.main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; min-width: 0; }
+.panel { background: #101010; aspect-ratio: 16 / 10; overflow: hidden; }
+#loop { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; }
+.panel .grain { position: absolute; inset: 0; pointer-events: none; opacity: .35; mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.lines { position: absolute; left: 4%; top: 30%; display: grid; justify-items: end; gap: 7px; z-index: 2; background: none; border: 0; padding: 0; cursor: pointer; }
+.lines span { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); padding: 1px 7px; font: 500 15px/1.35 var(--ko); }
+.lines span:last-child { background: var(--ink); color: var(--paper); border-color: var(--paper); font-weight: 700; }
+.lines:hover span:last-child, .lines:focus-visible span:last-child { background: var(--paper); color: var(--ink); }
+.lines:focus-visible { outline: 1px dashed var(--paper); outline-offset: 6px; }
+.tagr { position: absolute; right: 4%; bottom: 7%; color: var(--paper); font: 400 54px/1 var(--script); z-index: 2; transform: rotate(-6deg); }
+.mosaic { position: absolute; left: 46%; top: 8%; width: 84px; height: 112px; display: grid; grid-template-columns: repeat(6, 1fr); z-index: 2; }
+.vert { position: absolute; left: 38%; top: 42%; bottom: 6%; color: var(--g3); font: 500 9px/1 var(--mono); letter-spacing: .3em; writing-mode: vertical-rl; z-index: 2; }
+.title { position: relative; }
+.title h1 { margin: 0; font: 900 clamp(64px, 10vw, 140px)/.8 var(--cond); letter-spacing: -.03em; text-transform: uppercase; overflow-wrap: anywhere; }
+.title .scr { position: absolute; left: 22%; top: 14%; font: 400 clamp(70px, 10vw, 140px)/1 var(--script); color: var(--paper); -webkit-text-stroke: 1.5px var(--ink); transform: rotate(-8deg); pointer-events: none; }
+.title .meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 12px; font: italic 500 12px/1 var(--it); letter-spacing: .3em; text-transform: uppercase; }
+.title .rib { display: flex; gap: 20px; font: italic 500 12px/1 var(--it); letter-spacing: .5em; margin-bottom: 10px; text-transform: uppercase; }
+
+.right { display: grid; align-content: start; gap: 22px; min-width: 0; }
+.track h2 { margin: 0; display: flex; align-items: end; gap: 6px; font: italic 600 40px/1 var(--it); letter-spacing: -.02em; border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+.track h2 small { background: var(--g4); font: italic 500 10px/1 var(--it); padding: 2px 4px; margin-bottom: 6px; letter-spacing: .04em; }
+.track h2 em { margin-left: auto; font: 500 10px/1 var(--mono); font-style: normal; border: 1px solid var(--ink); padding: 3px 5px; margin-bottom: 6px; }
+.track p { margin: 12px 0 0; font: 400 14px/1.5 var(--ko); text-align: justify; word-break: keep-all; }
+.track .last { font: italic 600 26px/1.1 var(--it); margin-top: 14px; letter-spacing: -.01em; }
+.list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.list button { width: 100%; display: grid; grid-template-columns: 36px 1fr auto; align-items: baseline; gap: 10px; background: none; border: 0; border-bottom: 1px solid var(--g4); padding: 10px 0; cursor: pointer; text-align: left; }
+.list i { font: 500 11px/1 var(--mono); font-style: normal; color: var(--g2); }
+.list b { font: 900 24px/1 var(--cond); letter-spacing: .01em; text-transform: uppercase; }
+.list span { font: 400 11.5px/1 var(--ko); color: var(--g2); }
+.list button:hover b, .list button:focus-visible b { text-decoration: line-through; text-decoration-thickness: 3px; }
+.list button:focus-visible { outline: none; background: var(--g4); }
+.dd { display: flex; justify-content: space-between; align-items: end; padding: 12px; }
+.dd b { font: 900 54px/.8 var(--cond); }
+.dd span { font: 500 10px/1.5 var(--mono); text-align: right; letter-spacing: .06em; }
+
+/* 팝업 = 프레임 조각 */
+#wins { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
+.lw { position: absolute; width: 380px; max-width: calc(100vw - 24px); background: var(--paper); border: 1px solid var(--ink); pointer-events: auto; }
+.lw::before, .lw::after { content: ""; position: absolute; width: 7px; height: 7px; background: var(--paper); border: 1px solid var(--ink); }
+.lw::before { left: -4px; top: -4px; } .lw::after { right: -4px; bottom: -4px; }
+.lw-pop { animation: pop .2s steps(4) both; } @keyframes pop { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+.lw-bar { display: flex; justify-content: space-between; align-items: center; background: var(--ink); color: var(--paper); padding: 6px 10px; cursor: move; touch-action: none; }
+.lw-t { font: italic 600 18px/1 var(--it); letter-spacing: .02em; }
+.lw-x { border: 1px solid var(--paper); background: none; color: var(--paper); font: 500 11px/1 var(--mono); padding: 3px 6px; cursor: pointer; }
+.lw-x:hover, .lw-x:focus-visible { background: var(--paper); color: var(--ink); outline: none; }
+.lw-body { padding: 14px 16px 18px; max-height: 68vh; overflow: auto; }
+.pf-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pf-name { font: 900 56px/.8 var(--cond); text-transform: uppercase; }
+.pf-ko { font: 400 30px/1 var(--script); }
+.pf-plate { margin-left: auto; display: inline-flex; gap: 5px; border: 1px solid var(--ink); font: 500 12px/1.6 var(--mono); }
+.pf-plate i, .pf-plate s { font-style: normal; text-decoration: none; background: var(--ink); color: var(--paper); padding: 0 4px; }
+.pf-line { margin: 12px 0; display: inline; background: var(--ink); color: var(--paper); padding: 2px 6px; font: 700 14px/2 var(--ko); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.pf-dl { display: grid; grid-template-columns: 74px 1fr; margin: 14px 0 0; border-top: 1px solid var(--ink); }
+.pf-dl dt, .pf-dl dd { margin: 0; padding: 5px 0; border-bottom: 1px solid var(--g4); }
+.pf-dl dt { font: 500 10.5px/1.8 var(--mono); color: var(--g2); } .pf-dl dd { word-break: keep-all; }
+.pf-kw { margin: 10px 0 0; font: italic 500 14px/1.4 var(--it); }
+.rl, .nt { margin: 0; padding-left: 18px; } .rl li, .nt li { margin-bottom: 6px; word-break: keep-all; }
+.lk { display: grid; } .lk a { display: flex; justify-content: space-between; color: var(--ink); text-decoration: none; font: 900 26px/1 var(--cond); text-transform: uppercase; padding: 8px 0; border-bottom: 1px solid var(--ink); } .lk a:hover { text-decoration: line-through; } .lk i { font-style: normal; }
+.rt { list-style: none; margin: 0 0 12px; padding: 0; } .rt li { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--g4); } .rt b { font: 900 22px/1 var(--cond); } .rt span { font: 500 11px/1 var(--mono); }
+.bk { display: grid; grid-template-columns: 74px 1fr; margin: 0; } .bk dt { font: 500 10.5px/1.9 var(--mono); color: var(--g2); } .bk dd { margin: 0; padding: 2px 0; }
+.rc { font: 400 12px/1.6 var(--mono); } .rc-h { text-align: center; margin: 0; font-weight: 500; } .rc-m, .rc-t, .rc li { display: flex; justify-content: space-between; } .rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed var(--ink); } .rc-t { font-weight: 500; margin: 0; } .rc-f, .rc-m { color: var(--g2); margin: 6px 0 0; } .rc-f { text-align: center; }
+
+@media (max-width: 980px) {
+  .mag { grid-template-columns: 1fr; }
+  .date { grid-template-columns: auto auto; justify-content: start; align-items: end; gap: 10px 14px; }
+  .date .mon { margin-bottom: 0; transform: none; font-size: 54px; } .date .num { font-size: 64px; }
+  .sw, .chk, .side-n { display: none; }
+  .panel { aspect-ratio: 4 / 5; }
+  .lines span { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .lw-pop { animation: none; } }
+</style>
+</head>
+<body>
+<div class="mag">
+  <aside class="date">
+    <div class="num fr" id="dnum"></div>
+    <div class="mon" id="dmon"></div>
+    <span class="via">[since the first ride]</span>
+    <div class="sw" aria-hidden="true"><i style="background:var(--ink)"></i><i style="background:var(--g2)"></i><i style="background:var(--g3)"></i><i style="background:var(--g4)"></i></div>
+    <div class="chk" aria-hidden="true"></div>
+    <div class="side-n">YVAN // LIA // ROUTE 75 // BOULANGERIE</div>
+  </aside>
+  <main class="main">
+    <section class="panel fr">
+      <canvas id="loop" aria-label="서킷 모양 3D 리본 위를 도는 바이크 점"></canvas>
+      <div class="grain"></div>
+      <div class="mosaic" id="mosaic" aria-hidden="true"></div>
+      <button class="lines" type="button" data-open="p1" id="lines" aria-label="리아 프로필 열기"></button>
+      <span class="vert">— YVAN &amp; LIA // RIDE OUT —</span>
+      <span class="tagr">à l'aube</span>
+    </section>
+    <section class="title">
+      <div class="rib"><span>Rider</span><span>//</span><span>リダー</span><span>//</span><span>라이더</span></div>
+      <h1>Yvan&amp;Lia</h1>
+      <span class="scr">Paris</span>
+      <div class="meta"><span>→ The first ride · Paris 75 → Deauville</span><span id="meta2"></span></div>
+    </section>
+  </main>
+  <aside class="right">
+    <div class="track">
+      <h2>TRACK <small>INDEX.01</small><em>Ride Out</em></h2>
+      <p id="trackp"></p>
+      <p class="last">At last, the engine is warm.</p>
+    </div>
+    <ol class="list">
+      <li><button type="button" data-open="p0"><i>01</i><b>Yvan</b><span>rider</span></button></li>
+      <li><button type="button" data-open="p1"><i>02</i><b>Lia</b><span>passenger</span></button></li>
+      <li><button type="button" data-open="rel"><i>03</i><b>Us</b><span>관계</span></button></li>
+      <li><button type="button" data-open="route"><i>04</i><b>Route 75</b><span>204 km</span></button></li>
+      <li><button type="button" data-open="bread"><i>05</i><b>Boulangerie</b><span>reçu</span></button></li>
+      <li><button type="button" data-open="notice"><i>06</i><b>Notice</b><span>안내 · 링크</span></button></li>
+    </ol>
+    <div class="dd fr"><b id="dday"></b><span>TOGETHER<br>06:00 CET</span></div>
+  </aside>
+</div>
+<div id="wins"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="data.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var L = LUV, K = KIT, e = L.esc;
+  document.querySelectorAll('.fr').forEach(function (f) { ['a', 'b', 'c', 'd'].forEach(function (k) { var i = document.createElement('i'); i.className = 'hd ' + k; i.setAttribute('aria-hidden', 'true'); f.appendChild(i); }); });
+  var sd = new Date(L.since + 'T00:00:00'), mons = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+  document.getElementById('dnum').insertAdjacentText('afterbegin', String(sd.getDate()).padStart(2, '0'));
+  document.getElementById('dmon').textContent = mons[sd.getMonth()];
+  document.getElementById('meta2').textContent = K.since('.') + ' 6AM (CET)';
+  document.getElementById('dday').textContent = 'D+' + L.days();
+  document.getElementById('trackp').textContent = L.relation.slice(0, 2).join(' ') + ' ' + L.tagline + '.';
+  // 리아 대사를 박스 줄로 쪼개기
+  var words = L.chars[1].line.split(' '), chunks = [], cur = '';
+  words.forEach(function (w) { if ((cur + ' ' + w).trim().length > 9 && cur) { chunks.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); });
+  if (cur) chunks.push(cur);
+  document.getElementById('lines').innerHTML = chunks.map(function (c) { return '<span>' + e(c) + '</span>'; }).join('');
+  // 픽셀 모자이크
+  var g = ['#0e0e0e', '#2b2b2b', '#6f6f6f', '#a7a7a7', '#d4d4d2', 'transparent'], m = '';
+  for (var i = 0; i < 48; i++) m += '<i style="background:' + g[(i * 7 + (i % 5) * 3 + (i > 24 ? 2 : 0)) % 6] + '"></i>';
+  document.getElementById('mosaic').innerHTML = m;
+
+  K.bind({
+    p0: function () { K.open('p0', 'TRACK 01 — YVAN', K.profile(0), { left: 240, top: 110 }); },
+    p1: function () { K.open('p1', 'TRACK 02 — LIA', K.profile(1), { left: 300, top: 150 }); },
+    rel: function () { K.open('rel', 'TRACK 03 — US', K.relation()); },
+    route: function () { K.open('route', 'TRACK 04 — ROUTE 75', K.route() + K.bike(), { w: 340 }); },
+    bread: function () { K.open('bread', 'TRACK 05 — REÇU', K.receipt(), { w: 300 }); },
+    notice: function () { K.open('notice', 'TRACK 06 — NOTICE', K.notice() + '<div style="height:12px"></div>' + K.links(), { w: 340 }); }
+  });
+
+  K.demo([['p1', 470, 80], ['route', 860, 330], ['bread', 120, 420]]);
+  var S = K.stage(document.getElementById('loop'), { fov: 32, z: 11, y: 2.5 });
+  if (!S) return;
+  var T = S.T;
+  // 서킷 모양의 닫힌 곡선 (올가미처럼 꼬인 루프)
+  var pts = [];
+  for (var k = 0; k < 14; k++) {
+    var a = k / 14 * Math.PI * 2;
+    pts.push(new T.Vector3(Math.cos(a) * (4.2 + Math.sin(a * 3) * .9), Math.sin(a * 2) * .9 + Math.cos(a * 5) * .25, Math.sin(a) * (2.4 + Math.cos(a * 2) * .6)));
+  }
+  var curve = new T.CatmullRomCurve3(pts, true, 'centripetal');
+  var tube = new T.Mesh(new T.TubeGeometry(curve, 400, .05, 8, true), new T.MeshBasicMaterial({ color: 0xf2f2f2 }));
+  var thin = new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(400).map(function (p) { return p.clone().multiplyScalar(1.12).setY(p.y - .25); })), new T.LineBasicMaterial({ color: 0x8a8a8a }));
+  var grp = new T.Group(); grp.add(tube, thin); S.scene.add(grp);
+  grp.rotation.set(.32, 0, -.12);
+  // 바이크 = 앞뒤 두 점 + 꼬리
+  var dot = new T.Mesh(new T.SphereGeometry(.13, 16, 16), new T.MeshBasicMaterial({ color: 0xffffff })); grp.add(dot);
+  var dot2 = new T.Mesh(new T.SphereGeometry(.09, 16, 16), new T.MeshBasicMaterial({ color: 0xffffff })); grp.add(dot2);
+  var trailN = 60, tp = new Float32Array(trailN * 3), tg = new T.BufferGeometry(); tg.setAttribute('position', new T.BufferAttribute(tp, 3));
+  var trail = new T.Line(tg, new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: .55 })); grp.add(trail);
+  var spin = K.spin(S.renderer.domElement, grp, { x: .32, y: 0 });
+  S.cam.lookAt(0, 0, 0);
+  S.loop(function (t) {
+    spin(t, .08);
+    var u = (t * .045) % 1;
+    dot.position.copy(curve.getPointAt(u)); dot2.position.copy(curve.getPointAt((u + .985) % 1));
+    for (var j = 0; j < trailN; j++) { var p = curve.getPointAt((u - j * .0022 + 1) % 1); tp[j * 3] = p.x; tp[j * 3 + 1] = p.y + .02; tp[j * 3 + 2] = p.z; }
+    tg.attributes.position.needsUpdate = true;
+  });
+})();
+</script>
+</body>
+</html>
