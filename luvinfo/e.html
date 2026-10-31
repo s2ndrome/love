@@ -308,7 +308,6 @@ button { font: inherit; color: inherit; }
   <aside class="right">
     <div class="track">
       <h2>TRACK <small>INDEX.01</small><em>Ride Out</em></h2>
-      <p id="trackp"></p>
       <p class="last">At last, the engine is warm.</p>
     </div>
     <ol class="list">
@@ -351,7 +350,6 @@ button { font: inherit; color: inherit; }
   document.getElementById('dmon').textContent = mon;
   document.getElementById('mnum').textContent = dd;
   document.getElementById('mmon').innerHTML = mon.slice(0, 3) + '<small>SINCE</small>';
-  document.getElementById('trackp').textContent = L.relation.slice(0, 2).join(' ') + ' ' + L.tagline + '.';
   var tk = ['Yvan', 'Lia', 'Issue 01', 'Route 75', 'Paris → Deauville', 'Café Racer 900', 'Lap ∞', 'Boulangerie Y·L', Y.plate, Li.plate];
   document.getElementById('tick').innerHTML = tk.concat(tk).map(function (t) { return '<span>' + e(t) + '</span><span>//</span>'; }).join('');
   // 리아 대사를 박스 줄로
