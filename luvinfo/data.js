@@ -16,7 +16,7 @@ window.LUV = {
       age: '25', height: '186', birth: '02.18',
       color: '#2b3a67', colorName: 'MIDNIGHT INK', // 임시
       keywords: ['가죽 재킷', '무심한 다정', '헬멧은 늘 두 개'], // 임시
-      line: '타. 해 뜨기 전에 바다까지 데려다줄게.',          // 임시
+      line: '씨발, 또 2등?',
       likes: '새벽 국도, 엔진 정비, 리아의 잔소리',  // 임시
       dislikes: '비 오는 날 주행, 소란'              // 임시
     },
