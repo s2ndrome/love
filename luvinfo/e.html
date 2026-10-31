@@ -263,7 +263,7 @@ button { font: inherit; color: inherit; }
     <ol class="list">
       <li><button type="button" data-open="p0"><i>01</i><b>Yvan</b><span>rider</span></button></li>
       <li><button type="button" data-open="p1"><i>02</i><b>Lia</b><span>passenger</span></button></li>
-      <li><button type="button" data-open="rel"><i>03</i><b>Us</b><span>관계</span></button></li>
+      <li><button type="button" data-open="rel"><i>03</i><b>Le Mans</b><span>관계</span></button></li>
       <li><button type="button" data-open="route"><i>04</i><b>Route</b><span>204 km</span></button></li>
       <li><button type="button" data-open="bread"><i>05</i><b>Reçu</b><span>boulangerie</span></button></li>
       <li><button type="button" data-open="notice"><i>06</i><b>Notice</b><span>안내 · 링크</span></button></li>
@@ -331,7 +331,7 @@ button { font: inherit; color: inherit; }
   K.bind({
     p0: one(function () { K.open('p0', 'TRACK 01 — YVAN', yvanPop(), { left: 230, top: 90, w: 440 }); }),
     p1: one(function () { K.open('p1', 'TRACK 02 — LIA', liaPop(), { left: 300, top: 130, w: 440 }); }),
-    rel: one(function () { K.open('rel', 'TRACK 03 — US', K.relation(), { w: 380 }); }),
+    rel: one(function () { K.open('rel', 'TRACK 03 — LE MANS', K.relation(), { w: 380 }); }),
     route: one(function () { K.open('route', 'TRACK 04 — ROUTE 75', K.route() + K.bike(), { w: 340 }); }),
     bread: one(function () { K.open('bread', 'TRACK 05 — REÇU', K.receipt(), { w: 300 }); }),
     notice: one(function () { K.open('notice', 'TRACK 06 — NOTICE', K.notice() + '<div style="height:12px"></div>' + K.links(), { w: 340 }); })
