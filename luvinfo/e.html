@@ -13,6 +13,7 @@
 :root {
   --paper: #f4f4f1;
   --ink: #0d0d0d;
+  --night: #0b0b0b;
   --g1: #2a2a2a; --g2: #6c6c6a; --g3: #a6a6a3; --g4: #d6d6d2;
   --cond: "Big Shoulders Display", "Arial Narrow", sans-serif;
   --script: "Mrs Saint Delafield", "Snell Roundhand", cursive;
@@ -99,7 +100,27 @@ button { font: inherit; color: inherit; }
 .list button:hover, .list button:focus-visible { color: var(--paper); outline: none; padding-left: 8px; transition: padding .35s var(--ease); }
 .list button:hover i, .list button:hover span, .list button:focus-visible i, .list button:focus-visible span { color: var(--g3); }
 .tele { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr) auto auto; min-height: 0; }
-.tele .map { display: grid; grid-template-rows: auto minmax(0, 1fr); min-height: 90px; }
+.tele .map { display: grid; grid-template-rows: minmax(92px, 1fr) auto; padding: 0 !important; }
+.rs-k { display: flex; justify-content: space-between; font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); }
+.rs-k em { font-style: normal; }
+.rs-l { position: relative; background: var(--night); color: #e8e8e4; padding: 8px 10px; display: grid; grid-template-rows: auto 1fr auto; gap: 6px; cursor: pointer; min-height: 0; }
+.rs-l .rs-k { color: #8a8a86; }
+.rs-l:focus-visible { outline: 2px dashed var(--ink); outline-offset: 2px; }
+.rs-g { display: flex; justify-content: center; align-items: center; gap: 7px; }
+.rs-g i { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #5a5a58; background: #151515; }
+.rs-g i.on { background: #f4f4f1; border-color: #f4f4f1; box-shadow: 0 0 12px rgba(255,255,250,.45); }
+.rs-lo { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-46%); text-align: center; font: 900 30px/1 var(--cond); letter-spacing: .02em; opacity: 0; pointer-events: none; }
+.rs-l.out .rs-lo { opacity: 1; } .rs-l.out .rs-g { opacity: 0; }
+.rs-r { display: flex; justify-content: space-between; font: 500 8.5px/1 var(--mono); letter-spacing: .1em; color: #8a8a86; }
+.rs-r b { font: 900 15px/1 var(--cond); color: #e8e8e4; letter-spacing: 0; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.rs-t { padding: 8px 10px; display: grid; grid-template-rows: auto 1fr; gap: 6px; border-top: 1px solid var(--ink); min-height: 0; }
+.rs-ty { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; }
+.ty1 { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; gap: 3px 8px; align-items: center; }
+.ty1 .pr { grid-row: 1 / 4; width: 26px; height: 46px; border: 1.5px solid var(--ink); border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; }
+.ty1 .pr i { transition: background .4s; }
+.ty1 .cp { font: 900 14px/1 var(--cond); letter-spacing: .02em; } .ty1 .cp small { font: 500 8px/1 var(--mono); color: var(--g2); margin-right: 4px; letter-spacing: .08em; }
+.ty1 .dg { font: 900 22px/1 var(--cond); font-variant-numeric: tabular-nums; } .ty1 .dg small { font: 500 8px/1 var(--mono); margin-left: 1px; }
+.ty1 .wr { height: 4px; border: 1px solid var(--ink); position: relative; } .ty1 .wr i { position: absolute; inset: 0 auto 0 0; background: var(--ink); }
 .tele svg { width: 100%; height: 100%; display: block; margin-top: 6px; overflow: visible; }
 .tele > div { padding: 8px 10px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
 .tele > div:nth-child(2n) { border-right: 0; } .tele > div:nth-last-child(-n+2) { border-bottom: 0; }
@@ -183,6 +204,23 @@ button { font: inherit; color: inherit; }
 .iv-a small { display: block; font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); margin: 3px 0 6px; }
 .iv-a .en { margin: 0; font: italic 600 16.5px/1.3 var(--it); letter-spacing: .005em; }
 .iv-a .ko { margin: 6px 0 0; font: 400 12.5px/1.65 var(--ko); word-break: keep-all; }
+@media (min-width: 721px) and (max-height: 960px) { .track p:not(.last) { display: none; } .track .last { margin-top: 8px; } }
+/* 06 NOTICE + BGM 버튼 */
+.nt-e b { display: block; font: 900 30px/1 var(--cond); letter-spacing: .01em; text-transform: uppercase; }
+.nt-e ul { margin: 8px 0 0; padding-left: 16px; } .nt-e li { word-break: keep-all; }
+.bgm { margin-top: 16px; width: 100%; display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 10px; background: var(--night); color: #e8e8e4; border: 1px solid var(--ink); padding: 10px 12px; cursor: pointer; text-align: left; }
+.bgm:focus-visible { outline: 2px dashed var(--ink); outline-offset: 3px; }
+.bgm-ic { display: flex; align-items: end; gap: 2px; height: 16px; }
+.bgm-ic i { width: 3px; height: 4px; background: #e8e8e4; }
+.bgm.on .bgm-ic i { animation: eq .9s ease-in-out infinite; } .bgm.on .bgm-ic i:nth-child(2) { animation-delay: .2s; } .bgm.on .bgm-ic i:nth-child(3) { animation-delay: .45s; } .bgm.on .bgm-ic i:nth-child(4) { animation-delay: .1s; }
+@keyframes eq { 0%, 100% { height: 4px; } 50% { height: 16px; } }
+.bgm-k { font: 500 9.5px/1 var(--mono); letter-spacing: .14em; border: 1px solid #8a8a86; padding: 3px 5px; color: #a6a6a3; }
+.bgm-t { min-width: 0; } .bgm-t b { display: block; font: 900 19px/1 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
+.bgm-t em { display: block; font: italic 500 12.5px/1.2 var(--it); color: #a6a6a3; letter-spacing: .06em; margin-top: 2px; }
+.bgm-s { font: 500 10px/1 var(--mono); letter-spacing: .1em; background: #e8e8e4; color: var(--night); padding: 6px 8px; }
+.bgm:hover .bgm-s { background: #fff; }
+.bgm-frame { position: fixed; left: -9999px; top: 0; width: 200px; height: 200px; border: 0; }
+@media (prefers-reduced-motion: reduce) { .bgm.on .bgm-ic i { animation: none; height: 10px; } }
 /* 태블릿 */
 @media (max-width: 1100px) {
   .spread { grid-template-columns: minmax(0, 1fr) 280px; }
@@ -260,7 +298,6 @@ button { font: inherit; color: inherit; }
     <span class="ui tr" id="uitr">ISO 3200 · 1/60</span>
     <span class="ui bl">DRAG TO ROTATE</span>
     <button class="lines" type="button" data-open="p1" id="lines" aria-label="Hold on tight. Lights out and away we go. 리아 프로필 열기"></button>
-    <span class="tagr">à l'aube</span>
   </section>
   <section class="title">
     <div class="rib"><span>Rider</span><span>//</span><span>ライダー</span><span>//</span><span>라이더</span></div>
@@ -280,10 +317,18 @@ button { font: inherit; color: inherit; }
       <li><button type="button" data-open="rel"><i>03</i><b>Le Mans</b><span>관계</span></button></li>
       <li><button type="button" data-open="route"><i>04</i><b>Route</b><span>204 km</span></button></li>
       <li><button type="button" data-open="bread"><i>05</i><b>Reçu</b><span>boulangerie</span></button></li>
-      <li><button type="button" data-open="notice"><i>06</i><b>Notice</b><span>안내</span></button></li>
+      <li><button type="button" data-open="notice"><i>06</i><b>Notice</b><span>안내 · BGM</span></button></li>
     </ol>
     <dl class="tele fr" aria-live="off">
-      <div class="wide map"><dt>TOP VIEW · 1:2 000 000</dt><svg id="map" viewBox="-6 -4 12 8" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg></div>
+      <div class="wide map rs">
+        <div class="rs-l" id="rsL" role="button" tabindex="0" aria-label="출발 신호등. 불이 꺼지는 순간 누르면 반응속도를 재요">
+          <span class="rs-k">START · LIGHTS</span>
+          <div class="rs-g" id="rsG"></div>
+          <b class="rs-lo" id="rsLo">LIGHTS OUT</b>
+          <span class="rs-r"><span>REACTION <b id="rsRt">—</b></span><span>BEST <b id="rsRb">—</b></span></span>
+        </div>
+        <div class="rs-t"><span class="rs-k">TYRE · TEMP / WEAR<em id="rsLap">LAP 01</em></span><div class="rs-ty" id="rsTy"></div></div>
+      </div>
       <div class="wide"><dt>NOW RIDING</dt><dd id="tNow">PARIS → ROUEN</dd><div class="bar"><i id="tBar"></i></div></div>
       <div><dt>KM</dt><dd id="tKm">0</dd></div>
       <div><dt>KM/H</dt><dd id="tSp">0</dd></div>
@@ -307,7 +352,7 @@ button { font: inherit; color: inherit; }
   document.getElementById('mnum').textContent = dd;
   document.getElementById('mmon').innerHTML = mon.slice(0, 3) + '<small>SINCE</small>';
   document.getElementById('trackp').textContent = L.relation.slice(0, 2).join(' ') + ' ' + L.tagline + '.';
-  var tk = ['Yvan', 'Lia', 'Issue 01', 'Route 75', 'À l\'aube', 'Paris → Deauville', 'Café Racer 900', 'Lap ∞', 'Boulangerie Y·L', Y.plate, Li.plate];
+  var tk = ['Yvan', 'Lia', 'Issue 01', 'Route 75', 'Paris → Deauville', 'Café Racer 900', 'Lap ∞', 'Boulangerie Y·L', Y.plate, Li.plate];
   document.getElementById('tick').innerHTML = tk.concat(tk).map(function (t) { return '<span>' + e(t) + '</span><span>//</span>'; }).join('');
   // 리아 대사를 박스 줄로
   // 패널 위 박스 문구 (레이싱 콜) — 바꾸려면 이 배열만 고치면 돼요
@@ -350,6 +395,28 @@ button { font: inherit; color: inherit; }
           '<div class="iv-a"><i>A' + (i + 1) + '</i><div><small>YVAN STADEL · ATLAS FACTORY</small><p class="en">“' + e(q[1]) + '”</p><p class="ko">' + e(q[2]) + '</p></div></div>';
       }).join('') + '</div>';
   }
+  // 06 NOTICE: 안내 3줄 + BGM 버튼 (유튜브, 팝업을 닫아도 계속 재생)
+  var bgm = { frame: null, on: false };
+  function noticePop() {
+    var N = L.noticeE, B = L.bgm;
+    return '<div class="nt-e"><b>' + e(N[0]) + '</b><ul>' + N.slice(1).map(function (t) { return '<li>' + e(t) + '</li>'; }).join('') + '</ul></div>' +
+      '<button type="button" class="bgm" aria-pressed="false"><span class="bgm-ic"><i></i><i></i><i></i><i></i></span><span class="bgm-k">BGM</span><span class="bgm-t"><b>' + e(B.title) + '</b><em>' + e(B.artist) + '</em></span><span class="bgm-s">PLAY</span></button>';
+  }
+  function ytCmd(f) { if (bgm.frame) bgm.frame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: f, args: [] }), '*'); }
+  function paintBgm() { document.querySelectorAll('.bgm').forEach(function (b) { b.setAttribute('aria-pressed', bgm.on); b.classList.toggle('on', bgm.on); b.querySelector('.bgm-s').textContent = bgm.on ? 'PAUSE' : 'PLAY'; }); }
+  function bindBgm(w) {
+    var b = w.querySelector('.bgm');
+    b.onclick = function () {
+      if (!bgm.frame) {
+        var id = L.bgm.yt, f = document.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&playsinline=1&loop=1&playlist=' + id + '&enablejsapi=1&rel=0';
+        f.allow = 'autoplay; encrypted-media'; f.title = 'BGM ' + L.bgm.title; f.className = 'bgm-frame'; f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
+        document.body.appendChild(f); bgm.frame = f; bgm.on = true;
+      } else { bgm.on = !bgm.on; ytCmd(bgm.on ? 'playVideo' : 'pauseVideo'); }
+      paintBgm();
+    };
+    paintBgm();
+  }
   var one = function (f) { return function () { if (innerWidth <= 720) K.closeAll(); f(); }; };
   K.bind({
     p0: one(function () { K.open('p0', 'TRACK 01 — YVAN', yvanPop(), { left: 230, top: 90, w: 440 }); }),
@@ -357,12 +424,56 @@ button { font: inherit; color: inherit; }
     rel: one(function () { K.open('rel', 'TRACK 03 — LE MANS', interviewPop(), { left: 260, top: 70, w: 480 }); }),
     route: one(function () { K.open('route', 'TRACK 04 — ROUTE 75', K.route() + K.bike(), { w: 340 }); }),
     bread: one(function () { K.open('bread', 'TRACK 05 — REÇU', K.receipt(), { w: 300 }); }),
-    notice: one(function () { K.open('notice', 'TRACK 06 — NOTICE', K.notice(), { w: 340 }); })
+    notice: one(function () { var w = K.open('notice', 'TRACK 06 — NOTICE', noticePop(), { w: 340 }); bindBgm(w); })
   });
   K.demo([['p1', 440, 70], ['route', 880, 300], ['bread', 110, 400]]);
 
   // 등장 연출 한 번
   requestAnimationFrame(function () { requestAnimationFrame(function () { document.body.classList.add('ready'); document.body.classList.remove('intro'); }); });
+
+  // 위젯 칸: 출발 신호등 (눌러서 반응속도)
+  (function () {
+    var box = document.getElementById('rsL'), g = document.getElementById('rsG'), rt = document.getElementById('rsRt'), rb = document.getElementById('rsRb');
+    g.innerHTML = '<i></i><i></i><i></i><i></i><i></i>';
+    var lights = g.querySelectorAll('i'), state = 'idle', outAt = 0, best = null, tm = [];
+    function clear() { tm.forEach(clearTimeout); tm = []; }
+    function run() {
+      clear(); state = 'arming'; box.classList.remove('out'); lights.forEach(function (l) { l.classList.remove('on'); });
+      for (var i = 0; i < 5; i++) (function (i) { tm.push(setTimeout(function () { lights[i].classList.add('on'); }, 700 + i * 900)); })(i);
+      tm.push(setTimeout(function () {
+        lights.forEach(function (l) { l.classList.remove('on'); }); box.classList.add('out'); state = 'out'; outAt = performance.now();
+        tm.push(setTimeout(function () { if (state === 'out') { state = 'idle'; tm.push(setTimeout(run, 1800)); } }, 2200));
+      }, 700 + 4 * 900 + 600 + Math.random() * 1800));
+    }
+    function hit() {
+      if (state === 'out') { var r = (performance.now() - outAt) / 1000; rt.textContent = r.toFixed(3); if (best === null || r < best) { best = r; rb.textContent = r.toFixed(3); } state = 'idle'; clear(); tm.push(setTimeout(run, 2200)); }
+      else if (state === 'arming') { rt.textContent = 'JUMP'; clear(); lights.forEach(function (l) { l.classList.remove('on'); }); state = 'idle'; tm.push(setTimeout(run, 1800)); }
+    }
+    box.addEventListener('pointerdown', hit);
+    box.addEventListener('keydown', function (ev) { if (ev.key === ' ' || ev.key === 'Enter') { ev.preventDefault(); hit(); } });
+    if (L.reduced) { rt.textContent = '—'; } else run();
+  })();
+  // 위젯 칸: 타이어 온도 / 마모 (서킷 한 바퀴 = 약 36초에 맞춤)
+  (function () {
+    var el = document.getElementById('rsTy'), lapEl = document.getElementById('rsLap'), LAPS = 1 / .028, t0 = performance.now(), last = 0;
+    var ty = [['FRONT', 'SOFT'], ['REAR', 'MEDIUM']];
+    el.innerHTML = ty.map(function (t, i) { return '<div class="ty1"><div class="pr" id="tp' + i + '"><i></i><i></i><i></i></div><span class="cp"><small>' + t[0] + '</small>' + t[1] + '</span><span class="dg" id="td' + i + '">—</span><div class="wr"><i id="tw' + i + '"></i></div></div>'; }).join('');
+    function shade(tp) { var k = Math.max(0, Math.min(1, (tp - 92) / 30)), v = Math.round(232 - k * 215); return 'rgb(' + v + ',' + v + ',' + (v - 2) + ')'; }
+    (function loop() {
+      var t = (performance.now() - t0) / 1000;
+      if (t - last > .3) { last = t;
+        var u = (t % LAPS) / LAPS, lap = Math.floor(t / LAPS), side = Math.sin(u * Math.PI * 6);
+        [0, 1].forEach(function (i) {
+          var base = i ? 96 : 104, temps = [base + Math.max(0, -side) * 16 + Math.random() * 2, base + 4 + Math.random() * 2, base + Math.max(0, side) * 16 + Math.random() * 2];
+          var cells = document.querySelectorAll('#tp' + i + ' i'); temps.forEach(function (tp, k) { cells[k].style.background = shade(tp); });
+          document.getElementById('td' + i).innerHTML = Math.round(Math.max.apply(null, temps)) + '<small>°C</small>';
+          document.getElementById('tw' + i).style.width = Math.max(18, 100 - (lap + u) * (i ? 9 : 14)) + '%';
+        });
+        lapEl.textContent = 'LAP ' + String(lap + 1).padStart(2, '0');
+      }
+      requestAnimationFrame(loop);
+    })();
+  })();
 
   var cv = document.getElementById('loop');
   var S = K.stage(cv, { fov: 30, z: 14, y: 5, fit: function (c, w, h) { var a = w / h, z = Math.max(13.5, 11.6 / (.536 * a)); c.position.set(0, z * .36, z); c.lookAt(0, a < 1.1 ? -1.6 : -.4, 0); } });
@@ -410,13 +521,6 @@ button { font: inherit; color: inherit; }
     var ban = new T.Mesh(new T.PlaneGeometry(1.4, .22), new T.MeshBasicMaterial({ map: tx, side: T.DoubleSide }));
     ban.position.copy(p0).add(new T.Vector3(0, 1.02, 0)); ban.lookAt(ban.position.clone().add(t0v)); grp.add(ban);
   })();
-  // 탑뷰 미니맵
-  var svg = document.getElementById('map'), ns = 'http://www.w3.org/2000/svg';
-  var mp = curve.getPoints(200).map(function (q) { return q.x.toFixed(2) + ' ' + q.z.toFixed(2); }).join(' L ');
-  svg.innerHTML = '<path d="M ' + mp + ' Z" fill="none" stroke="#0d0d0d" stroke-width=".09"/><path d="M ' + mp + ' Z" fill="none" stroke="#a6a6a3" stroke-width=".04" transform="translate(.25 .3)"/>' +
-    wps.map(function (wp) { return '<circle cx="' + wp.p.x.toFixed(2) + '" cy="' + wp.p.z.toFixed(2) + '" r=".16" fill="#f4f4f1" stroke="#0d0d0d" stroke-width=".06"/><text x="' + (wp.p.x + .3).toFixed(2) + '" y="' + (wp.p.z - .25).toFixed(2) + '" font-size=".55" font-family="IBM Plex Mono, monospace" fill="#0d0d0d">' + wp.name + '</text>'; }).join('') +
-    '<circle id="mdot" r=".26" fill="#0d0d0d"/>';
-  var mdot = document.getElementById('mdot');
   // 바이크
   var bike = K.bike3D(T, { line: 0xffffff, faint: 0xbdbdb9, dims: false, ground: false });
   bike.scale.setScalar(.46); grp.add(bike);
@@ -438,7 +542,6 @@ button { font: inherit; color: inherit; }
     bike.position.copy(p).add(new T.Vector3(0, .52, 0));
     bike.quaternion.setFromUnitVectors(X, tan);
     bike.tick(t * 6);
-    mdot.setAttribute('cx', p.x.toFixed(2)); mdot.setAttribute('cy', p.z.toFixed(2));
     for (var j = 0; j < trailN; j++) { var q = curve.getPointAt((u - j * .0018 + 1) % 1); tp[j * 3] = q.x; tp[j * 3 + 1] = q.y + .05; tp[j * 3 + 2] = q.z; }
     tg.attributes.position.needsUpdate = true;
     // 경유지 라벨 위치

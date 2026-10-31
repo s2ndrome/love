@@ -99,6 +99,10 @@ window.LUV = {
        '날 기다리는 사람에게 돌아가야 했어. 데이터 쪼가리 10분 더 쳐다보는 것보다 그게 더 중요해. 우리 팀은 내 우선순위를 알아. 그리고 지금 내 우선순위는 이 좆같은 인터뷰에서 꺼지는 거야. 끝.']
     ]
   },
+  // 06 NOTICE 팝업 (첫 줄은 제목처럼 굵게)
+  noticeE: ['MO1 YVAN', '로그 누수 / 백업 목적 계정', '따로 교류는 안 하고 있어요.'],
+  // BGM 버튼 — 유튜브 영상 ID
+  bgm: { title: 'Unstoppable Now', artist: 'The Phantoms', yt: 'DKgFy49fLP4' },
   route: [ // 둘이 자주 가는 길 (임시) — ['지명', km]
     ['PARIS', 0], ['ROUEN', 135], ['HONFLEUR', 190], ['DEAUVILLE', 204]
   ],
