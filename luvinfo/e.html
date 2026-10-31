@@ -101,14 +101,15 @@ button { font: inherit; color: inherit; }
 .tele { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr) auto auto; min-height: 0; }
 .tele .map { display: grid; grid-template-rows: auto minmax(0, 1fr); min-height: 90px; }
 .tele svg { width: 100%; height: 100%; display: block; margin-top: 6px; overflow: visible; }
-.tele div { padding: 8px 10px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
-.tele div:nth-child(2n) { border-right: 0; } .tele div:nth-last-child(-n+2) { border-bottom: 0; }
+.tele > div { padding: 8px 10px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.tele > div:nth-child(2n) { border-right: 0; } .tele > div:nth-last-child(-n+2) { border-bottom: 0; }
 .tele dt { font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); }
 .tele dd { margin: 5px 0 0; font: 900 26px/1 var(--cond); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tele .wide { grid-column: 1 / -1; border-right: 0; }
 .bar { height: 4px; background: var(--g4); margin-top: 7px; } .bar i { display: block; height: 100%; width: 0; background: var(--ink); }
 .dd { display: flex; justify-content: space-between; align-items: end; padding: 10px 12px; }
-.dd b { font: 900 52px/.8 var(--cond); }
+.dd b { font: 900 44px/.8 var(--cond); white-space: nowrap; }
+.dd b i { font-style: normal; color: var(--g3); margin: 0 4px; }
 .dd span { font: 500 9.5px/1.5 var(--mono); text-align: right; letter-spacing: .06em; }
 
 /* 등장 연출 (한 번) */
@@ -181,7 +182,7 @@ button { font: inherit; color: inherit; }
   .ui.bl { display: none; } .ui { font-size: 8.5px; } .wp { font-size: 8px; } .wp b { font-size: 12px; }
     .track { display: none; }
   .tele { order: 3; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; }
-  .tele div { padding: 6px 8px; border-bottom: 0; } .tele div:nth-child(2n) { border-right: 1px solid var(--ink); } .tele div:last-child { border-right: 0; }
+  .tele > div { padding: 6px 8px; border-bottom: 0; } .tele > div:nth-child(2n) { border-right: 1px solid var(--ink); } .tele > div:last-child { border-right: 0; }
   .tele .wide { grid-column: auto; border-right: 1px solid var(--ink); }
   .tele .map { display: none; }
   .tele dd { font-size: 19px; } .tele dt { font-size: 8px; } .bar { display: none; }
@@ -204,7 +205,8 @@ button { font: inherit; color: inherit; }
 .mtop .md b { background: var(--ink); color: var(--paper); font: 900 34px/1 var(--cond); padding: 4px 6px 0; }
 .mtop .md span { font: 900 17px/.9 var(--cond); display: grid; align-content: center; }
 .mtop .md span small { font: italic 500 9px/1.2 var(--it); letter-spacing: .1em; }
-.mtop .mdd { font: 900 34px/1 var(--cond); }
+.mtop .mdd { font: 900 24px/1 var(--cond); white-space: nowrap; }
+.mtop .mdd small { font: 500 9px/1 var(--mono); color: var(--g2); margin: 0 3px 0 6px; vertical-align: 4px; }
 @media (prefers-reduced-motion: reduce) {
   .ticker div, .ui .rec { animation: none; }
   .intro .panel, .intro .title h1, .intro .title .scr, .intro .date, .intro .list li { clip-path: none; opacity: 1; transform: none; }
@@ -259,7 +261,7 @@ button { font: inherit; color: inherit; }
       <div><dt>KM</dt><dd id="tKm">0</dd></div>
       <div><dt>KM/H</dt><dd id="tSp">0</dd></div>
     </dl>
-    <div class="dd fr"><b id="dday"></b><span>TOGETHER<br>06:00 CET</span></div>
+    <div class="dd fr"><b id="bday"></b><span>BIRTHDAY<br>YVAN / LIA</span></div>
   </aside>
 </div>
 <div id="wins"></div>
@@ -277,11 +279,11 @@ button { font: inherit; color: inherit; }
   document.getElementById('dmon').textContent = mon;
   document.getElementById('mnum').textContent = dd;
   document.getElementById('mmon').innerHTML = mon.slice(0, 3) + '<small>SINCE</small>';
-  document.getElementById('mdd').textContent = 'D+' + L.days();
+  document.getElementById('mdd').innerHTML = '<small>Y</small>' + Y.birth + ' <small>L</small>' + Li.birth;
   document.getElementById('meta2').textContent = K.since('.') + ' · 6AM (CET)';
-  document.getElementById('dday').textContent = 'D+' + L.days();
+  document.getElementById('bday').innerHTML = Y.birth + '<i>/</i>' + Li.birth;
   document.getElementById('trackp').textContent = L.relation.slice(0, 2).join(' ') + ' ' + L.tagline + '.';
-  var tk = ['Yvan', 'Lia', 'Issue 01', 'Route 75', 'À l\'aube', 'Paris → Deauville', 'D+' + L.days(), 'Boulangerie Y·L', Y.plate, Li.plate];
+  var tk = ['Yvan', 'Lia', 'Issue 01', 'Route 75', 'À l\'aube', 'Paris → Deauville', 'Café Racer 900', 'Boulangerie Y·L', Y.plate, Li.plate];
   document.getElementById('tick').innerHTML = tk.concat(tk).map(function (t) { return '<span>' + e(t) + '</span><span>//</span>'; }).join('');
   // 리아 대사를 박스 줄로
   var words = Li.line.split(' '), chunks = [], cur = '';
@@ -342,7 +344,7 @@ button { font: inherit; color: inherit; }
   var mdot = document.getElementById('mdot');
   // 바이크
   var bike = K.bike3D(T, { line: 0xffffff, faint: 0xbdbdb9, dims: false, ground: false });
-  bike.scale.setScalar(.2); grp.add(bike);
+  bike.scale.setScalar(.46); grp.add(bike);
   var trailN = 80, tp = new Float32Array(trailN * 3), tg = new T.BufferGeometry(); tg.setAttribute('position', new T.BufferAttribute(tp, 3));
   grp.add(new T.Line(tg, new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: .6 })));
   var spin = K.spin(cv, grp, { x: 0, y: 0 });
@@ -355,7 +357,7 @@ button { font: inherit; color: inherit; }
     spin(t, .05);
     var u = L.reduced ? .32 : (t * .028) % 1;
     var p = curve.getPointAt(u), tan = curve.getTangentAt(u);
-    bike.position.copy(p).add(new T.Vector3(0, .24, 0));
+    bike.position.copy(p).add(new T.Vector3(0, .52, 0));
     bike.quaternion.setFromUnitVectors(X, tan);
     bike.tick(t * 6);
     mdot.setAttribute('cx', p.x.toFixed(2)); mdot.setAttribute('cy', p.z.toFixed(2));

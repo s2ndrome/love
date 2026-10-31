@@ -97,50 +97,111 @@
     return '<div class="rc"><p class="rc-h">BOULANGERIE Y·L<br><small>12 RUE DES ROSIERS 75004</small></p>' +
       '<p class="rc-m"><span>' + K.since('/') + '</span><span>' + t + '</span></p><ul>' +
       L.bakery.map(function (m) { return '<li><span>1 × ' + e(m[0]) + '</span><span>' + m[1] + '</span></li>'; }).join('') +
-      '</ul><p class="rc-t"><span>TOTAL</span><span>D+' + L.days() + '</span></p><p class="rc-f">MERCI · À DEMAIN 06:00</p></div>';
+      '</ul><p class="rc-t"><span>TOTAL</span><span>€ ' + L.bakery.reduce(function (a, m) { return a + parseFloat(m[1]); }, 0).toFixed(2) + '</span></p><p class="rc-f">MERCI · À DEMAIN 06:00</p></div>';
   };
 
-  /* ---------- 3D 바이크 (선으로만) ---------- */
-  // K.bike3D(THREE, { line: 0x111111, faint: 0x111111, accent: 0x2546a8 }) → Group
+  /* ---------- 3D 오토바이 (카페 레이서, 선으로만) ---------- */
+  // K.bike3D(THREE, { line, faint, accent, dims, ground }) → Group.  앞 = +x, 위 = +y
   K.bike3D = function (T, o) {
     o = o || {};
-    var main = new T.LineBasicMaterial({ color: o.line != null ? o.line : 0x111111, transparent: true, opacity: o.op || 1 });
-    var faint = new T.LineBasicMaterial({ color: o.faint != null ? o.faint : (o.line != null ? o.line : 0x111111), transparent: true, opacity: .32 });
+    var col = o.line != null ? o.line : 0x111111;
+    var main = new T.LineBasicMaterial({ color: col });
+    var faint = new T.LineBasicMaterial({ color: o.faint != null ? o.faint : col, transparent: true, opacity: .4 });
     var acc = new T.LineBasicMaterial({ color: o.accent != null ? o.accent : 0x2546a8 });
-    var root = new T.Group(), R = 1, WB = 3.1;
-    function add(x) { root.add(x); return x; }
-    function edges(g, m) { return new T.LineSegments(new T.EdgesGeometry(g, 20), m || main); }
+    var root = new T.Group(), R = 1, WB = 3.3, fx = WB / 2, rx = -WB / 2;
+    function add(x, p, r) { if (p) x.position.set(p[0], p[1], p[2] || 0); if (r) x.rotation.set(r[0] || 0, r[1] || 0, r[2] || 0); root.add(x); return x; }
+    function ed(g, m, th) { return new T.LineSegments(new T.EdgesGeometry(g, th || 24), m || main); }
     function seg(pts, m) { return new T.Line(new T.BufferGeometry().setFromPoints(pts.map(function (p) { return new T.Vector3(p[0], p[1], p[2] || 0); })), m || main); }
+    function both(fn) { fn(1); fn(-1); }
+    function circ(r, n) { var p = []; for (var i = 0; i <= n; i++) { var a = i / n * Math.PI * 2; p.push(new T.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0)); } return p; }
+    function ring(r, m, n) { return new T.Line(new T.BufferGeometry().setFromPoints(circ(r, n || 40)), m || main); }
+    function tube(a, b, r, m) { // a→b 원통을 선 두 줄로
+      var A = new T.Vector3(a[0], a[1], a[2] || 0), B = new T.Vector3(b[0], b[1], b[2] || 0), d = B.clone().sub(A).normalize();
+      var n = new T.Vector3(0, 0, 1).cross(d).normalize().multiplyScalar(r);
+      var g = new T.BufferGeometry().setFromPoints([A.clone().add(n), B.clone().add(n), A.clone().sub(n), B.clone().sub(n), A.clone().add(n), A.clone().sub(n), B.clone().add(n), B.clone().sub(n)]);
+      var l = new T.LineSegments(g, m || main); root.add(l); return l;
+    }
+    function ellipsoid(c, sx, sy, sz, m) { // 등고선으로 그린 타원체
+      var g = new T.Group(); g.position.set(c[0], c[1], c[2] || 0);
+      [-.55, 0, .55].forEach(function (k) { var rr = Math.sqrt(1 - k * k), e = ring(1, m, 40); e.scale.set(sx * rr, sz * rr, 1); e.rotation.x = Math.PI / 2; e.position.y = k * sy; g.add(e); });
+      var side = ring(1, m, 40); side.scale.set(sx, sy, 1); g.add(side);
+      var cross = ring(1, faint, 30); cross.scale.set(sz, sy, 1); cross.rotation.y = Math.PI / 2; g.add(cross);
+      [-.5, .5].forEach(function (k) { var c2 = ring(1, faint, 30); var rr = Math.sqrt(1 - k * k); c2.scale.set(sz * rr, sy * rr, 1); c2.rotation.y = Math.PI / 2; c2.position.x = k * sx; g.add(c2); });
+      root.add(g); return g;
+    }
     root.wheels = [];
-    [-WB / 2, WB / 2].forEach(function (x) {
-      var g = new T.Group(); g.position.x = x;
-      g.add(new T.LineSegments(new T.WireframeGeometry(new T.TorusGeometry(R, .14, 4, 36)), main));
-      g.add(edges(new T.CylinderGeometry(.8, .8, .06, 40).rotateX(Math.PI / 2), faint));
-      var sp = []; for (var i = 0; i < 18; i++) { var a = i / 18 * Math.PI * 2, z = i % 2 ? .07 : -.07; sp.push(new T.Vector3(0, 0, z), new T.Vector3(Math.cos(a) * .8, Math.sin(a) * .8, 0)); }
-      g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(sp), faint));
-      g.add(edges(new T.CylinderGeometry(.12, .12, .3, 16).rotateX(Math.PI / 2)));
-      add(g); root.wheels.push(g);
+    // 바퀴: 두꺼운 타이어 + 림 + 5스포크 캐스트 휠 + 디스크
+    [[rx, false], [fx, true]].forEach(function (w) {
+      var g = new T.Group(); g.position.x = w[0];
+      g.add(ring(R, main, 56));
+      [-.19, .19].forEach(function (z) { var c = ring(R - .16, main, 56); c.position.z = z; g.add(c); });
+      g.add(ring(R - .38, main, 48));
+      [-.16, .16].forEach(function (z) { var c = ring(R - .38, faint, 48); c.position.z = z; g.add(c); });
+      var tr = []; for (var q = 0; q < 36; q++) { var qa = q / 36 * Math.PI * 2, ca = Math.cos(qa), sa = Math.sin(qa);
+        tr.push(new T.Vector3(ca * R, sa * R, 0), new T.Vector3(ca * (R - .16), sa * (R - .16), q % 2 ? .19 : -.19)); }
+      g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(tr), faint));
+      var sp = []; for (var i = 0; i < 5; i++) { var a = i / 5 * Math.PI * 2, b = .16;
+        [-.05, .05].forEach(function (z) { sp.push(new T.Vector3(Math.cos(a - b) * .17, Math.sin(a - b) * .17, z), new T.Vector3(Math.cos(a - .05) * (R - .4), Math.sin(a - .05) * (R - .4), z),
+          new T.Vector3(Math.cos(a + b) * .17, Math.sin(a + b) * .17, z), new T.Vector3(Math.cos(a + .05) * (R - .4), Math.sin(a + .05) * (R - .4), z)); }); }
+      g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(sp), main));
+      g.add(ring(.17, main, 20));
+      var disc = ring(w[1] ? .5 : .38, main, 36); disc.position.z = w[1] ? .22 : -.22; g.add(disc);
+      var cal = ed(new T.BoxGeometry(.22, .3, .1)); cal.position.set(w[1] ? -.35 : .3, w[1] ? .3 : .22, w[1] ? .26 : -.26); g.add(cal);
+      root.add(g); root.wheels.push(g);
     });
-    add(seg([[-WB / 2, 0, .12], [-.2, .55, .12], [.35, .45, .12]])); add(seg([[-WB / 2, 0, -.12], [-.2, .55, -.12], [.35, .45, -.12]]));
-    add(seg([[-.2, .55], [-.55, 1.35], [.95, 1.45], [1.15, 1.25], [.35, .45], [-.2, .55]]));
-    add(seg([[-.55, 1.35], [-1.6, 1.25], [-WB / 2, 0]]));
-    add(seg([[WB / 2, 0, .1], [1.2, 1.75, .1]])); add(seg([[WB / 2, 0, -.1], [1.2, 1.75, -.1]]));
-    add(seg([[1.05, 1.95, -.55], [1.18, 1.78, -.3], [1.18, 1.78, .3], [1.05, 1.95, .55]]));
-    var tank = edges(new T.SphereGeometry(.62, 18, 10)); tank.scale.set(1.05, .42, .5); tank.position.set(.35, 1.62, 0); add(tank);
-    var seat = edges(new T.BoxGeometry(1.05, .16, .46)); seat.position.set(-.85, 1.48, 0); add(seat);
-    add(seg([[-1.38, 1.4], [-1.85, 1.62], [-1.85, 1.4], [-1.38, 1.4]]));
-    var eng = edges(new T.BoxGeometry(.95, .78, .62)); eng.position.set(.15, .62, 0); add(eng);
-    var fins = []; for (var f = 0; f < 6; f++) { var y = .95 + f * .07; fins.push(new T.Vector3(-.25, y, .36), new T.Vector3(.55, y, .36), new T.Vector3(-.25, y, -.36), new T.Vector3(.55, y, -.36)); }
-    add(new T.LineSegments(new T.BufferGeometry().setFromPoints(fins), faint));
-    var muf = edges(new T.CylinderGeometry(.12, .1, 1.6, 14).rotateZ(Math.PI / 2 - .12)); muf.position.set(-.85, .35, .42); add(muf);
-    add(seg([[.45, .45, .36], [-.05, .3, .42]]));
-    var hl = edges(new T.CylinderGeometry(.24, .2, .22, 20).rotateZ(Math.PI / 2)); hl.position.set(1.42, 1.5, 0); add(hl);
+    // 앞 포크 (굵은 2개) + 트리플 클램프
+    both(function (s) { tube([fx, 0, .2 * s], [fx - .55, 1.75, .2 * s], .075); tube([fx - .2, .65, .2 * s], [fx - .55, 1.75, .2 * s], .1, faint); });
+    add(ed(new T.BoxGeometry(.24, .1, .62)), [fx - .52, 1.7], [0, 0, .3]); add(ed(new T.BoxGeometry(.2, .08, .56)), [fx - .62, 1.96], [0, 0, .3]);
+    // 클립온 핸들 + 미러 없는 짧은 바
+    both(function (s) { add(seg([[fx - .55, 1.84, .22 * s], [fx - .72, 1.8, .62 * s], [fx - .86, 1.76, .66 * s]])); });
+    // 원형 헤드라이트
+    [[.3, fx - .1], [.26, fx - .36]].forEach(function (h) { var c = ring(h[0], main, 30); c.rotation.y = Math.PI / 2; c.position.set(h[1], 1.55, 0); root.add(c); });
+    var lens = ring(.2, faint, 24); lens.rotation.y = Math.PI / 2; lens.position.set(fx - .06, 1.55, 0); root.add(lens);
+    both(function (s) { add(seg([[fx - .1, 1.55 + .3 * (s > 0 ? 1 : -1) * 0, .3 * s], [fx - .36, 1.55, .26 * s]])); });
+    // 앞 펜더
+    function arc(cx, r, a0, a1, z, m) { var p = []; for (var i = 0; i <= 20; i++) { var a = a0 + (a1 - a0) * i / 20; p.push([cx + Math.cos(a) * r, Math.sin(a) * r, z]); } add(seg(p, m)); }
+    both(function (s) { arc(fx, R + .08, Math.PI * .2, Math.PI * .75, .2 * s, faint); });
+    // 연료탱크 (크고 긴 물방울형)
+    ellipsoid([.25, 1.6], .88, .36, .4, main);
+    // 카페 레이서 시트 + 테일 험프
+    both(function (s) { add(seg([[-.45, 1.5, .24 * s], [-.5, 1.62, .22 * s], [-1.35, 1.6, .22 * s], [-1.5, 1.82, .18 * s], [-1.9, 1.78, .16 * s], [-1.95, 1.45, .16 * s], [-.45, 1.42, .24 * s], [-.45, 1.5, .24 * s]])); });
+    [[-.5, 1.62, .22], [-1.35, 1.6, .22], [-1.5, 1.82, .18], [-1.9, 1.78, .16], [-1.95, 1.45, .16]].forEach(function (p) { add(seg([[p[0], p[1], p[2]], [p[0], p[1], -p[2]]], faint)); });
+    // 프레임
+    add(seg([[fx - .62, 1.84], [-.15, 1.72], [-1.75, 1.42]]));
+    add(seg([[fx - .62, 1.84], [.75, .9], [.3, .15], [-.45, .2], [-.45, .75], [-.15, 1.72]]));
+    add(seg([[-.45, .75], [-1.75, 1.42]], faint));
+    // 엔진: 크랭크케이스 + 2기통 실린더(냉각핀) + 사이드 커버
+    add(ed(new T.BoxGeometry(1.15, .55, .62)), [.12, .45]);
+    both(function (s) { var c = ring(.3, main, 30); c.position.set(-.05, .45, .33 * s); root.add(c); var c2 = ring(.18, faint, 24); c2.position.set(.4, .4, .33 * s); root.add(c2); });
+    var cyl = new T.Group(); cyl.position.set(.32, .78, 0); cyl.rotation.z = -.32; root.add(cyl);
+    cyl.add(ed(new T.BoxGeometry(.5, .6, .56))); cyl.add(ed(new T.BoxGeometry(.6, .12, .62))); cyl.children[1].position.y = .34;
+    var fins = []; for (var f = 0; f < 6; f++) { var y = -.24 + f * .09; fins.push(new T.Vector3(-.3, y, .3), new T.Vector3(.3, y, .3), new T.Vector3(-.3, y, -.3), new T.Vector3(.3, y, -.3)); }
+    cyl.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(fins), faint));
+    // 카뷰레터 / 에어필터
+    both(function (s) { var c = ring(.12, main, 18); c.rotation.y = Math.PI / 2; c.position.set(-.25, 1.0, .2 * s); root.add(c); add(seg([[-.25, 1.0, .2 * s], [.05, .98, .2 * s]], faint)); });
+    // 머플러 2개 (메가폰)
+    both(function (s) {
+      add(seg([[.55, .95, .2 * s], [.75, .55, .3 * s], [.55, .1, .34 * s], [-.4, .12, .4 * s]]));
+      [[.1, -.4, .12], [.15, -1.7, .3]].forEach(function (m) { var c = ring(m[0], main, 20); c.rotation.y = Math.PI / 2; c.position.set(m[1], m[2], .42 * s); root.add(c); });
+      add(seg([[-.4, .22, .42 * s], [-1.7, .45, .42 * s]])); add(seg([[-.4, .02, .42 * s], [-1.7, .15, .42 * s]]));
+    });
+    // 스윙암 + 쇼크업소버
+    both(function (s) {
+      tube([-.45, .5, .26 * s], [rx, 0, .26 * s], .06);
+      tube([-1.3, .2, .3 * s], [-1.62, 1.38, .3 * s], .06, faint);
+      var coil = []; for (var c = 0; c <= 24; c++) { var tt = c / 24, a = tt * Math.PI * 12; coil.push([-1.33 - tt * .26 + Math.cos(a) * .1, .32 + tt * .92, .3 * s + Math.sin(a) * .1]); }
+      add(seg(coil, main));
+    });
+    // 뒤 펜더 짧게
+    both(function (s) { arc(rx, R + .08, Math.PI * .45, Math.PI * .85, .2 * s, faint); });
+    // 발판
+    both(function (s) { add(seg([[-.55, .35, .3 * s], [-.55, .35, .55 * s]])); add(seg([[.5, .3, .3 * s], [.5, .3, .55 * s]])); });
     if (o.dims !== false) {
       var dy = -1.45;
-      add(seg([[-WB / 2, dy], [WB / 2, dy]], acc)); add(seg([[-WB / 2, dy - .15], [-WB / 2, -1.12]], acc)); add(seg([[WB / 2, dy - .15], [WB / 2, -1.12]], acc));
-      add(seg([[2.25, -R], [2.25, 1.95]], acc)); add(seg([[2.12, 1.95], [2.38, 1.95]], acc)); add(seg([[2.12, -R], [2.38, -R]], acc));
+      add(seg([[rx, dy], [fx, dy]], acc)); add(seg([[rx, dy - .15], [rx, -1.12]], acc)); add(seg([[fx, dy - .15], [fx, -1.12]], acc));
+      add(seg([[2.35, -R], [2.35, 2.0]], acc)); add(seg([[2.22, 2.0], [2.48, 2.0]], acc)); add(seg([[2.22, -R], [2.48, -R]], acc));
     }
-    if (o.ground !== false) { var gr = new T.GridHelper(8, 16); gr.material = faint; gr.position.y = -R - .01; add(gr); }
+    if (o.ground !== false) { var gr = new T.GridHelper(8, 16); gr.material = faint; gr.position.y = -R - .01; root.add(gr); }
     root.tick = function (t) { root.wheels.forEach(function (w) { w.rotation.z = -t * 1.2; }); };
     return root;
   };
