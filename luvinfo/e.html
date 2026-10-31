@@ -163,7 +163,6 @@ button { font: inherit; color: inherit; }
 .rc { font: 400 12px/1.6 var(--mono); } .rc-h { text-align: center; margin: 0; font-weight: 500; } .rc-m, .rc-t, .rc li { display: flex; justify-content: space-between; } .rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed var(--ink); } .rc-t { font-weight: 500; margin: 0; } .rc-f, .rc-m { color: var(--g2); margin: 6px 0 0; } .rc-f { text-align: center; }
 
 /* 01 YVAN 팝업 추가분 (레이아웃은 .pf 그대로) */
-.pf-y .pf-name { font-size: 64px; line-height: .8; }
 .pf-sub { margin: 6px 0 0; font: 400 12.5px/1.5 var(--ko); color: var(--g2); word-break: keep-all; }
 .pf-dl dd b { font-weight: 700; }
 .pf-dl dd { line-height: 1.65; }
@@ -308,7 +307,7 @@ button { font: inherit; color: inherit; }
     function row(k, v) { return '<dt>' + k + '</dt><dd>' + v + '</dd>'; }
     var career = R.timeline.map(function (t) { return '<span class="cr"><b>' + t[0] + '</b>' + (t[1] ? '<em>' + t[1] + '</em>' : '') + (t[2] ? '<i>' + t[2] + '</i>' : '') + t[3] + '</span>'; }).join('');
     return '<div class="pf pf-y">' +
-      '<div class="pf-head"><b class="pf-name">YVAN<br>STADEL</b><span class="pf-plate"><i>No</i>ATLAS<s>2</s></span></div>' +
+      '<div class="pf-head"><b class="pf-name">YVAN</b><span class="pf-plate"><i>No</i>ATLAS<s>2</s></span></div>' +
       '<p class="pf-line">' + e(R.head) + '</p><p class="pf-sub">' + e(R.sub) + '</p>' +
       '<dl class="pf-dl">' +
       row('NAME', tile['NAME']) + row('RIDER', tile['RIDER NAME']) +
