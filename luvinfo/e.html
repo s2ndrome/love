@@ -169,7 +169,6 @@ button { font: inherit; color: inherit; }
 .thr { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin: 6px 0 6px; } .thr i { height: 6px; background: var(--ink); }
 .cr { display: block; padding: 2px 0; } .cr b { font: 900 17px/1 var(--cond); margin-right: 6px; } .cr em { font-style: normal; font: 500 10px/1 var(--mono); color: var(--g2); margin-right: 6px; }
 .cr i { font-style: normal; font: 500 10px/1 var(--mono); background: var(--ink); color: var(--paper); padding: 1px 4px; margin-right: 6px; }
-.pf-l .pf-dl { border-top: 0; margin-top: 2px; }
 /* 태블릿 */
 @media (max-width: 1100px) {
   .spread { grid-template-columns: minmax(0, 1fr) 280px; }
@@ -324,6 +323,7 @@ button { font: inherit; color: inherit; }
     var V = L.lia;
     return '<div class="pf pf-l">' +
       '<div class="pf-head"><b class="pf-name">LIA</b><span class="pf-plate"><i>P</i>PASSENGER<s>2</s></span></div>' +
+      '<p class="pf-line">' + e(L.chars[1].line) + '</p><p class="pf-sub">' + e(V.sub) + '</p>' +
       '<dl class="pf-dl">' + V.rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' +
       '<p class="pf-kw">' + V.tags.map(function (k) { return '<span>#' + k + '</span>'; }).join(' ') + '</p></div>';
   }
