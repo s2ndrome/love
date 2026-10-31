@@ -72,7 +72,6 @@ button { font: inherit; color: inherit; }
 .lines:hover span:last-child, .lines:focus-visible span:last-child { background: var(--paper); color: var(--ink); }
 .lines:focus-visible { outline: 1px dashed var(--paper); outline-offset: 6px; }
 .tagr { position: absolute; right: 5%; bottom: 9%; z-index: 2; color: var(--paper); font: 400 clamp(40px, 4.4vw, 64px)/1 var(--script); transform: rotate(-7deg); pointer-events: none; }
-.mosaic { position: absolute; right: 18%; top: 9%; width: 60px; height: 80px; display: grid; grid-template-columns: repeat(6, 1fr); z-index: 2; pointer-events: none; }
 
 /* 타이틀 */
 .title { grid-column: 2; grid-row: 2; position: relative; min-width: 0; }
@@ -180,8 +179,7 @@ button { font: inherit; color: inherit; }
   .tagr { display: none; }
   .lines { top: 13%; left: 10px; } .lines span { font-size: 11.5px; padding: 0 5px; }
   .ui.bl { display: none; } .ui { font-size: 8.5px; } .wp { font-size: 8px; } .wp b { font-size: 12px; }
-  .mosaic { width: 42px; height: 56px; right: 8%; top: 12%; }
-  .track { display: none; }
+    .track { display: none; }
   .tele { order: 3; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; }
   .tele div { padding: 6px 8px; border-bottom: 0; } .tele div:nth-child(2n) { border-right: 1px solid var(--ink); } .tele div:last-child { border-right: 0; }
   .tele .wide { grid-column: auto; border-right: 1px solid var(--ink); }
@@ -229,7 +227,6 @@ button { font: inherit; color: inherit; }
     <canvas id="loop" aria-label="서킷 모양 리본 위를 달리는 3D 바이크. 드래그해서 돌릴 수 있어요"></canvas>
     <div class="vig"></div><div class="grain"></div>
     <div id="wps"></div>
-    <div class="mosaic" id="mosaic" aria-hidden="true"></div>
     <span class="ui tl"><i class="rec"></i>REC · IMG_0314.RAW</span>
     <span class="ui tr" id="uitr">ISO 3200 · 1/60</span>
     <span class="ui bl">DRAG TO ROTATE</span>
@@ -291,9 +288,6 @@ button { font: inherit; color: inherit; }
   words.forEach(function (w) { if ((cur + ' ' + w).trim().length > 9 && cur) { chunks.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); });
   if (cur) chunks.push(cur);
   document.getElementById('lines').innerHTML = chunks.map(function (c) { return '<span>' + e(c) + '</span>'; }).join('');
-  var g = ['#f4f4f1', '#a6a6a3', '#6c6c6a', '#2a2a2a', 'transparent', '#d6d6d2'], m = '';
-  for (var i = 0; i < 48; i++) m += '<i style="background:' + g[(i * 7 + (i % 5) * 3 + (i > 24 ? 2 : 0)) % 6] + '"></i>';
-  document.getElementById('mosaic').innerHTML = m;
 
   var one = function (f) { return function () { if (innerWidth <= 720) K.closeAll(); f(); }; };
   K.bind({
