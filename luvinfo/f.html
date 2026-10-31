@@ -191,7 +191,7 @@ button { font: inherit; color: inherit; }
   var table = document.getElementById('table'), btn = document.getElementById('fold');
   function fold() { var f = !table.classList.contains('folded'); table.classList.toggle('folded', f); table.classList.toggle('spin', f && !L.reduced); btn.textContent = f ? '다시 펼치기' : '상자 접기'; }
   btn.onclick = fold;
-  if (location.hash === '#pop') fold();
+  if (location.hash === '#pop' || window.DEMO) fold();
 })();
 </script>
 </body>

@@ -28,7 +28,7 @@
   };
   // 미리보기용: 주소 끝이 #pop 이면 팝업 몇 개를 미리 띄워 둠. list = [['p0', left, top], ...]
   K.demo = function (list) {
-    if (location.hash !== '#pop' || !K.map) return;
+    if ((location.hash !== '#pop' && !window.DEMO) || !K.map) return;
     setTimeout(function () {
       list.forEach(function (d) {
         var f = K.map[d[0]]; if (!f) return; f();

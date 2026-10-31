@@ -176,7 +176,7 @@ button { font: inherit; color: inherit; }
   };
   K.bind(W);
   K.demo([['p1', 560, 96], ['bread', 930, 330], ['route', 200, 430]]);
-  if (innerWidth > 860 && location.hash !== '#pop') K.open('p0', 'NOTEPAD.EXE-yvan.txt', K.profile(0), { left: innerWidth - 720, top: 250 });
+  if (innerWidth > 860 && location.hash !== '#pop' && !window.DEMO) K.open('p0', 'NOTEPAD.EXE-yvan.txt', K.profile(0), { left: innerWidth - 720, top: 250 });
 
   var S = K.stage(document.getElementById('bike'), { fov: 28, z: 10, fit: function (c, w, h) { c.position.z = Math.max(9, 7.6 / (.4986 * w / h)); } });
   if (!S) return;
