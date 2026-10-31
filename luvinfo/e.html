@@ -162,6 +162,14 @@ button { font: inherit; color: inherit; }
 .bk { display: grid; grid-template-columns: 62px 1fr; margin: 0; } .bk dt { font: 500 9.5px/2 var(--mono); color: var(--g2); } .bk dd { margin: 0; padding: 2px 0; }
 .rc { font: 400 12px/1.6 var(--mono); } .rc-h { text-align: center; margin: 0; font-weight: 500; } .rc-m, .rc-t, .rc li { display: flex; justify-content: space-between; } .rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed var(--ink); } .rc-t { font-weight: 500; margin: 0; } .rc-f, .rc-m { color: var(--g2); margin: 6px 0 0; } .rc-f { text-align: center; }
 
+/* 01 YVAN 팝업 추가분 (레이아웃은 .pf 그대로) */
+.pf-y .pf-name { font-size: 64px; line-height: .8; }
+.pf-sub { margin: 6px 0 0; font: 400 12.5px/1.5 var(--ko); color: var(--g2); word-break: keep-all; }
+.pf-dl dd b { font-weight: 700; }
+.pf-dl dd { line-height: 1.65; }
+.thr { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin: 6px 0 6px; } .thr i { height: 6px; background: var(--ink); }
+.cr { display: block; padding: 2px 0; } .cr b { font: 900 17px/1 var(--cond); margin-right: 6px; } .cr em { font-style: normal; font: 500 10px/1 var(--mono); color: var(--g2); margin-right: 6px; }
+.cr i { font-style: normal; font: 500 10px/1 var(--mono); background: var(--ink); color: var(--paper); padding: 1px 4px; margin-right: 6px; }
 /* 태블릿 */
 @media (max-width: 1100px) {
   .spread { grid-template-columns: minmax(0, 1fr) 280px; }
@@ -294,9 +302,27 @@ button { font: inherit; color: inherit; }
   var chunks = ['Hold on tight.', 'Lights out', 'and away', 'we go.'];
   document.getElementById('lines').innerHTML = chunks.map(function (c) { return '<span>' + e(c) + '</span>'; }).join('');
 
+  // 01 YVAN 팝업: 기존 프로필 레이아웃 그대로, 내용만 data.js 의 LUV.yvan 에서
+  function yvanPop() {
+    var V = L.yvan, R = V.race, tile = {}; V.tiles.forEach(function (t) { tile[t[0]] = t[1]; });
+    var off = {}; V.off.forEach(function (o) { off[o[0]] = o[1]; });
+    function row(k, v) { return '<dt>' + k + '</dt><dd>' + v + '</dd>'; }
+    var career = R.timeline.map(function (t) { return '<span class="cr"><b>' + t[0] + '</b>' + (t[1] ? '<em>' + t[1] + '</em>' : '') + (t[2] ? '<i>' + t[2] + '</i>' : '') + t[3] + '</span>'; }).join('');
+    return '<div class="pf pf-y">' +
+      '<div class="pf-head"><b class="pf-name">YVAN<br>STADEL</b><span class="pf-plate"><i>No</i>ATLAS<s>2</s></span></div>' +
+      '<p class="pf-line">' + e(R.head) + '</p><p class="pf-sub">' + e(R.sub) + '</p>' +
+      '<dl class="pf-dl">' +
+      row('NAME', tile['NAME']) + row('RIDER', tile['RIDER NAME']) +
+      row('BASIC', tile['BASIC']) + row('BIRTH', off['BIRTH']) +
+      row('TEAM', tile['TEAM']) + row('LIKE', off['LIKE']) + row('HATE', e(off['HATE'])) + row('SCENT', off['SCENT']) + row('DRINK', off['DRINK']) +
+      row('LOOKS', V.looks.join('<br>')) + row('PERSONA', V.personality.join('<br>')) + row('TONE', V.habits.join('<br>')) +
+      row('STYLE', '<b>' + R.style + '</b><span class="thr"><i></i><i></i><i></i><i></i><i></i></span>' + R.styleText) +
+      row('LEAN', R.lean) + row('CAREER', career) +
+      '</dl><p class="pf-kw">' + ['풀_스로틀', '만년_2등', '냉소', '완벽주의', '체스', '레몬_타르트'].map(function (k) { return '<span>#' + k + '</span>'; }).join(' ') + '</p></div>';
+  }
   var one = function (f) { return function () { if (innerWidth <= 720) K.closeAll(); f(); }; };
   K.bind({
-    p0: one(function () { K.open('p0', 'TRACK 01 — YVAN', K.profile(0), { left: 230, top: 90 }); }),
+    p0: one(function () { K.open('p0', 'TRACK 01 — YVAN', yvanPop(), { left: 230, top: 90, w: 440 }); }),
     p1: one(function () { K.open('p1', 'TRACK 02 — LIA', K.profile(1), { left: 300, top: 130 }); }),
     rel: one(function () { K.open('rel', 'TRACK 03 — US', K.relation(), { w: 380 }); }),
     route: one(function () { K.open('route', 'TRACK 04 — ROUTE 75', K.route() + K.bike(), { w: 340 }); }),
