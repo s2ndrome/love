@@ -37,7 +37,7 @@ button { font: inherit; color: inherit; }
 
 /* 스프레드 */
 .spread { height: calc(100% - 26px); min-height: 640px; max-width: 1480px; margin: 0 auto; display: grid;
-  grid-template-columns: 170px minmax(0, 1fr) 300px; grid-template-rows: minmax(0, 1fr) auto; gap: 18px 28px;
+  grid-template-columns: 170px minmax(0, 1fr) 300px; grid-template-rows: auto auto; align-content: start; gap: 18px 28px;
   padding: 22px max(24px, env(safe-area-inset-right, 0px)) 18px max(24px, env(safe-area-inset-left, 0px)); }
 .fr { position: relative; border: 1px solid var(--ink); }
 .fr > .hd { position: absolute; width: 7px; height: 7px; background: var(--paper); border: 1px solid var(--ink); z-index: 3; }
@@ -54,7 +54,7 @@ button { font: inherit; color: inherit; }
 .side-n { font: 500 9.5px/1 var(--mono); letter-spacing: .14em; color: var(--g3); writing-mode: vertical-rl; transform: rotate(180deg); align-self: end; justify-self: start; }
 
 /* 패널 */
-.panel { grid-column: 2; grid-row: 1; background: #0b0b0b; min-height: 0; overflow: hidden; }
+.panel { grid-column: 2; grid-row: 1; background: #0b0b0b; min-height: 0; overflow: hidden; aspect-ratio: 16 / 10; max-height: max(320px, calc(100vh - 290px)); }
 #loop { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; cursor: grab; }
 #loop:active { cursor: grabbing; }
 .panel .grain { position: absolute; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: screen;
@@ -77,9 +77,9 @@ button { font: inherit; color: inherit; }
 /* 타이틀 */
 .title { grid-column: 2; grid-row: 2; position: relative; min-width: 0; }
 .rib { display: flex; gap: 18px; font: italic 500 11px/1 var(--it); letter-spacing: .5em; text-transform: uppercase; margin-bottom: 8px; }
-.title h1 { margin: 0; font: 900 clamp(64px, min(10.5vw, 17vh), 176px)/.78 var(--cond); letter-spacing: -.035em; text-transform: uppercase; white-space: nowrap; }
+.title h1 { margin: 0; font: 900 clamp(56px, min(8.4vw, 14vh), 150px)/.78 var(--cond); letter-spacing: -.035em; text-transform: uppercase; white-space: nowrap; }
 .title h1 .amp { font: 400 .8em/0 var(--script); text-transform: none; letter-spacing: 0; vertical-align: -.05em; margin: 0 -.06em; }
-.title .scr { position: absolute; left: 18%; top: 2%; font: 400 clamp(60px, min(8vw, 13vh), 130px)/1 var(--script); color: var(--paper); -webkit-text-stroke: 1.4px var(--ink); transform: rotate(-9deg); pointer-events: none; }
+.title .scr { position: absolute; left: 44%; top: 2%; font: 400 clamp(60px, min(8vw, 13vh), 130px)/1 var(--script); color: var(--paper); -webkit-text-stroke: 1.4px var(--ink); transform: rotate(-9deg); pointer-events: none; }
 .title .meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 10px; font: italic 500 11px/1 var(--it); letter-spacing: .3em; text-transform: uppercase; }
 
 /* 오른쪽 */
@@ -100,7 +100,14 @@ button { font: inherit; color: inherit; }
 .list button:hover, .list button:focus-visible { color: var(--paper); outline: none; padding-left: 8px; transition: padding .35s var(--ease); }
 .list button:hover i, .list button:hover span, .list button:focus-visible i, .list button:focus-visible span { color: var(--g3); }
 .tele { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr) auto auto; min-height: 0; }
-.tele .map { display: grid; grid-template-rows: minmax(92px, 1fr) auto; padding: 0 !important; }
+.tele .map { display: grid; grid-template-rows: auto minmax(150px, 1fr); padding: 0 !important; }
+.rs-tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--ink); }
+.rs-tabs button { border: 0; background: none; padding: 7px 8px; font: 900 15px/1 var(--cond); letter-spacing: .03em; text-align: left; cursor: pointer; color: var(--g2); }
+.rs-tabs button + button { border-left: 1px solid var(--ink); }
+.rs-tabs button i { font: 500 9px/1 var(--mono); font-style: normal; margin-right: 6px; vertical-align: 2px; }
+.rs-tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+.rs-tabs button:focus-visible { outline: 2px dashed var(--ink); outline-offset: -4px; }
+.rs-l[hidden], .rs-t[hidden] { display: none; }
 .rs-k { display: flex; justify-content: space-between; font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); }
 .rs-k em { font-style: normal; }
 .rs-l { position: relative; background: var(--night); color: #e8e8e4; padding: 8px 10px; display: grid; grid-template-rows: auto 1fr auto; gap: 6px; cursor: pointer; min-height: 0; }
@@ -113,10 +120,10 @@ button { font: inherit; color: inherit; }
 .rs-l.out .rs-lo { opacity: 1; } .rs-l.out .rs-g { opacity: 0; }
 .rs-r { display: flex; justify-content: space-between; font: 500 8.5px/1 var(--mono); letter-spacing: .1em; color: #8a8a86; }
 .rs-r b { font: 900 15px/1 var(--cond); color: #e8e8e4; letter-spacing: 0; margin-left: 4px; font-variant-numeric: tabular-nums; }
-.rs-t { padding: 8px 10px; display: grid; grid-template-rows: auto 1fr; gap: 6px; border-top: 1px solid var(--ink); min-height: 0; }
+.rs-t { padding: 8px 10px; display: grid; grid-template-rows: auto 1fr; gap: 6px; min-height: 0; }
 .rs-ty { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; }
 .ty1 { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; gap: 3px 8px; align-items: center; }
-.ty1 .pr { grid-row: 1 / 4; width: 26px; height: 46px; border: 1.5px solid var(--ink); border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; }
+.ty1 .pr { grid-row: 1 / 4; width: 30px; height: 58px; border: 1.5px solid var(--ink); border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; }
 .ty1 .pr i { transition: background .4s; }
 .ty1 .cp { font: 900 14px/1 var(--cond); letter-spacing: .02em; } .ty1 .cp small { font: 500 8px/1 var(--mono); color: var(--g2); margin-right: 4px; letter-spacing: .08em; }
 .ty1 .dg { font: 900 22px/1 var(--cond); font-variant-numeric: tabular-nums; } .ty1 .dg small { font: 500 8px/1 var(--mono); margin-left: 1px; }
@@ -223,7 +230,7 @@ button { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) { .bgm.on .bgm-ic i { animation: none; height: 10px; } }
 /* 태블릿 */
 @media (max-width: 1100px) {
-  .spread { grid-template-columns: minmax(0, 1fr) 280px; }
+  .spread { grid-template-columns: minmax(0, 1fr) 280px; height: auto; }
   .left { display: none; }
   .panel, .title { grid-column: 1; }
   .right { grid-column: 2; }
@@ -239,8 +246,8 @@ button { font: inherit; color: inherit; }
   .panel { aspect-ratio: 1 / 1.02; order: 1; }
   .title { order: 2; position: absolute; left: 14px; right: 14px; top: 64px; aspect-ratio: 1 / 1.02; pointer-events: none; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 10px 10px; }
   .title .rib, .title .meta span:last-child { display: none; }
-  .title h1 { color: var(--paper); font-size: 19vw; }
-  .title .scr { color: transparent; -webkit-text-stroke: 1.2px var(--paper); left: 14%; top: auto; bottom: 7%; font-size: 13vw; }
+  .title h1 { color: var(--paper); font-size: 12.5vw; }
+  .title .scr { color: transparent; -webkit-text-stroke: 1.2px var(--paper); left: 40%; top: auto; bottom: 7%; font-size: 13vw; }
   .title .meta { color: var(--g3); font-size: 9px; letter-spacing: .2em; margin-top: 6px; }
   .tagr { display: none; }
   .lines { top: 13%; left: 10px; } .lines span { font-size: 14px; padding: 1px 5px 0; }
@@ -301,14 +308,12 @@ button { font: inherit; color: inherit; }
   </section>
   <section class="title">
     <div class="rib"><span>Rider</span><span>//</span><span>ライダー</span><span>//</span><span>라이더</span></div>
-    <h1>Yvan<span class="amp">&amp;</span>Lia</h1>
-    <span class="scr">Unstoppable</span>
+    <h1>Unstoppable</h1>
     <div class="meta"><span>→ Issue 01 · Paris 75 → Deauville 14</span></div>
   </section>
   <aside class="right">
     <div class="track">
       <h2>TRACK <small>INDEX.01</small><em>Ride Out</em></h2>
-      <p class="last">At last, the engine is warm.</p>
     </div>
     <ol class="list">
       <li><button type="button" data-open="p0"><i>01</i><b>Yvan</b><span>rider</span></button></li>
@@ -320,13 +325,14 @@ button { font: inherit; color: inherit; }
     </ol>
     <dl class="tele fr" aria-live="off">
       <div class="wide map rs">
-        <div class="rs-l" id="rsL" role="button" tabindex="0" aria-label="출발 신호등. 불이 꺼지는 순간 누르면 반응속도를 재요">
+        <div class="rs-tabs" role="tablist" aria-label="위젯 선택"><button type="button" role="tab" id="rsTabL" aria-selected="true" aria-controls="rsL"><i>01</i>START LIGHTS</button><button type="button" role="tab" id="rsTabT" aria-selected="false" aria-controls="rsT"><i>02</i>TYRES</button></div>
+        <div class="rs-l" role="tabpanel" id="rsL" role="button" tabindex="0" aria-label="출발 신호등. 불이 꺼지는 순간 누르면 반응속도를 재요">
           <span class="rs-k">START · LIGHTS</span>
           <div class="rs-g" id="rsG"></div>
           <b class="rs-lo" id="rsLo">LIGHTS OUT</b>
           <span class="rs-r"><span>REACTION <b id="rsRt">—</b></span><span>BEST <b id="rsRb">—</b></span></span>
         </div>
-        <div class="rs-t"><span class="rs-k">TYRE · TEMP / WEAR<em id="rsLap">LAP 01</em></span><div class="rs-ty" id="rsTy"></div></div>
+        <div class="rs-t" id="rsT" role="tabpanel" hidden><span class="rs-k">TYRE · TEMP / WEAR<em id="rsLap">LAP 01</em></span><div class="rs-ty" id="rsTy"></div></div>
       </div>
       <div class="wide"><dt>NOW RIDING</dt><dd id="tNow">PARIS → ROUEN</dd><div class="bar"><i id="tBar"></i></div></div>
       <div><dt>KM</dt><dd id="tKm">0</dd></div>
@@ -429,6 +435,15 @@ button { font: inherit; color: inherit; }
   // 등장 연출 한 번
   requestAnimationFrame(function () { requestAnimationFrame(function () { document.body.classList.add('ready'); document.body.classList.remove('intro'); }); });
 
+  // 위젯 칸 탭: 01 START LIGHTS / 02 TYRES
+  (function () {
+    var tabs = [[document.getElementById('rsTabL'), document.getElementById('rsL')], [document.getElementById('rsTabT'), document.getElementById('rsT')]];
+    function pick(k) { tabs.forEach(function (t, i) { t[0].setAttribute('aria-selected', i === k); t[1].hidden = i !== k; }); }
+    tabs.forEach(function (t, i) {
+      t[0].onclick = function () { pick(i); };
+      t[0].onkeydown = function (ev) { if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') { ev.preventDefault(); var n = 1 - i; pick(n); tabs[n][0].focus(); } };
+    });
+  })();
   // 위젯 칸: 출발 신호등 (눌러서 반응속도)
   (function () {
     var box = document.getElementById('rsL'), g = document.getElementById('rsG'), rt = document.getElementById('rsRt'), rb = document.getElementById('rsRb');
