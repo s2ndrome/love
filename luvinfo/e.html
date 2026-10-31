@@ -136,7 +136,7 @@ button { font: inherit; color: inherit; }
 .pf { display: grid; }
 .pf-head { display: grid; grid-template-columns: 1fr auto; align-items: end; position: relative; border-bottom: 1px solid var(--ink); padding-bottom: 8px; }
 .pf-name { font: 900 82px/.76 var(--cond); text-transform: uppercase; letter-spacing: -.03em; }
-.pf-ko { position: absolute; left: 46%; top: -6px; font: 400 48px/1 var(--script); transform: rotate(-8deg); color: var(--paper); -webkit-text-stroke: 1px var(--ink); }
+.pf-ko { display: none; }
 .pf-plate { display: inline-flex; gap: 5px; border: 1px solid var(--ink); font: 500 11.5px/1.6 var(--mono); margin-bottom: 4px; }
 .pf-plate i, .pf-plate s { font-style: normal; text-decoration: none; background: var(--ink); color: var(--paper); padding: 0 4px; }
 .pf-line { margin: 12px 0 0; justify-self: start; background: var(--ink); color: var(--paper); padding: 3px 8px; font: 700 14px/1.6 var(--ko); word-break: keep-all; }
@@ -197,7 +197,7 @@ button { font: inherit; color: inherit; }
   .lw { box-shadow: 0 -6px 24px rgba(0,0,0,.18); border-top: 2px solid var(--ink); }
   .lw-pop { animation: sheet .4s var(--ease) both; } @keyframes sheet { from { transform: translateY(100%); } }
   .lw-body { max-height: 62vh; }
-  .pf-name { font-size: 64px; } .pf-ko { font-size: 38px; }
+  .pf-name { font-size: 64px; }
   .pf-dl { grid-template-columns: 54px 1fr 54px 1fr; font-size: 12px; }
 }
 .mtop { display: none; order: 0; justify-content: space-between; align-items: center; gap: 10px; height: 44px; }
