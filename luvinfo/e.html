@@ -266,7 +266,7 @@ button { font: inherit; color: inherit; }
       <li><button type="button" data-open="rel"><i>03</i><b>Le Mans</b><span>관계</span></button></li>
       <li><button type="button" data-open="route"><i>04</i><b>Route</b><span>204 km</span></button></li>
       <li><button type="button" data-open="bread"><i>05</i><b>Reçu</b><span>boulangerie</span></button></li>
-      <li><button type="button" data-open="notice"><i>06</i><b>Notice</b><span>안내 · 링크</span></button></li>
+      <li><button type="button" data-open="notice"><i>06</i><b>Notice</b><span>안내</span></button></li>
     </ol>
     <dl class="tele fr" aria-live="off">
       <div class="wide map"><dt>TOP VIEW · 1:2 000 000</dt><svg id="map" viewBox="-6 -4 12 8" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg></div>
@@ -334,7 +334,7 @@ button { font: inherit; color: inherit; }
     rel: one(function () { K.open('rel', 'TRACK 03 — LE MANS', K.relation(), { w: 380 }); }),
     route: one(function () { K.open('route', 'TRACK 04 — ROUTE 75', K.route() + K.bike(), { w: 340 }); }),
     bread: one(function () { K.open('bread', 'TRACK 05 — REÇU', K.receipt(), { w: 300 }); }),
-    notice: one(function () { K.open('notice', 'TRACK 06 — NOTICE', K.notice() + '<div style="height:12px"></div>' + K.links(), { w: 340 }); })
+    notice: one(function () { K.open('notice', 'TRACK 06 — NOTICE', K.notice(), { w: 340 }); })
   });
   K.demo([['p1', 440, 70], ['route', 880, 300], ['bread', 110, 400]]);
 
