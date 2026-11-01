@@ -246,17 +246,22 @@
       unAI();
       const token = (localStorage.getItem('gh_token') || '').trim();
       if (!token) { qmsg.textContent = '관리자 토큰이 저장돼 있어야 써요 (토큰 칸에 한 번 넣고 올리면 저장돼요)'; return; }
-      const parts = area.innerHTML.split(SPLIT), idx = [], lines = [];
-      for (let i = 0; i < parts.length; i += 2) { const t = lineText(parts[i] || ''); if (t && !/^["“'‘「『(\[]/.test(t)) { idx.push(i); lines.push(t); } }
-      if (!lines.length) { qmsg.textContent = '따옴표 없는 줄이 없어요'; return; }
+      // 글 전체를 보내요 (이미 “ ” 있는 줄은 이 글의 대사 말투 예시가 돼요). 따옴표 없는 줄만 ask로 물어봐요
+      const parts = area.innerHTML.split(SPLIT), idx = [], lines = [], ask = [];
+      for (let i = 0; i < parts.length; i += 2) {
+        const t = lineText(parts[i] || ''); if (!t) continue;
+        idx.push(i); lines.push(t);
+        if (!/^["“'‘「『(\[]/.test(t)) ask.push(lines.length);
+      }
+      if (!ask.length) { qmsg.textContent = '따옴표 없는 줄이 없어요'; return; }
       qmsg.textContent = 'AI가 대사를 찾는 중…';
       let res;
       try {
-        const r = await fetch(QUOTE_URL, { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + token }, body: JSON.stringify({ lines }) });
+        const r = await fetch(QUOTE_URL, { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + token }, body: JSON.stringify({ lines, ask }) });
         res = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(res.error || ('오류 ' + r.status));
       } catch (e) { qmsg.textContent = 'AI 대사 찾기 실패: ' + (e.message === 'Failed to fetch' ? '대사 찾기 워커에 연결이 안 돼요' : e.message); return; }
-      const hit = (res.lines || []).map(n => idx[n - 1]).filter(x => x != null);
+      const hit = (res.lines || []).filter(n => ask.includes(n)).map(n => idx[n - 1]).filter(x => x != null);
       if (!hit.length) { qmsg.textContent = 'AI가 따옴표 빠진 대사를 못 찾았어요'; return; }
       // 그사이 글이 바뀌었으면 다시 나눠서 같은 줄 번호에 표시해요
       const now = area.innerHTML.split(SPLIT);

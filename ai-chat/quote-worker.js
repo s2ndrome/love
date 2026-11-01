@@ -19,11 +19,14 @@ const ALLOWED_ORIGINS = ["https://xn--hy1bp1el5l.com", "https://www.xn--hy1bp1el
 /* ───────────────────────────────────── */
 
 const PROMPT = `너는 한국어 소설(로그) 원고 교정 도우미야.
-번호가 붙은 줄 목록을 받으면, 그중 "등장인물이 소리 내어 말한 대사"인데 따옴표가 빠진 줄의 번호만 골라.
-- 대사: 인물이 직접 한 말 그대로인 줄. (예: 오빠 나 배고파 / 밥은 먹었어? / 아, 진짜... 미치겠네)
-- 대사가 아닌 것: 서술·묘사(~했다, ~였다 같은 지문), 속마음 독백 서술, 제목·소제목, 문서 양식(이름:, 작성자:), 편지·소개서처럼 글로 쓴 문장, 효과음만 있는 줄.
-- 한 줄 안에 서술과 대사가 섞여 있으면 고르지 마.
-- 헷갈리면 고르지 마. 확실한 것만.
+원고 전체가 번호 붙은 줄로 주어져. 번호 뒤에 "?"가 붙은 줄(예: "12?:")이 따옴표가 빠져 있을 수 있는 줄이야.
+"?" 줄을 하나도 빠짐없이 전부 살펴서, 등장인물이 소리 내어 말한 대사인 줄의 번호를 모두 골라.
+- 대사: 인물이 직접 한 말 그대로인 줄. 반말·존댓말·말줄임(…)·감탄·질문 모두 포함.
+  (예: 오빠 나 배고파 / 밥은 먹었어? / 아, 진짜... 미치겠네 / 지수야. / 응, 알았어.)
+- 원고 안에서 이미 “ ”로 감싼 줄들이 이 글의 대사 말투 예시야. 비슷한 말투면 대사로 봐.
+- 대사가 아닌 것: 서술·묘사 지문(~했다, ~였다, ~는 그를 바라보았다 등), 제목·소제목, 문서 양식(이름:, 작성자:), 효과음만 있는 줄.
+- 한 줄 안에 서술 지문과 대사가 섞여 있으면 고르지 마.
+글이 길어도 중간에 멈추지 말고 끝까지 다 확인해.
 답은 고른 번호의 JSON 배열만. 없으면 [].`;
 
 const CORS = origin => ({
@@ -49,12 +52,13 @@ async function canWrite(token) {
   return ok;
 }
 
-async function findQuotes(env, lines) {
+async function findQuotes(env, lines, ask) {
   const vertex = PROVIDER === "vertex";
   const keyName = vertex ? "VERTEX_API_KEY" : "GEMINI_API_KEY";
   if (!env[keyName]) throw Object.assign(new Error(`${keyName} 비밀이 없어요`), { status: 500 });
   const key = String(env[keyName]).trim();
-  const text = lines.map((l, i) => `${i + 1}: ${l}`).join("\n");
+  const askSet = new Set(ask && ask.length ? ask : lines.map((_, i) => i + 1));
+  const text = lines.map((l, i) => `${i + 1}${askSet.has(i + 1) ? "?" : ""}: ${l}`).join("\n");
   let r, err = "";
   for (const model of vertex ? VERTEX_MODELS : MODELS) {
     r = await fetch(
@@ -71,10 +75,10 @@ async function findQuotes(env, lines) {
           contents: [{ role: "user", parts: [{ text }] }],
           generationConfig: {
             temperature: 0,
-            maxOutputTokens: 2048,
+            maxOutputTokens: 8192, // 생각(thinking)에 쓰는 몫까지 넉넉하게 — 모자라면 답이 중간에 잘려요
             responseMimeType: "application/json",
             responseSchema: { type: "ARRAY", items: { type: "INTEGER" } },
-            ...(model.startsWith("gemini-2.5") ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+            ...(model.startsWith("gemini-2.5") ? { thinkingConfig: { thinkingBudget: 0 } } : model.startsWith("gemini-3") ? { thinkingConfig: { thinkingLevel: "low" } } : {}),
           },
         }),
       }
@@ -89,7 +93,7 @@ async function findQuotes(env, lines) {
   const out = (data?.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || "").join("");
   let arr = [];
   try { arr = JSON.parse(out); } catch { arr = (out.match(/\d+/g) || []).map(Number); }
-  return [...new Set(arr.map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= lines.length))].sort((a, b) => a - b);
+  return [...new Set(arr.map(Number).filter(n => askSet.has(n)))].sort((a, b) => a - b);
 }
 
 export default {
@@ -104,7 +108,8 @@ export default {
     const lines = Array.isArray(body?.lines) ? body.lines.map(x => String(x).slice(0, 2000)) : [];
     if (!lines.length) return json({ lines: [] }, 200, origin);
     if (lines.length > 800 || lines.join("").length > 80000) return json({ error: "글이 너무 길어요. 나눠서 해주세요." }, 413, origin);
-    try { return json({ lines: await findQuotes(env, lines) }, 200, origin); }
+    const ask = Array.isArray(body?.ask) ? body.ask.map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= lines.length) : null;
+    try { return json({ lines: await findQuotes(env, lines, ask) }, 200, origin); }
     catch (e) { return json({ error: e.message }, e.status || 500, origin); }
   },
 };
