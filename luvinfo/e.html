@@ -24,9 +24,7 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
-body { background: var(--paper); color: var(--ink); font: 400 13px/1.55 var(--ko); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .32; mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+body { background: transparent; color: var(--ink); font: 400 13px/1.55 var(--ko); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 button { font: inherit; color: inherit; }
 
 /* 티커 */
@@ -57,8 +55,6 @@ button { font: inherit; color: inherit; }
 .panel { grid-column: 2; grid-row: 1; background: #0b0b0b; min-height: 0; overflow: hidden; aspect-ratio: 16 / 10; max-height: max(320px, calc(100vh - 290px)); }
 #loop { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; cursor: grab; }
 #loop:active { cursor: grabbing; }
-.panel .grain { position: absolute; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: screen;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 .panel .vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.55)); }
 .ui { position: absolute; z-index: 2; font: 500 10px/1.4 var(--mono); letter-spacing: .1em; color: #cfcfcb; pointer-events: none; }
 .ui.tl { left: 14px; top: 12px; } .ui.tr { right: 14px; top: 12px; text-align: right; } .ui.bl { left: 14px; bottom: 12px; }
@@ -312,7 +308,7 @@ button { font: inherit; color: inherit; }
   </aside>
   <section class="panel fr">
     <canvas id="loop" aria-label="서킷 모양 리본 위를 달리는 3D 바이크. 드래그해서 돌릴 수 있어요"></canvas>
-    <div class="vig"></div><div class="grain"></div>
+    <div class="vig"></div>
     <div id="wps"></div>
     <span class="ui tl"><i class="rec"></i>REC · IMG_0314.RAW</span>
     <span class="ui tr" id="uitr">ISO 3200 · 1/60</span>
