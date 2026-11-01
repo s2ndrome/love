@@ -1,0 +1,79 @@
+/* E 팝업 내용 공통 스타일 (rock 시안들이 같이 씀). 색·글꼴은 각 시안의 :root 변수로 */
+.pf { display: grid; }
+.pf-head { display: grid; grid-template-columns: 1fr auto; align-items: end; position: relative; border-bottom: 1px solid var(--ink); padding-bottom: 8px; }
+.pf-name { font: 900 82px/.76 var(--cond); text-transform: uppercase; letter-spacing: -.03em; }
+.pf-ko { display: none; }
+.pf-plate { display: inline-flex; gap: 5px; border: 1px solid var(--ink); font: 500 11.5px/1.6 var(--mono); margin-bottom: 4px; }
+.pf-plate i, .pf-plate s { font-style: normal; text-decoration: none; background: var(--ink); color: var(--paper); padding: 0 4px; }
+.pf-line { margin: 12px 0 0; justify-self: start; background: var(--ink); color: var(--paper); padding: 3px 8px; font: 700 14px/1.6 var(--ko); word-break: keep-all; }
+.pf-dl { display: grid; grid-template-columns: 62px 1fr 62px 1fr; margin: 14px 0 0; border-top: 1px solid var(--ink); }
+.pf-dl dt, .pf-dl dd { margin: 0; padding: 6px 0; border-bottom: 1px solid var(--g4); }
+.pf-dl dt { font: 500 9.5px/1.9 var(--mono); color: var(--g2); letter-spacing: .06em; } .pf-dl dd { word-break: keep-all; padding-right: 8px; }
+.pf-dl dt:nth-of-type(n+5), .pf-dl dd:nth-of-type(n+5) { grid-column: span 1; }
+.pf-dl dd:nth-of-type(n+5) { grid-column: span 3; }
+.pf-kw { margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 5px; } .pf-kw span { border: 1px solid var(--ink); padding: 1px 7px; font: italic 500 13px/1.5 var(--it); }
+.rl { margin: 0; padding: 0; list-style: none; counter-reset: r; } .rl li { counter-increment: r; display: grid; grid-template-columns: 34px 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--g4); word-break: keep-all; }
+.rl li::before { content: "0" counter(r); font: 900 22px/1 var(--cond); }
+.nt { margin: 0; padding-left: 16px; } .nt li { margin-bottom: 6px; word-break: keep-all; }
+.lk { display: grid; } .lk a { display: flex; justify-content: space-between; color: var(--ink); text-decoration: none; font: 900 30px/1 var(--cond); text-transform: uppercase; padding: 8px 0; border-bottom: 1px solid var(--ink); } .lk a:hover { text-decoration: line-through; } .lk i { font-style: normal; }
+.rt { list-style: none; margin: 0 0 12px; padding: 0; } .rt li { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0 8px; border-bottom: 1px solid var(--g4); position: relative; }
+.rt li::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--p) * 100%); background: var(--ink); }
+.rt b { font: 900 26px/1 var(--cond); } .rt span { font: 500 11px/1 var(--mono); }
+.bk { display: grid; grid-template-columns: 62px 1fr; margin: 0; } .bk dt { font: 500 9.5px/2 var(--mono); color: var(--g2); } .bk dd { margin: 0; padding: 2px 0; }
+.rc { font: 400 12px/1.6 var(--mono); } .rc-h { text-align: center; margin: 0; font-weight: 500; } .rc-m, .rc-t, .rc li { display: flex; justify-content: space-between; } .rc ul { list-style: none; margin: 8px 0; padding: 8px 0; border-block: 1px dashed var(--ink); } .rc-t { font-weight: 500; margin: 0; } .rc-f, .rc-m { color: var(--g2); margin: 6px 0 0; } .rc-f { text-align: center; }
+
+/* 01 YVAN 팝업 추가분 (레이아웃은 .pf 그대로) */
+.pf-sub { margin: 6px 0 0; font: 400 12.5px/1.5 var(--ko); color: var(--g2); word-break: keep-all; }
+.pf-dl dd b { font-weight: 700; }
+.pf-dl dd { line-height: 1.65; }
+.thr { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin: 6px 0 6px; } .thr i { height: 6px; background: var(--ink); }
+.cr { display: block; padding: 2px 0; } .cr b { font: 900 17px/1 var(--cond); margin-right: 6px; } .cr em { font-style: normal; font: 500 10px/1 var(--mono); color: var(--g2); margin-right: 6px; }
+.cr i { font-style: normal; font: 500 10px/1 var(--mono); background: var(--ink); color: var(--paper); padding: 1px 4px; margin-right: 6px; }
+/* 03 LE MANS 인터뷰 팝업 */
+.iv-h { border-bottom: 1px solid var(--ink); padding-bottom: 10px; margin-bottom: 4px; }
+.iv-h span { display: block; font: 500 9.5px/1 var(--mono); letter-spacing: .14em; color: var(--g2); }
+.iv-h b { display: block; font: 900 36px/.9 var(--cond); text-transform: uppercase; margin-top: 8px; letter-spacing: -.01em; }
+.iv-h em { display: block; font: italic 500 14px/1.3 var(--it); letter-spacing: .04em; margin-top: 4px; }
+.iv-q, .iv-a { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 12px 0; }
+.iv-q { border-top: 1px solid var(--g4); }
+.iv-q i, .iv-a i { font: 500 10.5px/1 var(--mono); font-style: normal; padding: 4px 0; text-align: center; height: max-content; border: 1px solid var(--ink); }
+.iv-a i { background: var(--ink); color: var(--paper); }
+.iv-q p { margin: 0; font: 400 12.5px/1.65 var(--ko); color: var(--g2); word-break: keep-all; }
+.iv-a { padding-top: 0; }
+.iv-a small { display: block; font: 500 9px/1 var(--mono); letter-spacing: .12em; color: var(--g2); margin: 3px 0 6px; }
+.iv-a .en { margin: 0; font: italic 600 16.5px/1.3 var(--it); letter-spacing: .005em; }
+.iv-a .ko { margin: 6px 0 0; font: 400 12.5px/1.65 var(--ko); word-break: keep-all; }
+/* 06 NOTICE + BGM 버튼 */
+.nt-e b { display: block; font: 900 30px/1 var(--cond); letter-spacing: .01em; text-transform: uppercase; }
+.nt-e ul { margin: 8px 0 0; padding-left: 16px; } .nt-e li { word-break: keep-all; }
+.bgm { margin-top: 16px; width: 100%; display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 10px; background: var(--night); color: #e8e8e4; border: 1px solid var(--ink); padding: 10px 12px; cursor: pointer; text-align: left; }
+.bgm:focus-visible { outline: 2px dashed var(--ink); outline-offset: 3px; }
+.bgm-ic { display: flex; align-items: end; gap: 2px; height: 16px; }
+.bgm-ic i { width: 3px; height: 4px; background: #e8e8e4; }
+.bgm.on .bgm-ic i { animation: eq .9s ease-in-out infinite; } .bgm.on .bgm-ic i:nth-child(2) { animation-delay: .2s; } .bgm.on .bgm-ic i:nth-child(3) { animation-delay: .45s; } .bgm.on .bgm-ic i:nth-child(4) { animation-delay: .1s; }
+@keyframes eq { 0%, 100% { height: 4px; } 50% { height: 16px; } }
+.bgm-k { font: 500 9.5px/1 var(--mono); letter-spacing: .14em; border: 1px solid #8a8a86; padding: 3px 5px; color: #a6a6a3; }
+.bgm-t { min-width: 0; } .bgm-t b { display: block; font: 900 19px/1 var(--cond); letter-spacing: .02em; text-transform: uppercase; overflow-wrap: anywhere; }
+.bgm-t em { display: block; font: italic 500 12.5px/1.2 var(--it); color: #a6a6a3; letter-spacing: .06em; margin-top: 2px; }
+.bgm-s { font: 500 10px/1 var(--mono); letter-spacing: .1em; background: #e8e8e4; color: var(--night); padding: 6px 8px; }
+.bgm:hover .bgm-s { background: #fff; }
+.bgm-frame { position: fixed; left: -9999px; top: 0; width: 200px; height: 200px; border: 0; }
+@media (prefers-reduced-motion: reduce) { .bgm.on .bgm-ic i { animation: none; height: 10px; } }
+/* 04 ON AIR — 브라운관 TV */
+.tv { display: grid; gap: 8px; }
+.tv-box { position: relative; padding: 16px 18px 18px; background: linear-gradient(160deg, #2a2b33, #0e0e12 60%, #1a1a20); border-radius: 22px; box-shadow: inset 0 0 0 2px #050507, inset 0 2px 0 rgba(255,255,255,.08), 0 10px 0 -4px #050507; }
+.tv-cv { display: block; width: 100%; aspect-ratio: 4 / 3; border-radius: 7% / 9%; background: #05050a; box-shadow: 0 0 0 3px #050507, 0 0 24px rgba(110,120,255,.25); }
+.tv-glass { position: absolute; inset: 16px 18px 18px; border-radius: 7% / 9%; pointer-events: none; background: radial-gradient(120% 90% at 28% 18%, rgba(255,255,255,.10), transparent 40%); box-shadow: inset 0 0 40px rgba(0,0,0,.65); }
+.tv-cap { margin: 0; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font: 500 9.5px/1.4 var(--mono); letter-spacing: .1em; color: var(--g2); }
+.tv-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #d0283c; margin-right: 6px; vertical-align: 0; animation: blink 1s steps(1) infinite; }
+@media (max-width: 720px) { .tv-box { padding: 10px 11px 12px; border-radius: 16px; } .tv-glass { inset: 10px 11px 12px; } }
+@media (max-width: 720px) {
+  /* 팝업 = 아래에서 올라오는 시트 */
+  .lw { left: 0 !important; right: 0; top: auto !important; bottom: 0; width: 100% !important; max-width: none; border-width: 1px 0 0; box-shadow: 0 -12px 0 -1px var(--paper), 0 -12px 0 0 var(--ink); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .lw::before, .lw::after { display: none; }
+  .lw { box-shadow: 0 -6px 24px rgba(0,0,0,.18); border-top: 2px solid var(--ink); }
+  .lw-pop { animation: sheet .4s var(--ease) both; } @keyframes sheet { from { transform: translateY(100%); } }
+  .lw-body { max-height: 62vh; }
+  .pf-name { font-size: 64px; }
+  .pf-dl { grid-template-columns: 54px 1fr 54px 1fr; font-size: 12px; }
+}

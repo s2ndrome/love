@@ -874,8 +874,8 @@ LUV.reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)'
       og.beginPath(); og.arc(566, 62, 17, 0, Math.PI * 2); og.lineWidth = 4; og.strokeStyle = '#fff'; og.stroke(); og.beginPath(); og.arc(566, 62, 7, 0, Math.PI * 2); og.fillStyle = '#fff'; og.fill();
       og.fillStyle = 'rgba(10,12,40,.82)'; og.fillRect(30, 300, 230, 96);
       og.fillStyle = '#fff'; og.font = '500 13px "IBM Plex Mono", monospace'; og.fillText('LAP ' + String(lap).padStart(2, '0') + '/22', 42, 322);
-      var rows = lead ? [['1', '#2 STADEL', 'LEADER'], ['2', '#8 BLACKWOOD', '+0.0' + (40 + Math.floor((t * 7) % 45))]] : [['1', '#8 BLACKWOOD', 'LEADER'], ['2', '#2 STADEL', '+0.085']];
-      rows.forEach(function (r, i) { var y = 350 + i * 30; if (r[1].indexOf('STADEL') > -1) { og.fillStyle = 'rgba(230,232,255,.95)'; og.fillRect(36, y - 20, 218, 26); og.fillStyle = '#0b0b2a'; } else og.fillStyle = '#fff';
+      var rows = lead ? [['1', '#2 YVAN', 'LEADER'], ['2', '#9 NINE', '+0.0' + (40 + Math.floor((t * 7) % 45))]] : [['1', '#9 NINE', 'LEADER'], ['2', '#2 YVAN', '+0.085']];
+      rows.forEach(function (r, i) { var y = 350 + i * 30; if (r[1].indexOf('YVAN') > -1) { og.fillStyle = 'rgba(230,232,255,.95)'; og.fillRect(36, y - 20, 218, 26); og.fillStyle = '#0b0b2a'; } else og.fillStyle = '#fff';
         og.font = '900 20px "Big Shoulders Display", Impact, sans-serif'; og.fillText(r[0] + '  ' + r[1], 44, y); og.font = '500 12px "IBM Plex Mono", monospace'; og.fillText(r[2], 196, y); });
       og.fillStyle = 'rgba(10,12,40,.82)'; og.fillRect(30, 418, 580, 30); og.fillStyle = '#fff'; og.font = '500 14px "IBM Plex Mono", monospace';
       og.fillText('MO1 · QATAR GP · LUSAIL INTERNATIONAL CIRCUIT · NIGHT RACE', 44, 438);
