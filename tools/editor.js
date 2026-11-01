@@ -29,6 +29,7 @@
   .re-q .acts button { flex: 1; margin: 0; padding: 7px 0; border: 1px solid rgba(0,0,0,.12); border-radius: 6px; background: #fff; color: #1d1d1f; font-size: 12px; font-weight: 600; cursor: pointer; }
   .re-q .acts button.go { background: #1d1d1f; border-color: #1d1d1f; color: #fff; }
   .re-q .msg { margin-top: 8px; font-size: 11.5px; color: #6e6e73; }
+  .re-q .hint { margin: 6px 0 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,.08); font-size: 11.5px; line-height: 1.5; color: #6e6e73; }
   .re-area { min-height: 320px; max-height: 70vh; overflow-y: auto; padding: 16px 18px; outline: none; white-space: pre-line; word-break: break-word; font: 400 13.5px/1.9 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #3c3c43; }
   .re-area:empty::before { content: attr(data-ph); color: #b0b0b5; }
   .re-area p { margin: 0 0 16px; }
@@ -80,7 +81,10 @@
       '</div>' +
       '<div class="re-area" contenteditable="true"></div>' +
       '<div class="re-pop"><div class="sw"></div><div class="row">직접 고르기 <input type="color" value="#6fb0dc"><button type="button" data-none>없애기</button></div></div>' +
-      '<div class="re-pop re-q"><h6>“ ” 안의 대사를 한 번에 꾸며요</h6>' +
+      '<div class="re-pop re-q"><h6>따옴표 붙이기</h6>' +
+        '<div class="acts"><button type="button" class="go" data-qwrap>선택한 줄에 “ ” 붙이기</button></div>' +
+        '<p class="hint">대사 줄을 드래그해서(여러 줄도 OK) 누르면 줄마다 앞뒤에 “ ”가 붙어요. 커서만 두면 그 줄에 붙어요.</p>' +
+        '<h6>“ ” 안의 대사를 한 번에 꾸며요</h6>' +
         '<label><input type="checkbox" data-qb checked> 굵게</label>' +
         '<div class="sw"></div>' +
         '<div class="row">직접 고르기 <input type="color" data-qc value="#6fb0dc"><button type="button" data-qnone>색 없음</button></div>' +
@@ -218,9 +222,36 @@
       if (b.hasAttribute('data-qnone')) { qColor = ''; markQ(); }
       if (b.hasAttribute('data-qoff')) { const n = unQ(); sync(); qmsg.textContent = n ? '대사 ' + n + '곳의 꾸밈을 풀었어요' : '꾸민 대사가 없어요'; }
       if (b.hasAttribute('data-qgo')) applyQ();
+      if (b.hasAttribute('data-qwrap')) { const n = wrapLines(); qmsg.textContent = n ? n + '줄에 “ ”를 붙였어요' : '붙일 줄이 없어요 (이미 따옴표가 있거나 빈 줄이에요)'; }
     });
     qp.querySelector('input[data-qc]').addEventListener('input', e => { qColor = e.target.value; markQ(); });
     document.addEventListener('mousedown', e => { if (!qp.contains(e.target) && !e.target.closest('[data-act=quotes]')) qp.classList.remove('open'); });
+    // 선택한 줄(또는 커서가 있는 줄)마다 앞뒤에 “ ”를 붙여요. 이미 따옴표로 시작하는 줄은 건너뛰어요
+    function wrapLines() {
+      if (srcMode) return 0;
+      const sel = getSelection(); if (!sel.rangeCount || !area.contains(sel.anchorNode)) return 0;
+      const r = sel.getRangeAt(0), A = '\uE000', B = '\uE001';
+      const end = r.cloneRange(); end.collapse(false); end.insertNode(document.createTextNode(B));
+      const st = r.cloneRange(); st.collapse(true); st.insertNode(document.createTextNode(A));
+      const parts = area.innerHTML.split(/(<br\s*\/?>|\n|<\/?(?:div|p|li)[^>]*>)/i);
+      let inSel = false, n = 0;
+      for (let i = 0; i < parts.length; i += 2) {
+        const seg = parts[i] || '';
+        const hasA = seg.includes(A), hasB = seg.includes(B);
+        if (hasA) inSel = true;
+        if (inSel) {
+          const text = seg.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/[\uE000\uE001]/g, '').trim();
+          if (text && !/^["“'‘「『(\[]/.test(text)) {
+            const m = seg.match(/^((?:\s|&nbsp;|<[^>]+>|[\uE000\uE001])*)([\s\S]*?)((?:\s|&nbsp;|<[^>]+>|[\uE000\uE001])*)$/);
+            parts[i] = m[1] + '“' + m[2] + '”' + m[3]; n++;
+          }
+        }
+        if (hasB) inSel = false;
+      }
+      area.innerHTML = parts.join('').replace(/[\uE000\uE001]/g, '');
+      sync();
+      return n;
+    }
     function unQ() {
       const xs = area.querySelectorAll('span[data-q]');
       xs.forEach(x => x.replaceWith(...x.childNodes));

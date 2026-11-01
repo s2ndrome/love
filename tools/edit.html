@@ -182,6 +182,7 @@
 </main>
 
 <script src="editor.js"></script>
+<script src="draft.js"></script>
 <script>
 const OWNER = "s2ndrome";
 const REPO = "love";
@@ -412,6 +413,16 @@ categorySelect.addEventListener("change", loadPostList);
 })();
 loadBtn.addEventListener("click", loadPostList);
 
+// 임시저장: 글마다 따로 저장돼요. 그 글을 다시 열면 불러오기를 물어봐요
+const draft = Draft({
+  key: () => currentPost && currentPost.category !== "gallery" && editFields.style.display !== "none" && textFields.style.display !== "none" ? "edit:" + currentPost.category + ":" + currentPost.title : null,
+  get: () => ({ title: titleInput.value, html: editor.getHTML() }),
+  set: d => { titleInput.value = d.title || titleInput.value; editor.setHTML(d.html || ""); },
+  empty: s => !String(s.html || "").replace(/<[^>]*>|&nbsp;|\s/g, ""),
+  before: titleInput.previousElementSibling || titleInput,
+  note: saveBtn
+});
+
 async function openPostForEditing(plainContent) {
   titleInput.value = currentPost.title;
   editor.setMode(currentPost.category === "diary" ? "pre-line" : "normal");
@@ -422,6 +433,7 @@ async function openPostForEditing(plainContent) {
   textFields.style.display = "block";
   galleryFields.style.display = "none";
   editFields.style.display = "block";
+  draft.check();
 }
 
 // currentPost.photos: [{ kind: "existing", src }] | [{ kind: "new", file, previewUrl }]
@@ -752,6 +764,7 @@ saveBtn.addEventListener("click", async () => {
     await putFile(dataPath, utf8ToBase64(newJsonText), `Update "${oldTitle}" in ${category}.json`, jsonFile.sha, token);
 
     setStatus(`완료! 저장됐어요. 1~2분 후 사이트에 반영돼요.`, "done");
+    draft.clear();
     await loadPostList();
     editFields.style.display = "none";
   } catch (err) {
