@@ -30,6 +30,12 @@
   .re-q .acts button.go { background: #1d1d1f; border-color: #1d1d1f; color: #fff; }
   .re-q .msg { margin-top: 8px; font-size: 11.5px; color: #6e6e73; }
   .re-q .hint { margin: 6px 0 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,.08); font-size: 11.5px; line-height: 1.5; color: #6e6e73; }
+  .re-area mark[data-aiq] { background: #fff2a8; color: inherit; border-radius: 3px; cursor: pointer; }
+  .re-aiq { display: none; align-items: center; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border-bottom: 1px solid rgba(0,0,0,.08); background: #fffbe0; font-size: 12.5px; color: #1d1d1f; }
+  .re-aiq.on { display: flex; }
+  .re-aiq span { flex: 1 1 auto; }
+  .re-aiq button { width: auto; margin: 0; padding: 5px 12px; border: 1px solid rgba(0,0,0,.12); border-radius: 6px; background: #fff; color: #1d1d1f; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .re-aiq button.go { background: #1d1d1f; border-color: #1d1d1f; color: #fff; }
   .re-area { min-height: 320px; max-height: 70vh; overflow-y: auto; padding: 16px 18px; outline: none; white-space: pre-line; word-break: break-word; font: 400 13.5px/1.9 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #3c3c43; }
   .re-area:empty::before { content: attr(data-ph); color: #b0b0b5; }
   .re-area p { margin: 0 0 16px; }
@@ -79,10 +85,11 @@
         '<button type="button" data-cmd="redo" title="다시">↷</button>' +
         '<button type="button" class="html" data-act="html" title="HTML 코드로 보기">HTML</button>' +
       '</div>' +
+      '<div class="re-aiq"><span></span><button type="button" class="go" data-aiok>적용</button><button type="button" data-aino>취소</button></div>' +
       '<div class="re-area" contenteditable="true"></div>' +
       '<div class="re-pop"><div class="sw"></div><div class="row">직접 고르기 <input type="color" value="#6fb0dc"><button type="button" data-none>없애기</button></div></div>' +
       '<div class="re-pop re-q"><h6>따옴표 붙이기</h6>' +
-        '<div class="acts"><button type="button" class="go" data-qwrap>선택한 줄에 “ ” 붙이기</button></div>' +
+        '<div class="acts"><button type="button" class="go" data-qwrap>선택한 줄에 “ ” 붙이기</button><button type="button" data-qai>AI로 대사 찾기</button></div>' +
         '<p class="hint">대사 줄을 드래그해서(여러 줄도 OK) 누르면 줄마다 앞뒤에 “ ”가 붙어요. 커서만 두면 그 줄에 붙어요.</p>' +
         '<h6>“ ” 안의 대사를 한 번에 꾸며요</h6>' +
         '<label><input type="checkbox" data-qb checked> 굵게</label>' +
@@ -222,10 +229,58 @@
       if (b.hasAttribute('data-qnone')) { qColor = ''; markQ(); }
       if (b.hasAttribute('data-qoff')) { const n = unQ(); sync(); qmsg.textContent = n ? '대사 ' + n + '곳의 꾸밈을 풀었어요' : '꾸민 대사가 없어요'; }
       if (b.hasAttribute('data-qgo')) applyQ();
+      if (b.hasAttribute('data-qai')) aiFind();
       if (b.hasAttribute('data-qwrap')) { const n = wrapLines(); qmsg.textContent = n ? n + '줄에 “ ”를 붙였어요' : '붙일 줄이 없어요 (이미 따옴표가 있거나 빈 줄이에요)'; }
     });
     qp.querySelector('input[data-qc]').addEventListener('input', e => { qColor = e.target.value; markQ(); });
     document.addEventListener('mousedown', e => { if (!qp.contains(e.target) && !e.target.closest('[data-act=quotes]')) qp.classList.remove('open'); });
+    // AI로 대사 찾기: 따옴표 없는 줄들을 대사 찾기 워커(ai-chat/quote-worker.js)에 보내고,
+    // 대사로 보이는 줄을 노랗게 표시해요. 노란 줄을 누르면 빠지고, [적용]하면 “ ”가 붙어요.
+    const QUOTE_URL = 'https://syndrome-quote.jenojeno0423.workers.dev/quote';
+    const SPLIT = /(<br\s*\/?>|\n|<\/?(?:div|p|li)[^>]*>)/i;
+    const EDGE = /^((?:\s|&nbsp;|<[^>]+>)*)([\s\S]*?)((?:\s|&nbsp;|<[^>]+>)*)$/;
+    const aiq = wrap.querySelector('.re-aiq'), aiqMsg = aiq.querySelector('span');
+    const lineText = seg => seg.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+    async function aiFind() {
+      if (srcMode) return;
+      unAI();
+      const token = (localStorage.getItem('gh_token') || '').trim();
+      if (!token) { qmsg.textContent = '관리자 토큰이 저장돼 있어야 써요 (토큰 칸에 한 번 넣고 올리면 저장돼요)'; return; }
+      const parts = area.innerHTML.split(SPLIT), idx = [], lines = [];
+      for (let i = 0; i < parts.length; i += 2) { const t = lineText(parts[i] || ''); if (t && !/^["“'‘「『(\[]/.test(t)) { idx.push(i); lines.push(t); } }
+      if (!lines.length) { qmsg.textContent = '따옴표 없는 줄이 없어요'; return; }
+      qmsg.textContent = 'AI가 대사를 찾는 중…';
+      let res;
+      try {
+        const r = await fetch(QUOTE_URL, { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + token }, body: JSON.stringify({ lines }) });
+        res = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(res.error || ('오류 ' + r.status));
+      } catch (e) { qmsg.textContent = 'AI 대사 찾기 실패: ' + (e.message === 'Failed to fetch' ? '대사 찾기 워커에 연결이 안 돼요' : e.message); return; }
+      const hit = (res.lines || []).map(n => idx[n - 1]).filter(x => x != null);
+      if (!hit.length) { qmsg.textContent = 'AI가 따옴표 빠진 대사를 못 찾았어요'; return; }
+      // 그사이 글이 바뀌었으면 다시 나눠서 같은 줄 번호에 표시해요
+      const now = area.innerHTML.split(SPLIT);
+      hit.forEach(i => { const m = (now[i] || '').match(EDGE); if (m && m[2]) now[i] = m[1] + '<mark data-aiq>' + m[2] + '</mark>' + m[3]; });
+      area.innerHTML = now.join(''); sync();
+      qp.classList.remove('open');
+      aiCount();
+    }
+    function aiCount() {
+      const n = area.querySelectorAll('mark[data-aiq]').length;
+      aiq.classList.toggle('on', n > 0);
+      aiqMsg.textContent = 'AI가 찾은 대사 ' + n + '줄 (노란 줄). 아닌 줄은 눌러서 빼고 [적용]을 누르세요.';
+    }
+    function unAI() { area.querySelectorAll('mark[data-aiq]').forEach(x => x.replaceWith(...x.childNodes)); area.normalize(); aiq.classList.remove('on'); }
+    aiq.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.hasAttribute('data-aiok')) {
+        area.querySelectorAll('mark[data-aiq]').forEach(x => x.replaceWith('“', ...x.childNodes, '”'));
+        area.normalize();
+      }
+      unAI(); sync();
+    });
+    area.addEventListener('click', e => { const m = e.target.closest && e.target.closest('mark[data-aiq]'); if (m) { m.replaceWith(...m.childNodes); area.normalize(); aiCount(); sync(); } });
+
     // 선택한 줄(또는 커서가 있는 줄)마다 앞뒤에 “ ”를 붙여요. 이미 따옴표로 시작하는 줄은 건너뛰어요
     function wrapLines() {
       if (srcMode) return 0;
@@ -370,6 +425,7 @@
     }
     function getHTML() {
       const c = area.cloneNode(true);
+      c.querySelectorAll('mark[data-aiq]').forEach(x => x.replaceWith(...x.childNodes)); // AI 표시는 저장 안 해요
       c.querySelectorAll('img').forEach(img => {
         if (img.dataset.orig) { img.setAttribute('src', img.dataset.orig); img.removeAttribute('data-orig'); }
         img.classList.remove('sel'); if (!img.className) img.removeAttribute('class');
