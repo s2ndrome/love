@@ -7,7 +7,9 @@
     '.draft-bar span{flex:1 1 auto}.draft-bar small{color:#9a9ca3}' +
     '.draft-bar button{width:auto;margin:0;padding:6px 12px;border:1px solid #c9d5de;border-radius:8px;background:#fff;color:#2b2c31;font-size:12.5px;cursor:pointer}' +
     '.draft-bar button.go{background:#7f97a9;border-color:#7f97a9;color:#fff}' +
-    '.draft-note{margin:8px 0 0;font-size:11.5px;color:#9a9ca3;min-height:1em}';
+    '.draft-note{margin:8px 0 0;font-size:11.5px;color:#9a9ca3;min-height:1em}' +
+    '.draft-save{width:auto!important;margin:0 0 0 8px!important;padding:10px 16px!important;border:1px solid #c9d5de!important;border-radius:10px!important;background:#fff!important;color:#2b2c31!important;font-size:13px!important;font-weight:600!important;cursor:pointer;vertical-align:top}' +
+    '.draft-save:hover{border-color:#7f97a9!important}';
   document.head.appendChild(css);
 
   const PFX = 'draft:';
@@ -20,14 +22,23 @@
   //      empty(state) → 저장할 게 없는지, before → 안내 막대를 넣을 자리, note → "자동 저장됨" 표시 자리
   window.Draft = function (opt) {
     let last = '', paused = false, bar = null;
-    const note = document.createElement('p'); note.className = 'draft-note'; opt.note.after(note);
-    function save() {
+    const note = document.createElement('p'); note.className = 'draft-note';
+    // [임시저장] 버튼: 누르면 지금 글을 바로 저장해요 (자동 저장도 계속 돼요)
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'draft-save'; btn.textContent = '임시저장';
+    opt.note.after(btn); btn.after(note);
+    btn.style.setProperty('margin-top', getComputedStyle(opt.note).marginTop, 'important'); // 옆 버튼이랑 높이 맞춤
+    btn.onclick = () => {
+      if (!opt.key()) { note.textContent = '저장할 글이 없어요'; return; }
+      if (bar) { if (!confirm('전에 임시저장한 글이 있어요. 지금 글로 바꿔 저장할까요?')) return; hideBar(); }
+      last = ''; save(true);
+    };
+    function save(manual) {
       const k = opt.key(); if (!k || paused) return;
       const s = opt.get(); s.html = cleanHTML(s.html);
       const j = JSON.stringify(s); if (j === last) return; last = j;
       try {
-        if (opt.empty(s)) localStorage.removeItem(PFX + k);
-        else { localStorage.setItem(PFX + k, JSON.stringify(Object.assign({}, s, { t: Date.now() }))); note.textContent = '임시저장됨 · ' + time(Date.now()); }
+        if (opt.empty(s)) { localStorage.removeItem(PFX + k); if (manual) note.textContent = '빈 글은 저장하지 않아요'; }
+        else { localStorage.setItem(PFX + k, JSON.stringify(Object.assign({}, s, { t: Date.now() }))); note.textContent = (manual ? '임시저장했어요 · ' : '임시저장됨 · ') + time(Date.now()); }
       } catch (e) { note.textContent = '임시저장을 못 했어요 (저장 공간이 꽉 찼어요)'; }
     }
     function hideBar() { if (bar) { bar.remove(); bar = null; } paused = false; }
@@ -46,9 +57,9 @@
     }
     function clear() { const k = opt.key(); if (k) try { localStorage.removeItem(PFX + k); } catch (e) {} hideBar(); last = ''; note.textContent = ''; }
     let tm = 0;
-    document.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(save, 600); }, true);
-    setInterval(save, 4000); // 서식 버튼처럼 input이 안 생기는 변화도 놓치지 않게
-    addEventListener('pagehide', save);
+    document.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(() => save(), 600); }, true);
+    setInterval(() => save(), 4000); // 서식 버튼처럼 input이 안 생기는 변화도 놓치지 않게
+    addEventListener('pagehide', () => save());
     document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
     return { check, clear, save };
   };
