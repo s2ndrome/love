@@ -773,6 +773,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 .hw-tabs { flex-wrap: wrap; }
 .hw-b { min-height: 300px; }
 .hw-ph { aspect-ratio: 16 / 6.4; border-radius: 10px; background: url(img/hero-wide.jpg) 30% 30% / cover; }
+.hw-ph.b { background-image: url(img/hero-talk.jpg); background-position: center 25%; } /* B 대화 칸 헤더 사진 */
 .hw-av { flex: none; width: 34px; height: 34px; border-radius: 50%; background: center 18% / cover; box-shadow: 0 0 0 1px #e3e8ec; }
 .hw-av.s { background-image: url(img/sdpor.jpg); }
 .hw-av.l { background-image: url(img/lia-fro.jpg); }
@@ -1149,7 +1150,7 @@ SITE_READY.then(function () {
     if (HWT === 0 && HWD) b = hwEdHTML();
     else if (HWT === 0) {
       var LN = hwLines(); if (HWL >= LN.length) HWL = 0;
-      b = '<div class="hw-ph"></div>' + hwTalk(LN[HWL]) +
+      b = '<div class="hw-ph b"></div>' + hwTalk(LN[HWL]) +
         '<div class="hw-ft"><span>' + p2(HWL + 1) + ' / ' + p2(LN.length) + '</span>' + (isAdmin() ? '<button data-hwed class="hw-edb">대화 편집 ✎</button>' : '') + '<button data-hwnext>NEXT ↻</button></div>';
     } else if (HWT === 1) {
       var day = 864e5, now = new Date(); now.setHours(0, 0, 0, 0);
