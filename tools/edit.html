@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="embed.js?v=20261101d"></script>
-<script src="dedupe.js?v=20261101d"></script>
+<script src="embed.js?v=20261104a"></script>
+<script src="dedupe.js?v=20261104a"></script>
 <title>글 수정 도구</title>
 <style>
   * { box-sizing: border-box; }
@@ -181,8 +181,8 @@
   <p class="status" id="status"></p>
 </main>
 
-<script src="editor.js?v=20261101d"></script>
-<script src="draft.js?v=20261101d"></script>
+<script src="editor.js?v=20261104a"></script>
+<script src="draft.js?v=20261104a"></script>
 <script>
 const OWNER = "s2ndrome";
 const REPO = "love";
@@ -262,6 +262,8 @@ function readFileAsBase64(file) {
 // Same downscale-and-recompress used by the upload tool, so photos
 // added here don't undo the point of compressing on upload.
 async function compressImage(file, maxDim = 1600, quality = 0.85) {
+  const png = window.cleanTransparent ? await cleanTransparent(file) : null; // 투명 사진은 PNG 그대로
+  if (png) return png;
   const bitmap = await createImageBitmap(file);
   let { width, height } = bitmap;
   if (Math.max(width, height) > maxDim) {
@@ -640,7 +642,7 @@ async function saveGalleryPost() {
       const isGif = p.file.type === "image/gif" || /\.gif$/i.test(p.file.name);
       setStatus(`사진 압축 중… (${i + 1}/${currentPost.photos.length})`);
       const uploadBlob = isGif ? p.file : await compressImage(p.file);
-      const ext = isGif ? "gif" : "jpg";
+      const ext = isGif ? "gif" : (uploadBlob.type === "image/png" ? "png" : "jpg");
       const imgPath = `img/${crypto.randomUUID()}.${ext}`;
       setStatus(`사진 업로드 중… (${i + 1}/${currentPost.photos.length})`);
       const b64 = await readFileAsBase64(uploadBlob);
@@ -739,7 +741,7 @@ saveBtn.addEventListener("click", async () => {
       setStatus(`사진 압축 중… (${i}/${n})`);
       // GIF 말고는 항상 JPG로 다시 그려서 올려요 (촬영 정보·프롬프트 같은 메타데이터가 남지 않게)
       const blob = isGif ? file : await compressImage(file);
-      const imgPath = `img/${crypto.randomUUID()}.${isGif ? "gif" : "jpg"}`;
+      const imgPath = `img/${crypto.randomUUID()}.${isGif ? "gif" : (blob.type === "image/png" ? "png" : "jpg")}`;
       setStatus(`사진 업로드 중… (${i}/${n})`);
       await putFile(imgPath, await readFileAsBase64(blob), `Add photo for post: ${newTitle}`, undefined, token);
       return imgPath;

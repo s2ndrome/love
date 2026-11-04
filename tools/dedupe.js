@@ -28,3 +28,27 @@ window.uniqueImages = async function (files) {
   }
   return out;
 };
+
+/* 투명 배경 사진은 JPG로 바꾸지 않고 PNG 그대로 올려요 (JPG는 투명이 안 돼서 배경이 생겨요).
+   크기도 그대로 두고, 픽셀만 다시 그려서 메타데이터를 전부 지워요.
+   NovelAI 같은 툴이 픽셀 맨 끝 비트에 숨겨 둔 프롬프트도 같이 지워요 (눈으로는 차이가 안 보여요).
+   투명한 부분이 없는 사진이면 null을 돌려줘요 → 원래대로 JPG로 압축 */
+window.cleanTransparent = async function (file) {
+  if (/gif$/i.test(file.type) || /\.gif$/i.test(file.name || '')) return null;
+  let bm;
+  try { bm = await createImageBitmap(file, { premultiplyAlpha: 'none', colorSpaceConversion: 'none' }); } catch (e) { return null; }
+  const c = document.createElement('canvas'); c.width = bm.width; c.height = bm.height;
+  const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(bm, 0, 0); bm.close && bm.close();
+  const img = g.getImageData(0, 0, c.width, c.height), d = img.data;
+  let clear = false;
+  for (let i = 3; i < d.length; i += 4) if (d[i] < 255) { clear = true; break; }
+  if (!clear) return null;
+  for (let i = 0; i < d.length; i += 4) {
+    const a = d[i + 3];
+    d[i + 3] = a <= 1 ? 0 : (a | 1);                                   // 투명도 끝 비트에 숨긴 글자 지우기
+    const r = (Math.random() * 8) | 0;                                  // 색 끝 비트에 숨긴 글자 지우기
+    d[i] ^= r & 1; d[i + 1] ^= (r >> 1) & 1; d[i + 2] ^= (r >> 2) & 1;
+  }
+  g.putImageData(img, 0, 0);
+  return await new Promise(res => c.toBlob(res, 'image/png'));
+};
