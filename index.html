@@ -851,6 +851,30 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 .pod-row span { cursor: pointer; font: 400 14px/1 sans-serif; color: #c3ced6; user-select: none; }
 .pod-row span.on { color: #7f97a9; }
 @media (max-width: 480px) { .pod { grid-template-columns: 96px 1fr; gap: 8px; padding: 9px; } .pod-wheel { width: 96px; height: 96px; } .pod-wheel button { width: 28px; height: 28px; } .pod-wheel .t, .pod-wheel .b { left: 34px; } .pod-wheel .l, .pod-wheel .r { top: 34px; } .pod-wheel .c { left: 26px; top: 26px; width: 44px; height: 44px; } .pod-scr { height: 84px; padding: 10px 14px 8px; } .pod-scr b { font-size: 13.5px; } }
+
+/* script: 서사 타임라인 */
+.tl-head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #8ea4b5; }
+.tl-head small { display: none; }
+.tl-head b { font: 800 26px/1 "Archivo", "Inter", var(--sans); font-stretch: 125%; color: transparent; -webkit-text-stroke: 1px #7f97a9; letter-spacing: .01em; }
+.tl-head span { margin-left: auto; font: 500 10px "Inter", var(--sans); letter-spacing: .18em; color: #9a9ca3; }
+.tl { list-style: none; margin: 0; padding: 6px 0 0; position: relative; }
+.tl::before { content: ""; position: absolute; left: 15px; top: 14px; bottom: 14px; width: 1px; background: linear-gradient(#c9d5de, #e6ecf0); }
+.tl li { position: relative; display: grid; grid-template-columns: 32px 1fr; gap: 14px; padding: 14px 0; }
+.tl li + li { border-top: 1px dashed #ececee; }
+.tl-no { position: relative; z-index: 1; display: grid; place-items: center; width: 31px; height: 31px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px #c9d5de; font: 600 10px "Inter", var(--sans); letter-spacing: .04em; color: #7f97a9; }
+.tl li:first-child .tl-no { background: #7f97a9; box-shadow: none; color: #fff; }
+.tl-c { min-width: 0; padding-top: 2px; }
+.tl-c time { display: block; margin-bottom: 4px; font: 500 10px "Inter", var(--sans); letter-spacing: .16em; text-transform: uppercase; color: #7f97a9; }
+.hw .tl-c h4 { margin: 0 0 5px; font: 700 15px/1.35 "Pretendard Variable", Pretendard, var(--ko); letter-spacing: -.01em; color: #1d1d20; }
+.hw .tl-c p { margin: 0; font-size: 13px; line-height: 1.75; color: #55575f; word-break: keep-all; }
+.tl-empty { padding: 56px 0 46px; text-align: center; }
+.tl-empty b { display: block; font: 800 30px/1 "Archivo", "Inter", var(--sans); font-stretch: 125%; color: transparent; -webkit-text-stroke: 1px #9fb3c2; letter-spacing: .02em; }
+.hw .tl-empty p { margin: 12px 0 0; font: 500 12px var(--ko); letter-spacing: .1em; color: #9a9ca3; }
+.tl-ft { display: flex; justify-content: flex-end; margin-top: 12px; padding-top: 10px; border-top: 1px solid #ececee; }
+.tl-ft .hw-edb { margin: 0; padding: 0; border: 0; background: none; cursor: pointer; font: 500 10.5px "Inter", var(--sans); letter-spacing: .14em; color: #9a9ca3; }
+.tl-ed { display: grid; gap: 6px; }
+.tl-ed input, .tl-ed textarea { width: 100%; padding: 7px 10px; border: 1px solid #e3e6ea; border-radius: 7px; font: 400 13px/1.5 "Pretendard Variable", Pretendard, var(--ko); color: #2b2c31; background: #fff; resize: none; }
+.tl-ed input[data-f="title"] { font-weight: 600; }
 </style>
 </head>
 <body>
@@ -892,7 +916,7 @@ img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
 <script>
 // 사이트의 data/*.json을 바로 읽어요 — tools로 글을 올리면 새로고침만 해도 반영돼요.
 window.SITE = { data: {}, posts: { characters: {}, diary: {}, ooc: {}, world: {}, gallery: {} } };
-window.SITE_READY = Promise.all(['characters', 'diary', 'ooc', 'world', 'gallery', 'banners', 'talks'].map(function (k) {
+window.SITE_READY = Promise.all(['characters', 'diary', 'ooc', 'world', 'gallery', 'banners', 'talks', 'timeline'].map(function (k) {
   return fetch('data/' + k + '.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }).then(function (v) { SITE.data[k] = v; });
 })).then(function () {
   SYN.log = SITE.data.diary.map(function (d) { return [d.label || d.id, d.locked ? 1 : 0]; });
@@ -1167,7 +1191,7 @@ SITE_READY.then(function () {
   function hwTalk(turns) { return '<div class="hw-say">' + turns.map(function (t) { return '<div class="hw-row' + (t[0] === 'L' ? ' r' : '') + '"><span class="hw-av ' + t[0].toLowerCase() + '"></span><p><small>' + HWN[t[0]] + '</small>' + hwEsc(t[1]) + '</p></div>'; }).join('') + '</div>'; }
   function heroView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
-    var T = [[1, 'ruin'], [0, 'scene'], [2, 'screen'], [3, 'mp3']] /* ruin 디데이 · scene 대화 · screen 문답 · mp3 플리 */, b = '', p2 = function (n) { return ('0' + n).slice(-2); };
+    var T = [[1, 'ruin'], [0, 'scene'], [2, 'screen'], [4, 'script'], [3, 'mp3']] /* ruin 디데이 · scene 대화 · screen 문답 · script 서사 타임라인 · mp3 플리 */, b = '', p2 = function (n) { return ('0' + n).slice(-2); };
     if (HWT === 0 && HWD) b = hwEdHTML();
     else if (HWT === 0) {
       var LN = hwLines(); if (HWL >= LN.length) HWL = 0;
@@ -1185,18 +1209,21 @@ SITE_READY.then(function () {
       var q = HW.qa[HWQ];
       b = '<div class="hw-chips">' + HW.qa.map(function (x, i) { return '<button data-hwq="' + i + '"' + (i === HWQ ? ' class="on"' : '') + '>' + hwEsc(x[0]) + '</button>'; }).join('') + '</div>' +
         '<p class="hw-ask"><small>Q.' + p2(HWQ + 1) + '</small>' + hwEsc(q[1]) + '</p>' + hwTalk(q[2]);
+    } else if (HWT === 4) {
+      b = HWX ? hwTlEdHTML() : hwTlHTML();
     } else {
       b = hwPodHTML() +
         '<ol class="hw-songs">' + HW.songs.map(function (x, i) { var on = i === HWS && YP.on; return '<li><button data-hws="' + i + '"' + (on ? ' class="on"' : '') + '><i>' + p2(i + 1) + '</i>' + hwEsc(x[0]) + '<em>' + (on ? '♪ NOW' : '▶') + '</em></button></li>'; }).join('') + '</ol>';
     }
     render('', '<div class="hw"><nav class="gtabs hw-tabs">' + T.map(function (t) { return '<button data-hwt="' + t[0] + '"' + (t[0] === HWT ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join('') + '</nav><div class="hw-b">' + b + '</div></div>', null);
-    txt.querySelectorAll('[data-hwt]').forEach(function (x) { x.onclick = function () { if (HWD && !confirm('대화 편집을 저장하지 않고 나갈까요?')) return; HWD = null; HWT = +x.dataset.hwt; heroView(); }; });
+    txt.querySelectorAll('[data-hwt]').forEach(function (x) { x.onclick = function () { if ((HWD || HWX) && !confirm('편집한 걸 저장하지 않고 나갈까요?')) return; HWD = null; HWX = null; HWT = +x.dataset.hwt; heroView(); }; });
     txt.querySelectorAll('[data-hwq]').forEach(function (x) { x.onclick = function () { HWQ = +x.dataset.hwq; heroView(); }; });
     txt.querySelectorAll('[data-hws]').forEach(function (x) { x.onclick = function () { ypPlay(+x.dataset.hws); }; }); // 곡을 누르면 홈 플레이어는 멈추고 이 곡 재생
     if (HWT === 3) ypWire();
     var nx = txt.querySelector('[data-hwnext]'); if (nx) nx.onclick = function () { HWL = (HWL + 1) % hwLines().length; heroView(); };
     var ed = txt.querySelector('[data-hwed]'); if (ed) ed.onclick = function () { HWD = JSON.parse(JSON.stringify(hwLines())); heroView(); };
     if (HWT === 0 && HWD) hwEdWire();
+    if (HWT === 4) hwTlWire();
   }
   // ── D 플리: 아이팟 같은 작은 플레이어. 소리는 안 보이는 유튜브 플레이어에서 나와요
   var YP = { p: null, ready: false, on: false, playing: false, want: null, vol: 70 };
@@ -1302,6 +1329,60 @@ SITE_READY.then(function () {
       SITE.data.talks = clean; HWD = null; HWL = 0; heroView();
       var f = txt.querySelector('.hw-ft span'); if (f) f.textContent = '저장했어요 · 1~2분 뒤 모두에게 보여요';
     }).catch(function (e) { btn.disabled = false; msg.textContent = '저장 실패 (' + e.message + ') — 토큰을 확인해주세요'; });
+  }
+  // ── script: 페어 서사 타임라인. 관리 중이면 [타임라인 편집]으로 위젯 안에서 바로 고쳐요 (data/timeline.json)
+  // 한 칸 = { date: '2026.03.29', title: '제목', text: '내용' }
+  var HWX = null; // 편집 중인 사본
+  function hwTl() { return (SITE.data.timeline || []).filter(function (x) { return x && (x.title || x.text || x.date); }); }
+  function hwTlHTML() {
+    var L = hwTl(), ed = isAdmin() ? '<div class="tl-ft"><button data-tled class="hw-edb">타임라인 편집 ✎</button></div>' : '';
+    if (!L.length) return '<div class="tl-empty"><b>SCRIPT</b><p>준비중</p></div>' + ed;
+    return '<div class="tl-head"><small>SYNDROME ୨୧ LIA</small><b>SCRIPT</b><span>' + ('0' + L.length).slice(-2) + ' SCENES</span></div>' +
+      '<ol class="tl">' + L.map(function (x, i) {
+        return '<li><span class="tl-no">' + ('0' + (i + 1)).slice(-2) + '</span><div class="tl-c">' + (x.date ? '<time>' + hwEsc(x.date) + '</time>' : '') +
+          (x.title ? '<h4>' + hwEsc(x.title) + '</h4>' : '') + (x.text ? '<p>' + hwEsc(x.text).replace(/\n/g, '<br>') + '</p>' : '') + '</div></li>';
+      }).join('') + '</ol>' + ed;
+  }
+  function hwTlEdHTML() {
+    return '<div class="hw-ed">' + (HWX.length ? '' : '<p class="hw-ed-empty">아직 장면이 없어요. 아래 + 새 장면을 눌러주세요.</p>') + HWX.map(function (x, i) {
+      return '<div class="hw-ed-t" data-i="' + i + '"><div class="hw-ed-h"><b>' + ('0' + (i + 1)).slice(-2) + '</b><button data-up' + (i ? '' : ' disabled') + '>▲</button><button data-down' + (i < HWX.length - 1 ? '' : ' disabled') + '>▼</button><button data-del class="x">삭제</button></div>' +
+        '<div class="tl-ed"><input data-f="date" placeholder="날짜 (예: 2026.03.29 / 첫 만남 / 1년 차)" value="' + hwEsc(x.date || '').replace(/"/g, '&quot;') + '">' +
+        '<input data-f="title" placeholder="제목" value="' + hwEsc(x.title || '').replace(/"/g, '&quot;') + '">' +
+        '<textarea data-f="text" rows="2" placeholder="내용">' + hwEsc(x.text || '') + '</textarea></div></div>';
+    }).join('') + '<div class="hw-ed-ft"><button data-new>+ 새 장면</button><span data-msg></span><button data-cancel>취소</button><button data-save class="go">저장</button></div></div>';
+  }
+  function hwTlWire() {
+    var e0 = txt.querySelector('[data-tled]'); if (e0) e0.onclick = function () { HWX = JSON.parse(JSON.stringify(hwTl())); heroView(); };
+    var box = HWX && txt.querySelector('.hw-ed'); if (!box) return;
+    var fit = function (ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 2 + 'px'; };
+    box.querySelectorAll('textarea').forEach(fit);
+    box.addEventListener('input', function (e) { var f = e.target.dataset.f, t = e.target.closest('.hw-ed-t'); if (!f || !t) return; HWX[+t.dataset.i][f] = e.target.value; if (e.target.tagName === 'TEXTAREA') fit(e.target); });
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return; var t = b.closest('.hw-ed-t'), i = t ? +t.dataset.i : -1, keep = txt.scrollTop;
+      if (b.hasAttribute('data-up')) HWX.splice(i - 1, 0, HWX.splice(i, 1)[0]);
+      else if (b.hasAttribute('data-down')) HWX.splice(i + 1, 0, HWX.splice(i, 1)[0]);
+      else if (b.hasAttribute('data-del')) { if (!confirm('장면 ' + ('0' + (i + 1)).slice(-2) + '을(를) 지울까요?')) return; HWX.splice(i, 1); }
+      else if (b.hasAttribute('data-new')) HWX.push({ date: '', title: '', text: '' });
+      else if (b.hasAttribute('data-cancel')) { HWX = null; heroView(); return; }
+      else if (b.hasAttribute('data-save')) {
+        var clean = HWX.map(function (x) { return { date: (x.date || '').trim(), title: (x.title || '').trim(), text: (x.text || '').trim() }; }).filter(function (x) { return x.date || x.title || x.text; });
+        var msg = box.querySelector('[data-msg]'); b.disabled = true; msg.textContent = '저장 중…';
+        ghSave('data/timeline.json', clean, 'Update timeline (' + clean.length + ')').then(function () { SITE.data.timeline = clean; HWX = null; heroView(); },
+          function (er) { b.disabled = false; msg.textContent = '저장 실패 (' + er.message + ') — 토큰을 확인해주세요'; });
+        return;
+      } else return;
+      heroView(); txt.scrollTop = keep;
+      if (b.hasAttribute('data-new')) { var ins = txt.querySelectorAll('.hw-ed [data-f="date"]'); if (ins.length) ins[ins.length - 1].focus(); }
+    });
+  }
+  // GitHub에 JSON 파일 하나 저장 (관리자 토큰)
+  function ghSave(path, data, message) {
+    var api = 'https://api.github.com/repos/s2ndrome/love/contents/' + path, H = { Authorization: 'Bearer ' + tok(), Accept: 'application/vnd.github+json' };
+    var bin = ''; new TextEncoder().encode(JSON.stringify(data, null, 2) + '\n').forEach(function (x) { bin += String.fromCharCode(x); });
+    return fetch(api + '?ref=main', { cache: 'no-store', headers: H }).then(function (r) { return r.ok ? r.json() : {}; }).then(function (f) {
+      var body = { message: message, content: btoa(bin), branch: 'main' }; if (f.sha) body.sha = f.sha;
+      return fetch(api, { method: 'PUT', headers: H, body: JSON.stringify(body) });
+    }).then(function (r) { if (!r.ok) throw new Error(r.status); });
   }
   var LIA_URL = 'https://lia-chat.jenojeno0423.workers.dev';
   function chatView() {
