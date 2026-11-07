@@ -1,0 +1,45 @@
+/* 02 에디토리얼 — 블로그(love) 사이트와 같은 결: 흰 지면, 헤어라인, 파란 포인트 */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap');
+
+.chattext {
+  --FontColorStandard: #0f0f10; --FontColorBold: #0f0f10; --FontColorItalic: #6b6b70;
+  --FontColorItalicBold: #6b6b70; --FontColorQuote1: #2d46ff; --FontColorQuote2: #2d46ff;
+  display: block;
+  background: #ffffff;
+  color: #0f0f10;
+  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.9;
+  word-break: keep-all;
+  padding: 22px 28px 26px;
+  border: 1px solid #ececee;
+  border-radius: 12px;
+}
+.chattext::before {
+  content: '✦  SYNDROME × LIA';
+  display: block;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 10.5px; font-weight: 400; letter-spacing: 0.16em; color: #9b9b9f;
+  padding-bottom: 12px; margin-bottom: 18px; border-bottom: 1px solid #ececee;
+}
+.chattext p { margin: 0 0 1em; }
+.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
+  color: #2d46ff !important;
+  font-weight: 600 !important;
+}
+.chattext em, .chattext i { font-family: 'Instrument Serif', 'IBM Plex Sans KR', serif; font-style: italic; color: #6b6b70; font-size: 1.04em; }
+.chattext b, .chattext strong { font-weight: 600; }
+.chattext hr { border: 0; border-top: 1px solid #ececee; margin: 2.2em 0; overflow: visible; text-align: center; height: 0; }
+.chattext hr::after { content: '✦'; position: relative; top: -0.8em; padding: 0 12px; background: #fff; color: #2d46ff; font-size: 12px; }
+.chattext blockquote {
+  margin: 1.4em 0; padding: 16px 18px;
+  background: #f6f6f8; border-radius: 8px; border: 0;
+  font-size: 14px; line-height: 1.8;
+}
+.chattext blockquote b:first-child {
+  display: block; margin-bottom: 8px;
+  font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 400;
+  font-size: 11px; letter-spacing: 0.08em; color: #2d46ff;
+}
+.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 8px; }

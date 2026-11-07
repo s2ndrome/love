@@ -1,0 +1,43 @@
+/* 05 새벽 네 시 — 스탠드 주황빛이 번진 밤 침실. 집안 일상물용 */
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+.chattext {
+  --FontColorStandard: #e8e2d4; --FontColorBold: #ffd8a8; --FontColorItalic: #a9a4c6;
+  --FontColorItalicBold: #a9a4c6; --FontColorQuote1: #c4e6ff; --FontColorQuote2: #c4e6ff;
+  display: block;
+  position: relative;
+  color: #e8e2d4;
+  font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  line-height: 1.95;
+  word-break: keep-all;
+  padding: 28px 28px 24px;
+  border-radius: 24px;
+  background:
+    radial-gradient(110% 60% at 88% -8%, rgba(255, 176, 92, 0.30), rgba(255, 176, 92, 0) 62%),
+    #1a2034;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.chattext::after {
+  content: '☾'; position: absolute; top: 14px; right: 20px;
+  color: #ffcf8f; font-size: 18px; opacity: 0.8;
+}
+.chattext p { margin: 0 0 1em; }
+.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
+  color: #c4e6ff !important;
+  font-weight: 700 !important;
+  background: linear-gradient(transparent 64%, rgba(111, 176, 220, 0.30) 0);
+  padding: 0 2px;
+}
+.chattext em, .chattext i { color: #a9a4c6; }
+.chattext b, .chattext strong { color: #ffd8a8; }
+.chattext hr { border: 0; height: auto; margin: 2em 0; text-align: center; overflow: visible; }
+.chattext hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }
+.chattext blockquote {
+  margin: 1.4em 0; padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.22); border-radius: 16px;
+  font-size: 14px; color: #f1ece2;
+}
+.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffd8a8; }
+.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 16px; }

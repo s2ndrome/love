@@ -1,0 +1,40 @@
+/* 01 문고본 — 소설책 지면. 지금 로그 색(하늘색 굵은 대사)을 그대로 살린 버전 */
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
+
+.chattext {
+  --FontColorStandard: #2a2c31; --FontColorBold: #1d1f23; --FontColorItalic: #7b818b;
+  --FontColorItalicBold: #7b818b; --FontColorQuote1: #3d8fc4; --FontColorQuote2: #3d8fc4;
+  display: block;
+  background: #f7f7f3;
+  color: #2a2c31;
+  font-family: 'Gowun Batang', 'Nanum Myeongjo', serif;
+  font-size: 15.5px;
+  line-height: 2;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+  padding: 30px 32px 26px;
+  border-radius: 3px;
+  border-top: 3px double #c9d3dc;
+  box-shadow: 0 1px 0 #e4e4dc, 0 14px 32px -20px rgba(40, 55, 75, 0.45);
+}
+.chattext p { margin: 0 0 1.05em; }
+.chattext > p:first-child:not(:has(> span:first-child))::first-letter {
+  float: left; font-size: 2.7em; line-height: 1; font-weight: 700;
+  margin: 0.06em 0.14em 0 0; color: #3d8fc4;
+}
+.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
+  color: #3d8fc4 !important;
+  font-weight: 700 !important;
+}
+.chattext em, .chattext i { color: #7b818b; }
+.chattext b, .chattext strong { color: #1d1f23; }
+.chattext hr { border: 0; height: auto; margin: 2.2em 0; text-align: center; overflow: visible; }
+.chattext hr::after { content: '＊　＊　＊'; color: #9fadba; font-size: 12px; letter-spacing: 0.3em; }
+.chattext blockquote {
+  margin: 1.5em 0; padding: 18px 22px;
+  background: #fff; border: 1px solid #dfe4e8; border-left: 0;
+  box-shadow: inset 4px 0 0 #3d8fc4;
+  font-size: 14px; line-height: 1.85; color: #3a3e45;
+}
+.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #2a6f9c; letter-spacing: 0.02em; }
+.chattext img { display: block; max-width: 100%; margin: 1.4em auto; border-radius: 2px; }

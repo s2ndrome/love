@@ -1,0 +1,49 @@
+/* 06 RUSHES — 필름 촬영본. 지문은 시나리오 타자체, 대사는 영화 자막 */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Sans+KR:wght@500;700&display=swap');
+
+.chattext {
+  --FontColorStandard: #cfcfc8; --FontColorBold: #f2f2ea; --FontColorItalic: #8b8b84;
+  --FontColorItalicBold: #8b8b84; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;
+  display: block;
+  color: #cfcfc8;
+  font-family: 'Nanum Gothic Coding', ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.9;
+  word-break: keep-all;
+  padding: 20px 26px 22px;
+  background: #121212;
+  border-top: 16px solid #000;
+  border-bottom: 16px solid #000;
+}
+.chattext::before {
+  content: '● REC   RUSHES  ·  SCENE / TAKE';
+  display: block; margin-bottom: 18px; padding-bottom: 10px;
+  border-bottom: 1px dashed #333;
+  font-size: 11px; letter-spacing: 0.18em; color: #7d7d76;
+}
+.chattext p { margin: 0 0 1em; }
+.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
+  display: table;
+  margin: 0.5em auto;
+  padding: 2px 12px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff !important;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700 !important;
+  font-size: 15.5px;
+  text-shadow: 0 1px 2px #000;
+}
+.chattext :is(.dlg, .x-risu-dlg, span[data-q]) + br { display: none; }
+.chattext em, .chattext i { color: #8b8b84; }
+.chattext b, .chattext strong { color: #f2f2ea; }
+.chattext hr { border: 0; height: auto; margin: 1.8em 0; text-align: right; overflow: visible; }
+.chattext hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }
+.chattext blockquote {
+  margin: 1.4em 0; padding: 14px 16px;
+  background: #1a1a1a; border: 1px solid #333;
+  font-size: 13px;
+}
+.chattext blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }
+.chattext blockquote b:first-child { display: block; margin-bottom: 4px; color: #ffffff; }
+.chattext img { display: block; max-width: 100%; margin: 1.4em 0; filter: grayscale(0.25) contrast(1.05); }

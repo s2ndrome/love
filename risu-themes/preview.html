@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>리스 채팅 테마 6종</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&family=Noto+Sans+KR:wght@300;400;500;700&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=IBM+Plex+Sans+KR:wght@300;400;600&family=Chakra+Petch:wght@500;700&family=Nanum+Gothic+Coding:wght@400;700&display=swap">
+<style>
+/* Layout: theme chips on top, live Risu-style chat stage on the left, install + code panel on the right; stacks on phones. */
+:root {
+  --bg: #f5f5f7; --panel: #ffffff; --ink: #0f0f10; --mid: #75757c; --hair: #e4e4e8;
+  --accent: #2d46ff; --accent-ink: #ffffff; --code-bg: #0f1014; --code-fg: #d7d9e0;
+  --stage: #1d1e23; --stage-name: #e9e9ee; --stage-sub: #8a8b93;
+  --sans: "Geist", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --serif: "Instrument Serif", "Times New Roman", serif;
+  --mono: "Geist Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e0e11; --panel: #17171b; --ink: #ededf0; --mid: #9a9aa3; --hair: #2a2a31;
+  --accent: #6f80ff; --accent-ink: #0e0e11; --code-bg: #0a0a0d; --stage: #1d1e23; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e0e11; --panel: #17171b; --ink: #ededf0; --mid: #9a9aa3; --hair: #2a2a31;
+  --accent: #6f80ff; --accent-ink: #0e0e11; --code-bg: #0a0a0d; --stage: #1d1e23; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.6; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 36px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+header.top { display: grid; gap: 10px; margin-bottom: 26px; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--mid); text-transform: uppercase; }
+h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 5vw, 52px); line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; }
+h1 em { color: var(--accent); }
+.lede { margin: 0; max-width: 62ch; color: var(--mid); font-size: 14.5px; word-break: keep-all; }
+
+.chips { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-bottom: 22px; }
+.chip { all: unset; cursor: pointer; display: grid; gap: 2px; padding: 12px 14px; border-radius: 10px;
+  background: var(--panel); border: 1px solid var(--hair); min-width: 0; }
+.chip:hover { border-color: var(--mid); }
+.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chip[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.chip .no { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; opacity: .6; }
+.chip .nm { font-weight: 600; font-size: 14px; }
+.chip .sw { display: flex; gap: 3px; margin-top: 6px; }
+.chip .sw i { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(127,127,127,.35); }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+
+/* Risu-like stage */
+.stage { background: var(--stage); border-radius: 16px; padding: 22px 18px 26px; display: grid; gap: 22px; min-width: 0; }
+.stage-bar { display: flex; justify-content: space-between; align-items: center; color: var(--stage-sub); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; }
+.msg { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
+.msg img.av { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
+.msg .who { color: var(--stage-name); font-weight: 600; font-size: 14px; margin: 2px 0 8px; font-family: "Noto Sans KR", sans-serif; }
+.msg .body { min-width: 0; }
+
+/* side panel */
+.side { display: grid; gap: 14px; min-width: 0; }
+.card { background: var(--panel); border: 1px solid var(--hair); border-radius: 14px; padding: 18px; min-width: 0; }
+.card h2 { margin: 0 0 4px; font-size: 20px; font-family: var(--serif); font-weight: 400; }
+.card h2 small { font-family: var(--mono); font-size: 11px; color: var(--mid); letter-spacing: .12em; margin-left: 6px; }
+.card p.desc { margin: 0 0 12px; color: var(--mid); word-break: keep-all; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags span { font-size: 12px; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--hair); color: var(--mid); }
+
+ol.steps { margin: 0; padding-left: 20px; display: grid; gap: 8px; word-break: keep-all; }
+ol.steps b { font-weight: 600; }
+.k { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border-radius: 5px; background: var(--bg); border: 1px solid var(--hair); }
+
+.codehead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.codehead .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--mid); }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+label.tg { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--mid); cursor: pointer; }
+button.cp { font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 0; border-radius: 8px; padding: 7px 12px; background: var(--accent); color: var(--accent-ink); }
+button.cp.ghost { background: transparent; color: var(--ink); border: 1px solid var(--hair); }
+button.cp:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+pre.code { margin: 0; max-height: 340px; overflow: auto; background: var(--code-bg); color: var(--code-fg); border-radius: 10px; padding: 14px; font-family: var(--mono); font-size: 11.5px; line-height: 1.55; white-space: pre; }
+.rx { display: grid; gap: 8px; }
+.rx .line { display: grid; grid-template-columns: 54px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.rx .line span { font-family: var(--mono); font-size: 11px; color: var(--mid); letter-spacing: .1em; }
+.rx code { display: block; overflow-x: auto; white-space: nowrap; font-family: var(--mono); font-size: 12px; padding: 7px 10px; border-radius: 7px; background: var(--bg); border: 1px solid var(--hair); }
+.note { font-size: 12.5px; color: var(--mid); margin: 10px 0 0; word-break: keep-all; }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 99px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.toast.on { opacity: 1; }
+
+@media (max-width: 920px) {
+  .chips { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stage { padding: 16px 10px 20px; }
+  .msg { grid-template-columns: 36px minmax(0, 1fr); gap: 8px; }
+  .msg img.av { width: 36px; height: 36px; }
+}
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+</style>
+
+<style id="live"></style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">RisuAI · custom chat theme · 6 drafts</div>
+    <h1>리스 채팅창 <em>시안 여섯 개</em></h1>
+    <p class="lede">맥모닝 로그 한 장면으로 미리 봐요. 대사 색, 지문, 장면 구분선, 소개서 같은 삽입 문서까지 지금 쓰는 형식 그대로 넣었어요. 마음에 드는 걸 골라서 CSS를 복사해 리스에 붙이면 돼요.</p>
+  </header>
+
+  <div class="chips" role="tablist" id="chips"></div>
+
+  <div class="grid">
+    <section class="stage" aria-label="미리보기">
+      <div class="stage-bar"><span>PREVIEW</span><span id="stage-no">01 / 06</span></div>
+      <div class="msg">
+        <img class="av" alt="" src="data:image/jpeg;base64,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">
+        <div class="body"><div class="who">설지수</div>
+          <div class="chattext">
+            <p><span class="dlg">"오빠아... 나 아침에 맥모닝 시켜줘"</span></p>
+            <p><em>이불을 코끝까지 끌어올리고 눈만 빼꼼.</em></p>
+          </div>
+        </div>
+      </div>
+      <div class="msg">
+        <img class="av" alt="" src="data:image/jpeg;base64,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">
+        <div class="body"><div class="who">성유진</div>
+          <div class="chattext">
+            <p>성유진은 감았던 눈을 천천히 떴다. 천장의 둥근 빛 무리를 한참 올려다보았다. 푸딩 두 개, 치즈케이크 반 판, 아이스크림 한 통을 밀어 넣은 사람이, 이불을 덮은 지 삼십 초 만에 다음 끼니 주문을 넣고 있었다.</p>
+            <p><span class="dlg">"너 아까 내가 뭐라 그랬어."</span><br><span class="dlg">"으음... 잘 자라고오?"</span><br><span class="dlg">"내일 아침 굶는다고 했지. 그새 까먹었냐, 돼지토끼야."</span></p>
+            <p>설지수가 입술을 비죽 내밀었다. 변론이 시작된다는 신호였다. <em>어금니에 힘 줘. 여기서 웃으면 지는 거다.</em></p>
+            <p><span class="dlg">"맥모닝은 아침이 아니고 맥모닝이야."</span></p>
+            <hr>
+            <blockquote><b>📄 우리집 약속 목록 | 작성자: 설지수</b>1. 야식은 오빠 허락 받고 먹기<br>2. 내일 아침은 굶는다 <i>(맥모닝 제외)</i><br>3. 화나도 집 나가지 않기</blockquote>
+            <p>목록 둘째 줄 끝에 볼펜으로 덧붙인 괄호를 한참 내려다봤다. 이 집 마누라 사전은 아크 법무팀이 아니라 국립국어원에 보내야 할 판이었다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="card">
+        <h2 id="t-name">문고본</h2>
+        <p class="desc" id="t-desc"></p>
+        <div class="tags" id="t-tags"></div>
+      </div>
+
+      <div class="card">
+        <div class="codehead">
+          <span class="lbl">CSS</span>
+          <div class="row">
+            <label class="tg"><input type="checkbox" id="wrap-style"> &lt;style&gt;로 감싸기</label>
+            <button class="cp" id="copy-css" type="button">CSS 복사</button>
+          </div>
+        </div>
+        <pre class="code" id="code"></pre>
+        <p class="note">배경 임베딩 칸에 넣을 땐 "&lt;style&gt;로 감싸기"를 켜고 복사하세요.</p>
+      </div>
+
+      <div class="card">
+        <div class="codehead"><span class="lbl">적용 방법</span></div>
+        <ol class="steps">
+          <li>리스 <b>설정 → 디스플레이</b>의 <b>커스텀 CSS</b> 칸에 붙여넣기. 그 칸이 없으면 캐릭터 설정의 <b>배경 임베딩</b>에 &lt;style&gt;로 감싸서 붙여넣기.</li>
+          <li>대사 색이 이미 자동으로 칠해지고 있으면(<span class="k">data-q</span> 스팬) 그대로 먹어요. 안 바뀌면 아래 정규식을 추가하세요.</li>
+          <li>테마는 메시지 본문 <span class="k">.chattext</span>에 걸려 있어요. 버전에 따라 이름이 다르면 F12로 본문 클래스를 확인해서 바꿔 주세요.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="codehead"><span class="lbl">정규식 스크립트 · 출력문 수정</span></div>
+        <div class="rx">
+          <div class="line"><span>IN</span><code id="rx-in">["“]([^"”\n]+)["”]</code><button class="cp ghost" type="button" data-copy="rx-in">복사</button></div>
+          <div class="line"><span>OUT</span><code id="rx-out">&lt;span class="dlg"&gt;"$1"&lt;/span&gt;</code><button class="cp ghost" type="button" data-copy="rx-out">복사</button></div>
+        </div>
+        <p class="note">따옴표 대사를 <span class="k">dlg</span> 스팬으로 감싸요. 리스가 클래스 앞에 x-risu-를 붙여도 CSS에서 같이 잡아요.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const THEMES = [{"css": "/* 01 문고본 — 소설책 지면. 지금 로그 색(하늘색 굵은 대사)을 그대로 살린 버전 */\n@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');\n\n.chattext {\n  --FontColorStandard: #2a2c31; --FontColorBold: #1d1f23; --FontColorItalic: #7b818b;\n  --FontColorItalicBold: #7b818b; --FontColorQuote1: #3d8fc4; --FontColorQuote2: #3d8fc4;\n  display: block;\n  background: #f7f7f3;\n  color: #2a2c31;\n  font-family: 'Gowun Batang', 'Nanum Myeongjo', serif;\n  font-size: 15.5px;\n  line-height: 2;\n  letter-spacing: -0.01em;\n  word-break: keep-all;\n  padding: 30px 32px 26px;\n  border-radius: 3px;\n  border-top: 3px double #c9d3dc;\n  box-shadow: 0 1px 0 #e4e4dc, 0 14px 32px -20px rgba(40, 55, 75, 0.45);\n}\n.chattext p { margin: 0 0 1.05em; }\n.chattext > p:first-child:not(:has(> span:first-child))::first-letter {\n  float: left; font-size: 2.7em; line-height: 1; font-weight: 700;\n  margin: 0.06em 0.14em 0 0; color: #3d8fc4;\n}\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #3d8fc4 !important;\n  font-weight: 700 !important;\n}\n.chattext em, .chattext i { color: #7b818b; }\n.chattext b, .chattext strong { color: #1d1f23; }\n.chattext hr { border: 0; height: auto; margin: 2.2em 0; text-align: center; overflow: visible; }\n.chattext hr::after { content: '＊　＊　＊'; color: #9fadba; font-size: 12px; letter-spacing: 0.3em; }\n.chattext blockquote {\n  margin: 1.5em 0; padding: 18px 22px;\n  background: #fff; border: 1px solid #dfe4e8; border-left: 0;\n  box-shadow: inset 4px 0 0 #3d8fc4;\n  font-size: 14px; line-height: 1.85; color: #3a3e45;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #2a6f9c; letter-spacing: 0.02em; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em auto; border-radius: 2px; }\n", "name": "문고본", "en": "PAPERBACK", "desc": "지금 로그와 가장 가까운 버전이에요. 소설책 지면에 고운바탕체, 대사는 지금 쓰는 하늘색 굵은 글씨, 첫 글자는 드롭캡. 장면 구분선은 별표 세 개.", "tags": ["장편 서사", "고운바탕", "드롭캡"], "swatch": ["#f7f7f3", "#3d8fc4", "#2a2c31"], "file": "01-novel.css"}, {"css": "/* 02 에디토리얼 — 블로그(love) 사이트와 같은 결: 흰 지면, 헤어라인, 파란 포인트 */\n@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap');\n\n.chattext {\n  --FontColorStandard: #0f0f10; --FontColorBold: #0f0f10; --FontColorItalic: #6b6b70;\n  --FontColorItalicBold: #6b6b70; --FontColorQuote1: #2d46ff; --FontColorQuote2: #2d46ff;\n  display: block;\n  background: #ffffff;\n  color: #0f0f10;\n  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;\n  font-weight: 300;\n  font-size: 15px;\n  line-height: 1.9;\n  word-break: keep-all;\n  padding: 22px 28px 26px;\n  border: 1px solid #ececee;\n  border-radius: 12px;\n}\n.chattext::before {\n  content: '✦  SYNDROME × LIA';\n  display: block;\n  font-family: 'Geist Mono', ui-monospace, monospace;\n  font-size: 10.5px; font-weight: 400; letter-spacing: 0.16em; color: #9b9b9f;\n  padding-bottom: 12px; margin-bottom: 18px; border-bottom: 1px solid #ececee;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #2d46ff !important;\n  font-weight: 600 !important;\n}\n.chattext em, .chattext i { font-family: 'Instrument Serif', 'IBM Plex Sans KR', serif; font-style: italic; color: #6b6b70; font-size: 1.04em; }\n.chattext b, .chattext strong { font-weight: 600; }\n.chattext hr { border: 0; border-top: 1px solid #ececee; margin: 2.2em 0; overflow: visible; text-align: center; height: 0; }\n.chattext hr::after { content: '✦'; position: relative; top: -0.8em; padding: 0 12px; background: #fff; color: #2d46ff; font-size: 12px; }\n.chattext blockquote {\n  margin: 1.4em 0; padding: 16px 18px;\n  background: #f6f6f8; border-radius: 8px; border: 0;\n  font-size: 14px; line-height: 1.8;\n}\n.chattext blockquote b:first-child {\n  display: block; margin-bottom: 8px;\n  font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 400;\n  font-size: 11px; letter-spacing: 0.08em; color: #2d46ff;\n}\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 8px; }\n", "name": "에디토리얼", "en": "EDITORIAL", "desc": "블로그 사이트와 같은 결이에요. 흰 지면에 헤어라인, 파란 포인트, 상단에 SYNDROME × LIA 라벨. 삽입 문서는 회색 카드에 모노 제목.", "tags": ["사이트 통일감", "IBM Plex Sans KR", "미니멀"], "swatch": ["#ffffff", "#2d46ff", "#0f0f10"], "file": "02-editorial.css"}, {"css": "/* 03 S-CLASS — 센티넬 기록 단말. 신드롬 프로필의 검정 + 주황 */\n@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Chakra+Petch:wght@500;700&display=swap');\n\n.chattext {\n  --FontColorStandard: #cfcac2; --FontColorBold: #ff6a2b; --FontColorItalic: #8a857d;\n  --FontColorItalicBold: #8a857d; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block;\n  position: relative;\n  color: #cfcac2;\n  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;\n  font-size: 14.5px;\n  line-height: 1.9;\n  word-break: keep-all;\n  padding: 24px 26px 26px;\n  border: 1px solid rgba(255, 72, 0, 0.18);\n  background:\n    linear-gradient(#ff4800, #ff4800) top left / 14px 2px no-repeat,\n    linear-gradient(#ff4800, #ff4800) top left / 2px 14px no-repeat,\n    linear-gradient(#ff4800, #ff4800) bottom right / 14px 2px no-repeat,\n    linear-gradient(#ff4800, #ff4800) bottom right / 2px 14px no-repeat,\n    repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 3px),\n    #0a0a0b;\n}\n.chattext::before {\n  content: '▲ S-CLASS ENTITY  //  FIELD LOG';\n  display: block; margin-bottom: 16px;\n  font-family: 'Chakra Petch', monospace; font-weight: 700;\n  font-size: 11px; letter-spacing: 0.22em; color: #ff4800;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #ffffff !important;\n  font-weight: 600 !important;\n  text-shadow: 0 0 14px rgba(255, 72, 0, 0.55);\n}\n.chattext em, .chattext i { color: #8a857d; }\n.chattext b, .chattext strong { color: #ff6a2b; font-weight: 600; }\n.chattext hr { border: 0; height: 1px; margin: 2em 0; background: linear-gradient(90deg, #ff4800, rgba(255,72,0,0) 70%); }\n.chattext blockquote {\n  position: relative; margin: 1.6em 0; padding: 26px 18px 16px;\n  background: rgba(255, 72, 0, 0.06); border: 1px solid rgba(255, 72, 0, 0.45);\n  font-size: 13.5px; color: #e7e2da;\n}\n.chattext blockquote::before {\n  content: 'SYSTEM'; position: absolute; top: -1px; left: -1px;\n  padding: 2px 8px; background: #ff4800; color: #0a0a0b;\n  font-family: 'Chakra Petch', monospace; font-weight: 700; font-size: 10px; letter-spacing: 0.2em;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffffff; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border: 1px solid rgba(255,72,0,0.3); filter: contrast(1.05) saturate(0.9); }\n", "name": "S급 기록", "en": "S-CLASS", "desc": "센티넬 작전 기록 단말이에요. 신드롬 프로필의 검정과 주황, 모서리 브래킷, 대사에 주황 글로우. 삽입 문서는 SYSTEM 창으로 떠요.", "tags": ["센티넬버스", "다크", "HUD"], "swatch": ["#0a0a0b", "#ff4800", "#cfcac2"], "file": "03-sclass.css"}, {"css": "/* 04 메신저 — 대사는 말풍선, 지문은 작게. 상상임신 로그의 아이메시지 느낌 */\n.chattext {\n  --FontColorStandard: #6e6e73; --FontColorBold: #1c1c1e; --FontColorItalic: #8e8e93;\n  --FontColorItalicBold: #8e8e93; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block;\n  background: #f2f2f7;\n  color: #6e6e73;\n  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;\n  font-size: 13.5px;\n  line-height: 1.75;\n  letter-spacing: -0.01em;\n  word-break: keep-all;\n  padding: 20px 18px;\n  border-radius: 22px;\n}\n.chattext p { margin: 0 0 0.9em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  display: inline-block;\n  max-width: 88%;\n  margin: 3px 0;\n  padding: 7px 13px;\n  background: #007aff;\n  color: #ffffff !important;\n  font-weight: 400 !important;\n  font-size: 15px;\n  line-height: 1.45;\n  border-radius: 18px 18px 18px 5px;\n}\n.chattext em, .chattext i { color: #8e8e93; }\n.chattext b, .chattext strong { color: #1c1c1e; font-weight: 600; }\n.chattext hr { border: 0; height: auto; margin: 1.6em 0; text-align: center; overflow: visible; }\n.chattext hr::after {\n  content: '· · ·'; display: inline-block; padding: 0 12px; border-radius: 10px;\n  background: #e5e5ea; color: #8e8e93; font-size: 11px;\n}\n.chattext blockquote {\n  margin: 1.2em 0; padding: 12px 14px;\n  background: #ffffff; border: 0; border-radius: 14px;\n  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.25);\n  color: #1c1c1e; font-size: 13.5px;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 4px; font-size: 11.5px; color: #8e8e93; font-weight: 600; }\n.chattext img { display: block; max-width: 72%; margin: 6px 0; border-radius: 18px; }\n", "name": "메신저", "en": "MESSENGER", "desc": "대사가 파란 말풍선으로 뜨고 지문은 작은 회색 글씨로 깔려요. 상상임신 로그 같은 톡 장면이 많을 때 좋아요.", "tags": ["톡 장면", "말풍선", "가벼움"], "swatch": ["#f2f2f7", "#007aff", "#6e6e73"], "file": "04-messenger.css"}, {"css": "/* 05 새벽 네 시 — 스탠드 주황빛이 번진 밤 침실. 집안 일상물용 */\n@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');\n\n.chattext {\n  --FontColorStandard: #e8e2d4; --FontColorBold: #ffd8a8; --FontColorItalic: #a9a4c6;\n  --FontColorItalicBold: #a9a4c6; --FontColorQuote1: #c4e6ff; --FontColorQuote2: #c4e6ff;\n  display: block;\n  position: relative;\n  color: #e8e2d4;\n  font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif;\n  font-size: 15px;\n  line-height: 1.95;\n  word-break: keep-all;\n  padding: 28px 28px 24px;\n  border-radius: 24px;\n  background:\n    radial-gradient(110% 60% at 88% -8%, rgba(255, 176, 92, 0.30), rgba(255, 176, 92, 0) 62%),\n    #1a2034;\n  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);\n}\n.chattext::after {\n  content: '☾'; position: absolute; top: 14px; right: 20px;\n  color: #ffcf8f; font-size: 18px; opacity: 0.8;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #c4e6ff !important;\n  font-weight: 700 !important;\n  background: linear-gradient(transparent 64%, rgba(111, 176, 220, 0.30) 0);\n  padding: 0 2px;\n}\n.chattext em, .chattext i { color: #a9a4c6; }\n.chattext b, .chattext strong { color: #ffd8a8; }\n.chattext hr { border: 0; height: auto; margin: 2em 0; text-align: center; overflow: visible; }\n.chattext hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }\n.chattext blockquote {\n  margin: 1.4em 0; padding: 16px 18px;\n  background: rgba(255, 255, 255, 0.05);\n  border: 1px dashed rgba(255, 255, 255, 0.22); border-radius: 16px;\n  font-size: 14px; color: #f1ece2;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffd8a8; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 16px; }\n", "name": "새벽 네 시", "en": "BEDTIME", "desc": "스탠드 주황빛이 번진 밤 침실이에요. 남색 바탕에 고운돋움, 대사는 하늘색 형광펜 밑줄. 집안 일상물이나 침대 대화 장면용.", "tags": ["일상물", "다크", "고운돋움"], "swatch": ["#1a2034", "#ffb05c", "#c4e6ff"], "file": "05-bedtime.css"}, {"css": "/* 06 RUSHES — 필름 촬영본. 지문은 시나리오 타자체, 대사는 영화 자막 */\n@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Sans+KR:wght@500;700&display=swap');\n\n.chattext {\n  --FontColorStandard: #cfcfc8; --FontColorBold: #f2f2ea; --FontColorItalic: #8b8b84;\n  --FontColorItalicBold: #8b8b84; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block;\n  color: #cfcfc8;\n  font-family: 'Nanum Gothic Coding', ui-monospace, monospace;\n  font-size: 14px;\n  line-height: 1.9;\n  word-break: keep-all;\n  padding: 20px 26px 22px;\n  background: #121212;\n  border-top: 16px solid #000;\n  border-bottom: 16px solid #000;\n}\n.chattext::before {\n  content: '● REC   RUSHES  ·  SCENE / TAKE';\n  display: block; margin-bottom: 18px; padding-bottom: 10px;\n  border-bottom: 1px dashed #333;\n  font-size: 11px; letter-spacing: 0.18em; color: #7d7d76;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  display: table;\n  margin: 0.5em auto;\n  padding: 2px 12px;\n  text-align: center;\n  background: rgba(0, 0, 0, 0.6);\n  color: #ffffff !important;\n  font-family: 'Noto Sans KR', sans-serif;\n  font-weight: 700 !important;\n  font-size: 15.5px;\n  text-shadow: 0 1px 2px #000;\n}\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) + br { display: none; }\n.chattext em, .chattext i { color: #8b8b84; }\n.chattext b, .chattext strong { color: #f2f2ea; }\n.chattext hr { border: 0; height: auto; margin: 1.8em 0; text-align: right; overflow: visible; }\n.chattext hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }\n.chattext blockquote {\n  margin: 1.4em 0; padding: 14px 16px;\n  background: #1a1a1a; border: 1px solid #333;\n  font-size: 13px;\n}\n.chattext blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }\n.chattext blockquote b:first-child { display: block; margin-bottom: 4px; color: #ffffff; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; filter: grayscale(0.25) contrast(1.05); }\n", "name": "러시스", "en": "RUSHES", "desc": "필름 촬영본이에요. 위아래 레터박스, 지문은 시나리오 타자체, 대사는 가운데 정렬 영화 자막. 장면 구분선은 CUT TO:로 바뀌어요.", "tags": ["영화 AU", "자막", "나눔고딕코딩"], "swatch": ["#121212", "#ffffff", "#7d7d76"], "file": "06-rushes.css"}];
+const chips = document.getElementById('chips');
+const live = document.getElementById('live');
+const code = document.getElementById('code');
+const wrapBox = document.getElementById('wrap-style');
+let cur = 0;
+
+THEMES.forEach((t, i) => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.type = 'button'; b.setAttribute('role', 'tab');
+  b.innerHTML = `<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="nm">${t.name}</span><span class="sw">${t.swatch.map(c => `<i style="background:${c}"></i>`).join('')}</span>`;
+  b.addEventListener('click', () => show(i));
+  chips.appendChild(b);
+});
+
+function scoped(css) {
+  return css.replace(/^@import.*$/gm, '').replace(/\.chattext/g, '.stage .chattext');
+}
+function cssOut() {
+  const c = THEMES[cur].css.trim();
+  return wrapBox.checked ? `<style>\n${c}\n</style>` : c;
+}
+function show(i) {
+  cur = i;
+  const t = THEMES[i];
+  [...chips.children].forEach((c, j) => c.setAttribute('aria-selected', j === i ? 'true' : 'false'));
+  live.textContent = scoped(t.css);
+  code.textContent = cssOut();
+  document.getElementById('t-name').innerHTML = `${t.name}<small>${t.en}</small>`;
+  document.getElementById('t-desc').textContent = t.desc;
+  document.getElementById('t-tags').innerHTML = t.tags.map(x => `<span>${x}</span>`).join('');
+  document.getElementById('stage-no').textContent = `${String(i + 1).padStart(2, '0')} / 06`;
+  try { localStorage.setItem('risu-theme', String(i)); } catch (e) {}
+}
+wrapBox.addEventListener('change', () => { code.textContent = cssOut(); });
+
+const toast = document.getElementById('toast');
+let tt;
+function say(m) { toast.textContent = m; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove('on'), 1600); }
+function copy(text, el) {
+  const done = () => say('복사했어요');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, () => selectEl(el));
+  } else selectEl(el);
+}
+function selectEl(el) {
+  const r = document.createRange(); r.selectNodeContents(el);
+  const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  say('선택해 뒀어요. Ctrl+C로 복사하세요');
+}
+document.getElementById('copy-css').addEventListener('click', () => copy(cssOut(), code));
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const el = document.getElementById(b.dataset.copy); copy(el.textContent, el);
+}));
+
+let start = 0;
+try { const s = parseInt(localStorage.getItem('risu-theme'), 10); if (s >= 0 && s < 6) start = s; } catch (e) {}
+show(start);
+</script>
+
+</html>

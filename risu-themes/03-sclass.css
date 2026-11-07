@@ -1,0 +1,50 @@
+/* 03 S-CLASS — 센티넬 기록 단말. 신드롬 프로필의 검정 + 주황 */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Chakra+Petch:wght@500;700&display=swap');
+
+.chattext {
+  --FontColorStandard: #cfcac2; --FontColorBold: #ff6a2b; --FontColorItalic: #8a857d;
+  --FontColorItalicBold: #8a857d; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;
+  display: block;
+  position: relative;
+  color: #cfcac2;
+  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;
+  font-size: 14.5px;
+  line-height: 1.9;
+  word-break: keep-all;
+  padding: 24px 26px 26px;
+  border: 1px solid rgba(255, 72, 0, 0.18);
+  background:
+    linear-gradient(#ff4800, #ff4800) top left / 14px 2px no-repeat,
+    linear-gradient(#ff4800, #ff4800) top left / 2px 14px no-repeat,
+    linear-gradient(#ff4800, #ff4800) bottom right / 14px 2px no-repeat,
+    linear-gradient(#ff4800, #ff4800) bottom right / 2px 14px no-repeat,
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 3px),
+    #0a0a0b;
+}
+.chattext::before {
+  content: '▲ S-CLASS ENTITY  //  FIELD LOG';
+  display: block; margin-bottom: 16px;
+  font-family: 'Chakra Petch', monospace; font-weight: 700;
+  font-size: 11px; letter-spacing: 0.22em; color: #ff4800;
+}
+.chattext p { margin: 0 0 1em; }
+.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 14px rgba(255, 72, 0, 0.55);
+}
+.chattext em, .chattext i { color: #8a857d; }
+.chattext b, .chattext strong { color: #ff6a2b; font-weight: 600; }
+.chattext hr { border: 0; height: 1px; margin: 2em 0; background: linear-gradient(90deg, #ff4800, rgba(255,72,0,0) 70%); }
+.chattext blockquote {
+  position: relative; margin: 1.6em 0; padding: 26px 18px 16px;
+  background: rgba(255, 72, 0, 0.06); border: 1px solid rgba(255, 72, 0, 0.45);
+  font-size: 13.5px; color: #e7e2da;
+}
+.chattext blockquote::before {
+  content: 'SYSTEM'; position: absolute; top: -1px; left: -1px;
+  padding: 2px 8px; background: #ff4800; color: #0a0a0b;
+  font-family: 'Chakra Petch', monospace; font-weight: 700; font-size: 10px; letter-spacing: 0.2em;
+}
+.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffffff; }
+.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border: 1px solid rgba(255,72,0,0.3); filter: contrast(1.05) saturate(0.9); }
