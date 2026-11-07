@@ -10,7 +10,7 @@ card='background:rgba(255,255,255,.78);border:1px solid #dbeafe;border-radius:14
 lab=lambda t,c='#64748b',extra='': f'<div style="font-size:10px;color:{c};letter-spacing:.06em;margin-bottom:4px;{extra}">{t}</div>'
 panel='background:linear-gradient(180deg,rgba(240,249,255,.9),rgba(255,255,255,.96));border:1px solid #dbeafe;border-radius:18px;padding:12px 13px;'
 
-W = f'''<div style="background:linear-gradient(180deg,#ffffff 0%,#f8fbfd 30%,#f0f9ff 70%,#ffffff 100%);border:1px solid #dbeafe;border-radius:24px;padding:16px;margin:14px 0 4px;color:#334155;font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-style:normal;font-weight:400;max-width:450px;box-shadow:0 4px 20px rgba(186,230,253,.18);line-height:1.5;text-align:left;text-shadow:none;">
+W = f'''<div style="background:linear-gradient(180deg,#ffffff 0%,#f8fbfd 30%,#f0f9ff 70%,#ffffff 100%);border:1px solid #dbeafe;border-radius:24px;padding:16px;margin:14px auto 4px;color:#334155;font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-style:normal;font-weight:400;max-width:450px;box-shadow:0 4px 20px rgba(186,230,253,.18);line-height:1.5;text-align:left;text-shadow:none;">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid rgba(186,230,253,.6);padding-bottom:8px;margin-bottom:8px;">
 <div style="font-weight:900;letter-spacing:2px;color:{C};font-size:12px;text-shadow:0 0 3px rgba(255,255,255,.9),0 0 10px rgba(125,211,252,.55);">🫧 UNDERWATER SCENARIO</div>
 <div style="font-size:11px;color:#64748b;">{v('날짜_정보')}<span style="margin-left:8px;color:{C};font-weight:700;">♥ {v('디데이')}</span></div>
