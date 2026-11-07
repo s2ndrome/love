@@ -1,7 +1,7 @@
-/* 05 새벽 네 시 — 밤 침실이에요. 남색 바탕 오른쪽 위로 스탠드 주황빛이 번지고 작은 별과 달. 대사는 하늘색 형광펜 밑줄. */
+/* 05 새벽 네 시 — 밤 침실이에요. 남색 바탕 오른쪽 위로 스탠드 주황빛이 번지고 작은 별이 떠 있어요. 대사는 하늘색 형광펜 밑줄. */
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
-/* ── 리스 화면 색: 기본 테마 색을 덮어씀 ── */
+/* ── 리스 기본 색 덮어쓰기 (입력창·버튼·사이드바까지) ── */
 :root {
   --risu-theme-bgcolor: #1a2034 !important; --risu-theme-darkbg: #151a2b !important;
   --risu-theme-borderc: #2b3350 !important; --risu-theme-darkborderc: #2b3350 !important;
@@ -10,47 +10,50 @@
   --FontColorStandard: #e8e2d4 !important; --FontColorBold: #ffd8a8 !important;
   --FontColorItalic: #a9a4c6 !important; --FontColorItalicBold: #a9a4c6 !important;
   --FontColorQuote1: #c4e6ff !important; --FontColorQuote2: #c4e6ff !important;
-  --risu-font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif !important;
 }
 
 /* ── 채팅 화면 전체를 한 장으로 ── */
-[class~="grow"]:has([class~="default-chat-screen"]) { background: #121726 !important; }
-div:has(> [class~="default-chat-screen"]) {
+.grow:has(.default-chat-screen) { background: #121726 !important; }
+div:has(> .default-chat-screen) {
   background: radial-gradient(70% 45% at 95% 0%, rgba(255,176,92,0.28), rgba(255,176,92,0) 70%), #1a2034 !important;
   text-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-  transform: translateZ(0);
+}
+div:has(> .default-chat-screen)::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(1.5px 1.5px at 8% 6%, #c9cfe6 99%, transparent), radial-gradient(1px 1px at 22% 18%, #8d95b8 99%, transparent),
+    radial-gradient(1.5px 1.5px at 41% 4%, #c9cfe6 99%, transparent), radial-gradient(1px 1px at 63% 12%, #8d95b8 99%, transparent),
+    radial-gradient(1px 1px at 4% 42%, #8d95b8 99%, transparent), radial-gradient(1.5px 1.5px at 96% 38%, #c9cfe6 99%, transparent),
+    radial-gradient(1px 1px at 3% 77%, #c9cfe6 99%, transparent), radial-gradient(1px 1px at 97% 71%, #8d95b8 99%, transparent);
 }
 
-/* ── 프로필 사진 숨김, 메시지 사이 칸 없애기 ── */
-[class~="risu-chat"] [class~="shadow-lg"][class~="rounded-md"] { display: none !important; }
-[class~="risu-chat"] span[class~="ml-4"] { margin-left: 0 !important; }
-[class~="risu-chat"] > div { margin: 0 !important; padding: 14px 32px !important; border: 0 !important; background: transparent !important; }
+/* ── 메시지: 칸 없이 이어지게 ── */
+.risu-chat > div { margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; }
+.lv-msg { width: 100%; max-width: 660px; margin: 0 auto; padding: 18px 32px 4px; box-sizing: border-box; }
+.lv-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 22px; margin-bottom: 4px; }
+.lv-name { font-family: 'Gowun Dodum', sans-serif; font-size: 12px; letter-spacing: 0.08em; color: #ffcf8f; }
+.lv-user .lv-name { color: #a9a4c6; }
 
-/* ── 이름 줄 ── */
-[class~="risu-chat"] [class~="text-xl"][class~="unmargin"] {
-  font-family: 'Gowun Dodum', sans-serif !important; font-size: 12px !important; line-height: 1.4 !important;
-  letter-spacing: 0.08em; color: #ffcf8f !important; margin-bottom: 6px;
-}
+/* 버튼(복사·수정·재생성…)은 작고 흐리게, 누르면 진하게 */
+.lv-btns > div { display: flex; align-items: center; gap: 2px; margin: 0 !important; opacity: 0.4; transition: opacity 0.2s; }
+.lv-btns > div:hover, .lv-btns > div:focus-within { opacity: 1; }
+.lv-btns button { margin: 0 !important; padding: 2px !important; color: #a9a4c6 !important; }
+.lv-btns svg { width: 15px; height: 15px; }
 
 /* ── 본문 ── */
-[class~="chattext"] {
+.lv-body .chattext {
+  display: block; width: 100%; max-width: none !important;
   font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif !important; font-size: 15px !important; line-height: 1.95 !important;
-  color: #e8e2d4 !important; text-shadow: none !important; max-width: none !important; word-break: keep-all;
+  color: #e8e2d4 !important; text-shadow: none !important; word-break: keep-all;
 }
-[class~="chattext"] :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
-[class~="chattext"] :is(em, i) { color: #a9a4c6 !important; }
-[class~="chattext"] :is(strong, b) { color: #ffd8a8 !important; }
-[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) {
+.lv-body .chattext :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
+.lv-body .chattext :is(em, i) { color: #a9a4c6 !important; }
+.lv-body .chattext :is(strong, b) { color: #ffd8a8 !important; }
+.lv-body .chattext mark[risu-mark] {
   color: #c4e6ff !important; font-weight: 700 !important;
   background: linear-gradient(transparent 64%, rgba(111,176,220,0.30) 0) !important; padding: 0 2px;
 }
-[class~="chattext"] hr { border: 0 !important; height: auto; margin: 2em 0 !important; text-align: center; overflow: visible; }
-[class~="chattext"] hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }
-[class~="chattext"] blockquote { margin: 1.4em 0 !important; padding: 14px 18px !important; font-style: normal !important; background: rgba(255,255,255,0.05);
+.lv-char .lv-name::before { content: '☾ '; }
+.lv-body .chattext hr { border: 0 !important; height: auto; margin: 2em 0 !important; text-align: center; overflow: visible; }
+.lv-body .chattext hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }
+.lv-body .chattext blockquote { margin: 1.4em 0 !important; padding: 14px 18px !important; font-style: normal !important; background: rgba(255,255,255,0.05);
   border: 1px dashed rgba(255,255,255,0.22) !important; border-radius: 16px; color: #f1ece2 !important; }
-
-/* ── 장식 레이어 (HTML) ── */
-:is(.lv-page, .x-risu-lv-page) { position: fixed; inset: 0; pointer-events: none; z-index: 5; background: none !important; }
-:is(.lv-night, .x-risu-lv-night) :is(.lv-stars, .x-risu-lv-stars) { position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; opacity: 0.55;
-  box-shadow: 30px 40px #c9cfe6, 140px 120px #8d95b8, 260px 30px #c9cfe6, 420px 90px #8d95b8, 600px 50px #c9cfe6, 20px 300px #8d95b8, 640px 260px #8d95b8, 12px 560px #c9cfe6, 650px 520px #c9cfe6, 30px 760px #8d95b8, 640px 820px #8d95b8; }
-:is(.lv-night, .x-risu-lv-night) :is(.lv-moon, .x-risu-lv-moon) { position: absolute; top: 12px; right: 18px; color: #ffcf8f; font-size: 18px; opacity: 0.85; }

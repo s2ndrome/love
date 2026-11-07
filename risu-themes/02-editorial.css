@@ -1,7 +1,7 @@
-/* 02 에디토리얼 — 흰 지면에 파란 포인트. 맨 위 헤더에 캐릭터 이름({{char}})과 오늘 날짜가 자동으로 들어가요. 삽입 문서는 회색 카드. */
+/* 02 에디토리얼 — 흰 지면에 파란 포인트. 맨 위에 파란 선 한 줄, 이름은 작은 모노 글씨. 삽입 문서는 회색 카드. */
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600&family=Geist+Mono:wght@400&display=swap');
 
-/* ── 리스 화면 색: 기본 테마 색을 덮어씀 ── */
+/* ── 리스 기본 색 덮어쓰기 (입력창·버튼·사이드바까지) ── */
 :root {
   --risu-theme-bgcolor: #ffffff !important; --risu-theme-darkbg: #f6f6f8 !important;
   --risu-theme-borderc: #ececee !important; --risu-theme-darkborderc: #ececee !important;
@@ -10,48 +10,47 @@
   --FontColorStandard: #0f0f10 !important; --FontColorBold: #0f0f10 !important;
   --FontColorItalic: #6b6b70 !important; --FontColorItalicBold: #6b6b70 !important;
   --FontColorQuote1: #2d46ff !important; --FontColorQuote2: #2d46ff !important;
-  --risu-font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif !important;
 }
 
 /* ── 채팅 화면 전체를 한 장으로 ── */
-[class~="grow"]:has([class~="default-chat-screen"]) { background: #f3f3f5 !important; }
-div:has(> [class~="default-chat-screen"]) {
+.grow:has(.default-chat-screen) { background: #f3f3f5 !important; }
+div:has(> .default-chat-screen) {
   background: #ffffff !important;
   text-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-  transform: translateZ(0);
+}
+div:has(> .default-chat-screen)::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(#2d46ff, #2d46ff) 0 0 / 100% 3px no-repeat;
 }
 
-/* ── 프로필 사진 숨김, 메시지 사이 칸 없애기 ── */
-[class~="risu-chat"] [class~="shadow-lg"][class~="rounded-md"] { display: none !important; }
-[class~="risu-chat"] span[class~="ml-4"] { margin-left: 0 !important; }
-[class~="risu-chat"] > div { margin: 0 !important; padding: 14px 30px !important; border: 0 !important; background: transparent !important; }
+/* ── 메시지: 칸 없이 이어지게 ── */
+.risu-chat > div { margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; }
+.lv-msg { width: 100%; max-width: 660px; margin: 0 auto; padding: 18px 30px 4px; box-sizing: border-box; }
+.lv-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 22px; margin-bottom: 4px; }
+.lv-name { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.08em; color: #2d46ff; }
+.lv-user .lv-name { color: #9b9b9f; }
 
-/* ── 이름 줄 ── */
-[class~="risu-chat"] [class~="text-xl"][class~="unmargin"] {
-  font-family: 'Geist Mono', ui-monospace, monospace !important; font-size: 12px !important; line-height: 1.4 !important;
-  letter-spacing: 0.08em; color: #9b9b9f !important; margin-bottom: 6px;
-}
+/* 버튼(복사·수정·재생성…)은 작고 흐리게, 누르면 진하게 */
+.lv-btns > div { display: flex; align-items: center; gap: 2px; margin: 0 !important; opacity: 0.4; transition: opacity 0.2s; }
+.lv-btns > div:hover, .lv-btns > div:focus-within { opacity: 1; }
+.lv-btns button { margin: 0 !important; padding: 2px !important; color: #9b9b9f !important; }
+.lv-btns svg { width: 15px; height: 15px; }
 
 /* ── 본문 ── */
-[class~="chattext"] {
+.lv-body .chattext {
+  display: block; width: 100%; max-width: none !important;
   font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif !important; font-size: 15px !important; line-height: 1.9 !important;
-  color: #0f0f10 !important; text-shadow: none !important; max-width: none !important; word-break: keep-all;
+  color: #0f0f10 !important; text-shadow: none !important; word-break: keep-all;
 }
-[class~="chattext"] :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
-[class~="chattext"] :is(em, i) { color: #6b6b70 !important; }
-[class~="chattext"] :is(strong, b) { color: #0f0f10 !important; }
-[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) {
+.lv-body .chattext :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
+.lv-body .chattext :is(em, i) { color: #6b6b70 !important; }
+.lv-body .chattext :is(strong, b) { color: #0f0f10 !important; }
+.lv-body .chattext mark[risu-mark] {
   background: transparent !important; color: #2d46ff !important; font-weight: 600 !important;
 }
-[class~="chattext"] { font-weight: 300; }
-[class~="chattext"] hr { border: 0 !important; border-top: 1px solid #ececee !important; margin: 2.2em 0 !important; overflow: visible; text-align: center; height: 0; }
-[class~="chattext"] hr::after { content: '✦'; position: relative; top: -0.8em; padding: 0 12px; background: #fff; color: #2d46ff; font-size: 12px; }
-[class~="chattext"] blockquote { margin: 1.4em 0 !important; padding: 14px 18px !important; font-style: normal !important; background: #f6f6f8; border: 0 !important; border-radius: 8px; font-size: 0.93em; }
-[class~="chattext"] blockquote :is(strong, b):first-child { font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 400; font-size: 11px; letter-spacing: 0.08em; color: #2d46ff !important; }
-
-/* ── 장식 레이어 (HTML) ── */
-:is(.lv-page, .x-risu-lv-page) { position: fixed; inset: 0; pointer-events: none; z-index: 5; background: none !important; }
-[class~="default-chat-screen"] { padding-top: 40px; }
-:is(.lv-edit, .x-risu-lv-edit) :is(.lv-head, .x-risu-lv-head) { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between;
-  padding: 12px 22px 10px; background: rgba(255,255,255,0.94); border-bottom: 1px solid #ececee;
-  font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.16em; color: #9b9b9f; }
+.lv-name { text-transform: uppercase; }
+.lv-body .chattext { font-weight: 300; }
+.lv-body .chattext hr { border: 0 !important; border-top: 1px solid #ececee !important; margin: 2.2em 0 !important; overflow: visible; text-align: center; height: 0; }
+.lv-body .chattext hr::after { content: '✦'; position: relative; top: -0.8em; padding: 0 12px; background: #fff; color: #2d46ff; font-size: 12px; }
+.lv-body .chattext blockquote { margin: 1.4em 0 !important; padding: 14px 18px !important; font-style: normal !important; background: #f6f6f8; border: 0 !important; border-radius: 8px; font-size: 0.93em; }
+.lv-body .chattext blockquote :is(strong, b):first-child { font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 400; font-size: 11px; letter-spacing: 0.08em; color: #2d46ff !important; }

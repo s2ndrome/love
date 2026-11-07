@@ -1,3 +1,11 @@
-<div class="lv-page lv-msgr">
-  <div class="lv-bar"><span class="lv-back">‹</span><b>{{char}}</b><span class="lv-dot">•••</span></div>
+<div class="lv-msg lv-{{#if {{equal::{{role}}::char}} }}char{{/if}}{{#if {{not_equal::{{role}}::char}} }}user{{/if}}">
+    <div class="lv-head">
+        <span class="lv-name">{{#if {{equal::{{role}}::char}} }}{{char}}{{/if}}{{#if {{not_equal::{{role}}::char}} }}{{user}}{{/if}}</span>
+        <div class="lv-btns">
+            <risubuttons></risubuttons>
+        </div>
+    </div>
+    <div class="lv-body">
+        <risutextbox></risutextbox>
+    </div>
 </div>

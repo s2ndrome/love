@@ -1,4 +1,11 @@
-<div class="lv-page lv-scls">
-  <i class="lv-c lv-tl"></i><i class="lv-c lv-tr"></i>
-  <i class="lv-c lv-bl"></i><i class="lv-c lv-br"></i>
+<div class="lv-msg lv-{{#if {{equal::{{role}}::char}} }}char{{/if}}{{#if {{not_equal::{{role}}::char}} }}user{{/if}}">
+    <div class="lv-head">
+        <span class="lv-name">{{#if {{equal::{{role}}::char}} }}{{char}}{{/if}}{{#if {{not_equal::{{role}}::char}} }}{{user}}{{/if}}</span>
+        <div class="lv-btns">
+            <risubuttons></risubuttons>
+        </div>
+    </div>
+    <div class="lv-body">
+        <risutextbox></risutextbox>
+    </div>
 </div>

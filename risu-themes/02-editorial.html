@@ -1,3 +1,11 @@
-<div class="lv-page lv-edit">
-  <div class="lv-head"><span>✦ {{char}}</span><span>{{date::YYYY.MM.DD}}</span></div>
+<div class="lv-msg lv-{{#if {{equal::{{role}}::char}} }}char{{/if}}{{#if {{not_equal::{{role}}::char}} }}user{{/if}}">
+    <div class="lv-head">
+        <span class="lv-name">{{#if {{equal::{{role}}::char}} }}{{char}}{{/if}}{{#if {{not_equal::{{role}}::char}} }}{{user}}{{/if}}</span>
+        <div class="lv-btns">
+            <risubuttons></risubuttons>
+        </div>
+    </div>
+    <div class="lv-body">
+        <risutextbox></risutextbox>
+    </div>
 </div>

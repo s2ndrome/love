@@ -1,56 +1,55 @@
 /* 01 문고본 — 소설책 지면이에요. 미색 종이에 고운바탕체, 대사는 굵은 하늘색. 위아래 겹줄, 장면 구분선은 별표 세 개. */
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
 
-/* ── 리스 화면 색: 기본 테마 색을 덮어씀 ── */
+/* ── 리스 기본 색 덮어쓰기 (입력창·버튼·사이드바까지) ── */
 :root {
   --risu-theme-bgcolor: #f4f3ee !important; --risu-theme-darkbg: #ecebe4 !important;
   --risu-theme-borderc: #d9d8cf !important; --risu-theme-darkborderc: #d9d8cf !important;
   --risu-theme-selected: #e2e7ec !important; --risu-theme-darkbutton: #e6e5de !important;
-  --risu-theme-textcolor: #2a2c31 !important; --risu-theme-textcolor2: #7b818b !important;
+  --risu-theme-textcolor: #2a2c31 !important; --risu-theme-textcolor2: #8a8f98 !important;
   --FontColorStandard: #2a2c31 !important; --FontColorBold: #1d1f23 !important;
   --FontColorItalic: #6f7680 !important; --FontColorItalicBold: #6f7680 !important;
   --FontColorQuote1: #3d8fc4 !important; --FontColorQuote2: #3d8fc4 !important;
-  --risu-font-family: 'Gowun Batang', 'Nanum Myeongjo', serif !important;
 }
 
 /* ── 채팅 화면 전체를 한 장으로 ── */
-[class~="grow"]:has([class~="default-chat-screen"]) { background: #e4e3dc !important; }
-div:has(> [class~="default-chat-screen"]) {
+.grow:has(.default-chat-screen) { background: #e4e3dc !important; }
+div:has(> .default-chat-screen) {
   background: radial-gradient(120% 90% at 50% 40%, #f8f7f2 55%, #ecebe3 100%) !important;
   text-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-  transform: translateZ(0);
+}
+div:has(> .default-chat-screen)::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(#c9d3dc, #c9d3dc) 50% 12px / 88% 1px no-repeat, linear-gradient(#c9d3dc, #c9d3dc) 50% 16px / 88% 1px no-repeat;
 }
 
-/* ── 프로필 사진 숨김, 메시지 사이 칸 없애기 ── */
-[class~="risu-chat"] [class~="shadow-lg"][class~="rounded-md"] { display: none !important; }
-[class~="risu-chat"] span[class~="ml-4"] { margin-left: 0 !important; }
-[class~="risu-chat"] > div { margin: 0 !important; padding: 14px 34px !important; border: 0 !important; background: transparent !important; }
+/* ── 메시지: 칸 없이 이어지게 ── */
+.risu-chat > div { margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; }
+.lv-msg { width: 100%; max-width: 660px; margin: 0 auto; padding: 18px 34px 4px; box-sizing: border-box; }
+.lv-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 22px; margin-bottom: 4px; }
+.lv-name { font-family: 'Gowun Batang', serif; font-size: 12px; letter-spacing: 0.08em; color: #3d8fc4; }
+.lv-user .lv-name { color: #8a94a0; }
 
-/* ── 이름 줄 ── */
-[class~="risu-chat"] [class~="text-xl"][class~="unmargin"] {
-  font-family: 'Gowun Batang', serif !important; font-size: 12px !important; line-height: 1.4 !important;
-  letter-spacing: 0.08em; color: #8a94a0 !important; margin-bottom: 6px;
-}
+/* 버튼(복사·수정·재생성…)은 작고 흐리게, 누르면 진하게 */
+.lv-btns > div { display: flex; align-items: center; gap: 2px; margin: 0 !important; opacity: 0.4; transition: opacity 0.2s; }
+.lv-btns > div:hover, .lv-btns > div:focus-within { opacity: 1; }
+.lv-btns button { margin: 0 !important; padding: 2px !important; color: #8a8f98 !important; }
+.lv-btns svg { width: 15px; height: 15px; }
 
 /* ── 본문 ── */
-[class~="chattext"] {
+.lv-body .chattext {
+  display: block; width: 100%; max-width: none !important;
   font-family: 'Gowun Batang', 'Nanum Myeongjo', serif !important; font-size: 15.5px !important; line-height: 2 !important;
-  color: #2a2c31 !important; text-shadow: none !important; max-width: none !important; word-break: keep-all;
+  color: #2a2c31 !important; text-shadow: none !important; word-break: keep-all;
 }
-[class~="chattext"] :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
-[class~="chattext"] :is(em, i) { color: #6f7680 !important; }
-[class~="chattext"] :is(strong, b) { color: #1d1f23 !important; }
-[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) {
+.lv-body .chattext :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
+.lv-body .chattext :is(em, i) { color: #6f7680 !important; }
+.lv-body .chattext :is(strong, b) { color: #1d1f23 !important; }
+.lv-body .chattext mark[risu-mark] {
   background: transparent !important; color: #3d8fc4 !important; font-weight: 700 !important;
 }
-[class~="chattext"] hr { border: 0 !important; height: auto; margin: 2.2em 0 !important; text-align: center; overflow: visible; }
-[class~="chattext"] hr::after { content: '＊　＊　＊'; color: #9fadba; font-size: 12px; letter-spacing: 0.3em; }
-[class~="chattext"] blockquote { margin: 1.5em 0 !important; padding: 14px 20px !important; font-style: normal !important;
-  background: rgba(255,255,255,0.6); border: 0 !important; border-top: 1px solid #c9d3dc !important; border-bottom: 1px solid #c9d3dc !important; font-size: 0.92em; }
-[class~="chattext"] blockquote :is(strong, b):first-child { color: #2a6f9c !important; }
-
-/* ── 장식 레이어 (HTML) ── */
-:is(.lv-page, .x-risu-lv-page) { position: fixed; inset: 0; pointer-events: none; z-index: 5; background: none !important; }
-:is(.lv-novel, .x-risu-lv-novel) :is(.lv-rule, .x-risu-lv-rule) { position: absolute; left: 6%; right: 6%; height: 4px; border-top: 3px double #c9d3dc; }
-:is(.lv-novel, .x-risu-lv-novel) :is(.lv-top, .x-risu-lv-top) { top: 12px; }
-:is(.lv-novel, .x-risu-lv-novel) :is(.lv-bot, .x-risu-lv-bot) { bottom: 8px; }
+.lv-body .chattext hr { border: 0 !important; height: auto; margin: 2.2em 0 !important; text-align: center; overflow: visible; }
+.lv-body .chattext hr::after { content: '＊　＊　＊'; color: #9fadba; font-size: 12px; letter-spacing: 0.3em; }
+.lv-body .chattext blockquote { margin: 1.5em 0 !important; padding: 14px 20px !important; font-style: normal !important; background: rgba(255,255,255,0.6);
+  border: 0 !important; border-top: 1px solid #c9d3dc !important; border-bottom: 1px solid #c9d3dc !important; font-size: 0.92em; }
+.lv-body .chattext blockquote :is(strong, b):first-child { color: #2a6f9c !important; }

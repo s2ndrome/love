@@ -1,64 +1,62 @@
-/* 06 러시스 — 필름 한 롤이에요. 위아래 검은 띠, 양옆 필름 구멍, 지문은 타자체, 대사는 가운데 정렬 영화 자막. 장면 구분선은 CUT TO:. 오른쪽 위에 오늘 날짜. */
+/* 06 러시스 — 필름 한 롤이에요. 위아래 검은 띠, 양옆 필름 구멍, 이름은 시나리오처럼 가운데. 지문은 타자체, 대사는 영화 자막. 장면 구분선은 CUT TO:. */
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Sans+KR:wght@500;700&display=swap');
 
-/* ── 리스 화면 색: 기본 테마 색을 덮어씀 ── */
+/* ── 리스 기본 색 덮어쓰기 (입력창·버튼·사이드바까지) ── */
 :root {
   --risu-theme-bgcolor: #121212 !important; --risu-theme-darkbg: #0c0c0c !important;
   --risu-theme-borderc: #2a2a2a !important; --risu-theme-darkborderc: #2a2a2a !important;
   --risu-theme-selected: #262626 !important; --risu-theme-darkbutton: #1b1b1b !important;
-  --risu-theme-textcolor: #cfcfc8 !important; --risu-theme-textcolor2: #8b8b84 !important;
+  --risu-theme-textcolor: #cfcfc8 !important; --risu-theme-textcolor2: #7d7d76 !important;
   --FontColorStandard: #cfcfc8 !important; --FontColorBold: #f2f2ea !important;
   --FontColorItalic: #8b8b84 !important; --FontColorItalicBold: #8b8b84 !important;
   --FontColorQuote1: #ffffff !important; --FontColorQuote2: #ffffff !important;
-  --risu-font-family: 'Nanum Gothic Coding', ui-monospace, monospace !important;
 }
 
 /* ── 채팅 화면 전체를 한 장으로 ── */
-[class~="grow"]:has([class~="default-chat-screen"]) { background: #000000 !important; }
-div:has(> [class~="default-chat-screen"]) {
+.grow:has(.default-chat-screen) { background: #000000 !important; }
+div:has(> .default-chat-screen) {
   background: #121212 !important;
   text-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-  transform: translateZ(0);
+}
+div:has(> .default-chat-screen)::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(#000,#000) 0 0 / 100% 16px no-repeat, linear-gradient(#000,#000) 0 100% / 100% 16px no-repeat,
+    repeating-linear-gradient(180deg, #2c2c2c 0 7px, transparent 7px 18px) 6px 0 / 7px 100% no-repeat,
+    repeating-linear-gradient(180deg, #2c2c2c 0 7px, transparent 7px 18px) calc(100% - 6px) 0 / 7px 100% no-repeat;
 }
 
-/* ── 프로필 사진 숨김, 메시지 사이 칸 없애기 ── */
-[class~="risu-chat"] [class~="shadow-lg"][class~="rounded-md"] { display: none !important; }
-[class~="risu-chat"] span[class~="ml-4"] { margin-left: 0 !important; }
-[class~="risu-chat"] > div { margin: 0 !important; padding: 14px 34px !important; border: 0 !important; background: transparent !important; }
+/* ── 메시지: 칸 없이 이어지게 ── */
+.risu-chat > div { margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; }
+.lv-msg { width: 100%; max-width: 660px; margin: 0 auto; padding: 18px 36px 4px; box-sizing: border-box; }
+.lv-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 22px; margin-bottom: 4px; }
+.lv-name { font-family: 'Nanum Gothic Coding', monospace; font-size: 12px; letter-spacing: 0.08em; color: #e8e8df; }
+.lv-user .lv-name { color: #8b8b84; }
 
-/* ── 이름 줄 ── */
-[class~="risu-chat"] [class~="text-xl"][class~="unmargin"] {
-  font-family: 'Nanum Gothic Coding', monospace !important; font-size: 12px !important; line-height: 1.4 !important;
-  letter-spacing: 0.08em; color: #7d7d76 !important; margin-bottom: 6px;
-}
+/* 버튼(복사·수정·재생성…)은 작고 흐리게, 누르면 진하게 */
+.lv-btns > div { display: flex; align-items: center; gap: 2px; margin: 0 !important; opacity: 0.4; transition: opacity 0.2s; }
+.lv-btns > div:hover, .lv-btns > div:focus-within { opacity: 1; }
+.lv-btns button { margin: 0 !important; padding: 2px !important; color: #7d7d76 !important; }
+.lv-btns svg { width: 15px; height: 15px; }
 
 /* ── 본문 ── */
-[class~="chattext"] {
+.lv-body .chattext {
+  display: block; width: 100%; max-width: none !important;
   font-family: 'Nanum Gothic Coding', ui-monospace, monospace !important; font-size: 14px !important; line-height: 1.9 !important;
-  color: #cfcfc8 !important; text-shadow: none !important; max-width: none !important; word-break: keep-all;
+  color: #cfcfc8 !important; text-shadow: none !important; word-break: keep-all;
 }
-[class~="chattext"] :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
-[class~="chattext"] :is(em, i) { color: #8b8b84 !important; }
-[class~="chattext"] :is(strong, b) { color: #f2f2ea !important; }
-[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) {
+.lv-body .chattext :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
+.lv-body .chattext :is(em, i) { color: #8b8b84 !important; }
+.lv-body .chattext :is(strong, b) { color: #f2f2ea !important; }
+.lv-body .chattext mark[risu-mark] {
   display: table; margin: 0.5em auto; padding: 2px 12px; text-align: center;
   background: rgba(0,0,0,0.6) !important; color: #ffffff !important;
   font-family: 'Noto Sans KR', sans-serif; font-weight: 700 !important; font-size: 15.5px; text-shadow: 0 1px 2px #000 !important;
 }
-[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) + br { display: none; }
-[class~="chattext"] hr { border: 0 !important; height: auto; margin: 1.8em 0 !important; text-align: right; overflow: visible; }
-[class~="chattext"] hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }
-[class~="chattext"] blockquote { margin: 1.4em 0 !important; padding: 12px 16px !important; font-style: normal !important; background: #1a1a1a; border: 1px solid #333 !important; font-size: 0.93em; }
-[class~="chattext"] blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }
-
-/* ── 장식 레이어 (HTML) ── */
-:is(.lv-page, .x-risu-lv-page) { position: fixed; inset: 0; pointer-events: none; z-index: 5; background: none !important; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-bar, .x-risu-lv-bar) { position: absolute; left: 0; right: 0; height: 16px; background: #000; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-top, .x-risu-lv-top) { top: 0; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-bot, .x-risu-lv-bot) { bottom: 0; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-holes, .x-risu-lv-holes) { position: absolute; top: 16px; bottom: 16px; width: 7px; background: repeating-linear-gradient(180deg, #2c2c2c 0 7px, transparent 7px 18px); }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-left, .x-risu-lv-left) { left: 6px; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-right, .x-risu-lv-right) { right: 6px; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-rec, .x-risu-lv-rec), :is(.lv-film, .x-risu-lv-film) :is(.lv-slate, .x-risu-lv-slate) { position: absolute; top: 2px; font-family: 'Nanum Gothic Coding', monospace; font-size: 10px; letter-spacing: 0.18em; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-rec, .x-risu-lv-rec) { left: 18px; color: #e5484d; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-slate, .x-risu-lv-slate) { right: 18px; color: #7d7d76; }
+.lv-head { position: relative; justify-content: center; }
+.lv-btns { position: absolute; right: 0; top: 0; }
+.lv-name { letter-spacing: 0.3em; }
+.lv-body .chattext mark[risu-mark] + br { display: none; }
+.lv-body .chattext hr { border: 0 !important; height: auto; margin: 1.8em 0 !important; text-align: right; overflow: visible; }
+.lv-body .chattext hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }
+.lv-body .chattext blockquote { margin: 1.4em 0 !important; padding: 12px 16px !important; font-style: normal !important; background: #1a1a1a; border: 1px solid #333 !important; font-size: 0.93em; }
+.lv-body .chattext blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }
