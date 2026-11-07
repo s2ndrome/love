@@ -1167,7 +1167,7 @@ SITE_READY.then(function () {
   function hwTalk(turns) { return '<div class="hw-say">' + turns.map(function (t) { return '<div class="hw-row' + (t[0] === 'L' ? ' r' : '') + '"><span class="hw-av ' + t[0].toLowerCase() + '"></span><p><small>' + HWN[t[0]] + '</small>' + hwEsc(t[1]) + '</p></div>'; }).join('') + '</div>'; }
   function heroView() {
     document.getElementById('wurl').textContent = 'www.syndrome.com';
-    var T = [[1, 'A'], [0, 'B'], [2, 'C'], [3, 'D']] /* A 디데이 · B 한마디 · C 문답 · D 플리 */, b = '', p2 = function (n) { return ('0' + n).slice(-2); };
+    var T = [[1, 'ruin'], [0, 'scene'], [2, 'screen'], [3, 'mp3']] /* ruin 디데이 · scene 대화 · screen 문답 · mp3 플리 */, b = '', p2 = function (n) { return ('0' + n).slice(-2); };
     if (HWT === 0 && HWD) b = hwEdHTML();
     else if (HWT === 0) {
       var LN = hwLines(); if (HWL >= LN.length) HWL = 0;
