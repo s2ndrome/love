@@ -1,36 +1,59 @@
-/* 04 메신저 — 화면 전체가 톡방. 대사는 말풍선, 지문은 작은 회색 글씨 */
+/* 04 메신저 — 화면 전체가 톡방이에요. 위 상단바에 캐릭터 이름({{char}})이 자동으로 뜨고, 대사는 파란 말풍선, 지문은 작은 회색 글씨. 짧은 대화가 많은 채팅에 어울려요. */
+/* ── 리스 화면 색: 기본 테마 색을 덮어씀 ── */
 :root {
-  --risu-theme-bgcolor: #f2f2f7; --risu-theme-darkbg: #ffffff; --risu-theme-borderc: #e5e5ea;
-  --risu-theme-darkborderc: #e5e5ea; --risu-theme-selected: #dcebff; --risu-theme-darkbutton: #e9e9eb;
-  --risu-theme-textcolor: #1c1c1e; --risu-theme-textcolor2: #8e8e93; --risu-theme-draculared: #ff3b30;
+  --risu-theme-bgcolor: #f2f2f7 !important; --risu-theme-darkbg: #ffffff !important;
+  --risu-theme-borderc: #e5e5ea !important; --risu-theme-darkborderc: #e5e5ea !important;
+  --risu-theme-selected: #dcebff !important; --risu-theme-darkbutton: #e9e9eb !important;
+  --risu-theme-textcolor: #6e6e73 !important; --risu-theme-textcolor2: #8e8e93 !important;
+  --FontColorStandard: #6e6e73 !important; --FontColorBold: #1c1c1e !important;
+  --FontColorItalic: #8e8e93 !important; --FontColorItalicBold: #8e8e93 !important;
+  --FontColorQuote1: #ffffff !important; --FontColorQuote2: #ffffff !important;
+  --risu-font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important;
 }
-:is(.lv-page, .x-risu-lv-page) { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-:is(.lv-msgr, .x-risu-lv-msgr) { background: #f2f2f7; }
-:is(.lv-msgr, .x-risu-lv-msgr) :is(.lv-bar, .x-risu-lv-bar) {
-  position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 18px; background: rgba(249, 249, 251, 0.92); border-bottom: 1px solid #e5e5ea;
-  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 15px; color: #1c1c1e;
-}
-:is(.lv-msgr, .x-risu-lv-msgr) :is(.lv-back, .x-risu-lv-back) { color: #007aff; font-size: 24px; line-height: 1; }
-:is(.lv-msgr, .x-risu-lv-msgr) :is(.lv-dot, .x-risu-lv-dot) { color: #007aff; letter-spacing: 0.1em; }
 
-.chattext {
-  --FontColorStandard: #6e6e73; --FontColorBold: #1c1c1e; --FontColorItalic: #8e8e93;
-  --FontColorItalicBold: #8e8e93; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;
-  display: block; background: transparent; color: #6e6e73;
-  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-  font-size: 13.5px; line-height: 1.75; letter-spacing: -0.01em; word-break: keep-all;
+/* ── 채팅 화면 전체를 한 장으로 ── */
+[class~="grow"]:has([class~="default-chat-screen"]) { background: #e9e9ee !important; }
+div:has(> [class~="default-chat-screen"]) {
+  background: #f2f2f7 !important;
+  text-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+  transform: translateZ(0);
 }
-.chattext p { margin: 0 0 0.9em; }
-.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
+
+/* ── 프로필 사진 숨김, 메시지 사이 칸 없애기 ── */
+[class~="risu-chat"] [class~="shadow-lg"][class~="rounded-md"] { display: none !important; }
+[class~="risu-chat"] span[class~="ml-4"] { margin-left: 0 !important; }
+[class~="risu-chat"] > div { margin: 0 !important; padding: 10px 24px !important; border: 0 !important; background: transparent !important; }
+
+/* ── 이름 줄 ── */
+[class~="risu-chat"] [class~="text-xl"][class~="unmargin"] {
+  font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important; font-size: 12px !important; line-height: 1.4 !important;
+  letter-spacing: 0.08em; color: #8e8e93 !important; margin-bottom: 6px;
+}
+
+/* ── 본문 ── */
+[class~="chattext"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important; font-size: 13.5px !important; line-height: 1.75 !important;
+  color: #6e6e73 !important; text-shadow: none !important; max-width: none !important; word-break: keep-all;
+}
+[class~="chattext"] :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
+[class~="chattext"] :is(em, i) { color: #8e8e93 !important; }
+[class~="chattext"] :is(strong, b) { color: #1c1c1e !important; }
+[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) {
   display: inline-block; max-width: 88%; margin: 3px 0; padding: 7px 13px;
-  background: #007aff; color: #ffffff !important; font-weight: 400 !important;
+  background: #007aff !important; color: #ffffff !important; font-weight: 400 !important;
   font-size: 15px; line-height: 1.45; border-radius: 18px 18px 18px 5px;
 }
-.chattext em, .chattext i { color: #8e8e93; }
-.chattext b, .chattext strong { color: #1c1c1e; font-weight: 600; }
-.chattext hr { border: 0; height: auto; margin: 1.6em 0; text-align: center; overflow: visible; }
-.chattext hr::after { content: '· · ·'; display: inline-block; padding: 0 12px; border-radius: 10px; background: #e5e5ea; color: #8e8e93; font-size: 11px; }
-.chattext blockquote { margin: 1.2em 0; padding: 12px 14px; background: #ffffff; border: 0; border-radius: 14px; box-shadow: 0 6px 18px -10px rgba(0,0,0,0.25); color: #1c1c1e; font-size: 13.5px; }
-.chattext blockquote b:first-child { display: block; margin-bottom: 4px; font-size: 11.5px; color: #8e8e93; font-weight: 600; }
-.chattext img { display: block; max-width: 72%; margin: 6px 0; border-radius: 18px; }
+[class~="chattext"] hr { border: 0 !important; height: auto; margin: 1.6em 0 !important; text-align: center; overflow: visible; }
+[class~="chattext"] hr::after { content: '· · ·'; display: inline-block; padding: 0 12px; border-radius: 10px; background: #e5e5ea; color: #8e8e93; font-size: 11px; }
+[class~="chattext"] blockquote { margin: 1.2em 0 !important; padding: 12px 14px !important; font-style: normal !important; background: #ffffff; border: 0 !important;
+  border-radius: 14px; box-shadow: 0 6px 18px -10px rgba(0,0,0,0.25); color: #1c1c1e !important; }
+[class~="chattext"] blockquote :is(strong, b):first-child { font-size: 11.5px; color: #8e8e93 !important; }
+
+/* ── 장식 레이어 (HTML) ── */
+:is(.lv-page, .x-risu-lv-page) { position: fixed; inset: 0; pointer-events: none; z-index: 5; background: none !important; }
+[class~="default-chat-screen"] { padding-top: 48px; }
+:is(.lv-msgr, .x-risu-lv-msgr) :is(.lv-bar, .x-risu-lv-bar) { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 16px; background: rgba(249,249,251,0.94); border-bottom: 1px solid #e5e5ea;
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 15px; color: #1c1c1e; }
+:is(.lv-msgr, .x-risu-lv-msgr) :is(.lv-back, .x-risu-lv-back) { color: #007aff; font-size: 24px; line-height: 1; }
+:is(.lv-msgr, .x-risu-lv-msgr) :is(.lv-dot, .x-risu-lv-dot) { color: #007aff; letter-spacing: 0.1em; }

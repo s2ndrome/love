@@ -1,42 +1,64 @@
-/* 06 러시스 — 화면 전체가 필름 한 롤. 위아래 레터박스, 양옆 필름 구멍, 대사는 자막 */
+/* 06 러시스 — 필름 한 롤이에요. 위아래 검은 띠, 양옆 필름 구멍, 지문은 타자체, 대사는 가운데 정렬 영화 자막. 장면 구분선은 CUT TO:. 오른쪽 위에 오늘 날짜. */
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Sans+KR:wght@500;700&display=swap');
 
+/* ── 리스 화면 색: 기본 테마 색을 덮어씀 ── */
 :root {
-  --risu-theme-bgcolor: #121212; --risu-theme-darkbg: #0c0c0c; --risu-theme-borderc: #2a2a2a;
-  --risu-theme-darkborderc: #222222; --risu-theme-selected: #262626; --risu-theme-darkbutton: #1b1b1b;
-  --risu-theme-textcolor: #e8e8df; --risu-theme-textcolor2: #8b8b84; --risu-theme-draculared: #e5484d;
+  --risu-theme-bgcolor: #121212 !important; --risu-theme-darkbg: #0c0c0c !important;
+  --risu-theme-borderc: #2a2a2a !important; --risu-theme-darkborderc: #2a2a2a !important;
+  --risu-theme-selected: #262626 !important; --risu-theme-darkbutton: #1b1b1b !important;
+  --risu-theme-textcolor: #cfcfc8 !important; --risu-theme-textcolor2: #8b8b84 !important;
+  --FontColorStandard: #cfcfc8 !important; --FontColorBold: #f2f2ea !important;
+  --FontColorItalic: #8b8b84 !important; --FontColorItalicBold: #8b8b84 !important;
+  --FontColorQuote1: #ffffff !important; --FontColorQuote2: #ffffff !important;
+  --risu-font-family: 'Nanum Gothic Coding', ui-monospace, monospace !important;
 }
-:is(.lv-page, .x-risu-lv-page) { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-:is(.lv-film, .x-risu-lv-film) { background: #121212; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-bar, .x-risu-lv-bar) { position: absolute; left: 0; right: 0; height: 22px; background: #000; }
+
+/* ── 채팅 화면 전체를 한 장으로 ── */
+[class~="grow"]:has([class~="default-chat-screen"]) { background: #000000 !important; }
+div:has(> [class~="default-chat-screen"]) {
+  background: #121212 !important;
+  text-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+  transform: translateZ(0);
+}
+
+/* ── 프로필 사진 숨김, 메시지 사이 칸 없애기 ── */
+[class~="risu-chat"] [class~="shadow-lg"][class~="rounded-md"] { display: none !important; }
+[class~="risu-chat"] span[class~="ml-4"] { margin-left: 0 !important; }
+[class~="risu-chat"] > div { margin: 0 !important; padding: 14px 34px !important; border: 0 !important; background: transparent !important; }
+
+/* ── 이름 줄 ── */
+[class~="risu-chat"] [class~="text-xl"][class~="unmargin"] {
+  font-family: 'Nanum Gothic Coding', monospace !important; font-size: 12px !important; line-height: 1.4 !important;
+  letter-spacing: 0.08em; color: #7d7d76 !important; margin-bottom: 6px;
+}
+
+/* ── 본문 ── */
+[class~="chattext"] {
+  font-family: 'Nanum Gothic Coding', ui-monospace, monospace !important; font-size: 14px !important; line-height: 1.9 !important;
+  color: #cfcfc8 !important; text-shadow: none !important; max-width: none !important; word-break: keep-all;
+}
+[class~="chattext"] :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
+[class~="chattext"] :is(em, i) { color: #8b8b84 !important; }
+[class~="chattext"] :is(strong, b) { color: #f2f2ea !important; }
+[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) {
+  display: table; margin: 0.5em auto; padding: 2px 12px; text-align: center;
+  background: rgba(0,0,0,0.6) !important; color: #ffffff !important;
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 700 !important; font-size: 15.5px; text-shadow: 0 1px 2px #000 !important;
+}
+[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) + br { display: none; }
+[class~="chattext"] hr { border: 0 !important; height: auto; margin: 1.8em 0 !important; text-align: right; overflow: visible; }
+[class~="chattext"] hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }
+[class~="chattext"] blockquote { margin: 1.4em 0 !important; padding: 12px 16px !important; font-style: normal !important; background: #1a1a1a; border: 1px solid #333 !important; font-size: 0.93em; }
+[class~="chattext"] blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }
+
+/* ── 장식 레이어 (HTML) ── */
+:is(.lv-page, .x-risu-lv-page) { position: fixed; inset: 0; pointer-events: none; z-index: 5; background: none !important; }
+:is(.lv-film, .x-risu-lv-film) :is(.lv-bar, .x-risu-lv-bar) { position: absolute; left: 0; right: 0; height: 16px; background: #000; }
 :is(.lv-film, .x-risu-lv-film) :is(.lv-top, .x-risu-lv-top) { top: 0; }
 :is(.lv-film, .x-risu-lv-film) :is(.lv-bot, .x-risu-lv-bot) { bottom: 0; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-holes, .x-risu-lv-holes) { position: absolute; top: 0; bottom: 0; width: 8px; background: repeating-linear-gradient(180deg, #2a2a2a 0 8px, transparent 8px 20px); }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-left, .x-risu-lv-left) { left: 4px; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-right, .x-risu-lv-right) { right: 4px; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-rec, .x-risu-lv-rec), :is(.lv-film, .x-risu-lv-film) :is(.lv-slate, .x-risu-lv-slate) { position: absolute; top: 5px; font-family: 'Nanum Gothic Coding', monospace; font-size: 10.5px; letter-spacing: 0.18em; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-rec, .x-risu-lv-rec) { left: 20px; color: #e5484d; }
-:is(.lv-film, .x-risu-lv-film) :is(.lv-slate, .x-risu-lv-slate) { right: 20px; color: #7d7d76; }
-
-.chattext {
-  --FontColorStandard: #cfcfc8; --FontColorBold: #f2f2ea; --FontColorItalic: #8b8b84;
-  --FontColorItalicBold: #8b8b84; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;
-  display: block; background: transparent; color: #cfcfc8;
-  font-family: 'Nanum Gothic Coding', ui-monospace, monospace;
-  font-size: 14px; line-height: 1.9; word-break: keep-all;
-}
-.chattext p { margin: 0 0 1em; }
-.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
-  display: table; margin: 0.5em auto; padding: 2px 12px; text-align: center;
-  background: rgba(0,0,0,0.6); color: #ffffff !important;
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 700 !important; font-size: 15.5px; text-shadow: 0 1px 2px #000;
-}
-.chattext :is(.dlg, .x-risu-dlg, span[data-q]) + br { display: none; }
-.chattext em, .chattext i { color: #8b8b84; }
-.chattext b, .chattext strong { color: #f2f2ea; }
-.chattext hr { border: 0; height: auto; margin: 1.8em 0; text-align: right; overflow: visible; }
-.chattext hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }
-.chattext blockquote { margin: 1.4em 0; padding: 14px 16px; background: #1a1a1a; border: 1px solid #333; font-size: 13px; }
-.chattext blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }
-.chattext blockquote b:first-child { display: block; margin-bottom: 4px; color: #ffffff; }
-.chattext img { display: block; max-width: 100%; margin: 1.4em 0; filter: grayscale(0.25) contrast(1.05); }
+:is(.lv-film, .x-risu-lv-film) :is(.lv-holes, .x-risu-lv-holes) { position: absolute; top: 16px; bottom: 16px; width: 7px; background: repeating-linear-gradient(180deg, #2c2c2c 0 7px, transparent 7px 18px); }
+:is(.lv-film, .x-risu-lv-film) :is(.lv-left, .x-risu-lv-left) { left: 6px; }
+:is(.lv-film, .x-risu-lv-film) :is(.lv-right, .x-risu-lv-right) { right: 6px; }
+:is(.lv-film, .x-risu-lv-film) :is(.lv-rec, .x-risu-lv-rec), :is(.lv-film, .x-risu-lv-film) :is(.lv-slate, .x-risu-lv-slate) { position: absolute; top: 2px; font-family: 'Nanum Gothic Coding', monospace; font-size: 10px; letter-spacing: 0.18em; }
+:is(.lv-film, .x-risu-lv-film) :is(.lv-rec, .x-risu-lv-rec) { left: 18px; color: #e5484d; }
+:is(.lv-film, .x-risu-lv-film) :is(.lv-slate, .x-risu-lv-slate) { right: 18px; color: #7d7d76; }

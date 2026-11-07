@@ -1,31 +1,56 @@
-/* 05 새벽 네 시 — 화면 전체가 밤 침실. 오른쪽 위에서 스탠드 주황빛이 번진다 */
+/* 05 새벽 네 시 — 밤 침실이에요. 남색 바탕 오른쪽 위로 스탠드 주황빛이 번지고 작은 별과 달. 대사는 하늘색 형광펜 밑줄. */
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
+/* ── 리스 화면 색: 기본 테마 색을 덮어씀 ── */
 :root {
-  --risu-theme-bgcolor: #1a2034; --risu-theme-darkbg: #151a2b; --risu-theme-borderc: #2b3350;
-  --risu-theme-darkborderc: #252c45; --risu-theme-selected: #2b3350; --risu-theme-darkbutton: #222940;
-  --risu-theme-textcolor: #e8e2d4; --risu-theme-textcolor2: #a9a4c6; --risu-theme-draculared: #ff9b8a;
+  --risu-theme-bgcolor: #1a2034 !important; --risu-theme-darkbg: #151a2b !important;
+  --risu-theme-borderc: #2b3350 !important; --risu-theme-darkborderc: #2b3350 !important;
+  --risu-theme-selected: #2b3350 !important; --risu-theme-darkbutton: #222940 !important;
+  --risu-theme-textcolor: #e8e2d4 !important; --risu-theme-textcolor2: #a9a4c6 !important;
+  --FontColorStandard: #e8e2d4 !important; --FontColorBold: #ffd8a8 !important;
+  --FontColorItalic: #a9a4c6 !important; --FontColorItalicBold: #a9a4c6 !important;
+  --FontColorQuote1: #c4e6ff !important; --FontColorQuote2: #c4e6ff !important;
+  --risu-font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif !important;
 }
-:is(.lv-page, .x-risu-lv-page) { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-:is(.lv-night, .x-risu-lv-night) { background: #1a2034; }
-:is(.lv-night, .x-risu-lv-night) :is(.lv-glow, .x-risu-lv-glow) { position: absolute; top: -20%; right: -15%; width: 80%; height: 70%; background: radial-gradient(closest-side, rgba(255,176,92,0.30), rgba(255,176,92,0)); }
-:is(.lv-night, .x-risu-lv-night) :is(.lv-stars, .x-risu-lv-stars) { position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; background: transparent;
-  box-shadow: 40px 60px #c9cfe6, 120px 140px #8d95b8, 210px 40px #c9cfe6, 310px 190px #8d95b8, 60px 320px #8d95b8, 260px 420px #c9cfe6, 90px 560px #8d95b8, 380px 640px #c9cfe6, 20px 760px #8d95b8, 300px 860px #8d95b8; opacity: 0.6; }
-:is(.lv-night, .x-risu-lv-night) :is(.lv-moon, .x-risu-lv-moon) { position: absolute; top: 14px; right: 20px; color: #ffcf8f; font-size: 20px; opacity: 0.85; }
 
-.chattext {
-  --FontColorStandard: #e8e2d4; --FontColorBold: #ffd8a8; --FontColorItalic: #a9a4c6;
-  --FontColorItalicBold: #a9a4c6; --FontColorQuote1: #c4e6ff; --FontColorQuote2: #c4e6ff;
-  display: block; background: transparent; color: #e8e2d4;
-  font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif;
-  font-size: 15px; line-height: 1.95; word-break: keep-all;
+/* ── 채팅 화면 전체를 한 장으로 ── */
+[class~="grow"]:has([class~="default-chat-screen"]) { background: #121726 !important; }
+div:has(> [class~="default-chat-screen"]) {
+  background: radial-gradient(70% 45% at 95% 0%, rgba(255,176,92,0.28), rgba(255,176,92,0) 70%), #1a2034 !important;
+  text-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+  transform: translateZ(0);
 }
-.chattext p { margin: 0 0 1em; }
-.chattext :is(.dlg, .x-risu-dlg, span[data-q]) { color: #c4e6ff !important; font-weight: 700 !important; background: linear-gradient(transparent 64%, rgba(111,176,220,0.30) 0); padding: 0 2px; }
-.chattext em, .chattext i { color: #a9a4c6; }
-.chattext b, .chattext strong { color: #ffd8a8; }
-.chattext hr { border: 0; height: auto; margin: 2em 0; text-align: center; overflow: visible; }
-.chattext hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }
-.chattext blockquote { margin: 1.4em 0; padding: 16px 18px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.22); border-radius: 16px; font-size: 14px; color: #f1ece2; }
-.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffd8a8; }
-.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 16px; }
+
+/* ── 프로필 사진 숨김, 메시지 사이 칸 없애기 ── */
+[class~="risu-chat"] [class~="shadow-lg"][class~="rounded-md"] { display: none !important; }
+[class~="risu-chat"] span[class~="ml-4"] { margin-left: 0 !important; }
+[class~="risu-chat"] > div { margin: 0 !important; padding: 14px 32px !important; border: 0 !important; background: transparent !important; }
+
+/* ── 이름 줄 ── */
+[class~="risu-chat"] [class~="text-xl"][class~="unmargin"] {
+  font-family: 'Gowun Dodum', sans-serif !important; font-size: 12px !important; line-height: 1.4 !important;
+  letter-spacing: 0.08em; color: #ffcf8f !important; margin-bottom: 6px;
+}
+
+/* ── 본문 ── */
+[class~="chattext"] {
+  font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif !important; font-size: 15px !important; line-height: 1.95 !important;
+  color: #e8e2d4 !important; text-shadow: none !important; max-width: none !important; word-break: keep-all;
+}
+[class~="chattext"] :is(p, li) { color: inherit !important; margin: 0 0 1em !important; }
+[class~="chattext"] :is(em, i) { color: #a9a4c6 !important; }
+[class~="chattext"] :is(strong, b) { color: #ffd8a8 !important; }
+[class~="chattext"] :is(mark[risu-mark], .dlg, .x-risu-dlg, span[data-q]) {
+  color: #c4e6ff !important; font-weight: 700 !important;
+  background: linear-gradient(transparent 64%, rgba(111,176,220,0.30) 0) !important; padding: 0 2px;
+}
+[class~="chattext"] hr { border: 0 !important; height: auto; margin: 2em 0 !important; text-align: center; overflow: visible; }
+[class~="chattext"] hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }
+[class~="chattext"] blockquote { margin: 1.4em 0 !important; padding: 14px 18px !important; font-style: normal !important; background: rgba(255,255,255,0.05);
+  border: 1px dashed rgba(255,255,255,0.22) !important; border-radius: 16px; color: #f1ece2 !important; }
+
+/* ── 장식 레이어 (HTML) ── */
+:is(.lv-page, .x-risu-lv-page) { position: fixed; inset: 0; pointer-events: none; z-index: 5; background: none !important; }
+:is(.lv-night, .x-risu-lv-night) :is(.lv-stars, .x-risu-lv-stars) { position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; opacity: 0.55;
+  box-shadow: 30px 40px #c9cfe6, 140px 120px #8d95b8, 260px 30px #c9cfe6, 420px 90px #8d95b8, 600px 50px #c9cfe6, 20px 300px #8d95b8, 640px 260px #8d95b8, 12px 560px #c9cfe6, 650px 520px #c9cfe6, 30px 760px #8d95b8, 640px 820px #8d95b8; }
+:is(.lv-night, .x-risu-lv-night) :is(.lv-moon, .x-risu-lv-moon) { position: absolute; top: 12px; right: 18px; color: #ffcf8f; font-size: 18px; opacity: 0.85; }
