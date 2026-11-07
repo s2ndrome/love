@@ -1,43 +1,31 @@
-/* 05 새벽 네 시 — 스탠드 주황빛이 번진 밤 침실. 집안 일상물용 */
+/* 05 새벽 네 시 — 화면 전체가 밤 침실. 오른쪽 위에서 스탠드 주황빛이 번진다 */
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+:root {
+  --risu-theme-bgcolor: #1a2034; --risu-theme-darkbg: #151a2b; --risu-theme-borderc: #2b3350;
+  --risu-theme-darkborderc: #252c45; --risu-theme-selected: #2b3350; --risu-theme-darkbutton: #222940;
+  --risu-theme-textcolor: #e8e2d4; --risu-theme-textcolor2: #a9a4c6; --risu-theme-draculared: #ff9b8a;
+}
+:is(.lv-page, .x-risu-lv-page) { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+:is(.lv-night, .x-risu-lv-night) { background: #1a2034; }
+:is(.lv-night, .x-risu-lv-night) :is(.lv-glow, .x-risu-lv-glow) { position: absolute; top: -20%; right: -15%; width: 80%; height: 70%; background: radial-gradient(closest-side, rgba(255,176,92,0.30), rgba(255,176,92,0)); }
+:is(.lv-night, .x-risu-lv-night) :is(.lv-stars, .x-risu-lv-stars) { position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; background: transparent;
+  box-shadow: 40px 60px #c9cfe6, 120px 140px #8d95b8, 210px 40px #c9cfe6, 310px 190px #8d95b8, 60px 320px #8d95b8, 260px 420px #c9cfe6, 90px 560px #8d95b8, 380px 640px #c9cfe6, 20px 760px #8d95b8, 300px 860px #8d95b8; opacity: 0.6; }
+:is(.lv-night, .x-risu-lv-night) :is(.lv-moon, .x-risu-lv-moon) { position: absolute; top: 14px; right: 20px; color: #ffcf8f; font-size: 20px; opacity: 0.85; }
 
 .chattext {
   --FontColorStandard: #e8e2d4; --FontColorBold: #ffd8a8; --FontColorItalic: #a9a4c6;
   --FontColorItalicBold: #a9a4c6; --FontColorQuote1: #c4e6ff; --FontColorQuote2: #c4e6ff;
-  display: block;
-  position: relative;
-  color: #e8e2d4;
+  display: block; background: transparent; color: #e8e2d4;
   font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif;
-  font-size: 15px;
-  line-height: 1.95;
-  word-break: keep-all;
-  padding: 28px 28px 24px;
-  border-radius: 24px;
-  background:
-    radial-gradient(110% 60% at 88% -8%, rgba(255, 176, 92, 0.30), rgba(255, 176, 92, 0) 62%),
-    #1a2034;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-}
-.chattext::after {
-  content: '☾'; position: absolute; top: 14px; right: 20px;
-  color: #ffcf8f; font-size: 18px; opacity: 0.8;
+  font-size: 15px; line-height: 1.95; word-break: keep-all;
 }
 .chattext p { margin: 0 0 1em; }
-.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {
-  color: #c4e6ff !important;
-  font-weight: 700 !important;
-  background: linear-gradient(transparent 64%, rgba(111, 176, 220, 0.30) 0);
-  padding: 0 2px;
-}
+.chattext :is(.dlg, .x-risu-dlg, span[data-q]) { color: #c4e6ff !important; font-weight: 700 !important; background: linear-gradient(transparent 64%, rgba(111,176,220,0.30) 0); padding: 0 2px; }
 .chattext em, .chattext i { color: #a9a4c6; }
 .chattext b, .chattext strong { color: #ffd8a8; }
 .chattext hr { border: 0; height: auto; margin: 2em 0; text-align: center; overflow: visible; }
 .chattext hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }
-.chattext blockquote {
-  margin: 1.4em 0; padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px dashed rgba(255, 255, 255, 0.22); border-radius: 16px;
-  font-size: 14px; color: #f1ece2;
-}
+.chattext blockquote { margin: 1.4em 0; padding: 16px 18px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.22); border-radius: 16px; font-size: 14px; color: #f1ece2; }
 .chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffd8a8; }
 .chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 16px; }

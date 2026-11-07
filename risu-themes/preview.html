@@ -45,39 +45,36 @@ h1 em { color: var(--accent); }
 
 .grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
 
-/* Risu-like stage */
-.stage { background: var(--stage); border-radius: 16px; padding: 22px 18px 26px; display: grid; gap: 22px; min-width: 0; }
-.stage-bar { display: flex; justify-content: space-between; align-items: center; color: var(--stage-sub); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; }
-.msg { display: block; }
-.msg .who { color: var(--stage-name); font-weight: 600; font-size: 14px; margin: 2px 0 8px; font-family: "Noto Sans KR", sans-serif; }
+/* Risu-like stage: one continuous sheet, no per-message cards */
+.stage { position: relative; overflow: hidden; border-radius: 16px; min-width: 0; background: var(--risu-theme-bgcolor, #1d1e23); }
+.stage > .msgs { position: relative; z-index: 1; display: grid; gap: 26px; padding: 52px 34px 50px; }
+.msg .who { color: var(--risu-theme-textcolor, #e9e9ee); font-weight: 600; font-size: 13.5px; margin: 0 0 6px; font-family: "Noto Sans KR", sans-serif; opacity: .85; }
 .msg .body { min-width: 0; }
-
-/* side panel */
-.side { display: grid; gap: 14px; min-width: 0; }
-.card { background: var(--panel); border: 1px solid var(--hair); border-radius: 14px; padding: 18px; min-width: 0; }
-.card h2 { margin: 0 0 4px; font-size: 20px; font-family: var(--serif); font-weight: 400; }
-.card h2 small { font-family: var(--mono); font-size: 11px; color: var(--mid); letter-spacing: .12em; margin-left: 6px; }
-.card p.desc { margin: 0 0 12px; color: var(--mid); word-break: keep-all; }
+.stage-cap { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--mid); margin-bottom: 8px; }
+/* side panel: flat sections divided by hairlines */
+.side { display: grid; min-width: 0; border-top: 1px solid var(--hair); }
+.sec { padding: 16px 0; border-bottom: 1px solid var(--hair); min-width: 0; }
+.sec h2 { margin: 0 0 4px; font-size: 24px; font-family: var(--serif); font-weight: 400; }
+.sec h2 small { font-family: var(--mono); font-size: 11px; color: var(--mid); letter-spacing: .12em; margin-left: 8px; }
+.sec p.desc { margin: 0 0 10px; color: var(--mid); word-break: keep-all; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tags span { font-size: 12px; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--hair); color: var(--mid); }
-
+.tags span { font-size: 12px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--hair); color: var(--mid); }
 ol.steps { margin: 0; padding-left: 20px; display: grid; gap: 8px; word-break: keep-all; }
 ol.steps b { font-weight: 600; }
-.k { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border-radius: 5px; background: var(--bg); border: 1px solid var(--hair); }
-
-.codehead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-.codehead .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--mid); }
+.k { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border-radius: 5px; background: var(--panel); border: 1px solid var(--hair); }
+.codehead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.lbl { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--mid); }
+.lbl b { color: var(--ink); font-weight: 500; }
 .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-label.tg { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--mid); cursor: pointer; }
 button.cp { font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 0; border-radius: 8px; padding: 7px 12px; background: var(--accent); color: var(--accent-ink); }
 button.cp.ghost { background: transparent; color: var(--ink); border: 1px solid var(--hair); }
 button.cp:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-pre.code { margin: 0; max-height: 340px; overflow: auto; background: var(--code-bg); color: var(--code-fg); border-radius: 10px; padding: 14px; font-family: var(--mono); font-size: 11.5px; line-height: 1.55; white-space: pre; }
+pre.code { margin: 0; max-height: 260px; overflow: auto; background: var(--code-bg); color: var(--code-fg); border-radius: 10px; padding: 14px; font-family: var(--mono); font-size: 11.5px; line-height: 1.55; white-space: pre; }
 .rx { display: grid; gap: 8px; }
-.rx .line { display: grid; grid-template-columns: 54px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.rx .line { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
 .rx .line span { font-family: var(--mono); font-size: 11px; color: var(--mid); letter-spacing: .1em; }
-.rx code { display: block; overflow-x: auto; white-space: nowrap; font-family: var(--mono); font-size: 12px; padding: 7px 10px; border-radius: 7px; background: var(--bg); border: 1px solid var(--hair); }
-.note { font-size: 12.5px; color: var(--mid); margin: 10px 0 0; word-break: keep-all; }
+.rx code { display: block; overflow-x: auto; white-space: nowrap; font-family: var(--mono); font-size: 12px; padding: 7px 10px; border-radius: 7px; background: var(--panel); border: 1px solid var(--hair); }
+.note { font-size: 12.5px; color: var(--mid); margin: 8px 0 0; word-break: keep-all; }
 .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 99px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
 .toast.on { opacity: 1; }
 
@@ -87,7 +84,7 @@ pre.code { margin: 0; max-height: 340px; overflow: auto; background: var(--code-
 }
 @media (max-width: 480px) {
   .chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .stage { padding: 16px 10px 20px; }
+  .stage > .msgs { padding: 46px 22px 44px; }
 }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
 </style>
@@ -98,14 +95,17 @@ pre.code { margin: 0; max-height: 340px; overflow: auto; background: var(--code-
   <header class="top">
     <div class="eyebrow">RisuAI · custom chat theme · 6 drafts</div>
     <h1>리스 채팅창 <em>시안 여섯 개</em></h1>
-    <p class="lede">맥모닝 로그 한 장면으로 미리 봐요. 대사 색, 지문, 장면 구분선, 소개서 같은 삽입 문서까지 지금 쓰는 형식 그대로 넣었어요. 마음에 드는 걸 골라서 CSS를 복사해 리스에 붙이면 돼요.</p>
+    <p class="lede">맥모닝 로그 한 장면으로 미리 봐요. 메시지를 칸으로 나누지 않고 채팅 화면 전체가 한 장의 지면으로 이어져요. 테마마다 배경 지면을 그리는 HTML과 글씨를 꾸미는 CSS가 한 쌍이에요.</p>
   </header>
 
   <div class="chips" role="tablist" id="chips"></div>
 
   <div class="grid">
-    <section class="stage" aria-label="미리보기">
-      <div class="stage-bar"><span>PREVIEW</span><span id="stage-no">01 / 06</span></div>
+    <div class="stage-wrap">
+      <div class="stage-cap"><span>PREVIEW · 리스 채팅 화면 한 장</span><span id="stage-no">01 / 06</span></div>
+      <section class="stage" aria-label="미리보기">
+        <div id="bgslot"></div>
+        <div class="msgs">
       <div class="msg">
         <div class="body"><div class="who">설지수</div>
           <div class="chattext">
@@ -127,43 +127,57 @@ pre.code { margin: 0; max-height: 340px; overflow: auto; background: var(--code-
           </div>
         </div>
       </div>
-    </section>
+        </div>
+      </section>
+    </div>
 
     <aside class="side">
-      <div class="card">
+      <div class="sec">
         <h2 id="t-name">문고본</h2>
         <p class="desc" id="t-desc"></p>
         <div class="tags" id="t-tags"></div>
       </div>
 
-      <div class="card">
+      <div class="sec">
         <div class="codehead">
-          <span class="lbl">CSS</span>
-          <div class="row">
-            <label class="tg"><input type="checkbox" id="wrap-style"> &lt;style&gt;로 감싸기</label>
-            <button class="cp" id="copy-css" type="button">CSS 복사</button>
-          </div>
+          <span class="lbl"><b>한 번에</b> · 배경 임베딩에 통째로</span>
+          <button class="cp" id="copy-all" type="button">HTML + CSS 복사</button>
         </div>
-        <pre class="code" id="code"></pre>
-        <p class="note">배경 임베딩 칸에 넣을 땐 "&lt;style&gt;로 감싸기"를 켜고 복사하세요.</p>
+        <p class="note" style="margin:0">HTML 뒤에 CSS를 &lt;style&gt;로 붙여서 한 덩어리로 복사해요. 캐릭터 설정의 배경 임베딩 칸에 그대로 붙이면 돼요.</p>
       </div>
 
-      <div class="card">
-        <div class="codehead"><span class="lbl">적용 방법</span></div>
+      <div class="sec">
+        <div class="codehead">
+          <span class="lbl"><b>HTML</b> · 배경 지면과 장식</span>
+          <button class="cp ghost" id="copy-html" type="button">HTML 복사</button>
+        </div>
+        <pre class="code" id="code-html"></pre>
+      </div>
+
+      <div class="sec">
+        <div class="codehead">
+          <span class="lbl"><b>CSS</b> · 화면 색과 본문 글씨</span>
+          <button class="cp ghost" id="copy-css" type="button">CSS 복사</button>
+        </div>
+        <pre class="code" id="code-css"></pre>
+      </div>
+
+      <div class="sec">
+        <div class="codehead"><span class="lbl"><b>적용 방법</b></span></div>
         <ol class="steps">
-          <li>리스 <b>설정 → 디스플레이</b>의 <b>커스텀 CSS</b> 칸에 붙여넣기. 그 칸이 없으면 캐릭터 설정의 <b>배경 임베딩</b>에 &lt;style&gt;로 감싸서 붙여넣기.</li>
-          <li>대사 색이 이미 자동으로 칠해지고 있으면(<span class="k">data-q</span> 스팬) 그대로 먹어요. 안 바뀌면 아래 정규식을 추가하세요.</li>
-          <li>테마는 메시지 본문 <span class="k">.chattext</span>에 걸려 있어요. 버전에 따라 이름이 다르면 F12로 본문 클래스를 확인해서 바꿔 주세요.</li>
+          <li>가장 간단한 방법: <b>HTML + CSS 복사</b>를 눌러 캐릭터 설정의 <b>배경 임베딩</b>에 붙여넣기.</li>
+          <li>따로 넣고 싶으면 HTML은 배경 임베딩, CSS는 <b>설정 → 디스플레이 → 커스텀 CSS</b>에.</li>
+          <li>CSS 맨 위 <span class="k">:root</span> 색 변수가 리스 화면 전체 배경과 글씨색을 바꿔서, 메시지가 칸으로 나뉘지 않고 한 장으로 이어져 보여요.</li>
+          <li>본문은 <span class="k">.chattext</span>에 걸려 있어요. 버전에 따라 이름이 다르면 F12로 확인해서 바꿔 주세요.</li>
         </ol>
       </div>
 
-      <div class="card">
-        <div class="codehead"><span class="lbl">정규식 스크립트 · 출력문 수정</span></div>
+      <div class="sec">
+        <div class="codehead"><span class="lbl"><b>정규식</b> · 출력문 수정 (대사 색이 안 바뀔 때만)</span></div>
         <div class="rx">
           <div class="line"><span>IN</span><code id="rx-in">["“]([^"”\n]+)["”]</code><button class="cp ghost" type="button" data-copy="rx-in">복사</button></div>
           <div class="line"><span>OUT</span><code id="rx-out">&lt;span class="dlg"&gt;"$1"&lt;/span&gt;</code><button class="cp ghost" type="button" data-copy="rx-out">복사</button></div>
         </div>
-        <p class="note">따옴표 대사를 <span class="k">dlg</span> 스팬으로 감싸요. 리스가 클래스 앞에 x-risu-를 붙여도 CSS에서 같이 잡아요.</p>
       </div>
     </aside>
   </div>
@@ -171,11 +185,9 @@ pre.code { margin: 0; max-height: 340px; overflow: auto; background: var(--code-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const THEMES = [{"css": "/* 01 문고본 — 소설책 지면. 지금 로그 색(하늘색 굵은 대사)을 그대로 살린 버전 */\n@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');\n\n.chattext {\n  --FontColorStandard: #2a2c31; --FontColorBold: #1d1f23; --FontColorItalic: #7b818b;\n  --FontColorItalicBold: #7b818b; --FontColorQuote1: #3d8fc4; --FontColorQuote2: #3d8fc4;\n  display: block;\n  background: #f7f7f3;\n  color: #2a2c31;\n  font-family: 'Gowun Batang', 'Nanum Myeongjo', serif;\n  font-size: 15.5px;\n  line-height: 2;\n  letter-spacing: -0.01em;\n  word-break: keep-all;\n  padding: 30px 32px 26px;\n  border-radius: 3px;\n  border-top: 3px double #c9d3dc;\n  box-shadow: 0 1px 0 #e4e4dc, 0 14px 32px -20px rgba(40, 55, 75, 0.45);\n}\n.chattext p { margin: 0 0 1.05em; }\n.chattext > p:first-child:not(:has(> span:first-child))::first-letter {\n  float: left; font-size: 2.7em; line-height: 1; font-weight: 700;\n  margin: 0.06em 0.14em 0 0; color: #3d8fc4;\n}\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #3d8fc4 !important;\n  font-weight: 700 !important;\n}\n.chattext em, .chattext i { color: #7b818b; }\n.chattext b, .chattext strong { color: #1d1f23; }\n.chattext hr { border: 0; height: auto; margin: 2.2em 0; text-align: center; overflow: visible; }\n.chattext hr::after { content: '＊　＊　＊'; color: #9fadba; font-size: 12px; letter-spacing: 0.3em; }\n.chattext blockquote {\n  margin: 1.5em 0; padding: 18px 22px;\n  background: #fff; border: 1px solid #dfe4e8; border-left: 0;\n  box-shadow: inset 4px 0 0 #3d8fc4;\n  font-size: 14px; line-height: 1.85; color: #3a3e45;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #2a6f9c; letter-spacing: 0.02em; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em auto; border-radius: 2px; }\n", "name": "문고본", "en": "PAPERBACK", "desc": "지금 로그와 가장 가까운 버전이에요. 소설책 지면에 고운바탕체, 대사는 지금 쓰는 하늘색 굵은 글씨, 첫 글자는 드롭캡. 장면 구분선은 별표 세 개.", "tags": ["장편 서사", "고운바탕", "드롭캡"], "swatch": ["#f7f7f3", "#3d8fc4", "#2a2c31"], "file": "01-novel.css"}, {"css": "/* 02 에디토리얼 — 블로그(love) 사이트와 같은 결: 흰 지면, 헤어라인, 파란 포인트 */\n@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap');\n\n.chattext {\n  --FontColorStandard: #0f0f10; --FontColorBold: #0f0f10; --FontColorItalic: #6b6b70;\n  --FontColorItalicBold: #6b6b70; --FontColorQuote1: #2d46ff; --FontColorQuote2: #2d46ff;\n  display: block;\n  background: #ffffff;\n  color: #0f0f10;\n  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;\n  font-weight: 300;\n  font-size: 15px;\n  line-height: 1.9;\n  word-break: keep-all;\n  padding: 22px 28px 26px;\n  border: 1px solid #ececee;\n  border-radius: 12px;\n}\n.chattext::before {\n  content: '✦  SYNDROME × LIA';\n  display: block;\n  font-family: 'Geist Mono', ui-monospace, monospace;\n  font-size: 10.5px; font-weight: 400; letter-spacing: 0.16em; color: #9b9b9f;\n  padding-bottom: 12px; margin-bottom: 18px; border-bottom: 1px solid #ececee;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #2d46ff !important;\n  font-weight: 600 !important;\n}\n.chattext em, .chattext i { font-family: 'Instrument Serif', 'IBM Plex Sans KR', serif; font-style: italic; color: #6b6b70; font-size: 1.04em; }\n.chattext b, .chattext strong { font-weight: 600; }\n.chattext hr { border: 0; border-top: 1px solid #ececee; margin: 2.2em 0; overflow: visible; text-align: center; height: 0; }\n.chattext hr::after { content: '✦'; position: relative; top: -0.8em; padding: 0 12px; background: #fff; color: #2d46ff; font-size: 12px; }\n.chattext blockquote {\n  margin: 1.4em 0; padding: 16px 18px;\n  background: #f6f6f8; border-radius: 8px; border: 0;\n  font-size: 14px; line-height: 1.8;\n}\n.chattext blockquote b:first-child {\n  display: block; margin-bottom: 8px;\n  font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 400;\n  font-size: 11px; letter-spacing: 0.08em; color: #2d46ff;\n}\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 8px; }\n", "name": "에디토리얼", "en": "EDITORIAL", "desc": "블로그 사이트와 같은 결이에요. 흰 지면에 헤어라인, 파란 포인트, 상단에 SYNDROME × LIA 라벨. 삽입 문서는 회색 카드에 모노 제목.", "tags": ["사이트 통일감", "IBM Plex Sans KR", "미니멀"], "swatch": ["#ffffff", "#2d46ff", "#0f0f10"], "file": "02-editorial.css"}, {"css": "/* 03 S-CLASS — 센티넬 기록 단말. 신드롬 프로필의 검정 + 주황 */\n@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Chakra+Petch:wght@500;700&display=swap');\n\n.chattext {\n  --FontColorStandard: #cfcac2; --FontColorBold: #ff6a2b; --FontColorItalic: #8a857d;\n  --FontColorItalicBold: #8a857d; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block;\n  position: relative;\n  color: #cfcac2;\n  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;\n  font-size: 14.5px;\n  line-height: 1.9;\n  word-break: keep-all;\n  padding: 24px 26px 26px;\n  border: 1px solid rgba(255, 72, 0, 0.18);\n  background:\n    linear-gradient(#ff4800, #ff4800) top left / 14px 2px no-repeat,\n    linear-gradient(#ff4800, #ff4800) top left / 2px 14px no-repeat,\n    linear-gradient(#ff4800, #ff4800) bottom right / 14px 2px no-repeat,\n    linear-gradient(#ff4800, #ff4800) bottom right / 2px 14px no-repeat,\n    repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 3px),\n    #0a0a0b;\n}\n.chattext::before {\n  content: '▲ S-CLASS ENTITY  //  FIELD LOG';\n  display: block; margin-bottom: 16px;\n  font-family: 'Chakra Petch', monospace; font-weight: 700;\n  font-size: 11px; letter-spacing: 0.22em; color: #ff4800;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #ffffff !important;\n  font-weight: 600 !important;\n  text-shadow: 0 0 14px rgba(255, 72, 0, 0.55);\n}\n.chattext em, .chattext i { color: #8a857d; }\n.chattext b, .chattext strong { color: #ff6a2b; font-weight: 600; }\n.chattext hr { border: 0; height: 1px; margin: 2em 0; background: linear-gradient(90deg, #ff4800, rgba(255,72,0,0) 70%); }\n.chattext blockquote {\n  position: relative; margin: 1.6em 0; padding: 26px 18px 16px;\n  background: rgba(255, 72, 0, 0.06); border: 1px solid rgba(255, 72, 0, 0.45);\n  font-size: 13.5px; color: #e7e2da;\n}\n.chattext blockquote::before {\n  content: 'SYSTEM'; position: absolute; top: -1px; left: -1px;\n  padding: 2px 8px; background: #ff4800; color: #0a0a0b;\n  font-family: 'Chakra Petch', monospace; font-weight: 700; font-size: 10px; letter-spacing: 0.2em;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffffff; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border: 1px solid rgba(255,72,0,0.3); filter: contrast(1.05) saturate(0.9); }\n", "name": "S급 기록", "en": "S-CLASS", "desc": "센티넬 작전 기록 단말이에요. 신드롬 프로필의 검정과 주황, 모서리 브래킷, 대사에 주황 글로우. 삽입 문서는 SYSTEM 창으로 떠요.", "tags": ["센티넬버스", "다크", "HUD"], "swatch": ["#0a0a0b", "#ff4800", "#cfcac2"], "file": "03-sclass.css"}, {"css": "/* 04 메신저 — 대사는 말풍선, 지문은 작게. 상상임신 로그의 아이메시지 느낌 */\n.chattext {\n  --FontColorStandard: #6e6e73; --FontColorBold: #1c1c1e; --FontColorItalic: #8e8e93;\n  --FontColorItalicBold: #8e8e93; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block;\n  background: #f2f2f7;\n  color: #6e6e73;\n  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;\n  font-size: 13.5px;\n  line-height: 1.75;\n  letter-spacing: -0.01em;\n  word-break: keep-all;\n  padding: 20px 18px;\n  border-radius: 22px;\n}\n.chattext p { margin: 0 0 0.9em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  display: inline-block;\n  max-width: 88%;\n  margin: 3px 0;\n  padding: 7px 13px;\n  background: #007aff;\n  color: #ffffff !important;\n  font-weight: 400 !important;\n  font-size: 15px;\n  line-height: 1.45;\n  border-radius: 18px 18px 18px 5px;\n}\n.chattext em, .chattext i { color: #8e8e93; }\n.chattext b, .chattext strong { color: #1c1c1e; font-weight: 600; }\n.chattext hr { border: 0; height: auto; margin: 1.6em 0; text-align: center; overflow: visible; }\n.chattext hr::after {\n  content: '· · ·'; display: inline-block; padding: 0 12px; border-radius: 10px;\n  background: #e5e5ea; color: #8e8e93; font-size: 11px;\n}\n.chattext blockquote {\n  margin: 1.2em 0; padding: 12px 14px;\n  background: #ffffff; border: 0; border-radius: 14px;\n  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.25);\n  color: #1c1c1e; font-size: 13.5px;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 4px; font-size: 11.5px; color: #8e8e93; font-weight: 600; }\n.chattext img { display: block; max-width: 72%; margin: 6px 0; border-radius: 18px; }\n", "name": "메신저", "en": "MESSENGER", "desc": "대사가 파란 말풍선으로 뜨고 지문은 작은 회색 글씨로 깔려요. 상상임신 로그 같은 톡 장면이 많을 때 좋아요.", "tags": ["톡 장면", "말풍선", "가벼움"], "swatch": ["#f2f2f7", "#007aff", "#6e6e73"], "file": "04-messenger.css"}, {"css": "/* 05 새벽 네 시 — 스탠드 주황빛이 번진 밤 침실. 집안 일상물용 */\n@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');\n\n.chattext {\n  --FontColorStandard: #e8e2d4; --FontColorBold: #ffd8a8; --FontColorItalic: #a9a4c6;\n  --FontColorItalicBold: #a9a4c6; --FontColorQuote1: #c4e6ff; --FontColorQuote2: #c4e6ff;\n  display: block;\n  position: relative;\n  color: #e8e2d4;\n  font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif;\n  font-size: 15px;\n  line-height: 1.95;\n  word-break: keep-all;\n  padding: 28px 28px 24px;\n  border-radius: 24px;\n  background:\n    radial-gradient(110% 60% at 88% -8%, rgba(255, 176, 92, 0.30), rgba(255, 176, 92, 0) 62%),\n    #1a2034;\n  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);\n}\n.chattext::after {\n  content: '☾'; position: absolute; top: 14px; right: 20px;\n  color: #ffcf8f; font-size: 18px; opacity: 0.8;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  color: #c4e6ff !important;\n  font-weight: 700 !important;\n  background: linear-gradient(transparent 64%, rgba(111, 176, 220, 0.30) 0);\n  padding: 0 2px;\n}\n.chattext em, .chattext i { color: #a9a4c6; }\n.chattext b, .chattext strong { color: #ffd8a8; }\n.chattext hr { border: 0; height: auto; margin: 2em 0; text-align: center; overflow: visible; }\n.chattext hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }\n.chattext blockquote {\n  margin: 1.4em 0; padding: 16px 18px;\n  background: rgba(255, 255, 255, 0.05);\n  border: 1px dashed rgba(255, 255, 255, 0.22); border-radius: 16px;\n  font-size: 14px; color: #f1ece2;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffd8a8; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 16px; }\n", "name": "새벽 네 시", "en": "BEDTIME", "desc": "스탠드 주황빛이 번진 밤 침실이에요. 남색 바탕에 고운돋움, 대사는 하늘색 형광펜 밑줄. 집안 일상물이나 침대 대화 장면용.", "tags": ["일상물", "다크", "고운돋움"], "swatch": ["#1a2034", "#ffb05c", "#c4e6ff"], "file": "05-bedtime.css"}, {"css": "/* 06 RUSHES — 필름 촬영본. 지문은 시나리오 타자체, 대사는 영화 자막 */\n@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Sans+KR:wght@500;700&display=swap');\n\n.chattext {\n  --FontColorStandard: #cfcfc8; --FontColorBold: #f2f2ea; --FontColorItalic: #8b8b84;\n  --FontColorItalicBold: #8b8b84; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block;\n  color: #cfcfc8;\n  font-family: 'Nanum Gothic Coding', ui-monospace, monospace;\n  font-size: 14px;\n  line-height: 1.9;\n  word-break: keep-all;\n  padding: 20px 26px 22px;\n  background: #121212;\n  border-top: 16px solid #000;\n  border-bottom: 16px solid #000;\n}\n.chattext::before {\n  content: '● REC   RUSHES  ·  SCENE / TAKE';\n  display: block; margin-bottom: 18px; padding-bottom: 10px;\n  border-bottom: 1px dashed #333;\n  font-size: 11px; letter-spacing: 0.18em; color: #7d7d76;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  display: table;\n  margin: 0.5em auto;\n  padding: 2px 12px;\n  text-align: center;\n  background: rgba(0, 0, 0, 0.6);\n  color: #ffffff !important;\n  font-family: 'Noto Sans KR', sans-serif;\n  font-weight: 700 !important;\n  font-size: 15.5px;\n  text-shadow: 0 1px 2px #000;\n}\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) + br { display: none; }\n.chattext em, .chattext i { color: #8b8b84; }\n.chattext b, .chattext strong { color: #f2f2ea; }\n.chattext hr { border: 0; height: auto; margin: 1.8em 0; text-align: right; overflow: visible; }\n.chattext hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }\n.chattext blockquote {\n  margin: 1.4em 0; padding: 14px 16px;\n  background: #1a1a1a; border: 1px solid #333;\n  font-size: 13px;\n}\n.chattext blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }\n.chattext blockquote b:first-child { display: block; margin-bottom: 4px; color: #ffffff; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; filter: grayscale(0.25) contrast(1.05); }\n", "name": "러시스", "en": "RUSHES", "desc": "필름 촬영본이에요. 위아래 레터박스, 지문은 시나리오 타자체, 대사는 가운데 정렬 영화 자막. 장면 구분선은 CUT TO:로 바뀌어요.", "tags": ["영화 AU", "자막", "나눔고딕코딩"], "swatch": ["#121212", "#ffffff", "#7d7d76"], "file": "06-rushes.css"}];
+const THEMES = [{"css": "/* 01 문고본 — 채팅 전체가 소설책 한 쪽. 대사는 지금 쓰는 하늘색 굵은 글씨 */\n@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');\n\n:root {\n  --risu-theme-bgcolor: #f4f3ee; --risu-theme-darkbg: #ecebe4; --risu-theme-borderc: #d9d8cf;\n  --risu-theme-darkborderc: #d9d8cf; --risu-theme-selected: #e2e7ec; --risu-theme-darkbutton: #e6e5de;\n  --risu-theme-textcolor: #2a2c31; --risu-theme-textcolor2: #7b818b; --risu-theme-draculared: #c45a5a;\n}\n.lv-page { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }\n.lv-novel { background: radial-gradient(120% 90% at 50% 40%, #f7f6f1 55%, #e9e8e0 100%); }\n.lv-novel .lv-rule { position: absolute; top: 18px; left: 6%; right: 6%; height: 4px; border-top: 3px double #c9d3dc; }\n.lv-novel .lv-folio { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;\n  font-family: 'Gowun Batang', serif; font-size: 11px; letter-spacing: 0.3em; color: #9fadba; }\n\n.chattext {\n  --FontColorStandard: #2a2c31; --FontColorBold: #1d1f23; --FontColorItalic: #7b818b;\n  --FontColorItalicBold: #7b818b; --FontColorQuote1: #3d8fc4; --FontColorQuote2: #3d8fc4;\n  display: block; background: transparent; color: #2a2c31;\n  font-family: 'Gowun Batang', 'Nanum Myeongjo', serif;\n  font-size: 15.5px; line-height: 2; letter-spacing: -0.01em; word-break: keep-all;\n}\n.chattext p { margin: 0 0 1.05em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) { color: #3d8fc4 !important; font-weight: 700 !important; }\n.chattext em, .chattext i { color: #7b818b; }\n.chattext b, .chattext strong { color: #1d1f23; }\n.chattext hr { border: 0; height: auto; margin: 2.2em 0; text-align: center; overflow: visible; }\n.chattext hr::after { content: '＊　＊　＊'; color: #9fadba; font-size: 12px; letter-spacing: 0.3em; }\n.chattext blockquote {\n  margin: 1.5em 0; padding: 16px 20px; background: rgba(255,255,255,0.6);\n  border: 0; border-top: 1px solid #c9d3dc; border-bottom: 1px solid #c9d3dc;\n  font-size: 14px; line-height: 1.85; color: #3a3e45;\n}\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #2a6f9c; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em auto; }\n", "html": "<div class=\"lv-page lv-novel\">\n  <i class=\"lv-rule\"><\/i>\n  <span class=\"lv-folio\">SYNDROME × LIA<\/span>\n<\/div>\n", "name": "문고본", "en": "PAPERBACK", "desc": "지금 로그와 가장 가까운 버전이에요. 소설책 지면에 고운바탕체, 대사는 지금 쓰는 하늘색 굵은 글씨. 위에 겹줄, 아래에 SYNDROME × LIA 쪽표시. 장면 구분선은 별표 세 개.", "tags": ["장편 서사", "고운바탕", "겹줄 쪽표시"], "swatch": ["#f7f7f3", "#3d8fc4", "#2a2c31"], "file": "01-novel.css"}, {"css": "/* 02 에디토리얼 — 블로그와 같은 흰 지면. 상단 헤어라인 한 줄, 파란 포인트 */\n@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap');\n\n:root {\n  --risu-theme-bgcolor: #ffffff; --risu-theme-darkbg: #f6f6f8; --risu-theme-borderc: #ececee;\n  --risu-theme-darkborderc: #ececee; --risu-theme-selected: #eef0ff; --risu-theme-darkbutton: #f1f1f3;\n  --risu-theme-textcolor: #0f0f10; --risu-theme-textcolor2: #9b9b9f; --risu-theme-draculared: #e5484d;\n}\n.lv-page { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }\n.lv-edit { background: #ffffff; }\n.lv-edit .lv-head {\n  position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between;\n  padding: 14px 22px 12px; border-bottom: 1px solid #ececee;\n  font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.16em; color: #9b9b9f;\n}\n\n.chattext {\n  --FontColorStandard: #0f0f10; --FontColorBold: #0f0f10; --FontColorItalic: #6b6b70;\n  --FontColorItalicBold: #6b6b70; --FontColorQuote1: #2d46ff; --FontColorQuote2: #2d46ff;\n  display: block; background: transparent; color: #0f0f10;\n  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif; font-weight: 300;\n  font-size: 15px; line-height: 1.9; word-break: keep-all;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) { color: #2d46ff !important; font-weight: 600 !important; }\n.chattext em, .chattext i { font-family: 'Instrument Serif', 'IBM Plex Sans KR', serif; font-style: italic; color: #6b6b70; font-size: 1.04em; }\n.chattext b, .chattext strong { font-weight: 600; }\n.chattext hr { border: 0; border-top: 1px solid #ececee; margin: 2.2em 0; overflow: visible; text-align: center; height: 0; }\n.chattext hr::after { content: '✦'; position: relative; top: -0.8em; padding: 0 12px; background: #fff; color: #2d46ff; font-size: 12px; }\n.chattext blockquote { margin: 1.4em 0; padding: 16px 18px; background: #f6f6f8; border: 0; border-radius: 8px; font-size: 14px; line-height: 1.8; }\n.chattext blockquote b:first-child { display: block; margin-bottom: 8px; font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 400; font-size: 11px; letter-spacing: 0.08em; color: #2d46ff; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 8px; }\n", "html": "<div class=\"lv-page lv-edit\">\n  <div class=\"lv-head\"><span>✦ SYNDROME × LIA<\/span><span>DIARY · LOG<\/span><\/div>\n<\/div>\n", "name": "에디토리얼", "en": "EDITORIAL", "desc": "블로그 사이트와 같은 결이에요. 흰 지면 위쪽에 SYNDROME × LIA 헤더 한 줄, 파란 포인트. 삽입 문서는 회색 카드에 모노 제목.", "tags": ["사이트 통일감", "IBM Plex Sans KR", "미니멀"], "swatch": ["#ffffff", "#2d46ff", "#0f0f10"], "file": "02-editorial.css"}, {"css": "/* 03 S급 기록 — 화면 전체가 센티넬 기록 단말. 검정 + 주황, 네 귀퉁이 브래킷 */\n@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Chakra+Petch:wght@500;700&display=swap');\n\n:root {\n  --risu-theme-bgcolor: #0a0a0b; --risu-theme-darkbg: #111113; --risu-theme-borderc: #3a1d0e;\n  --risu-theme-darkborderc: #2a160b; --risu-theme-selected: #2a140a; --risu-theme-darkbutton: #17110e;\n  --risu-theme-textcolor: #e7e2da; --risu-theme-textcolor2: #8a857d; --risu-theme-draculared: #ff4800;\n}\n.lv-page { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }\n.lv-scls { background: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 3px), radial-gradient(90% 70% at 50% 0%, #1a0e08, #0a0a0b 70%); }\n.lv-scls .lv-c { position: absolute; width: 22px; height: 22px; border: 0 solid #ff4800; }\n.lv-scls .lv-tl { top: 10px; left: 10px; border-top-width: 2px; border-left-width: 2px; }\n.lv-scls .lv-tr { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; }\n.lv-scls .lv-bl { bottom: 10px; left: 10px; border-bottom-width: 2px; border-left-width: 2px; }\n.lv-scls .lv-br { bottom: 10px; right: 10px; border-bottom-width: 2px; border-right-width: 2px; }\n.lv-scls .lv-tag, .lv-scls .lv-sync { position: absolute; font-family: 'Chakra Petch', monospace; font-weight: 700; font-size: 10.5px; letter-spacing: 0.22em; }\n.lv-scls .lv-tag { top: 14px; left: 42px; color: #ff4800; }\n.lv-scls .lv-sync { bottom: 14px; right: 42px; color: #6b5a50; }\n\n.chattext {\n  --FontColorStandard: #cfcac2; --FontColorBold: #ff6a2b; --FontColorItalic: #8a857d;\n  --FontColorItalicBold: #8a857d; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block; background: transparent; color: #cfcac2;\n  font-family: 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;\n  font-size: 14.5px; line-height: 1.9; word-break: keep-all;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) { color: #ffffff !important; font-weight: 600 !important; text-shadow: 0 0 14px rgba(255, 72, 0, 0.55); }\n.chattext em, .chattext i { color: #8a857d; }\n.chattext b, .chattext strong { color: #ff6a2b; font-weight: 600; }\n.chattext hr { border: 0; height: 1px; margin: 2em 0; background: linear-gradient(90deg, #ff4800, rgba(255,72,0,0) 70%); }\n.chattext blockquote { position: relative; margin: 1.6em 0; padding: 26px 18px 16px; background: rgba(255,72,0,0.06); border: 1px solid rgba(255,72,0,0.45); font-size: 13.5px; color: #e7e2da; }\n.chattext blockquote::before { content: 'SYSTEM'; position: absolute; top: -1px; left: -1px; padding: 2px 8px; background: #ff4800; color: #0a0a0b; font-family: 'Chakra Petch', monospace; font-weight: 700; font-size: 10px; letter-spacing: 0.2em; }\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffffff; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border: 1px solid rgba(255,72,0,0.3); }\n", "html": "<div class=\"lv-page lv-scls\">\n  <i class=\"lv-c lv-tl\"><\/i><i class=\"lv-c lv-tr\"><\/i><i class=\"lv-c lv-bl\"><\/i><i class=\"lv-c lv-br\"><\/i>\n  <span class=\"lv-tag\">▲ S-CLASS ENTITY // FIELD LOG<\/span>\n  <span class=\"lv-sync\">GUIDE LINK ● STABLE<\/span>\n<\/div>\n", "name": "S급 기록", "en": "S-CLASS", "desc": "센티넬 작전 기록 단말이에요. 신드롬 프로필의 검정과 주황, 화면 네 귀퉁이 브래킷과 GUIDE LINK 표시, 대사에 주황 글로우. 삽입 문서는 SYSTEM 창으로 떠요.", "tags": ["센티넬버스", "다크", "HUD"], "swatch": ["#0a0a0b", "#ff4800", "#cfcac2"], "file": "03-sclass.css"}, {"css": "/* 04 메신저 — 화면 전체가 톡방. 대사는 말풍선, 지문은 작은 회색 글씨 */\n:root {\n  --risu-theme-bgcolor: #f2f2f7; --risu-theme-darkbg: #ffffff; --risu-theme-borderc: #e5e5ea;\n  --risu-theme-darkborderc: #e5e5ea; --risu-theme-selected: #dcebff; --risu-theme-darkbutton: #e9e9eb;\n  --risu-theme-textcolor: #1c1c1e; --risu-theme-textcolor2: #8e8e93; --risu-theme-draculared: #ff3b30;\n}\n.lv-page { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }\n.lv-msgr { background: #f2f2f7; }\n.lv-msgr .lv-bar {\n  position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center;\n  padding: 10px 18px; background: rgba(249, 249, 251, 0.92); border-bottom: 1px solid #e5e5ea;\n  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 15px; color: #1c1c1e;\n}\n.lv-msgr .lv-back { color: #007aff; font-size: 24px; line-height: 1; }\n.lv-msgr .lv-dot { color: #007aff; letter-spacing: 0.1em; }\n\n.chattext {\n  --FontColorStandard: #6e6e73; --FontColorBold: #1c1c1e; --FontColorItalic: #8e8e93;\n  --FontColorItalicBold: #8e8e93; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block; background: transparent; color: #6e6e73;\n  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;\n  font-size: 13.5px; line-height: 1.75; letter-spacing: -0.01em; word-break: keep-all;\n}\n.chattext p { margin: 0 0 0.9em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  display: inline-block; max-width: 88%; margin: 3px 0; padding: 7px 13px;\n  background: #007aff; color: #ffffff !important; font-weight: 400 !important;\n  font-size: 15px; line-height: 1.45; border-radius: 18px 18px 18px 5px;\n}\n.chattext em, .chattext i { color: #8e8e93; }\n.chattext b, .chattext strong { color: #1c1c1e; font-weight: 600; }\n.chattext hr { border: 0; height: auto; margin: 1.6em 0; text-align: center; overflow: visible; }\n.chattext hr::after { content: '· · ·'; display: inline-block; padding: 0 12px; border-radius: 10px; background: #e5e5ea; color: #8e8e93; font-size: 11px; }\n.chattext blockquote { margin: 1.2em 0; padding: 12px 14px; background: #ffffff; border: 0; border-radius: 14px; box-shadow: 0 6px 18px -10px rgba(0,0,0,0.25); color: #1c1c1e; font-size: 13.5px; }\n.chattext blockquote b:first-child { display: block; margin-bottom: 4px; font-size: 11.5px; color: #8e8e93; font-weight: 600; }\n.chattext img { display: block; max-width: 72%; margin: 6px 0; border-radius: 18px; }\n", "html": "<div class=\"lv-page lv-msgr\">\n  <div class=\"lv-bar\"><span class=\"lv-back\">‹<\/span><b>성유진<\/b><span class=\"lv-dot\">•••<\/span><\/div>\n<\/div>\n", "name": "메신저", "en": "MESSENGER", "desc": "화면 전체가 톡방이에요. 위에 대화방 상단바, 대사는 파란 말풍선, 지문은 작은 회색 글씨. 상상임신 로그 같은 톡 장면이 많을 때 좋아요.", "tags": ["톡 장면", "말풍선", "가벼움"], "swatch": ["#f2f2f7", "#007aff", "#6e6e73"], "file": "04-messenger.css"}, {"css": "/* 05 새벽 네 시 — 화면 전체가 밤 침실. 오른쪽 위에서 스탠드 주황빛이 번진다 */\n@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');\n\n:root {\n  --risu-theme-bgcolor: #1a2034; --risu-theme-darkbg: #151a2b; --risu-theme-borderc: #2b3350;\n  --risu-theme-darkborderc: #252c45; --risu-theme-selected: #2b3350; --risu-theme-darkbutton: #222940;\n  --risu-theme-textcolor: #e8e2d4; --risu-theme-textcolor2: #a9a4c6; --risu-theme-draculared: #ff9b8a;\n}\n.lv-page { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }\n.lv-night { background: #1a2034; }\n.lv-night .lv-glow { position: absolute; top: -20%; right: -15%; width: 80%; height: 70%; background: radial-gradient(closest-side, rgba(255,176,92,0.30), rgba(255,176,92,0)); }\n.lv-night .lv-stars { position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; background: transparent;\n  box-shadow: 40px 60px #c9cfe6, 120px 140px #8d95b8, 210px 40px #c9cfe6, 310px 190px #8d95b8, 60px 320px #8d95b8, 260px 420px #c9cfe6, 90px 560px #8d95b8, 380px 640px #c9cfe6, 20px 760px #8d95b8, 300px 860px #8d95b8; opacity: 0.6; }\n.lv-night .lv-moon { position: absolute; top: 14px; right: 20px; color: #ffcf8f; font-size: 20px; opacity: 0.85; }\n\n.chattext {\n  --FontColorStandard: #e8e2d4; --FontColorBold: #ffd8a8; --FontColorItalic: #a9a4c6;\n  --FontColorItalicBold: #a9a4c6; --FontColorQuote1: #c4e6ff; --FontColorQuote2: #c4e6ff;\n  display: block; background: transparent; color: #e8e2d4;\n  font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif;\n  font-size: 15px; line-height: 1.95; word-break: keep-all;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) { color: #c4e6ff !important; font-weight: 700 !important; background: linear-gradient(transparent 64%, rgba(111,176,220,0.30) 0); padding: 0 2px; }\n.chattext em, .chattext i { color: #a9a4c6; }\n.chattext b, .chattext strong { color: #ffd8a8; }\n.chattext hr { border: 0; height: auto; margin: 2em 0; text-align: center; overflow: visible; }\n.chattext hr::after { content: '✦  ⋆  ✦'; color: #ffcf8f; font-size: 12px; letter-spacing: 0.2em; opacity: 0.75; }\n.chattext blockquote { margin: 1.4em 0; padding: 16px 18px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.22); border-radius: 16px; font-size: 14px; color: #f1ece2; }\n.chattext blockquote b:first-child { display: block; margin-bottom: 6px; color: #ffd8a8; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; border-radius: 16px; }\n", "html": "<div class=\"lv-page lv-night\">\n  <i class=\"lv-glow\"><\/i>\n  <i class=\"lv-stars\"><\/i>\n  <span class=\"lv-moon\">☾<\/span>\n<\/div>\n", "name": "새벽 네 시", "en": "BEDTIME", "desc": "화면 전체가 밤 침실이에요. 오른쪽 위 스탠드 주황빛, 별, 달. 고운돋움, 대사는 하늘색 형광펜 밑줄. 집안 일상물이나 침대 대화 장면용.", "tags": ["일상물", "다크", "고운돋움"], "swatch": ["#1a2034", "#ffb05c", "#c4e6ff"], "file": "05-bedtime.css"}, {"css": "/* 06 러시스 — 화면 전체가 필름 한 롤. 위아래 레터박스, 양옆 필름 구멍, 대사는 자막 */\n@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Sans+KR:wght@500;700&display=swap');\n\n:root {\n  --risu-theme-bgcolor: #121212; --risu-theme-darkbg: #0c0c0c; --risu-theme-borderc: #2a2a2a;\n  --risu-theme-darkborderc: #222222; --risu-theme-selected: #262626; --risu-theme-darkbutton: #1b1b1b;\n  --risu-theme-textcolor: #e8e8df; --risu-theme-textcolor2: #8b8b84; --risu-theme-draculared: #e5484d;\n}\n.lv-page { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }\n.lv-film { background: #121212; }\n.lv-film .lv-bar { position: absolute; left: 0; right: 0; height: 22px; background: #000; }\n.lv-film .lv-top { top: 0; }\n.lv-film .lv-bot { bottom: 0; }\n.lv-film .lv-holes { position: absolute; top: 0; bottom: 0; width: 8px; background: repeating-linear-gradient(180deg, #2a2a2a 0 8px, transparent 8px 20px); }\n.lv-film .lv-left { left: 4px; }\n.lv-film .lv-right { right: 4px; }\n.lv-film .lv-rec, .lv-film .lv-slate { position: absolute; top: 5px; font-family: 'Nanum Gothic Coding', monospace; font-size: 10.5px; letter-spacing: 0.18em; }\n.lv-film .lv-rec { left: 20px; color: #e5484d; }\n.lv-film .lv-slate { right: 20px; color: #7d7d76; }\n\n.chattext {\n  --FontColorStandard: #cfcfc8; --FontColorBold: #f2f2ea; --FontColorItalic: #8b8b84;\n  --FontColorItalicBold: #8b8b84; --FontColorQuote1: #ffffff; --FontColorQuote2: #ffffff;\n  display: block; background: transparent; color: #cfcfc8;\n  font-family: 'Nanum Gothic Coding', ui-monospace, monospace;\n  font-size: 14px; line-height: 1.9; word-break: keep-all;\n}\n.chattext p { margin: 0 0 1em; }\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) {\n  display: table; margin: 0.5em auto; padding: 2px 12px; text-align: center;\n  background: rgba(0,0,0,0.6); color: #ffffff !important;\n  font-family: 'Noto Sans KR', sans-serif; font-weight: 700 !important; font-size: 15.5px; text-shadow: 0 1px 2px #000;\n}\n.chattext :is(.dlg, .x-risu-dlg, span[data-q]) + br { display: none; }\n.chattext em, .chattext i { color: #8b8b84; }\n.chattext b, .chattext strong { color: #f2f2ea; }\n.chattext hr { border: 0; height: auto; margin: 1.8em 0; text-align: right; overflow: visible; }\n.chattext hr::after { content: 'CUT TO:'; font-size: 12px; letter-spacing: 0.2em; color: #e8e8df; }\n.chattext blockquote { margin: 1.4em 0; padding: 14px 16px; background: #1a1a1a; border: 1px solid #333; font-size: 13px; }\n.chattext blockquote::before { content: 'INSERT —'; display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.2em; color: #7d7d76; }\n.chattext blockquote b:first-child { display: block; margin-bottom: 4px; color: #ffffff; }\n.chattext img { display: block; max-width: 100%; margin: 1.4em 0; filter: grayscale(0.25) contrast(1.05); }\n", "html": "<div class=\"lv-page lv-film\">\n  <i class=\"lv-bar lv-top\"><\/i><i class=\"lv-bar lv-bot\"><\/i>\n  <i class=\"lv-holes lv-left\"><\/i><i class=\"lv-holes lv-right\"><\/i>\n  <span class=\"lv-rec\">● REC<\/span>\n  <span class=\"lv-slate\">RUSHES · SCENE / TAKE<\/span>\n<\/div>\n", "name": "러시스", "en": "RUSHES", "desc": "화면 전체가 필름 한 롤이에요. 위아래 레터박스, 양옆 필름 구멍, REC 표시, 지문은 시나리오 타자체, 대사는 가운데 정렬 영화 자막. 장면 구분선은 CUT TO:로 바뀌어요.", "tags": ["영화 AU", "자막", "나눔고딕코딩"], "swatch": ["#121212", "#ffffff", "#7d7d76"], "file": "06-rushes.css"}];
 const chips = document.getElementById('chips');
 const live = document.getElementById('live');
-const code = document.getElementById('code');
-const wrapBox = document.getElementById('wrap-style');
 let cur = 0;
 
 THEMES.forEach((t, i) => {
@@ -187,25 +199,31 @@ THEMES.forEach((t, i) => {
 });
 
 function scoped(css) {
-  return css.replace(/^@import.*$/gm, '').replace(/\.chattext/g, '.stage .chattext');
+  return css.replace(/^@import.*$/gm, '')
+    .replace(/:root\s*\{/g, '.stage {')
+    .replace(/\.chattext/g, '.stage .chattext')
+    .replace(/(^|,\s*)\.lv-/gm, '$1.stage .lv-');
 }
-function cssOut() {
-  const c = THEMES[cur].css.trim();
-  return wrapBox.checked ? `<style>\n${c}\n</style>` : c;
+function forRisu(css) {
+  return css.replace(/\.lv-([\w-]+)/g, ':is(.lv-$1, .x-risu-lv-$1)');
 }
+const H = () => THEMES[cur].html.trim();
+const C = () => forRisu(THEMES[cur].css.trim());
+const ALL = () => `${H()}\n\n<style>\n${C()}\n</style>`;
 function show(i) {
   cur = i;
   const t = THEMES[i];
   [...chips.children].forEach((c, j) => c.setAttribute('aria-selected', j === i ? 'true' : 'false'));
   live.textContent = scoped(t.css);
-  code.textContent = cssOut();
+  document.getElementById('bgslot').innerHTML = t.html;
+  document.getElementById('code-html').textContent = H();
+  document.getElementById('code-css').textContent = C();
   document.getElementById('t-name').innerHTML = `${t.name}<small>${t.en}</small>`;
   document.getElementById('t-desc').textContent = t.desc;
   document.getElementById('t-tags').innerHTML = t.tags.map(x => `<span>${x}</span>`).join('');
   document.getElementById('stage-no').textContent = `${String(i + 1).padStart(2, '0')} / 06`;
   try { localStorage.setItem('risu-theme', String(i)); } catch (e) {}
 }
-wrapBox.addEventListener('change', () => { code.textContent = cssOut(); });
 
 const toast = document.getElementById('toast');
 let tt;
@@ -221,7 +239,9 @@ function selectEl(el) {
   const s = getSelection(); s.removeAllRanges(); s.addRange(r);
   say('선택해 뒀어요. Ctrl+C로 복사하세요');
 }
-document.getElementById('copy-css').addEventListener('click', () => copy(cssOut(), code));
+document.getElementById('copy-css').addEventListener('click', () => copy(C(), document.getElementById('code-css')));
+document.getElementById('copy-html').addEventListener('click', () => copy(H(), document.getElementById('code-html')));
+document.getElementById('copy-all').addEventListener('click', () => copy(ALL(), document.getElementById('code-css')));
 document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
   const el = document.getElementById(b.dataset.copy); copy(el.textContent, el);
 }));
