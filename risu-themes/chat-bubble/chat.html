@@ -1,0 +1,9 @@
+<div class="lv-msg lv-{{#if {{equal::{{role}}::char}} }}char{{/if}}{{#if {{not_equal::{{role}}::char}} }}user{{/if}}">
+    {{#if {{equal::{{role}}::char}} }}<div class="lv-name">{{char}}</div>{{/if}}
+    <div class="lv-body">
+        <risutextbox></risutextbox>
+    </div>
+    <div class="lv-btns">
+        <risubuttons></risubuttons>
+    </div>
+</div>

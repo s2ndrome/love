@@ -1,0 +1,51 @@
+/* ── 채팅을 가운데, 읽기 좋은 폭으로 ── */
+.risu-chat > div {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+.lv-msg { width: 100%; box-sizing: border-box; padding: 10px 20px; display: flex; flex-direction: column; }
+.lv-char { align-items: stretch; }
+.lv-user { align-items: flex-end; }
+
+/* ── 캐릭터 이름 ── */
+.lv-name { font-size: 12px; color: #8e8e93; margin-bottom: 4px; }
+
+/* ── 캐릭터 답변: 검은 글씨 ── */
+:root {
+  --FontColorStandard: #111111 !important;
+  --FontColorItalic: #111111 !important;
+  --FontColorItalicBold: #111111 !important;
+}
+.lv-char .chattext {
+  display: block; max-width: none !important;
+  font-size: 15px !important; line-height: 1.85 !important;
+  color: #111111 !important; text-shadow: none !important;
+}
+.lv-char .chattext :is(p, li, em, i, span) { color: #111111 !important; }
+.lv-char .chattext p { margin: 0 0 1em !important; }
+/* 대사(따옴표): 하늘색 굵게. 색은 #2a7fb8 를 바꾸면 돼요 */
+.lv-char .chattext mark[risu-mark] { color: #2a7fb8 !important; font-weight: 700; background: transparent !important; }
+
+/* ── 내 메시지: 오른쪽 파란 말풍선 ── */
+.lv-user .lv-body { max-width: 78%; }
+.lv-user .chattext {
+  display: block; width: fit-content; max-width: 100% !important; margin-left: auto;
+  padding: 9px 14px; border-radius: 18px 18px 5px 18px;
+  background: #007aff;
+  font-size: 15px !important; line-height: 1.5 !important;
+  color: #ffffff !important; text-shadow: none !important; text-align: left;
+}
+.lv-user .chattext :is(p, li, em, i, span, strong, b, mark) { color: #ffffff !important; background: transparent !important; }
+.lv-user .chattext p { margin: 0 !important; }
+.lv-user .chattext p + p { margin-top: 0.4em !important; }
+
+/* ── 버튼(번역·수정·복사…): 작고 흐리게, 마우스 올리면 진하게 ── */
+.lv-btns > div { display: flex; align-items: center; gap: 2px; margin: 4px 0 0 !important; opacity: 0.35; transition: opacity 0.2s; }
+.lv-btns > div:hover { opacity: 1; }
+.lv-btns button { margin: 0 !important; padding: 2px !important; }
+.lv-btns svg { width: 15px; height: 15px; }
+.lv-user .lv-btns { align-self: flex-end; }
